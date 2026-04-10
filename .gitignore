@@ -12,3 +12,6 @@ dist-ssr
 __unconfig*
 todos.json
 .idea
+
+pocketbase/pb_data
+pocketbase/pocketbase
