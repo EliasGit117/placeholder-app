@@ -102,6 +102,10 @@ export type TodosRecord = {
 	user: RecordIdString
 }
 
+export enum UsersRoleOptions {
+	"admin" = "admin",
+	"user" = "user",
+}
 export type UsersRecord = {
 	avatar?: FileNameString
 	created: IsoAutoDateString
@@ -110,6 +114,7 @@ export type UsersRecord = {
 	id: string
 	name?: string
 	password: string
+	role?: UsersRoleOptions
 	tokenKey: string
 	updated: IsoAutoDateString
 	verified?: boolean

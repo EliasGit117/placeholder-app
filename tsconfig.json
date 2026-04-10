@@ -6,7 +6,6 @@
     "module": "ESNext",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"],
       "@/*": ["./src/*"]
     },
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
