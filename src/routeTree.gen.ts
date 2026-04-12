@@ -9,9 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TodosIndexRouteImport } from './routes/todos/index'
+import { Route as ApiSplatRouteImport } from './routes/api/$'
+import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 
+const SignUpRoute = SignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -22,35 +31,86 @@ const TodosIndexRoute = TodosIndexRouteImport.update({
   path: '/todos/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSplatRoute = ApiSplatRouteImport.update({
+  id: '/api/$',
+  path: '/api/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
+  id: '/api/rpc/$',
+  path: '/api/rpc/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sign-up': typeof SignUpRoute
+  '/api/$': typeof ApiSplatRoute
   '/todos/': typeof TodosIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sign-up': typeof SignUpRoute
+  '/api/$': typeof ApiSplatRoute
   '/todos': typeof TodosIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/sign-up': typeof SignUpRoute
+  '/api/$': typeof ApiSplatRoute
   '/todos/': typeof TodosIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/todos/'
+  fullPaths:
+    | '/'
+    | '/sign-up'
+    | '/api/$'
+    | '/todos/'
+    | '/api/auth/$'
+    | '/api/rpc/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/todos'
-  id: '__root__' | '/' | '/todos/'
+  to: '/' | '/sign-up' | '/api/$' | '/todos' | '/api/auth/$' | '/api/rpc/$'
+  id:
+    | '__root__'
+    | '/'
+    | '/sign-up'
+    | '/api/$'
+    | '/todos/'
+    | '/api/auth/$'
+    | '/api/rpc/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SignUpRoute: typeof SignUpRoute
+  ApiSplatRoute: typeof ApiSplatRoute
   TodosIndexRoute: typeof TodosIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -65,12 +125,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TodosIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/$': {
+      id: '/api/$'
+      path: '/api/$'
+      fullPath: '/api/$'
+      preLoaderRoute: typeof ApiSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/rpc/$': {
+      id: '/api/rpc/$'
+      path: '/api/rpc/$'
+      fullPath: '/api/rpc/$'
+      preLoaderRoute: typeof ApiRpcSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SignUpRoute: SignUpRoute,
+  ApiSplatRoute: ApiSplatRoute,
   TodosIndexRoute: TodosIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiRpcSplatRoute: ApiRpcSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

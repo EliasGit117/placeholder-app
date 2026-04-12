@@ -1,11 +1,13 @@
 {
   "include": ["**/*.ts", "**/*.tsx"],
   "compilerOptions": {
+    "allowJs": true,
     "target": "ES2022",
     "jsx": "react-jsx",
     "module": "ESNext",
     "baseUrl": ".",
     "paths": {
+      "~/*": ["./*"],
       "@/*": ["./src/*"]
     },
     "lib": ["ES2022", "DOM", "DOM.Iterable"],

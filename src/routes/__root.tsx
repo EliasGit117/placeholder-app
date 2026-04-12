@@ -3,12 +3,11 @@ import {
   Scripts,
   createRootRouteWithContext
 } from '@tanstack/react-router';
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
-import { TanStackDevtools } from '@tanstack/react-devtools';
-import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
 import appCss from '../styles.css?url';
 import type { QueryClient } from '@tanstack/react-query';
-import { TooltipProvider } from '@/components/ui/tooltip.tsx';
+import { envConfig } from '@/lib/config';
+import { ThemeProvider } from 'better-themes';
+import { MainLayout } from '@/components/layout/main';
 
 
 interface IRouterContext {
@@ -22,7 +21,7 @@ export const Route = createRootRouteWithContext<IRouterContext>()({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'TanStack Start Starter' }
+      { title: envConfig.appName }
     ],
     links: [
       { rel: 'stylesheet', href: appCss }
@@ -33,26 +32,20 @@ export const Route = createRootRouteWithContext<IRouterContext>()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <TooltipProvider>
-      <html lang="en" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}/>
-        <HeadContent/>
-      </head>
+    <html lang="en" suppressHydrationWarning>
+    <head>
+      <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}/>
+      <HeadContent/>
+    </head>
 
-      <body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-[rgba(79,184,178,0.24)]">
-      {children}
-
-      <TanStackDevtools
-        config={{ position: 'bottom-right' }}
-        plugins={[
-          { name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel/> },
-          TanStackQueryDevtools
-        ]}
-      />
+    <body className="font-sans antialiased wrap-anywhere min-h-screen flex flex-col">
+    <ThemeProvider attribute="class" disableTransitionOnChange>
+      <MainLayout>
+        {children}
+      </MainLayout>
       <Scripts/>
-      </body>
-      </html>
-    </TooltipProvider>
+    </ThemeProvider>
+    </body>
+    </html>
   );
 }
