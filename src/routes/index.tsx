@@ -74,15 +74,15 @@ function App() {
             </div>
 
             <div className="grid gap-2.5 sm:grid-cols-3 mt-auto">
-              <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-3 backdrop-blur">
+              <div className="rounded-md border border-border/70 bg-background/70 p-3 backdrop-blur">
                 <p className="text-xs text-muted-foreground">Primary goal</p>
                 <p className="mt-1.5 text-sm font-semibold">Guide action fast</p>
               </div>
-              <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-3 backdrop-blur">
+              <div className="rounded-md border border-border/70 bg-background/70 p-3 backdrop-blur">
                 <p className="text-xs text-muted-foreground">Visual tone</p>
                 <p className="mt-1.5 text-sm font-semibold">Warm, focused, clean</p>
               </div>
-              <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-3 backdrop-blur">
+              <div className="rounded-md border border-border/70 bg-background/70 p-3 backdrop-blur">
                 <p className="text-xs text-muted-foreground">Next step</p>
                 <p className="mt-1.5 text-sm font-semibold">Connect live data</p>
               </div>
@@ -103,19 +103,19 @@ function App() {
 
             <CardContent className="space-y-3 py-4">
               <div className="grid grid-cols-2 gap-2.5">
-                <div className="rounded-[1.5rem] bg-primary p-3 text-primary-foreground">
+                <div className="rounded-md bg-primary p-3 text-primary-foreground">
                   <p className="text-[0.65rem] uppercase tracking-[0.16em] text-primary-foreground/70">Modules</p>
                   <p className="mt-2 text-2xl font-semibold">03</p>
                   <p className="mt-1 text-xs text-primary-foreground/70">Homepage, todos, API</p>
                 </div>
-                <div className="rounded-[1.5rem] bg-secondary p-3 text-secondary-foreground">
+                <div className="rounded-md bg-secondary p-3 text-secondary-foreground">
                   <p className="text-[0.65rem] uppercase tracking-[0.16em] text-secondary-foreground/60">Status</p>
                   <p className="mt-2 text-2xl font-semibold">Live</p>
                   <p className="mt-1 text-xs text-secondary-foreground/60">Ready for richer states</p>
                 </div>
               </div>
 
-              <div className="rounded-[1.5rem] border border-dashed border-border bg-background/70 p-4">
+              <div className="rounded-md border border-dashed border-border bg-background/70 p-4">
                 <div className="flex items-start gap-2.5">
                   <div className="rounded-xl bg-accent p-2 text-accent-foreground">
                     <IconChecklist className="size-4" />

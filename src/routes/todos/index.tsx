@@ -25,10 +25,13 @@ import {
   IconRefresh
 } from '@tabler/icons-react';
 
+
 export const Route = createFileRoute('/todos/')({
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {
-    await awaitIfServer(queryClient.ensureQueryData(orpc.todos.search.queryOptions({ input: {} })));
+    await awaitIfServer(queryClient.ensureQueryData({
+      ...orpc.todos.search.queryOptions({ input: {} }),
+    }));
   }
 });
 
@@ -77,15 +80,15 @@ function RouteComponent() {
             </div>
 
             <div className="grid gap-2.5 sm:grid-cols-3">
-              <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-3 backdrop-blur">
+              <div className="rounded-md border border-border/70 bg-background/70 p-3 backdrop-blur">
                 <p className="text-xs text-muted-foreground">Items</p>
                 <p className="mt-1.5 text-sm font-semibold">{items.length.toString().padStart(2, '0')}</p>
               </div>
-              <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-3 backdrop-blur">
+              <div className="rounded-md border border-border/70 bg-background/70 p-3 backdrop-blur">
                 <p className="text-xs text-muted-foreground">State</p>
                 <p className="mt-1.5 text-sm font-semibold">{isFetching ? 'Refreshing' : 'Synced'}</p>
               </div>
-              <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-3 backdrop-blur">
+              <div className="rounded-md border border-border/70 bg-background/70 p-3 backdrop-blur">
                 <p className="text-xs text-muted-foreground">View</p>
                 <p className="mt-1.5 text-sm font-semibold">Compact overview</p>
               </div>
@@ -120,19 +123,19 @@ function RouteComponent() {
 
             <CardContent className="space-y-3 py-4">
               <div className="grid grid-cols-2 gap-2.5">
-                <div className="rounded-[1.5rem] bg-primary p-3 text-primary-foreground">
+                <div className="rounded-md bg-primary p-3 text-primary-foreground">
                   <p className="text-[0.65rem] uppercase tracking-[0.16em] text-primary-foreground/70">Loaded</p>
                   <p className="mt-2 text-2xl font-semibold">{items.length}</p>
                   <p className="mt-1 text-xs text-primary-foreground/70">Todos available now</p>
                 </div>
-                <div className="rounded-[1.5rem] bg-secondary p-3 text-secondary-foreground">
+                <div className="rounded-md bg-secondary p-3 text-secondary-foreground">
                   <p className="text-[0.65rem] uppercase tracking-[0.16em] text-secondary-foreground/60">Refresh</p>
                   <p className="mt-2 text-2xl font-semibold">{isFetching ? 'Now' : 'Manual'}</p>
                   <p className="mt-1 text-xs text-secondary-foreground/60">Use the button to sync</p>
                 </div>
               </div>
 
-              <div className="rounded-[1.5rem] border border-dashed border-border bg-background/70 p-4">
+              <div className="rounded-md border border-dashed border-border bg-background/70 p-4">
                 <div className="flex items-start gap-2.5">
                   <div className="rounded-xl bg-accent p-2 text-accent-foreground">
                     <IconChecklist className="size-4" />
@@ -181,7 +184,7 @@ function RouteComponent() {
                 ))}
               </div>
             ) : items.length === 0 ? (
-              <Empty className="rounded-[1.5rem] border border-dashed border-border bg-background/70 p-8">
+              <Empty className="rounded-md border border-dashed border-border bg-background/70 p-8">
                 <EmptyHeader>
                   <EmptyMedia variant="icon" className="bg-accent text-accent-foreground">
                     <IconChecklist />

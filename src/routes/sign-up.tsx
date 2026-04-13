@@ -101,15 +101,15 @@ function SignUpRoute() {
             </div>
 
             <div className="grid gap-2.5 sm:grid-cols-3">
-              <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-3 backdrop-blur">
+              <div className="rounded-md border border-border/70 bg-background/70 p-3 backdrop-blur">
                 <p className="text-xs text-muted-foreground">Auth</p>
                 <p className="mt-1.5 text-sm font-semibold">Better Auth</p>
               </div>
-              <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-3 backdrop-blur">
+              <div className="rounded-md border border-border/70 bg-background/70 p-3 backdrop-blur">
                 <p className="text-xs text-muted-foreground">Method</p>
                 <p className="mt-1.5 text-sm font-semibold">Email + password</p>
               </div>
-              <div className="rounded-[1.5rem] border border-border/70 bg-background/70 p-3 backdrop-blur">
+              <div className="rounded-md border border-border/70 bg-background/70 p-3 backdrop-blur">
                 <p className="text-xs text-muted-foreground">Next stop</p>
                 <p className="mt-1.5 text-sm font-semibold">Todo workspace</p>
               </div>
