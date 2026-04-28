@@ -1,7 +1,4 @@
-
-export async function awaitIfServer(promise: Promise<unknown>): Promise<void> {
-  if (typeof window !== 'undefined')
-    return;
-
-  await promise;
+export async function awaitIfServer<T>(promise: Promise<T>): Promise<T | undefined> {
+  if (!import.meta.env.SSR) return undefined;
+  return await promise;
 }

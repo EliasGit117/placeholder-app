@@ -9,7 +9,6 @@ import { getRequestHeaders } from '@tanstack/react-start/server';
 import { envConfig } from '@/lib/config';
 
 
-
 const handler = new OpenAPIHandler(orpcRouter, {
   interceptors: [
     onError((error) => {
@@ -17,19 +16,18 @@ const handler = new OpenAPIHandler(orpcRouter, {
     })
   ],
   plugins: [
-    new SmartCoercionPlugin({
-      schemaConverters: [new ZodToJsonSchemaConverter()]
-    }),
+    new SmartCoercionPlugin({ schemaConverters: [new ZodToJsonSchemaConverter()] }),
     new OpenAPIReferencePlugin({
       schemaConverters: [new ZodToJsonSchemaConverter()],
+      renderDocsHtml: (specUrl, title, head, scriptUrl, config) =>
+        renderScalarDocsHtml(specUrl, title, head, scriptUrl, config),
       specGenerateOptions: {
         servers: [{ url: `${envConfig.appBaseUrl}/api` }],
         info: {
           title: 'API',
           version: '1.0.0'
         },
-        commonSchemas: {
-        },
+        commonSchemas: {},
         security: [],
         components: {
           securitySchemes: {}
@@ -38,7 +36,11 @@ const handler = new OpenAPIHandler(orpcRouter, {
       docsConfig: {
         authentication: {
           securitySchemes: {}
-        }
+        },
+        sources: [
+          { title: 'Main API', url: '/api/spec.json' },
+          { title: 'Auth API', url: '/api/auth/spec.json' }
+        ]
       }
     })
   ]
@@ -78,3 +80,65 @@ export const Route = createFileRoute('/api/$')({
     }
   }
 });
+
+
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function escapeJsonForHtml(value: unknown) {
+  return JSON.stringify(value)
+    .replace(/&/g, '\\u0026')
+    .replace(/'/g, '\\u0027')
+    .replace(/</g, '\\u003C')
+    .replace(/>/g, '\\u003E')
+    .replace(/\//g, '\\u002F');
+}
+
+function getScalarConfig(specUrl: string, config: unknown) {
+  if (!config || typeof config !== 'object') {
+    return { url: specUrl };
+  }
+
+  const sources = Reflect.get(config, 'sources');
+  if (Array.isArray(sources) && sources.length > 0) {
+    return config;
+  }
+
+  return { ...config, url: specUrl };
+}
+
+function renderScalarDocsHtml(
+  specUrl: string,
+  title: string,
+  head: string,
+  scriptUrl: string,
+  config: unknown
+) {
+  const scalarConfig = getScalarConfig(specUrl, config);
+
+  return `
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>${escapeHtml(title)}</title>
+        ${head}
+      </head>
+      <body>
+        <div id="app"></div>
+        <script src="${escapeHtml(scriptUrl)}"><\/script>
+        <script>
+          const scalarConfig = ${escapeJsonForHtml(scalarConfig)}
+          Scalar.createApiReference('#app', scalarConfig)
+        <\/script>
+      </body>
+    </html>
+  `;
+}
