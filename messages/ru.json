@@ -1,4 +1,38 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "example_message": "Привет, {username}!"
+  "example_message": "Привет, {username}!",
+  "common": {
+    "unauthorized": "Неавторизован",
+    "loading": "Загрузка",
+    "forbidden": "Запрещено",
+    "error": "Ошибка",
+    "success": "Успешно",
+    "submit": "Отправить",
+    "email": "Электронная почта",
+    "password": "Пароль",
+    "invalid": "Недопустимое значение",
+    "full_name": "Полное имя"
+  },
+  "components": {
+    "auth": {
+      "sign_in_card": {
+        "title": "Вход",
+        "description": "Войдите в свой аккаунт",
+        "forgot_password": "Забыли пароль?",
+        "remember_me": "Запомнить меня",
+        "magic_link": "Войти по ссылке",
+        "dont_have_account": "Нет аккаунта?",
+        "create": "Создать"
+      },
+      "sign_up_card": {
+        "title": "Регистрация",
+        "description": "Создайте новый аккаунт",
+        "success_message": "Аккаунт создан. Теперь вы можете войти.",
+        "already_have_account": "Уже есть аккаунт?",
+        "sign_in": "Войти",
+        "show_passwords": "Показать пароли",
+        "confirm_password": "Подтвердите пароль"
+      }
+    }
+  }
 }

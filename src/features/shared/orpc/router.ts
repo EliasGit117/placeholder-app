@@ -1,10 +1,17 @@
 import { base } from '@/features/shared/orpc/base.ts';
 import type { InferRouterInputs, InferRouterOutputs } from '@orpc/server';
 import { todosRoutes } from '@/features/todos/routes';
+import { categoriesRoutes } from '@/features/categories/routes';
+import { sessionsPublicRoutes } from '@/features/sessions/routes/public';
 
 
 export const orpcRouter = base.router({
-  todos: todosRoutes
+  sessions: sessionsPublicRoutes,
+  categories: categoriesRoutes,
+  todos: todosRoutes,
+  admin: {
+    sessions: sessionsPublicRoutes,
+  },
 });
 
 export type TOrpcRouter = typeof orpcRouter;

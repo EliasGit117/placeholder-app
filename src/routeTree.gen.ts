@@ -9,32 +9,67 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SignUpRouteImport } from './routes/sign-up'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as TodosIndexRouteImport } from './routes/todos/index'
+import { Route as AuthRouteRouteImport } from './routes/auth/route'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
+import { Route as PublicRouteRouteImport } from './routes/_public/route'
+import { Route as AuthIndexRouteImport } from './routes/auth/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
+import { Route as AuthSignUpIndexRouteImport } from './routes/auth/sign-up/index'
+import { Route as AuthSignInIndexRouteImport } from './routes/auth/sign-in/index'
+import { Route as PublicTodosIndexRouteImport } from './routes/_public/todos/index'
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 
-const SignUpRoute = SignUpRouteImport.update({
-  id: '/sign-up',
-  path: '/sign-up',
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicRouteRoute = PublicRouteRouteImport.update({
+  id: '/_public',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthIndexRoute = AuthIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthRouteRoute,
 } as any)
-const TodosIndexRoute = TodosIndexRouteImport.update({
-  id: '/todos/',
-  path: '/todos/',
-  getParentRoute: () => rootRouteImport,
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const PublicIndexRoute = PublicIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PublicRouteRoute,
 } as any)
 const ApiSplatRoute = ApiSplatRouteImport.update({
   id: '/api/$',
   path: '/api/$',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthSignUpIndexRoute = AuthSignUpIndexRouteImport.update({
+  id: '/sign-up/',
+  path: '/sign-up/',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthSignInIndexRoute = AuthSignInIndexRouteImport.update({
+  id: '/sign-in/',
+  path: '/sign-in/',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const PublicTodosIndexRoute = PublicTodosIndexRouteImport.update({
+  id: '/todos/',
+  path: '/todos/',
+  getParentRoute: () => PublicRouteRoute,
 } as any)
 const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   id: '/api/rpc/$',
@@ -48,82 +83,137 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/sign-up': typeof SignUpRoute
+  '/': typeof PublicIndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/auth': typeof AuthRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
-  '/todos/': typeof TodosIndexRoute
+  '/admin/': typeof AdminIndexRoute
+  '/auth/': typeof AuthIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/todos/': typeof PublicTodosIndexRoute
+  '/auth/sign-in/': typeof AuthSignInIndexRoute
+  '/auth/sign-up/': typeof AuthSignUpIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/sign-up': typeof SignUpRoute
   '/api/$': typeof ApiSplatRoute
-  '/todos': typeof TodosIndexRoute
+  '/': typeof PublicIndexRoute
+  '/admin': typeof AdminIndexRoute
+  '/auth': typeof AuthIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/todos': typeof PublicTodosIndexRoute
+  '/auth/sign-in': typeof AuthSignInIndexRoute
+  '/auth/sign-up': typeof AuthSignUpIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/sign-up': typeof SignUpRoute
+  '/_public': typeof PublicRouteRouteWithChildren
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/auth': typeof AuthRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
-  '/todos/': typeof TodosIndexRoute
+  '/_public/': typeof PublicIndexRoute
+  '/admin/': typeof AdminIndexRoute
+  '/auth/': typeof AuthIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/_public/todos/': typeof PublicTodosIndexRoute
+  '/auth/sign-in/': typeof AuthSignInIndexRoute
+  '/auth/sign-up/': typeof AuthSignUpIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/sign-up'
+    | '/admin'
+    | '/auth'
     | '/api/$'
-    | '/todos/'
+    | '/admin/'
+    | '/auth/'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/todos/'
+    | '/auth/sign-in/'
+    | '/auth/sign-up/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sign-up' | '/api/$' | '/todos' | '/api/auth/$' | '/api/rpc/$'
+  to:
+    | '/api/$'
+    | '/'
+    | '/admin'
+    | '/auth'
+    | '/api/auth/$'
+    | '/api/rpc/$'
+    | '/todos'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
   id:
     | '__root__'
-    | '/'
-    | '/sign-up'
+    | '/_public'
+    | '/admin'
+    | '/auth'
     | '/api/$'
-    | '/todos/'
+    | '/_public/'
+    | '/admin/'
+    | '/auth/'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/_public/todos/'
+    | '/auth/sign-in/'
+    | '/auth/sign-up/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  SignUpRoute: typeof SignUpRoute
+  PublicRouteRoute: typeof PublicRouteRouteWithChildren
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
   ApiSplatRoute: typeof ApiSplatRoute
-  TodosIndexRoute: typeof TodosIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sign-up': {
-      id: '/sign-up'
-      path: '/sign-up'
-      fullPath: '/sign-up'
-      preLoaderRoute: typeof SignUpRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/': {
+      id: '/auth/'
+      path: '/'
+      fullPath: '/auth/'
+      preLoaderRoute: typeof AuthIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/_public/': {
+      id: '/_public/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/todos/': {
-      id: '/todos/'
-      path: '/todos'
-      fullPath: '/todos/'
-      preLoaderRoute: typeof TodosIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
     }
     '/api/$': {
       id: '/api/$'
@@ -131,6 +221,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/$'
       preLoaderRoute: typeof ApiSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/auth/sign-up/': {
+      id: '/auth/sign-up/'
+      path: '/sign-up'
+      fullPath: '/auth/sign-up/'
+      preLoaderRoute: typeof AuthSignUpIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/sign-in/': {
+      id: '/auth/sign-in/'
+      path: '/sign-in'
+      fullPath: '/auth/sign-in/'
+      preLoaderRoute: typeof AuthSignInIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_public/todos/': {
+      id: '/_public/todos/'
+      path: '/todos'
+      fullPath: '/todos/'
+      preLoaderRoute: typeof PublicTodosIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
     }
     '/api/rpc/$': {
       id: '/api/rpc/$'
@@ -149,11 +260,53 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface PublicRouteRouteChildren {
+  PublicIndexRoute: typeof PublicIndexRoute
+  PublicTodosIndexRoute: typeof PublicTodosIndexRoute
+}
+
+const PublicRouteRouteChildren: PublicRouteRouteChildren = {
+  PublicIndexRoute: PublicIndexRoute,
+  PublicTodosIndexRoute: PublicTodosIndexRoute,
+}
+
+const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
+  PublicRouteRouteChildren,
+)
+
+interface AdminRouteRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
+interface AuthRouteRouteChildren {
+  AuthIndexRoute: typeof AuthIndexRoute
+  AuthSignInIndexRoute: typeof AuthSignInIndexRoute
+  AuthSignUpIndexRoute: typeof AuthSignUpIndexRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthIndexRoute: AuthIndexRoute,
+  AuthSignInIndexRoute: AuthSignInIndexRoute,
+  AuthSignUpIndexRoute: AuthSignUpIndexRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  SignUpRoute: SignUpRoute,
+  PublicRouteRoute: PublicRouteRouteWithChildren,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
   ApiSplatRoute: ApiSplatRoute,
-  TodosIndexRoute: TodosIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
 }

@@ -7,25 +7,26 @@ import {
   DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
+  DropdownMenuRadioItem, DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu.tsx';
 import { getLocale, isLocale, setLocale, type Locale } from '@/paraglide/runtime';
-import { IconLanguage } from '@tabler/icons-react';
+import { IconWorld } from '@tabler/icons-react';
 import { type ComponentProps, type FC } from 'react';
 import type { VariantProps } from 'class-variance-authority';
 
 const localeOptions: { label: string, shortLabel: string, value: Locale }[] = [
-  { label: 'English', shortLabel: 'EN', value: 'en' },
-  { label: 'Russian', shortLabel: 'RU', value: 'ru' }
+  { label: 'Românǎ', shortLabel: 'RO', value: 'ro' },
+  { label: 'Русский', shortLabel: 'RU', value: 'ru' }
 ];
 
 
 interface IProps extends Omit<ComponentProps<typeof Button>, 'onClick' | 'size'> {
   size?: Extract<VariantProps<typeof buttonVariants>["size"],"icon-sm" | "icon" | "icon-lg">;
+  align?: 'start' | 'center' | 'end';
 }
 
-export const LocaleDropdown: FC<IProps> = ({ ...props }) => {
+export const LocaleDropdown: FC<IProps> = ({ variant = 'outline', size = 'icon', align, ...props }) => {
   const locale = getLocale();
 
   function handleLocaleChange(value: string) {
@@ -38,14 +39,16 @@ export const LocaleDropdown: FC<IProps> = ({ ...props }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" {...props}>
-          <IconLanguage/>
+        <Button variant={variant} size={size} {...props}>
+          <IconWorld/>
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="min-w-36">
+
+      <DropdownMenuContent align={align} className="min-w-36">
         <DropdownMenuGroup>
           <DropdownMenuLabel>Language</DropdownMenuLabel>
+          <DropdownMenuSeparator/>
           <DropdownMenuRadioGroup value={locale} onValueChange={handleLocaleChange}>
             {localeOptions.map((option) => (
               <DropdownMenuRadioItem key={option.value} value={option.value}>

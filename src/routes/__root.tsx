@@ -1,22 +1,32 @@
 import {
   HeadContent,
   Scripts,
-  createRootRouteWithContext
+  createRootRouteWithContext, useRouter
 } from '@tanstack/react-router';
 import appCss from '../styles.css?url';
-import type { QueryClient } from '@tanstack/react-query';
+import { type QueryClient, useQuery } from '@tanstack/react-query';
 import { envConfig } from '@/lib/config';
 import { ThemeProvider } from 'better-themes';
-import { MainLayout } from '@/components/layout/main';
+import type { TSession, TUser } from '@/lib/auth/server.ts';
+import { type FC, type ReactNode, useEffect, useRef } from 'react';
+import { orpc } from '@/lib/orpc';
+import { getZodErrorMap } from '@/lib/zod';
+import { getLocale } from '@/paraglide/runtime';
+import { z } from 'zod';
 
 
 interface IRouterContext {
   queryClient: QueryClient;
+  session?: TSession | null;
+  user?: TUser | null;
 }
 
-const THEME_INIT_SCRIPT = `(function(){try{var stored=window.localStorage.getItem('theme');var mode=(stored==='light'||stored==='dark'||stored==='auto')?stored:'auto';var prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;var resolved=mode==='auto'?(prefersDark?'dark':'light'):mode;var root=document.documentElement;root.classList.remove('light','dark');root.classList.add(resolved);if(mode==='auto'){root.removeAttribute('data-theme')}else{root.setAttribute('data-theme',mode)}root.style.colorScheme=resolved;}catch(e){}})();`;
 
 export const Route = createRootRouteWithContext<IRouterContext>()({
+  beforeLoad: async ({ context: { queryClient } }) => {
+    const res = await queryClient.ensureQueryData(orpc.sessions.current.queryOptions());
+    return { session: res?.session, user: res?.user };
+  },
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
@@ -30,22 +40,49 @@ export const Route = createRootRouteWithContext<IRouterContext>()({
   shellComponent: RootDocument
 });
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+
+function RootDocument({ children }: { children: ReactNode }) {
+  const locale = getLocale();
+
+  useEffect(() => {
+    getZodErrorMap(locale)
+      .then((res) => z.config(res));
+  }, []);
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
     <head>
-      <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}/>
       <HeadContent/>
     </head>
 
     <body className="font-sans antialiased wrap-anywhere min-h-screen flex flex-col">
     <ThemeProvider attribute="class" disableTransitionOnChange>
-      <MainLayout>
-        {children}
-      </MainLayout>
+      {children}
       <Scripts/>
     </ThemeProvider>
+
+    <RouterInvalidation/>
     </body>
     </html>
   );
 }
+
+// Invalidates route if session change
+const RouterInvalidation: FC = () => {
+  const router = useRouter();
+  const { data: authRes } = useQuery({
+    ...orpc.sessions.current.queryOptions(),
+    retry: false
+  });
+  const prevSession = useRef<TSession | null>(authRes?.session);
+
+  useEffect(() => {
+    if (authRes?.session === prevSession.current)
+      return;
+
+    prevSession.current = authRes?.session;
+    router.invalidate();
+  }, [authRes]);
+
+  return null;
+};

@@ -20,8 +20,12 @@ export const auth = betterAuth({
     tanstackStartCookies(),
     openAPI({ disableDefaultReference: true }),
     admin({
+      defaultRole: 'user',
       ac: accessControl,
       roles: roles
     })
   ]
 });
+
+export type TUser = typeof auth.$Infer.Session.user;
+export type TSession = typeof auth.$Infer.Session.session;

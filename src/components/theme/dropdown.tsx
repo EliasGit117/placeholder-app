@@ -1,5 +1,3 @@
-'use client';
-
 import { useTheme } from 'better-themes';
 import { Button, buttonVariants } from '@/components/ui/button.tsx';
 import {
@@ -8,7 +6,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
+  DropdownMenuRadioItem, DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu.tsx';
 import { IconMoon, IconPalette, IconSun, type TablerIcon } from '@tabler/icons-react';
@@ -32,9 +30,10 @@ function isThemeOption(value: string): value is TTheme {
 
 interface IProps extends Omit<ComponentProps<typeof Button>, 'onClick' | 'size'> {
   size?: Extract<VariantProps<typeof buttonVariants>["size"],"icon-sm" | "icon" | "icon-lg">;
+  align?: 'start' | 'center' | 'end';
 }
 
-export const ThemeDropdown: FC<IProps> = ({ ...props }) => {
+export const ThemeDropdown: FC<IProps> = ({ variant = 'outline', size = 'icon', align, ...props }) => {
   const { theme, setTheme } = useTheme();
 
   const currentOption = themeOptions.find(option => option.value === theme);
@@ -49,14 +48,16 @@ export const ThemeDropdown: FC<IProps> = ({ ...props }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" {...props}>
-          {currentOption?.icon && <currentOption.icon/>}
+        <Button variant={variant} size={size} {...props}>
+          <IconSun className='dark:hidden'/>
+          <IconMoon className='hidden dark:block'/>
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="min-w-36">
+      <DropdownMenuContent align={align} className="min-w-36">
         <DropdownMenuGroup>
           <DropdownMenuLabel>Theme</DropdownMenuLabel>
+          <DropdownMenuSeparator/>
           <DropdownMenuRadioGroup value={currentOption?.value} onValueChange={handleThemeChange}>
             {themeOptions.map(({ icon: Icon, label, value }) => (
               <DropdownMenuRadioItem key={value} value={value}>

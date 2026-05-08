@@ -1,4 +1,38 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "example_message": "Salut, {username}!"
+  "example_message": "Salut, {username}!",
+  "common": {
+    "unauthorized": "Neautorizat",
+    "loading": "Încărcare",
+    "forbidden": "Interzis",
+    "error": "Eroare",
+    "success": "Succes",
+    "submit": "Trimite",
+    "email": "Email",
+    "password": "Parolă",
+    "invalid": "Invalid",
+    "full_name": "Nume complet"
+  },
+  "components": {
+    "auth": {
+      "sign_in_card": {
+        "title": "Autentificare",
+        "description": "Conectează-te la contul tău",
+        "forgot_password": "Ai uitat parola?",
+        "remember_me": "Ține-mă minte",
+        "magic_link": "Trimite link magic",
+        "dont_have_account": "Nu ai un cont?",
+        "create": "Creează unul"
+      },
+      "sign_up_card": {
+        "title": "Înregistrare",
+        "description": "Creează un cont nou",
+        "success_message": "Contul a fost creat. Acum te poți autentifica.",
+        "already_have_account": "Ai deja un cont?",
+        "sign_in": "Autentifică-te",
+        "show_passwords": "Afișează parolele",
+        "confirm_password": "Confirmă parola"
+      }
+    }
+  }
 }

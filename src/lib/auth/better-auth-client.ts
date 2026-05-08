@@ -1,7 +1,8 @@
 import { envConfig } from '@/lib/config';
 import { createAuthClient } from 'better-auth/react';
-import { adminClient } from 'better-auth/client/plugins';
+import { adminClient, inferAdditionalFields } from 'better-auth/client/plugins';
 import { accessControl, roles } from './permissions';
+import type { auth } from './better-auth.ts';
 
 
 export const authClient = createAuthClient({
@@ -13,9 +14,7 @@ export const authClient = createAuthClient({
     }
   },
   plugins: [
-    adminClient({
-      ac: accessControl,
-      roles: roles,
-    })
+    adminClient({ ac: accessControl, roles: roles, }),
+    inferAdditionalFields<typeof auth>(),
   ]
 });

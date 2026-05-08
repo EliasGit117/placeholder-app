@@ -1,38 +1,17 @@
-import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from '~/prisma/generated/prisma/client';
-import { serverEnvConfig } from '@/lib/config/server-env-config';
+import { createPrismaClient } from '@/lib/db/create-client.ts';
 
 
-const adapter = new PrismaPg({
-  connectionString: serverEnvConfig.dbUrl
-});
-
-function createPrismaClient() {
-  const client = new PrismaClient({
-    adapter: adapter,
-    log: [
-      { emit: "event", level: "query" },
-      { emit: "stdout", level: "error" },
-      { emit: "stdout", level: "info" },
-      { emit: "stdout", level: "warn" }
-    ],
-  });
-
-  client.$on("query", (event) => {
-    console.log("Query: " + event.query);
-    console.log("Params: " + event.params);
-    console.log("Duration: " + event.duration + "ms");
-  });
-
-  return client;
-}
+export type TPrismaExtendedClient = ReturnType<typeof createPrismaClient>;
+export type TxClient = Omit<TPrismaExtendedClient, '$connect' | '$disconnect' | '$transaction' | '$extends'>;
 
 declare global {
-  var __prisma: PrismaClient | undefined;
+  var __prisma: TPrismaExtendedClient | undefined;
 }
 
-export const prisma = globalThis.__prisma || createPrismaClient();
+export const prisma =
+  globalThis.__prisma ?? createPrismaClient();
 
-if (!serverEnvConfig.isProduction) {
+if (process.env.NODE_ENV !== 'production') {
   globalThis.__prisma = prisma;
 }
+
