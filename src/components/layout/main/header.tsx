@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { LocaleDropdown } from '@/components/locale';
 import { ThemeDropdown } from '@/components/theme';
 import { LogoButton } from '../common/logo-button.tsx';
-import { useAuth } from '@/hooks/use-session.ts';
+import { useAuth } from '@/hooks/use-auth.ts';
 import { getLinksPerRole } from '@/components/layout/main/links.ts';
 import { UserDropdown } from '../common/user-dropdown.tsx';
 import { AppSidebarTrigger } from '@/components/layout/main/sidebar.tsx';

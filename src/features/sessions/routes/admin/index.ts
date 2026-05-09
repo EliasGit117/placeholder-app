@@ -1,8 +1,6 @@
-import { listSessions } from './list.ts';
-import { revokeSessions } from './revoke-sessions.ts';
+import { adminSessionsSearch } from '@/features/sessions/routes/admin/search.ts';
 
 
 export const sessionsAdminRoutes = {
-  list: listSessions,
-  revoke: revokeSessions
+  search: adminSessionsSearch,
 };

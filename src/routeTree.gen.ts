@@ -16,8 +16,10 @@ import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
+import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
 import { Route as AuthSignUpIndexRouteImport } from './routes/auth/sign-up/index'
 import { Route as AuthSignInIndexRouteImport } from './routes/auth/sign-in/index'
+import { Route as AdminSessionsIndexRouteImport } from './routes/admin/sessions/index'
 import { Route as PublicTodosIndexRouteImport } from './routes/_public/todos/index'
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
@@ -56,6 +58,11 @@ const ApiSplatRoute = ApiSplatRouteImport.update({
   path: '/api/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AuthSignUpIndexRoute = AuthSignUpIndexRouteImport.update({
   id: '/sign-up/',
   path: '/sign-up/',
@@ -65,6 +72,11 @@ const AuthSignInIndexRoute = AuthSignInIndexRouteImport.update({
   id: '/sign-in/',
   path: '/sign-in/',
   getParentRoute: () => AuthRouteRoute,
+} as any)
+const AdminSessionsIndexRoute = AdminSessionsIndexRouteImport.update({
+  id: '/sessions/',
+  path: '/sessions/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 const PublicTodosIndexRoute = PublicTodosIndexRouteImport.update({
   id: '/todos/',
@@ -86,16 +98,19 @@ export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
+  '/admin/settings': typeof AdminSettingsRoute
   '/api/$': typeof ApiSplatRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/todos/': typeof PublicTodosIndexRoute
+  '/admin/sessions/': typeof AdminSessionsIndexRoute
   '/auth/sign-in/': typeof AuthSignInIndexRoute
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
 }
 export interface FileRoutesByTo {
+  '/admin/settings': typeof AdminSettingsRoute
   '/api/$': typeof ApiSplatRoute
   '/': typeof PublicIndexRoute
   '/admin': typeof AdminIndexRoute
@@ -103,6 +118,7 @@ export interface FileRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/todos': typeof PublicTodosIndexRoute
+  '/admin/sessions': typeof AdminSessionsIndexRoute
   '/auth/sign-in': typeof AuthSignInIndexRoute
   '/auth/sign-up': typeof AuthSignUpIndexRoute
 }
@@ -111,6 +127,7 @@ export interface FileRoutesById {
   '/_public': typeof PublicRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
+  '/admin/settings': typeof AdminSettingsRoute
   '/api/$': typeof ApiSplatRoute
   '/_public/': typeof PublicIndexRoute
   '/admin/': typeof AdminIndexRoute
@@ -118,6 +135,7 @@ export interface FileRoutesById {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/_public/todos/': typeof PublicTodosIndexRoute
+  '/admin/sessions/': typeof AdminSessionsIndexRoute
   '/auth/sign-in/': typeof AuthSignInIndexRoute
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
 }
@@ -127,16 +145,19 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/admin/settings'
     | '/api/$'
     | '/admin/'
     | '/auth/'
     | '/api/auth/$'
     | '/api/rpc/$'
     | '/todos/'
+    | '/admin/sessions/'
     | '/auth/sign-in/'
     | '/auth/sign-up/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/admin/settings'
     | '/api/$'
     | '/'
     | '/admin'
@@ -144,6 +165,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/api/rpc/$'
     | '/todos'
+    | '/admin/sessions'
     | '/auth/sign-in'
     | '/auth/sign-up'
   id:
@@ -151,6 +173,7 @@ export interface FileRouteTypes {
     | '/_public'
     | '/admin'
     | '/auth'
+    | '/admin/settings'
     | '/api/$'
     | '/_public/'
     | '/admin/'
@@ -158,6 +181,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/api/rpc/$'
     | '/_public/todos/'
+    | '/admin/sessions/'
     | '/auth/sign-in/'
     | '/auth/sign-up/'
   fileRoutesById: FileRoutesById
@@ -222,6 +246,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/auth/sign-up/': {
       id: '/auth/sign-up/'
       path: '/sign-up'
@@ -235,6 +266,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/sign-in/'
       preLoaderRoute: typeof AuthSignInIndexRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/admin/sessions/': {
+      id: '/admin/sessions/'
+      path: '/sessions'
+      fullPath: '/admin/sessions/'
+      preLoaderRoute: typeof AdminSessionsIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
     }
     '/_public/todos/': {
       id: '/_public/todos/'
@@ -275,11 +313,15 @@ const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
 )
 
 interface AdminRouteRouteChildren {
+  AdminSettingsRoute: typeof AdminSettingsRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminSessionsIndexRoute: typeof AdminSessionsIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminSettingsRoute: AdminSettingsRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminSessionsIndexRoute: AdminSessionsIndexRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(

@@ -213,7 +213,7 @@ function RouteComponent() {
                       <div
                         className="flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-xs text-muted-foreground">
                         <IconClockHour4 className="size-3.5"/>
-                        <span>{item.createdAt.toLocaleDateString()}</span>
+                        <span>{item.createdAt.toDateString()}</span>
                       </div>
                     </div>
                   </article>

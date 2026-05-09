@@ -13,6 +13,7 @@ import { orpc } from '@/lib/orpc';
 import { getZodErrorMap } from '@/lib/zod';
 import { getLocale } from '@/paraglide/runtime';
 import { z } from 'zod';
+import { ConfirmDialogProvider } from '@/components/ui/confirm-dialog.tsx';
 
 
 interface IRouterContext {
@@ -57,10 +58,12 @@ function RootDocument({ children }: { children: ReactNode }) {
 
     <body className="font-sans antialiased wrap-anywhere min-h-screen flex flex-col">
     <ThemeProvider attribute="class" disableTransitionOnChange>
-      {children}
-      <Scripts/>
+      <ConfirmDialogProvider>
+        {children}
+      </ConfirmDialogProvider>
     </ThemeProvider>
 
+    <Scripts/>
     <RouterInvalidation/>
     </body>
     </html>

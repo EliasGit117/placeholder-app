@@ -10,7 +10,7 @@ const defaultLimit = 10;
 const maxLimit = 100;
 
 
-export const paginatedRequestSchema = z.object({
+export const paginatedRequestDtoSchema = z.object({
   page: z.number().int().min(1).default(1).meta({ example: 1, }),
 
   limit: z.number().int().min(minLimit).max(maxLimit).default(defaultLimit).meta({
@@ -24,14 +24,14 @@ export const paginatedRequestSchema = z.object({
   })
 });
 
-export const paginatedResultSchema = paginatedRequestSchema.extend({
+export const paginatedResultDtoSchema = paginatedRequestDtoSchema.extend({
   totalItems: z.number().int().min(0).meta({ example: 0 }),
   totalPages: z.number().int().min(1).meta({ example: 1 })
 });
 
 
-export type TPaginatedRequest = z.infer<typeof paginatedRequestSchema>;
-export type TPaginatedResult = z.infer<typeof paginatedResultSchema>;
+export type TPaginatedRequestDto = z.infer<typeof paginatedRequestDtoSchema>;
+export type TPaginatedResultDto = z.infer<typeof paginatedResultDtoSchema>;
 
 
 function getLimitSteps(min = minLimit, max = maxLimit, steps = 5): number[] {

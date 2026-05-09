@@ -1,9 +1,9 @@
-import { Session } from '~/prisma/generated/prisma/client.ts';
-import { paginatedSchema } from '@/features/shared/schemas/pagination.ts';
-import { z } from 'zod';
+import type { Session } from '~/prisma/generated/prisma/client.ts';
 import { dateRangeSchema } from '@/components/data-table';
+import { paginatedRequestDtoSchema } from '@/features/shared/schemas/pagination.ts';
+import { z } from 'zod';
 import { paginationResultWithCountDtoSchema } from '@/features/shared/dtos/pagination-result-dto.ts';
-import { sessionDtoSchema } from '@/features/sessions/dtos/session-dto.ts';
+import { sessionBriefDtoSchema } from '@/features/sessions/schemas/session-brief.ts';
 
 
 const sortableFields: (keyof Session)[] = [
@@ -15,7 +15,7 @@ const sortableFields: (keyof Session)[] = [
   'userId'
 ];
 
-export const listSessionsSchema = paginatedSchema.extend({
+export const searchSessionsRequestDtoSchema = paginatedRequestDtoSchema.extend({
   sort: z.enum(sortableFields).optional().catch(undefined),
   userId: z.string().optional().catch(undefined),
   ipAddress: z.string().optional().catch(undefined),
@@ -24,6 +24,6 @@ export const listSessionsSchema = paginatedSchema.extend({
   expiresAt: dateRangeSchema.optional().catch(undefined)
 });
 
-export type TListSessions = z.infer<typeof listSessionsSchema>;
-export const paginatedSessionSchema = paginationResultWithCountDtoSchema(sessionDtoSchema);
+export type TSearchSessionsRequestDto = z.infer<typeof searchSessionsRequestDtoSchema>;
+export const searchSessionsResultDtoSchema = paginationResultWithCountDtoSchema(sessionBriefDtoSchema);
 

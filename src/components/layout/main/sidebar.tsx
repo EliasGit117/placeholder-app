@@ -12,7 +12,7 @@ import { IconLayoutSidebar } from '@tabler/icons-react';
 import { contextFactory } from '@/lib/utils/context-factory.ts';
 import { LogoButton } from '@/components/layout/common';
 import { getLinksPerRole } from '@/components/layout/main/links.ts';
-import { useAuth } from '@/hooks/use-session.ts';
+import { useAuth } from '@/hooks/use-auth.ts';
 import { Link } from '@tanstack/react-router';
 
 

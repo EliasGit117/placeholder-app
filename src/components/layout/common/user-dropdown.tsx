@@ -1,5 +1,5 @@
 import type { ComponentProps, FC } from 'react';
-import { useAuth } from 'src/hooks/use-session.ts';
+import { useAuth } from '@/hooks/use-auth.ts';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/avatar.ts
 import { Spinner } from 'src/components/ui/spinner.tsx';
 import { pickFirstLetters } from 'src/lib/utils';
 import { cn } from '@/lib/utils';
+import { Link } from '@tanstack/react-router';
 
 
 type TButtonSize = NonNullable<VariantProps<typeof buttonVariants>['size']>;
@@ -51,7 +52,7 @@ export const UserDropdown: FC<IProps> = ({ className, align, variant = 'ghost', 
               {!!user ? (
                 <>
                   <AvatarImage src={user?.image ?? ''}/>
-                  {pickFirstLetters(user?.name, 4)}
+                  {pickFirstLetters(user?.name, 2)}
                 </>
               ) : (
                 <IconUser/>
@@ -82,9 +83,12 @@ export const UserDropdown: FC<IProps> = ({ className, align, variant = 'ghost', 
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator/>
-            <DropdownMenuItem>
-              <IconSettings/>
-              <span>Settings</span>
+
+            <DropdownMenuItem asChild>
+              <Link to="/admin/settings">
+                <IconSettings/>
+                <span>Settings</span>
+              </Link>
             </DropdownMenuItem>
 
             <DropdownMenuSeparator/>

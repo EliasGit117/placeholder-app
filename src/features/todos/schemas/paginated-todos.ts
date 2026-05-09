@@ -1,17 +1,17 @@
-import { paginatedRequestSchema, paginatedResultSchema } from '@/features/shared/schemas/pagination.ts';
+import { paginatedRequestDtoSchema, paginatedResultDtoSchema } from '@/features/shared/schemas/pagination.ts';
 import { z } from 'zod';
 import { todoSchema } from '@/features/todos/schemas/todo.ts';
 import { TodoState } from '~/prisma/generated/prisma/enums.ts';
 
 
-export const todosPaginatedRequestSchema = paginatedRequestSchema.extend({
+export const todosPaginatedRequestSchema = paginatedRequestDtoSchema.extend({
   sort: z.enum(['title', 'createdAt', 'updatedAt']).optional().meta({
     example: 'title',
     examples: ['title', 'createdAt', 'updatedAt']
   }),
 })
 
-export const todosPaginatedResultSchema = paginatedResultSchema.extend({
+export const todosPaginatedResultSchema = paginatedResultDtoSchema.extend({
   items: z.array(todoSchema).meta({
     example: [todoSchema.parse({
       id: 1,

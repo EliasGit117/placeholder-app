@@ -2,11 +2,12 @@ import type { ComponentPropsWithoutRef, FC } from 'react';
 import {
   IconCheckbox,
   IconChevronRight,
-  IconDashboard,
+  IconDashboard, IconKey,
   IconLanguage,
   IconMoon,
   IconPalette,
   IconSettings,
+  IconShieldLock,
   IconSun,
   type TablerIcon
 } from '@tabler/icons-react';
@@ -65,17 +66,23 @@ const navMain: ISidebarMenuItem[] = [
     icon: IconDashboard,
     items: [
       {
-        title: 'Todos',
+        title: 'Index',
         icon: IconCheckbox,
-        linkOptions: { to: '/admin', activeOptions: { includeSearch: false } }
+        linkOptions: { to: '/admin', activeOptions: { includeSearch: false, exact: true } }
       }
     ]
   },
   {
-    title: 'Todos',
-    icon: IconCheckbox,
-    linkOptions: { to: '/todos', activeOptions: { includeSearch: false } }
-  }
+    title: 'Security',
+    icon: IconShieldLock,
+    items: [
+      {
+        title: 'Sessions',
+        icon: IconKey,
+        linkOptions: { to: '/admin/sessions', activeOptions: { includeSearch: false } }
+      }
+    ]
+  },
 ];
 
 const collapsedSidebarIconClassName = 'group-data-[collapsible=icon]:[&_[data-sidebar=menu-button]>svg:first-child]:size-5! group-data-[collapsible=icon]:[&_[data-sidebar=menu-button]>svg:first-child]:-ml-0.5';

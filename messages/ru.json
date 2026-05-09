@@ -11,9 +11,36 @@
     "email": "Электронная почта",
     "password": "Пароль",
     "invalid": "Недопустимое значение",
-    "full_name": "Полное имя"
+    "full_name": "Полное имя",
+    "asc": "По возрастанию",
+    "desc": "По убыванию",
+    "clear": "Сбросить",
+    "selected": "выбрано",
+    "page": "Страница",
+    "of": "из",
+    "filter_by": "Фильтр по {name}",
+    "select": "Выбрать",
+    "created": "Создана",
+    "updated": "Обновлена",
+    "expires": "Истекает",
+    "status": "Статус",
+    "actions": "Действия",
+    "revoke": "Отозвать"
   },
   "components": {
+    "data_table": {
+      "clear": "Сбросить",
+      "clear_filters": "Сбросить фильтры",
+      "columns": "Столбцы",
+      "direction": "Направление",
+      "hide": "Скрыть",
+      "no_columns_found": "Столбцы не найдены",
+      "no_results_found": "Результаты не найдены",
+      "rows_per_page": "Строк на странице",
+      "search_columns": "Поиск по столбцам",
+      "sort": "Сортировка",
+      "sort_by": "Сортировать по"
+    },
     "auth": {
       "sign_in_card": {
         "title": "Вход",
@@ -32,6 +59,25 @@
         "sign_in": "Войти",
         "show_passwords": "Показать пароли",
         "confirm_password": "Подтвердите пароль"
+      }
+    }
+  },
+  "pages": {
+    "sessions": {
+      "index": {
+        "table": {
+          "userId": "Id пользователя",
+          "user": "Пользователь",
+          "agent": "Агент",
+          "ipAddress": "IP-адрес",
+          "type": "Тип",
+          "current": "Текущая",
+          "other": "Другая",
+          "external": "Внешняя",
+          "active": "Активна",
+          "revoked": "Отозвана",
+          "owner": "Владелец"
+        }
       }
     }
   }

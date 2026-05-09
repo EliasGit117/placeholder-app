@@ -11,9 +11,36 @@
     "email": "Email",
     "password": "Parolă",
     "invalid": "Invalid",
-    "full_name": "Nume complet"
+    "full_name": "Nume complet",
+    "asc": "Crescător",
+    "desc": "Descrescător",
+    "clear": "Golire",
+    "selected": "selectate",
+    "page": "Pagina",
+    "of": "din",
+    "filter_by": "Filtrare după {name}",
+    "select": "Selectează",
+    "created": "Creat",
+    "updated": "Actualizat",
+    "expires": "Expiră",
+    "status": "Stare",
+    "actions": "Acțiuni",
+    "revoke": "Revocare"
   },
   "components": {
+    "data_table": {
+      "clear": "Golire",
+      "clear_filters": "Golire filtre",
+      "columns": "Coloane",
+      "direction": "Direcție",
+      "hide": "Ascunde",
+      "no_columns_found": "Nu s-au găsit coloane",
+      "no_results_found": "Nu s-au găsit rezultate",
+      "rows_per_page": "Rânduri per pagină",
+      "search_columns": "Caută coloane",
+      "sort": "Sortare",
+      "sort_by": "Sortare după"
+    },
     "auth": {
       "sign_in_card": {
         "title": "Autentificare",
@@ -32,6 +59,25 @@
         "sign_in": "Autentifică-te",
         "show_passwords": "Afișează parolele",
         "confirm_password": "Confirmă parola"
+      }
+    }
+  },
+  "pages": {
+    "sessions": {
+      "index": {
+        "table": {
+          "userId": "Id utilizator",
+          "user": "Utilizator",
+          "agent": "Agent",
+          "ipAddress": "Adresă IP",
+          "type": "Tip",
+          "current": "Curentă",
+          "other": "Alta",
+          "external": "Externă",
+          "active": "Activă",
+          "revoked": "Revocată",
+          "owner": "Proprietar"
+        }
       }
     }
   }

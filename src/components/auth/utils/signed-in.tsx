@@ -1,9 +1,9 @@
-import { PropsWithChildren } from 'react';
-import { useSession } from '@/hooks/use-session.ts';
+import type { PropsWithChildren } from 'react';
+import { useAuth } from '@/hooks/use-auth.ts';
 
 interface IProps extends PropsWithChildren {}
 
 export const SignedIn = ({ children }: IProps) => {
-  const { session } = useSession();
+  const { session } = useAuth();
   return !!session ? children : null
 }
