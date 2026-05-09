@@ -57,7 +57,12 @@ export const adminSessionsSearch = sessionsPublicBase
 function getWhere(input: TSearchSessionsRequestDto): Prisma.SessionWhereInput {
   const where: Prisma.SessionWhereInput = {};
 
-  if (input.userId != null) where.userId = input.userId;
+  if (input.id != null)
+    where.id = input.id;
+
+  if (input.userId != null)
+    where.userId = input.userId;
+
   if (input.ipAddress != null)
     where.ipAddress = {
       contains: input.ipAddress,

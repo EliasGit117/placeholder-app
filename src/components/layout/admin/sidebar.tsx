@@ -91,7 +91,7 @@ export const AdminSidebar: FC<ComponentPropsWithoutRef<typeof Sidebar>> = ({ cla
   const { setOpenMobile } = useSidebar();
 
   return (
-    <Sidebar collapsible="icon" className={cn(collapsedSidebarIconClassName, className)} {...props}>
+    <Sidebar className={cn(collapsedSidebarIconClassName, className)} {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>

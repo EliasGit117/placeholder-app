@@ -14,7 +14,7 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button.tsx';
-import { IconCheck, IconTableOptions } from '@tabler/icons-react';
+import { IconTableOptions } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 
 
@@ -67,16 +67,13 @@ export function DataTableColumnsOptions<TData>({ ...props }: IDataTableColumnsOp
                 return (
                   <CommandItem
                     key={column.id}
+                    data-checked={column.getIsVisible()}
                     onSelect={() => column.toggleVisibility(!column.getIsVisible())}
                   >
                     {Icon && <Icon className='size-4 text-muted-foreground'/>}
                     <span className="truncate">
                       {column.columnDef.meta?.label ?? column.id}
                     </span>
-                    <IconCheck
-                      data-visible={column.getIsVisible()}
-                      className='ml-auto size-4 shrink-0 data-[visible=false]:opacity-0'
-                    />
                   </CommandItem>
                 );
               })}

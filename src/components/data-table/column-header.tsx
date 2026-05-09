@@ -4,12 +4,12 @@ import { Button } from '@/components/ui/button';
 import { type HTMLAttributes } from 'react';
 import {
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuContent, DropdownMenuGroup,
+  DropdownMenuItem, DropdownMenuRadioGroup, DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { IconChevronDown, IconSelector, IconChevronUp, IconPoint, IconEraser, IconEyeOff } from '@tabler/icons-react';
+import { IconChevronDown, IconSelector, IconChevronUp, IconEraser, IconEyeOff } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 
 
@@ -64,17 +64,19 @@ export function DataTableColumnHeader<TData, TValue>(props: DataTableColumnHeade
         </DropdownMenuTrigger>
 
         <DropdownMenuContent className="w-fit min-w-42" align="start">
-          <DropdownMenuItem onClick={() => toggleSorting(false)}>
-            <IconChevronUp/>
-            <span>{m['common.asc']()}</span>
-            {isSorted === 'asc' && (<IconPoint className="ml-auto stroke-5"/>)}
-          </DropdownMenuItem>
+          <DropdownMenuGroup>
+            <DropdownMenuRadioGroup value={`${isSorted}`}>
+              <DropdownMenuRadioItem value="asc" onClick={() => toggleSorting(false)}>
+                <IconChevronUp/>
+                <span>{m['common.asc']()}</span>
+              </DropdownMenuRadioItem>
 
-          <DropdownMenuItem onClick={() => toggleSorting(true)}>
-            <IconChevronDown/>
-            <span>{m['common.desc']()}</span>
-            {isSorted === 'desc' && (<IconPoint className="ml-auto stroke-5"/>)}
-          </DropdownMenuItem>
+              <DropdownMenuRadioItem value="desc" onClick={() => toggleSorting(true)}>
+                <IconChevronDown/>
+                <span>{m['common.desc']()}</span>
+              </DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+          </DropdownMenuGroup>
 
           {isSorted && (
             <DropdownMenuItem onClick={clearSorting}>
@@ -92,5 +94,6 @@ export function DataTableColumnHeader<TData, TValue>(props: DataTableColumnHeade
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-  );
+  )
+    ;
 }

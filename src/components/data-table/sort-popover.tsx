@@ -15,7 +15,7 @@ import {
   CommandList
 } from '@/components/ui/command.tsx';
 import { Separator } from '@/components/ui/separator.tsx';
-import { IconArrowsUpDown, IconChevronDown, IconChevronUp, IconPoint, IconCircleX } from '@tabler/icons-react';
+import { IconArrowsUpDown, IconChevronDown, IconChevronUp, IconCircleX } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 
 
@@ -62,13 +62,13 @@ export function DataTableSortPopover<TData>({ ...props }: IDataTableSortPopoverP
                 return (
                   <CommandItem
                     key={column.id}
+                    data-checked={currentSort?.id === column.id}
                     onSelect={() => table.setSorting([{ id: column.id, desc: !!currentSort?.desc }])}
                   >
                     {Icon && <Icon className="size-4 text-muted-foreground"/>}
                     <span className="truncate">
                       {column.columnDef.meta?.label ?? column.id}
                     </span>
-                    {currentSort?.id === column.id && (<IconPoint className="ml-auto stroke-5"/>)}
                   </CommandItem>
                 );
               })}
@@ -84,23 +84,23 @@ export function DataTableSortPopover<TData>({ ...props }: IDataTableSortPopoverP
               <CommandList>
                 <CommandGroup className="p-0" heading={m['components.data_table.direction']()}>
                   <CommandItem
+                    data-checked={!currentSort.desc}
                     onSelect={() => table.setSorting([{ id: currentSort.id, desc: false }])}
                   >
                     <IconChevronUp className="size-4 text-muted-foreground"/>
                     <span className="truncate">
                       {m['common.asc']()}
                     </span>
-                    {!currentSort.desc && <IconPoint className="ml-auto stroke-5"/>}
                   </CommandItem>
 
                   <CommandItem
+                    data-checked={currentSort.desc}
                     onSelect={() => table.setSorting([{ id: currentSort.id, desc: true }])}
                   >
                     <IconChevronDown className="size-4 text-muted-foreground"/>
                     <span className="truncate">
                       {m['common.desc']()}
                     </span>
-                    {currentSort.desc && <IconPoint className="ml-auto stroke-5"/>}
                   </CommandItem>
                 </CommandGroup>
               </CommandList>

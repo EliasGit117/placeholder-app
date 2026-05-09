@@ -76,7 +76,10 @@
           "external": "Externă",
           "active": "Activă",
           "revoked": "Revocată",
-          "owner": "Proprietar"
+          "owner": "Proprietar",
+          "validity": "Valabilitate",
+          "valid": "Validă",
+          "expired": "Expirată"
         }
       }
     }

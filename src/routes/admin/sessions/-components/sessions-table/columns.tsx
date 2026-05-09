@@ -47,7 +47,7 @@ import type { TSessionBriefDto } from '@/features/sessions/schemas/session-brief
 
 interface IOptions {
   disabled?: boolean;
-  canDelete?: boolean;
+  canRevoke?: boolean;
   onRevokeClick?: (id: string) => void;
 }
 
@@ -55,7 +55,7 @@ interface IOptions {
 const columnHelper = createColumnHelper<TSessionBriefDto>();
 
 export const sessionColumns = (options?: IOptions) => {
-  const { disabled, canDelete, onRevokeClick } = options ?? {};
+  const { disabled, canRevoke, onRevokeClick } = options ?? {};
 
   return ([
     columnHelper.display({
@@ -130,7 +130,7 @@ export const sessionColumns = (options?: IOptions) => {
         icon: IconUser,
         skeletonClassName: 'h-4 w-10',
         filter: {
-          type: ColumnFilterType.Text,
+          type: ColumnFilterType.Text
         }
       }
     }),
@@ -179,6 +179,7 @@ export const sessionColumns = (options?: IOptions) => {
     }),
 
     columnHelper.accessor('userAgent', {
+      enableSorting: false,
       header: ({ column }) => <DataTableColumnHeader column={column}/>,
       cell: ({ getValue }) => {
         const ua = getValue();
@@ -324,6 +325,32 @@ export const sessionColumns = (options?: IOptions) => {
       }
     }),
 
+    columnHelper.accessor('isExpired', {
+      size: 100,
+      enableSorting: false,
+      header: ({ column }) => <DataTableColumnHeader column={column}/>,
+      cell: ({ getValue }) => {
+        const isExpired = getValue();
+        if (isExpired == null)
+          return null;
+
+        return (
+          <Badge
+            variant={isExpired ? 'destructive' : 'outline'}
+            className={cn('rounded-sm min-h-6', !isExpired && 'border border-border')}
+          >
+            {isExpired ? <IconClock size={16}/> : <IconCheck size={16}/>}
+            <span>{isExpired ? m['pages.sessions.index.table.expired']() : m['pages.sessions.index.table.valid']()}</span>
+          </Badge>
+        );
+      },
+      meta: {
+        icon: IconClock,
+        label: m['pages.sessions.index.table.validity'](),
+        skeletonClassName: 'h-5.5 w-20 rounded-sm'
+      }
+    }),
+
     // Actions
     columnHelper.display({
       id: 'actions',
@@ -356,11 +383,11 @@ export const sessionColumns = (options?: IOptions) => {
                 {/*  </Link>*/}
                 {/*</DropdownMenuItem>*/}
 
-                {(!!onRevokeClick && canDelete) && (
+                {(!!onRevokeClick && canRevoke) && (
                   <DropdownMenuItem
                     variant="destructive"
                     disabled={disabled}
-                    onClick={() => onRevokeClick?.(row.original.id)}
+                    onClick={() => onRevokeClick?.(row.original.token)}
                   >
                     <IconTrash className="mr-2 size-4"/>
                     <span>{m['common.revoke']()}</span>

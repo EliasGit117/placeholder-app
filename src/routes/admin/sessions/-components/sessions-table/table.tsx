@@ -1,6 +1,6 @@
 import { useEffect, useMemo, type ComponentProps, type FC } from 'react';
 import type { TSearchSessionsRequestDto } from '@/features/sessions/schemas/search-sessions.ts';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { orpc } from '@/lib/orpc';
 import { sessionColumns } from '@/routes/admin/sessions/-components/sessions-table/columns.tsx';
 import {
@@ -14,20 +14,22 @@ import { exportToCsv } from '@/lib/utils/csv.ts';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
-import { IconFileDownload, IconRefresh, IconTrash } from '@tabler/icons-react';
+import { IconFileDownload, IconRefresh } from '@tabler/icons-react';
 import type { TSessionBriefDto } from '@/features/sessions/schemas/session-brief.ts';
 import { Button } from '@/components/ui/button.tsx';
+import { authClient } from '@/lib/auth';
 
 
 interface IProps extends ComponentProps<'div'> {
   search?: TSearchSessionsRequestDto;
-  canDelete?: boolean;
+  canRevoke?: boolean;
 }
 
 export const SessionsTable: FC<IProps> = (props) => {
   'use no memo';
 
-  const { className, canDelete, search, ...divProps } = props;
+  const { className, canRevoke, search, ...divProps } = props;
+  const queryClient = useQueryClient();
 
   const { data, isPending: isPendingData, isFetching: isFetchingData, refetch, error } = useQuery({
     ...orpc.admin.sessions.search.queryOptions({ input: search ?? {} }),
@@ -36,20 +38,22 @@ export const SessionsTable: FC<IProps> = (props) => {
     gcTime: 0,
   });
 
-  // const { mutate: revokeSessions, isPending: isRevokingSession } = useMutation({
-  //   ...sessions_delete_revoke_MutationOptions(),
-  //   onSuccess: () => {
-  //     void queryClient.invalidateQueries({ queryKey: sessions_post_search_QueryKeys({ body: search }) });
-  //     setRowSelection({});
-  //   }
-  // });
+  const { mutate: revokeSession, isPending: isRevokingSession } = useMutation({
+    mutationFn: ({ token }: { token: string }) => authClient.admin.revokeUserSession({
+      sessionToken: token
+    }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: orpc.admin.sessions.search.queryKey({ input: search ?? {} })
+      });
+    }
+  });
 
   const columns = useMemo(() => sessionColumns({
     disabled: isFetchingData,
-    canDelete: canDelete,
-    // onRevokeClick: (id) => revokeSessions({ query: { ids: [id] } })
-    onRevokeClick: () => {}
-  }), [isFetchingData, canDelete]);
+    canRevoke: canRevoke,
+    onRevokeClick: (token) => revokeSession({ token: token }),
+  }), [isFetchingData, canRevoke]);
 
 
   const { table, selectedItems, setRowSelection } = useDataTable({
@@ -81,16 +85,6 @@ export const SessionsTable: FC<IProps> = (props) => {
     exportToCsv('sessions.csv', selectedItems);
   };
 
-
-  const revokeSelectedSession = () => {
-    if (selectedItems?.length <= 0)
-      return;
-
-    // revokeSessions({ query: { ids: selectedItems.map(item => item.id) } });
-  };
-
-  const isRevokingSession = false;
-
   useEffect(() => {
     if (error == null)
       return;
@@ -113,15 +107,6 @@ export const SessionsTable: FC<IProps> = (props) => {
 
         <DataTableActionBar disabled={isFetchingData || isRevokingSession}>
           <ActionBarButton text="CSV" icon={IconFileDownload} onClick={onExportToCsvClick}/>
-          {canDelete && (
-            <ActionBarButton
-              text='Revoke'
-              // text={m['pages.sessions.list.table.revoke']()}
-              icon={IconTrash}
-              variant="destructive"
-              onClick={revokeSelectedSession}
-            />
-          )}
         </DataTableActionBar>
       </DataTableProvider>
     </div>

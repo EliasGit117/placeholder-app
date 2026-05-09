@@ -8,14 +8,15 @@ import { sessionBriefDtoSchema } from '@/features/sessions/schemas/session-brief
 
 const sortableFields: (keyof Session)[] = [
   'id',
+  'userId',
   'ipAddress',
   'createdAt',
   'updatedAt',
   'expiresAt',
-  'userId'
 ];
 
 export const searchSessionsRequestDtoSchema = paginatedRequestDtoSchema.extend({
+  id: z.string().optional().catch(undefined),
   sort: z.enum(sortableFields).optional().catch(undefined),
   userId: z.string().optional().catch(undefined),
   ipAddress: z.string().optional().catch(undefined),

@@ -14,6 +14,7 @@ export const sessionBriefDtoSchema = z.object({
 
   userId: z.string(),
   userAgent: z.string().optional(),
+  token: z.string(),
   ipAddress: z.string().optional(),
   isCurrent: z.boolean().optional(),
   isOwned: z.boolean().optional(),
@@ -42,6 +43,7 @@ export class SessionBriefDtoFactory {
         email: entity.user.email,
         name: entity.user.name,
       } : undefined,
+      token: entity.token,
       ipAddress: entity.ipAddress ?? undefined,
       userAgent: entity.userAgent ?? undefined,
       createdAt: entity.createdAt.toISOString(),

@@ -12,8 +12,9 @@ export const Route = createFileRoute('/admin/sessions/')({
   beforeLoad: async ({ context: { user } }) => {
     const canListSessions = await roleHasPermission(user?.role, { session: ['list'] });
     const canListUsers = await roleHasPermission(user?.role, { user: ['list'] });
+    const canRevokeSessions = await roleHasPermission(user?.role, { session: ['revoke'] });
     if (canListUsers && canListSessions)
-      return;
+      return { canRevoke: canRevokeSessions };
 
     throw redirect({ to: '/', replace: true });
   },
@@ -29,10 +30,11 @@ export const Route = createFileRoute('/admin/sessions/')({
 
 function RouteComponent() {
   const search = Route.useSearch();
+  const { canRevoke } = Route.useRouteContext();
 
   return (
     <div className="container mx-auto p-4 space-y-4">
-      <SessionsTable search={search}/>
+      <SessionsTable search={search} canRevoke={canRevoke}/>
     </div>
   );
 }
