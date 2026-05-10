@@ -9,8 +9,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from 'src/components/ui/dropdown-menu.tsx';
-import { Button, buttonVariants } from 'src/components/ui/button.tsx';
-import type { VariantProps } from 'class-variance-authority';
 import { IconLogin, IconLogout, IconSettings, IconUser, IconUserPlus } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authClient } from 'src/lib/auth/better-auth-client.ts';
@@ -20,17 +18,15 @@ import { Spinner } from 'src/components/ui/spinner.tsx';
 import { pickFirstLetters } from 'src/lib/utils';
 import { cn } from '@/lib/utils';
 import { Link } from '@tanstack/react-router';
+import { m } from '@/paraglide/messages';
 
 
-type TButtonSize = NonNullable<VariantProps<typeof buttonVariants>['size']>;
-type TButtonValidSize = Extract<TButtonSize, 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg'>;
 
-interface IProps extends Omit<ComponentProps<typeof Button>, 'children' | 'size' | 'onClick'> {
-  size?: TButtonValidSize;
+interface IProps extends Omit<ComponentProps<typeof Avatar>, 'children' | 'onClick'> {
   align?: 'start' | 'center' | 'end';
 }
 
-export const UserDropdown: FC<IProps> = ({ className, align, variant = 'ghost', size = 'icon', ...props }) => {
+export const UserDropdown: FC<IProps> = ({ className, align, size, ...props }) => {
   const queryClient = useQueryClient();
   const { user } = useAuth();
 
@@ -46,20 +42,18 @@ export const UserDropdown: FC<IProps> = ({ className, align, variant = 'ghost', 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size={size} variant={variant} className={cn('rounded-full', className)} {...props}>
-          <Avatar className="rounded-full">
-            <AvatarFallback>
-              {!!user ? (
-                <>
-                  <AvatarImage src={user?.image ?? ''}/>
-                  {pickFirstLetters(user?.name, 2)}
-                </>
-              ) : (
-                <IconUser/>
-              )}
-            </AvatarFallback>
-          </Avatar>
-        </Button>
+        <Avatar className={cn('rounded-full', className)} size={size} {...props}>
+          <AvatarFallback>
+            {!!user ? (
+              <>
+                <AvatarImage src={user?.image ?? ''}/>
+                {pickFirstLetters(user?.name, 2)}
+              </>
+            ) : (
+              <IconUser/>
+            )}
+          </AvatarFallback>
+        </Avatar>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="w-fit min-w-48" align={align}>
@@ -87,7 +81,7 @@ export const UserDropdown: FC<IProps> = ({ className, align, variant = 'ghost', 
             <DropdownMenuItem asChild>
               <Link to="/admin/settings">
                 <IconSettings/>
-                <span>Settings</span>
+                <span>{m['components.user_dropdown.settings']()}</span>
               </Link>
             </DropdownMenuItem>
 
@@ -95,26 +89,26 @@ export const UserDropdown: FC<IProps> = ({ className, align, variant = 'ghost', 
 
             <DropdownMenuItem variant="destructive" disabled={isPending} onClick={() => signOut()}>
               <IconLogout/>
-              <span>Sign Out</span>
+              <span>{m['components.user_dropdown.sign_out']()}</span>
               {isPending && <Spinner className="ml-auto"/>}
             </DropdownMenuItem>
           </DropdownMenuGroup>
         ) : (
           <DropdownMenuGroup>
             <DropdownMenuLabel>
-              Authorization
+              {m['components.user_dropdown.authorization']()}
             </DropdownMenuLabel>
 
             <DropdownMenuSeparator/>
 
             <DropdownMenuItem>
               <IconLogin/>
-              <span>Sign In</span>
+              <span>{m['components.user_dropdown.sign_in']()}</span>
             </DropdownMenuItem>
 
             <DropdownMenuItem>
               <IconUserPlus/>
-              <span>Sign Up</span>
+              <span>{m['components.user_dropdown.sign_up']()}</span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
         )}

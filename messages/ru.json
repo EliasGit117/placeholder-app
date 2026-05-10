@@ -20,12 +20,23 @@
     "of": "из",
     "filter_by": "Фильтр по {name}",
     "select": "Выбрать",
-    "created": "Создана",
-    "updated": "Обновлена",
+    "created": "Создан",
+    "updated": "Обновлен",
     "expires": "Истекает",
     "status": "Статус",
     "actions": "Действия",
-    "revoke": "Отозвать"
+    "revoke": "Отозвать",
+    "save": "Сохранить",
+    "create": "Создать",
+    "close": "Закрыть",
+    "edit": "Редактировать",
+    "optional": "необязательно"
+  },
+  "enums": {
+    "user_role": {
+      "user": "Пользователь",
+      "admin": "Администратор"
+    }
   },
   "components": {
     "data_table": {
@@ -40,6 +51,27 @@
       "search_columns": "Поиск по столбцам",
       "sort": "Сортировка",
       "sort_by": "Сортировать по"
+    },
+    "sidebar": {
+      "theme": "Тема",
+      "system": "Системная",
+      "light": "Светлая",
+      "dark": "Тёмная",
+      "language": "Язык",
+      "nav": {
+        "main": "Главная",
+        "dashboard": "Дэшборд",
+        "security": "Безопасность",
+        "users": "Пользователи",
+        "sessions": "Сессии"
+      }
+    },
+    "user_dropdown": {
+      "settings": "Настройки",
+      "sign_out": "Выйти",
+      "authorization": "Авторизация",
+      "sign_in": "Войти",
+      "sign_up": "Зарегистрироваться"
     },
     "auth": {
       "sign_in_card": {
@@ -63,6 +95,27 @@
     }
   },
   "pages": {
+    "users": {
+      "index": {
+        "table": {
+          "name": "Имя",
+          "role": "Роль",
+          "emailVerified": "Email подтверждён",
+          "verified": "Подтверждён",
+          "unverified": "Не подтверждён",
+          "active": "Активен",
+          "banned": "Заблокирован",
+          "banReason": "Причина блокировки",
+          "sessions": "Сессии"
+        },
+        "sheet": {
+          "create_title": "Создать пользователя",
+          "create_description": "Заполните поля для создания нового пользователя",
+          "edit_title": "Редактировать пользователя",
+          "edit_description": "Измените поля выбранного пользователя"
+        }
+      }
+    },
     "sessions": {
       "index": {
         "table": {

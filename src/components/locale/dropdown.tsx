@@ -14,6 +14,7 @@ import { getLocale, isLocale, setLocale, type Locale } from '@/paraglide/runtime
 import { IconWorld } from '@tabler/icons-react';
 import { type ComponentProps, type FC } from 'react';
 import type { VariantProps } from 'class-variance-authority';
+import { m } from '@/paraglide/messages';
 
 const localeOptions: { label: string, shortLabel: string, value: Locale }[] = [
   { label: 'Românǎ', shortLabel: 'RO', value: 'ro' },
@@ -47,7 +48,7 @@ export const LocaleDropdown: FC<IProps> = ({ variant = 'outline', size = 'icon',
 
       <DropdownMenuContent align={align} className="min-w-36">
         <DropdownMenuGroup>
-          <DropdownMenuLabel>Language</DropdownMenuLabel>
+          <DropdownMenuLabel>{m['components.sidebar.language']()}</DropdownMenuLabel>
           <DropdownMenuSeparator/>
           <DropdownMenuRadioGroup value={locale} onValueChange={handleLocaleChange}>
             {localeOptions.map((option) => (

@@ -2,13 +2,15 @@ import type { ComponentPropsWithoutRef, FC } from 'react';
 import {
   IconCheckbox,
   IconChevronRight,
-  IconDashboard, IconKey,
+  IconDashboard,
+  IconKey,
   IconLanguage,
   IconMoon,
   IconPalette,
   IconSettings,
   IconShieldLock,
   IconSun,
+  IconUsers,
   type TablerIcon
 } from '@tabler/icons-react';
 import { Link, type LinkOptions, useLocation } from '@tanstack/react-router';
@@ -44,17 +46,18 @@ import {
 import { cn } from '@/lib/utils';
 import { envConfig } from '@/lib/config';
 import { getLocale, isLocale, setLocale, type Locale } from '@/paraglide/runtime';
+import { m } from '@/paraglide/messages';
 import logo from '/images/common/logo_sm.png';
 
 
 interface INavItem {
-  title: string;
+  title: () => string;
   linkOptions: LinkOptions;
   icon?: TablerIcon;
 }
 
 interface ISidebarMenuItem {
-  title: string;
+  title: () => string;
   linkOptions?: LinkOptions;
   icon?: TablerIcon;
   items?: INavItem[];
@@ -62,27 +65,32 @@ interface ISidebarMenuItem {
 
 const navMain: ISidebarMenuItem[] = [
   {
-    title: 'Dashboard',
+    title: () => m['components.sidebar.nav.dashboard'](),
     icon: IconDashboard,
     items: [
       {
-        title: 'Index',
+        title: () => m['components.sidebar.nav.main'](),
         icon: IconCheckbox,
         linkOptions: { to: '/admin', activeOptions: { includeSearch: false, exact: true } }
       }
     ]
   },
   {
-    title: 'Security',
+    title: () => m['components.sidebar.nav.security'](),
     icon: IconShieldLock,
     items: [
       {
-        title: 'Sessions',
+        title: () => m['components.sidebar.nav.users'](),
+        icon: IconUsers,
+        linkOptions: { to: '/admin/users', activeOptions: { includeSearch: false } }
+      },
+      {
+        title: () => m['components.sidebar.nav.sessions'](),
         icon: IconKey,
         linkOptions: { to: '/admin/sessions', activeOptions: { includeSearch: false } }
       }
     ]
-  },
+  }
 ];
 
 const collapsedSidebarIconClassName = 'group-data-[collapsible=icon]:[&_[data-sidebar=menu-button]>svg:first-child]:size-5! group-data-[collapsible=icon]:[&_[data-sidebar=menu-button]>svg:first-child]:-ml-0.5';
@@ -97,7 +105,8 @@ export const AdminSidebar: FC<ComponentPropsWithoutRef<typeof Sidebar>> = ({ cla
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link to="/admin" onClick={() => setOpenMobile(false)}>
-                <figure className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center overflow-clip rounded-md">
+                <figure
+                  className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center overflow-clip rounded-md">
                   <img src={logo} alt="" className="size-full grayscale invert dark:invert-0"/>
                 </figure>
                 <div className="grid flex-1 text-left text-sm leading-tight">
@@ -111,7 +120,7 @@ export const AdminSidebar: FC<ComponentPropsWithoutRef<typeof Sidebar>> = ({ cla
       </SidebarHeader>
 
       <SidebarContent className="group-data-[collapsible=icon]:pt-2">
-        <NavSidebarGroup label="Main" items={navMain}/>
+        <NavSidebarGroup label={m['components.sidebar.nav.main']()} items={navMain}/>
       </SidebarContent>
 
       <SidebarFooter>
@@ -149,16 +158,16 @@ const NavSidebarGroup: FC<INavSidebarGroupProps> = ({ label, items, itemsSize, .
 
             if (!hasChildren) {
               return (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.title()}>
                   <SidebarMenuButton
                     size={itemsSize}
-                    tooltip={item.title}
+                    tooltip={item.title()}
                     onClick={() => setOpenMobile(false)}
                     asChild
                   >
                     <Link {...item.linkOptions}>
                       {item.icon && <item.icon/>}
-                      <span>{item.title}</span>
+                      <span>{item.title()}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -166,35 +175,37 @@ const NavSidebarGroup: FC<INavSidebarGroupProps> = ({ label, items, itemsSize, .
             }
 
             return (
-              <Collapsible key={item.title} defaultOpen={hasActiveChild} className="group/collapsible" asChild>
+              <Collapsible key={item.title()} defaultOpen={hasActiveChild} className="group/collapsible" asChild>
                 <SidebarMenuItem>
                   {!!item.linkOptions ? (
                     <>
                       <SidebarMenuButton
                         size={itemsSize}
-                        tooltip={item.title}
+                        tooltip={item.title()}
                         onClick={() => setOpenMobile(false)}
                         asChild
                       >
                         <Link {...item.linkOptions}>
                           {item.icon && <item.icon/>}
-                          <span>{item.title}</span>
+                          <span>{item.title()}</span>
                         </Link>
                       </SidebarMenuButton>
 
                       <CollapsibleTrigger asChild>
                         <SidebarMenuAction>
-                          <IconChevronRight className="transition-transform group-data-[state=open]/collapsible:rotate-90"/>
-                          <span className="sr-only">Toggle {item.title}</span>
+                          <IconChevronRight
+                            className="transition-transform group-data-[state=open]/collapsible:rotate-90"/>
+                          <span className="sr-only">Toggle {item.title()}</span>
                         </SidebarMenuAction>
                       </CollapsibleTrigger>
                     </>
                   ) : (
                     <CollapsibleTrigger asChild>
-                      <SidebarMenuButton size={itemsSize} tooltip={item.title}>
+                      <SidebarMenuButton size={itemsSize} tooltip={item.title()}>
                         {item.icon && <item.icon/>}
-                        <span>{item.title}</span>
-                        <IconChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90"/>
+                        <span>{item.title()}</span>
+                        <IconChevronRight
+                          className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90"/>
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
                   )}
@@ -202,7 +213,7 @@ const NavSidebarGroup: FC<INavSidebarGroupProps> = ({ label, items, itemsSize, .
                   <CollapsibleContent>
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => (
-                        <SidebarMenuSubItem key={subItem.title}>
+                        <SidebarMenuSubItem key={subItem.title()}>
                           <SidebarMenuSubButton
                             size={sidebarMenuSubButtonSizes[itemsSize ?? 'default']}
                             isActive={isLinkActive(pathname, subItem.linkOptions)}
@@ -213,7 +224,7 @@ const NavSidebarGroup: FC<INavSidebarGroupProps> = ({ label, items, itemsSize, .
                               onClick={() => setOpenMobile(false)}
                             >
                               {subItem.icon && <subItem.icon/>}
-                              <span>{subItem.title}</span>
+                              <span>{subItem.title()}</span>
                             </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
@@ -230,15 +241,15 @@ const NavSidebarGroup: FC<INavSidebarGroupProps> = ({ label, items, itemsSize, .
   );
 };
 
-interface INavPreferencesProps extends ComponentPropsWithoutRef<typeof SidebarMenu> {
+interface INavPreferencesProps extends ComponentPropsWithoutRef<typeof SidebarGroup> {
   itemsSize?: ComponentPropsWithoutRef<typeof SidebarMenuButton>['size'];
 }
 
 const themeOptions = [
-  { title: 'System', value: 'system', icon: IconPalette },
-  { title: 'Light', value: 'light', icon: IconSun },
-  { title: 'Dark', value: 'dark', icon: IconMoon }
-] satisfies { title: string; value: string; icon: TablerIcon }[];
+  { title: () => m['components.sidebar.system'](), value: 'system', icon: IconPalette },
+  { title: () => m['components.sidebar.light'](), value: 'light', icon: IconSun },
+  { title: () => m['components.sidebar.dark'](), value: 'dark', icon: IconMoon }
+] satisfies { title: () => string; value: string; icon: TablerIcon }[];
 
 const localeOptions = [
   { label: 'Romana', shortLabel: 'RO', value: 'ro' },
@@ -258,72 +269,74 @@ const NavPreferences: FC<INavPreferencesProps> = ({ itemsSize, ...props }) => {
   }
 
   return (
-    <SidebarMenu {...props}>
-      <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton size={itemsSize}>
-              <IconSettings/>
-              <span>Theme</span>
-              <IconSun className="ml-auto dark:hidden"/>
-              <IconMoon className="ml-auto hidden dark:block"/>
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className={cn('w-(--radix-dropdown-menu-trigger-width) rounded-lg', !isMobile && 'max-w-44')}
-            side={isMobile ? 'bottom' : 'right'}
-            align="end"
-            sideOffset={4}
-          >
-            <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
-              <DropdownMenuLabel className="flex items-center gap-2">
-                <IconSettings/>
-                <span>Theme</span>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator/>
-              {themeOptions.map(({ icon: Icon, title, value }) => (
-                <DropdownMenuRadioItem value={value} key={value}>
-                  <Icon/>
-                  <span>{title}</span>
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </SidebarMenuItem>
+    <SidebarGroup {...props}>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton size={itemsSize}>
+                  <IconSettings className="text-muted-foreground"/>
+                  <span>{m['components.sidebar.theme']()}</span>
+                  <IconSun className="ml-auto dark:hidden"/>
+                  <IconMoon className="ml-auto hidden dark:block"/>
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className={cn('w-(--radix-dropdown-menu-trigger-width) rounded-lg', !isMobile && 'max-w-44')}
+                side={isMobile ? 'bottom' : 'right'}
+                align="end"
+                sideOffset={4}
+              >
+                <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
+                  <DropdownMenuLabel className="flex items-center gap-2">
+                    <span>{m['components.sidebar.theme']()}</span>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator/>
+                  {themeOptions.map(({ icon: Icon, title, value }) => (
+                    <DropdownMenuRadioItem value={value} key={value}>
+                      <Icon/>
+                      <span>{title()}</span>
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
 
-      <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton size={itemsSize}>
-              <IconLanguage/>
-              <span>Language</span>
-              <span className="ml-auto text-xs uppercase text-muted-foreground">{locale}</span>
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className={cn('w-(--radix-dropdown-menu-trigger-width) rounded-lg', !isMobile && 'max-w-44')}
-            side={isMobile ? 'bottom' : 'right'}
-            align="end"
-            sideOffset={4}
-          >
-            <DropdownMenuRadioGroup value={locale} onValueChange={handleLocaleChange}>
-              <DropdownMenuLabel className="flex items-center gap-2">
-                <IconLanguage/>
-                <span>Language</span>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator/>
-              {localeOptions.map((option) => (
-                <DropdownMenuRadioItem key={option.value} value={option.value}>
-                  <span className="text-xs uppercase text-muted-foreground">{option.shortLabel}</span>
-                  <span>{option.label}</span>
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </SidebarMenuItem>
-    </SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton size={itemsSize}>
+                  <IconLanguage className="text-muted-foreground"/>
+                  <span>{m['components.sidebar.language']()}</span>
+                  <span className="ml-auto text-xs uppercase text-muted-foreground">{locale}</span>
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className={cn('w-(--radix-dropdown-menu-trigger-width) rounded-lg', !isMobile && 'max-w-44')}
+                side={isMobile ? 'bottom' : 'right'}
+                align="end"
+                sideOffset={4}
+              >
+                <DropdownMenuRadioGroup value={locale} onValueChange={handleLocaleChange}>
+                  <DropdownMenuLabel className="flex items-center gap-2">
+                    <span>{m['components.sidebar.language']()}</span>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator/>
+                  {localeOptions.map((option) => (
+                    <DropdownMenuRadioItem key={option.value} value={option.value}>
+                      <span className="text-xs uppercase text-muted-foreground">{option.shortLabel}</span>
+                      <span>{option.label}</span>
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
   );
 };
 

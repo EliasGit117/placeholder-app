@@ -43,7 +43,7 @@ export const Header = ({ children, className, ...props }: IProps) => {
           <ThemeDropdown variant="ghost" size="icon" align="end"/>
           <LocaleDropdown variant="ghost" size="icon" align="end"/>
 
-          {!!user && <UserDropdown align="end" className='ml-1.5'/>}
+          {!!user && <UserDropdown size='md' align="end" className='ml-2'/>}
         </div>
       </nav>
     </header>

@@ -12,15 +12,16 @@ import {
 import { IconMoon, IconPalette, IconSun, type TablerIcon } from '@tabler/icons-react';
 import type { ComponentProps, FC } from 'react';
 import type { VariantProps } from 'class-variance-authority';
+import { m } from '@/paraglide/messages';
 
 
 const themes = ['light', 'dark', 'system'] as const;
 type TTheme = (typeof themes)[number];
 
-const themeOptions: { label: string, icon: TablerIcon, value: TTheme }[] = [
-  { label: 'Light', icon: IconSun, value: 'light' },
-  { label: 'Dark', icon: IconMoon, value: 'dark' },
-  { label: 'System', icon: IconPalette, value: 'system' }
+const themeOptions: { label: () => string, icon: TablerIcon, value: TTheme }[] = [
+  { label: () => m['components.sidebar.light'](), icon: IconSun, value: 'light' },
+  { label: () => m['components.sidebar.dark'](), icon: IconMoon, value: 'dark' },
+  { label: () => m['components.sidebar.system'](), icon: IconPalette, value: 'system' }
 ];
 
 
@@ -56,13 +57,13 @@ export const ThemeDropdown: FC<IProps> = ({ variant = 'outline', size = 'icon', 
 
       <DropdownMenuContent align={align} className="min-w-36">
         <DropdownMenuGroup>
-          <DropdownMenuLabel>Theme</DropdownMenuLabel>
+          <DropdownMenuLabel>{m['components.sidebar.theme']()}</DropdownMenuLabel>
           <DropdownMenuSeparator/>
           <DropdownMenuRadioGroup value={currentOption?.value} onValueChange={handleThemeChange}>
             {themeOptions.map(({ icon: Icon, label, value }) => (
               <DropdownMenuRadioItem key={value} value={value}>
                 <Icon className="text-muted-foreground"/>
-                <span>{label}</span>
+                <span>{label()}</span>
               </DropdownMenuRadioItem>
             ))}
           </DropdownMenuRadioGroup>

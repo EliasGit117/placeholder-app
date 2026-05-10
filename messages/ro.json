@@ -25,7 +25,18 @@
     "expires": "Expiră",
     "status": "Stare",
     "actions": "Acțiuni",
-    "revoke": "Revocare"
+    "revoke": "Revocare",
+    "save": "Salvare",
+    "create": "Creare",
+    "close": "Închide",
+    "edit": "Editare",
+    "optional": "opțional"
+  },
+  "enums": {
+    "user_role": {
+      "user": "Utilizator",
+      "admin": "Administrator"
+    }
   },
   "components": {
     "data_table": {
@@ -40,6 +51,27 @@
       "search_columns": "Caută coloane",
       "sort": "Sortare",
       "sort_by": "Sortare după"
+    },
+    "sidebar": {
+      "theme": "Temă",
+      "system": "Sistem",
+      "light": "Luminos",
+      "dark": "Întunecat",
+      "language": "Limbă",
+      "nav": {
+        "main": "Principal",
+        "dashboard": "Dashboard",
+        "security": "Securitate",
+        "users": "Utilizatori",
+        "sessions": "Sesiuni"
+      }
+    },
+    "user_dropdown": {
+      "settings": "Setări",
+      "sign_out": "Deconectare",
+      "authorization": "Autorizare",
+      "sign_in": "Autentificare",
+      "sign_up": "Înregistrare"
     },
     "auth": {
       "sign_in_card": {
@@ -63,6 +95,27 @@
     }
   },
   "pages": {
+    "users": {
+      "index": {
+        "table": {
+          "name": "Nume",
+          "role": "Rol",
+          "emailVerified": "Email verificat",
+          "verified": "Verificat",
+          "unverified": "Neverificat",
+          "active": "Activ",
+          "banned": "Blocat",
+          "banReason": "Motiv blocare",
+          "sessions": "Sesiuni"
+        },
+        "sheet": {
+          "create_title": "Creare utilizator",
+          "create_description": "Completați câmpurile pentru a crea un utilizator nou",
+          "edit_title": "Editare utilizator",
+          "edit_description": "Modificați câmpurile utilizatorului selectat"
+        }
+      }
+    },
     "sessions": {
       "index": {
         "table": {

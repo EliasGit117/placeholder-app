@@ -43,6 +43,7 @@ import { cn, pickFirstLetters } from '@/lib/utils';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard.ts';
 import { m } from '@/paraglide/messages';
 import type { TSessionBriefDto } from '@/features/sessions/schemas/session-brief.ts';
+import { Link } from '@tanstack/react-router';
 
 
 interface IOptions {
@@ -370,18 +371,18 @@ export const sessionColumns = (options?: IOptions) => {
                 </Button>
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent  align="end">
                 <DropdownMenuLabel>
                   {m['common.actions']()}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator/>
 
-                {/*<DropdownMenuItem asChild>*/}
-                {/*  <Link to="/users" search={{ id: row.original.userId }}>*/}
-                {/*    <IconUserCircle className="mr-2 size-4"/>*/}
-                {/*    <span>{m['pages.sessions.index.table.owner']()}</span>*/}
-                {/*  </Link>*/}
-                {/*</DropdownMenuItem>*/}
+                <DropdownMenuItem asChild>
+                  <Link to="/admin/users" search={{ id: row.original.userId }}>
+                    <IconUserCircle className="mr-2 size-4"/>
+                    <span>{m['pages.sessions.index.table.owner']()}</span>
+                  </Link>
+                </DropdownMenuItem>
 
                 {(!!onRevokeClick && canRevoke) && (
                   <DropdownMenuItem

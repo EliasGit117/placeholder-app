@@ -22,7 +22,7 @@ import {
   type TFacetedOptionValue
 } from '@/components/data-table/types/tanstack-table-meta';
 import { ButtonGroup } from '@/components/ui/button-group.tsx';
-import { IconCheck, IconCirclePlus, IconCircleX } from '@tabler/icons-react';
+import { IconCirclePlus, IconCircleX } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 
 
@@ -155,7 +155,7 @@ export function DataTableMultiSelectFilter<TData, TValue>({ column }: IDataTable
                   return (
                     <CommandItem
                       key={`${option.value}`}
-                      data-is-selected={isSelected}
+                      data-checked={isSelected}
                       onSelect={() => onItemSelect(option.value, isSelected)}
                       className="group"
                     >
@@ -168,10 +168,6 @@ export function DataTableMultiSelectFilter<TData, TValue>({ column }: IDataTable
                         <Badge variant="secondary" className="border border-border ml-auto px-1.5 font-mono text-xs">
                           {option.count}
                         </Badge>
-                      )}
-
-                      {isSelected && (
-                        <IconCheck className="ml-auto"/>
                       )}
                     </CommandItem>
                   );

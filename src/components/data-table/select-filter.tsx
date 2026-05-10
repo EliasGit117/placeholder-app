@@ -22,7 +22,7 @@ import {
   type TFacetedOptionValue
 } from '@/components/data-table/types/tanstack-table-meta';
 import { ButtonGroup } from '@/components/ui/button-group.tsx';
-import { IconCirclePlus, IconPoint, IconCircleX } from '@tabler/icons-react';
+import { IconCirclePlus, IconCircleX } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 
 
@@ -103,15 +103,13 @@ export function DataTableSelectFilter<TData, TValue>({ column }: IDataTableSelec
                   return (
                     <CommandItem
                       key={`${option.value}`}
-                      data-is-selected={isSelected}
+                      data-checked={isSelected}
                       onSelect={() => onItemSelect(option.value, isSelected)}
                     >
                       {option.icon && <option.icon className="text-muted-foreground"/>}
                       <span className="truncate">
                         <span>{option.title}</span>
                       </span>
-
-                      {isSelected && (<IconPoint className="ml-auto stroke-5"/>)}
 
                       {option.count && (
                         <Badge variant="secondary" className="border border-border ml-auto px-1.5 font-mono text-xs">
