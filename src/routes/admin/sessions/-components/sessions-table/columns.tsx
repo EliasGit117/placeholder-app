@@ -121,11 +121,27 @@ export const sessionColumns = (options?: IOptions) => {
     columnHelper.accessor('userId', {
       size: 80,
       header: ({ column }) => (<DataTableColumnHeader column={column}/>),
-      cell: ({ getValue }) => (
-        <span className="text-xs font-mono">
-          {getValue()}
-        </span>
-      ),
+      cell: ({ getValue }) => {
+        const { isCopied, copyToClipboard } = useCopyToClipboard();
+        const value = getValue();
+
+        return (
+          <div className="flex gap-1 items-center">
+            <span className="text-xs font-mono">
+              {value}
+            </span>
+
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              className="text-muted-foreground"
+              onClick={() => copyToClipboard(value)}
+            >
+              {isCopied ? <IconCheck size={16}/> : <IconCopy size={16}/>}
+            </Button>
+          </div>
+        );
+      },
       meta: {
         label: m['pages.sessions.index.table.userId'](),
         icon: IconUser,
