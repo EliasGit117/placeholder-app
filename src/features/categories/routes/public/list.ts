@@ -1,8 +1,9 @@
 import { ORPCError } from '@orpc/server';
-import { authMiddleware } from '@/lib/auth/middleware.ts';
-import { auth } from '@/lib/auth/server.ts';
-import { categoriesSchema, type TCategory } from '@/features/categories/schemas/category.ts';
+import { authMiddleware } from 'src/lib/auth/middleware.ts';
+import { auth } from 'src/lib/auth/server.ts';
+import { categoriesSchema } from 'src/features/categories/schemas/category.ts';
 import { categoriesBase } from './base.ts';
+import { CategoryService } from '../../services/category-service.ts';
 
 export const listCategories = categoriesBase
   .route({
@@ -22,5 +23,5 @@ export const listCategories = categoriesBase
     if (!permission.success)
       throw new ORPCError('FORBIDDEN');
 
-    return [] satisfies TCategory[];
+    return CategoryService.list();
   });

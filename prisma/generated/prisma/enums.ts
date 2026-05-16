@@ -9,6 +9,14 @@
 * 🟢 You can import this file directly.
 */
 
+export const CategoryState = {
+  active: 'active',
+  hidden: 'hidden'
+} as const
+
+export type CategoryState = (typeof CategoryState)[keyof typeof CategoryState]
+
+
 export const TodoState = {
   TODO: 'TODO',
   IN_PROGRESS: 'IN_PROGRESS',

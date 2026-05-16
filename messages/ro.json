@@ -30,7 +30,13 @@
     "create": "Creare",
     "close": "Închide",
     "edit": "Editare",
-    "optional": "opțional"
+    "optional": "opțional",
+    "expand": "Extinde",
+    "collapse": "Împinge",
+    "search": "Căutare",
+    "no_results": "Niciun rezultat",
+    "selected_none": "Niciunul selectat",
+    "refresh": "Reîncarcă"
   },
   "enums": {
     "user_role": {
@@ -63,7 +69,9 @@
         "dashboard": "Dashboard",
         "security": "Securitate",
         "users": "Utilizatori",
-        "sessions": "Sesiuni"
+        "sessions": "Sesiuni",
+        "catalog": "Catalog",
+        "categories": "Categorii"
       }
     },
     "user_dropdown": {
@@ -95,6 +103,36 @@
     }
   },
   "pages": {
+    "settings": {
+      "tabs": {
+        "profile": "Profil",
+        "security": "Securitate"
+      },
+      "profile": {
+        "title": "Informații profil",
+        "description": "Vizualizați și actualizați informațiile contului dvs.",
+        "edit_name": "Editare nume",
+        "edit_name_description": "Actualizați-vă numele afișat",
+        "update_success": "Profilul a fost actualizat"
+      },
+      "security": {
+        "change_password": "Schimbare parolă",
+        "change_password_description": "Actualizați-vă parola de acces",
+        "current_password": "Parolă curentă",
+        "new_password": "Parolă nouă",
+        "confirm_password": "Confirmare parolă",
+        "passwords_mismatch": "Parolele nu coincid",
+        "change_password_success": "Parola a fost schimbată cu succes",
+        "sessions": "Sesiunile mele",
+        "sessions_description": "Gestionați sesiunile active ale contului dvs.",
+        "current_session": "Curentă",
+        "revoke_all_others": "Revocare toate celelalte",
+        "revoke_all_confirm_title": "Revocare sesiuni",
+        "revoke_all_confirm_description": "Sigur doriți să revocați toate celelalte sesiuni active?",
+        "revoke_all_success": "Toate celelalte sesiuni au fost revocate",
+        "revoke_success": "Sesiunea a fost revocată"
+      }
+    },
     "users": {
       "index": {
         "table": {
@@ -113,6 +151,35 @@
           "create_description": "Completați câmpurile pentru a crea un utilizator nou",
           "edit_title": "Editare utilizator",
           "edit_description": "Modificați câmpurile utilizatorului selectat"
+        }
+      }
+    },
+    "categories": {
+      "index": {
+        "sheet": {
+          "create_title": "Creare categorie",
+          "create_description": "Completați câmpurile pentru a crea o categorie nouă",
+          "edit_title": "Editare categorie",
+          "edit_description": "Modificați câmpurile categoriei selectate",
+          "parent_category": "Categorie părinte",
+          "no_parent": "Fără categorie părinte",
+          "name_ro": "Denumire (RO)",
+          "name_ru": "Denumire (RU)",
+          "description_ro": "Descriere (RO)",
+          "description_ru": "Descriere (RU)",
+          "slug": "Slug",
+          "state_active": "Activă",
+          "state_hidden": "Ascunsă"
+        },
+        "tree": {
+          "no_categories": "Nu există categorii",
+          "add_child": "Adaugă subcategorie",
+          "short_info": "Informații scurte",
+          "delete_title": "Ștergere categorie",
+          "delete_description": "Sigur doriți să ștergeți această categorie? Aceasta nu trebuie să aibă subcategorii.",
+          "deleting": "Ștergere...",
+          "delete_success": "Categoria a fost ștearsă",
+          "delete_error": "Eroare la ștergere"
         }
       }
     },

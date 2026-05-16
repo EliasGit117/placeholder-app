@@ -13,6 +13,4 @@ __unconfig*
 todos.json
 .idea
 
-pocketbase/pb_data
-pocketbase/pocketbase
 /generated/prisma

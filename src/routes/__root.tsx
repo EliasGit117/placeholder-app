@@ -14,6 +14,7 @@ import { getZodErrorMap } from '@/lib/zod';
 import { getLocale } from '@/paraglide/runtime';
 import { z } from 'zod';
 import { ConfirmDialogProvider } from '@/components/ui/confirm-dialog.tsx';
+import { Toaster } from '@/components/ui/sonner.tsx';
 
 
 interface IRouterContext {
@@ -60,6 +61,7 @@ function RootDocument({ children }: { children: ReactNode }) {
     <ThemeProvider attribute="class" disableTransitionOnChange>
       <ConfirmDialogProvider>
         {children}
+        <Toaster/>
       </ConfirmDialogProvider>
     </ThemeProvider>
 

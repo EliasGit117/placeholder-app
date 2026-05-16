@@ -30,9 +30,8 @@ import {
   IconUserCircle,
   IconUserX
 } from '@tabler/icons-react';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar.tsx';
 import { Badge } from '@/components/ui/badge.tsx';
-import { cn, pickFirstLetters } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard.ts';
 import { m } from '@/paraglide/messages';
 import type { TUserBriefDto } from '@/features/users/schemas/user-brief.ts';
@@ -113,16 +112,8 @@ export const userColumns = (options?: IOptions) => {
       header: ({ column }) => <DataTableColumnHeader column={column}/>,
       cell: ({ getValue }) => {
         const name = getValue();
-
         return (
-          <div className="flex items-center gap-2">
-            <Avatar className="size-7">
-              <AvatarFallback className="text-xs!">
-                {pickFirstLetters(name, 2)}
-              </AvatarFallback>
-            </Avatar>
-            <span className="text-xs">{name}</span>
-          </div>
+          <span className="text-xs">{name}</span>
         );
       },
       meta: {

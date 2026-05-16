@@ -4,7 +4,7 @@ enum CategoryState {
 }
 
 model Category {
-  id            String        @id @default(cuid())
+  id            Int           @id @default(autoincrement())
   nameRo        String        @map("name_ro")
   nameRu        String        @map("name_ru")
   descriptionRo String?       @map("description_ro")
@@ -12,7 +12,7 @@ model Category {
   state         CategoryState @default(active)
   slug          String
   path          String        @unique @map("path")
-  parentId      String?       @map("parent_id")
+  parentId      Int?          @map("parent_id")
   parent        Category?     @relation("CategoryHierarchy", fields: [parentId], references: [id])
   children      Category[]    @relation("CategoryHierarchy")
   createdAt     DateTime      @default(now()) @map("created_at")

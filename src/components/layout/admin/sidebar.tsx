@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef, FC } from 'react';
 import {
+  IconCategory,
   IconCheckbox,
   IconChevronRight,
   IconDashboard,
@@ -72,6 +73,17 @@ const navMain: ISidebarMenuItem[] = [
         title: () => m['components.sidebar.nav.main'](),
         icon: IconCheckbox,
         linkOptions: { to: '/admin', activeOptions: { includeSearch: false, exact: true } }
+      }
+    ]
+  },
+  {
+    title: () => m['components.sidebar.nav.catalog'](),
+    icon: IconCategory,
+    items: [
+      {
+        title: () => m['components.sidebar.nav.categories'](),
+        icon: IconCategory,
+        linkOptions: { to: '/admin/categories', activeOptions: { includeSearch: false } }
       }
     ]
   },

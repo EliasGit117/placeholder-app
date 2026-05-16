@@ -30,7 +30,13 @@
     "create": "Создать",
     "close": "Закрыть",
     "edit": "Редактировать",
-    "optional": "необязательно"
+    "optional": "Опционально",
+    "expand": "Развернуть",
+    "collapse": "Свернуть",
+    "search": "Поиск",
+    "no_results": "Нет результатов",
+    "selected_none": "Ничего не выбрано",
+    "refresh": "Обновить"
   },
   "enums": {
     "user_role": {
@@ -63,7 +69,9 @@
         "dashboard": "Дэшборд",
         "security": "Безопасность",
         "users": "Пользователи",
-        "sessions": "Сессии"
+        "sessions": "Сессии",
+        "catalog": "Каталог",
+        "categories": "Категории"
       }
     },
     "user_dropdown": {
@@ -133,6 +141,65 @@
           "validity": "Действительность",
           "valid": "Действительна",
           "expired": "Просрочена"
+        }
+      }
+    },
+    "settings": {
+      "tabs": {
+        "profile": "Профиль",
+        "security": "Безопасность"
+      },
+      "profile": {
+        "title": "Информация профиля",
+        "description": "Просматривайте и обновляйте информацию своей учетной записи.",
+        "edit_name": "Изменить имя",
+        "edit_name_description": "Обновите отображаемое имя.",
+        "update_success": "Профиль обновлен."
+      },
+      "security": {
+        "change_password": "Изменить пароль",
+        "change_password_description": "Обновите свой пароль доступа.",
+        "current_password": "Текущий пароль",
+        "new_password": "Новый пароль",
+        "confirm_password": "Подтвердите пароль",
+        "passwords_mismatch": "Пароли не совпадают.",
+        "change_password_success": "Пароль успешно изменен.",
+        "sessions": "Мои сессии",
+        "sessions_description": "Управляйте активными сессиями вашей учетной записи.",
+        "current_session": "Текущая",
+        "revoke_all_others": "Отменить все остальные",
+        "revoke_all_confirm_title": "Отменить сессии",
+        "revoke_all_confirm_description": "Вы уверены, что хотите отменить все остальные активные сессии?",
+        "revoke_all_success": "Все остальные занятия отменены.",
+        "revoke_success": "Заседание отменено."
+      }
+    },
+    "categories": {
+      "index": {
+        "sheet": {
+          "create_title": "Создать категорию",
+          "create_description": "Заполните поля, чтобы создать новую категорию.",
+          "edit_title": "Редактировать категорию",
+          "edit_description": "Измените поля выбранной категории.",
+          "parent_category": "Родительская категория",
+          "no_parent": "Нет родительской категории",
+          "name_ro": "Имя (RO)",
+          "name_ru": "Имя (RU)",
+          "description_ro": "Описание (RO)",
+          "description_ru": "Описание (RU)",
+          "state_active": "Активна",
+          "state_hidden": "Скрыта",
+          "slug": "Slug"
+        },
+        "tree": {
+          "no_categories": "Категории отсутствуют.",
+          "add_child": "Добавить подкатегорию",
+          "short_info": "Краткая информация",
+          "delete_title": "Удалить категорию",
+          "delete_description": "Вы уверены, что хотите удалить эту категорию? В ней не должно быть подкатегорий.",
+          "deleting": "Удаление...",
+          "delete_success": "Категория удалена.",
+          "delete_error": "Ошибка при удалении"
         }
       }
     }
