@@ -21,6 +21,7 @@ import { AdaptiveButton } from '@/components/ui/adaptive-button.tsx';
 
 
 export const Route = createFileRoute('/admin/categories/')({
+  staticData: { crumbs: { title: () => m['pages.categories.title']() } },
   component: RouteComponent,
   beforeLoad: async ({ context: { user } }) => {
     const canList = await roleHasPermission(user?.role, { categories: ['list'] });

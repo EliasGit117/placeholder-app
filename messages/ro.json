@@ -2,6 +2,7 @@
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "example_message": "Salut, {username}!",
   "common": {
+    "home": "Acasă",
     "unauthorized": "Neautorizat",
     "loading": "Încărcare",
     "forbidden": "Interzis",
@@ -37,7 +38,9 @@
     "no_results": "Niciun rezultat",
     "selected_none": "Niciunul selectat",
     "refresh": "Reîncarcă",
-    "delete": "Ștergere"
+    "delete": "Ștergere",
+    "open": "Deschide",
+    "admin": "Admin"
   },
   "enums": {
     "user_role": {
@@ -73,6 +76,7 @@
         "sessions": "Sesiuni",
         "catalog": "Catalog",
         "categories": "Categorii",
+        "gallery": "Galerie",
         "gallery_sections": "Secțiuni galerie"
       }
     },
@@ -105,7 +109,14 @@
     }
   },
   "pages": {
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "gallery": {
+      "title": "Galerie"
+    },
     "settings": {
+      "title": "Setări",
       "tabs": {
         "profile": "Profil",
         "security": "Securitate"
@@ -136,6 +147,7 @@
       }
     },
     "users": {
+      "title": "Utilizatori",
       "index": {
         "table": {
           "name": "Nume",
@@ -157,6 +169,7 @@
       }
     },
     "categories": {
+      "title": "Categorii",
       "index": {
         "sheet": {
           "create_title": "Creare categorie",
@@ -186,6 +199,10 @@
       }
     },
     "gallery_sections": {
+      "title": "Secțiuni",
+      "detail": {
+        "title": "Secțiune"
+      },
       "index": {
         "table": {
           "name_ro": "Denumire (RO)",
@@ -214,6 +231,7 @@
       }
     },
     "sessions": {
+      "title": "Sesiuni",
       "index": {
         "table": {
           "userId": "Id utilizator",

@@ -1,4 +1,5 @@
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
+import type { IBreadcrumb } from '@/components/layout/admin/nav-breadcrumbs';
 import { routeTree } from './routeTree.gen';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
 import { RootProvider } from '@/providers';
@@ -45,5 +46,10 @@ export function getRouter() {
 declare module '@tanstack/react-router' {
   interface Register {
     router: ReturnType<typeof getRouter>;
+  }
+
+  interface StaticDataRouteOption {
+    crumbs?: IBreadcrumb | IBreadcrumb[];
+    hideCrumbs?: boolean;
   }
 }

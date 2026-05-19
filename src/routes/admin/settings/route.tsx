@@ -4,6 +4,7 @@ import { IconLock, IconUser } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 
 export const Route = createFileRoute('/admin/settings')({
+  staticData: { crumbs: { title: () => m['pages.settings.title']() } },
   component: RouteComponent,
 });
 

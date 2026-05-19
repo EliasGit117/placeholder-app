@@ -1,12 +1,14 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { orpc } from '@/lib/orpc';
 import { SessionsTable } from '@/routes/admin/sessions/-components/sessions-table';
+import { m } from '@/paraglide/messages';
 import { searchSessionsRequestDtoSchema } from '@/features/sessions/schemas/search-sessions.ts';
 import { roleHasPermission } from '@/lib/auth';
 import { awaitIfServer } from '@/lib/server';
 
 
 export const Route = createFileRoute('/admin/sessions/')({
+  staticData: { crumbs: { title: () => m['pages.sessions.title']() } },
   component: RouteComponent,
   validateSearch: searchSessionsRequestDtoSchema,
   beforeLoad: async ({ context: { user } }) => {

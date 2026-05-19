@@ -1,12 +1,14 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { orpc } from '@/lib/orpc';
 import { UsersTable } from '@/routes/admin/users/-components/users-table';
+import { m } from '@/paraglide/messages';
 import { searchUsersRequestDtoSchema } from '@/features/users/schemas/search-users.ts';
 import { roleHasPermission } from '@/lib/auth';
 import { awaitIfServer } from '@/lib/server';
 
 
 export const Route = createFileRoute('/admin/users/')({
+  staticData: { crumbs: { title: () => m['pages.users.title']() } },
   component: RouteComponent,
   validateSearch: searchUsersRequestDtoSchema,
   beforeLoad: async ({ context: { user } }) => {

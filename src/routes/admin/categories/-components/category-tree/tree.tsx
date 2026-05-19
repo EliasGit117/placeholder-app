@@ -142,7 +142,7 @@ export const CategoryTree: FC<{ className?: string }> = ({ className }) => {
                   </ContextMenuSubTrigger>
                   <ContextMenuSubContent className="p-2 min-w-48">
                     <div className="text-xs whitespace-pre-wrap rounded-md bg-muted p-3 overflow-auto max-h-80 font-mono">
-                      {JSON.stringify({ ...data }, null, 2)}
+                      {JSON.stringify({ ...data, children: undefined }, null, 2)}
                     </div>
                   </ContextMenuSubContent>
                 </ContextMenuSub>

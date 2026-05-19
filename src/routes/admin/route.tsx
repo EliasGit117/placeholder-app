@@ -1,5 +1,7 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { AdminLayout } from '@/components/layout/admin';
+import { m } from '@/paraglide/messages';
+
 
 export const Route = createFileRoute('/admin')({
   component: RouteComponent,
@@ -7,6 +9,7 @@ export const Route = createFileRoute('/admin')({
     if (!user)
       throw redirect({ to: '/', replace: true })
   },
+  staticData: { crumbs: { title: () => m['common.admin']() } },
 })
 
 

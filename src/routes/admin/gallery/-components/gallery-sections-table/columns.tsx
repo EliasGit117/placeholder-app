@@ -192,9 +192,9 @@ export const gallerySectionColumns = (options?: IOptions) => {
                 <DropdownMenuSeparator/>
 
                 <DropdownMenuItem asChild>
-                  <Link to="/admin/gallery/$sectionId" params={{ sectionId: section.id }}>
+                  <Link to="/admin/gallery/sections/$sectionId" params={{ sectionId: section.id }}>
                     <IconExternalLink className="mr-2 size-4"/>
-                    <span>Open</span>
+                    <span>{m['common.open']()}</span>
                   </Link>
                 </DropdownMenuItem>
 

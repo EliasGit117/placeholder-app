@@ -1,16 +1,15 @@
 import type { ComponentPropsWithoutRef, FC } from 'react';
 import {
   IconCategory,
-  IconCheckbox,
   IconChevronRight,
   IconDashboard,
   IconKey,
   IconLanguage,
-  IconLayoutGrid,
+  IconLibraryPhoto,
   IconMoon,
   IconPalette,
   IconSettings,
-  IconShieldLock,
+  IconShieldLock, IconShoppingCart,
   IconSun,
   IconUsers,
   type TablerIcon
@@ -69,26 +68,20 @@ const navMain: ISidebarMenuItem[] = [
   {
     title: () => m['components.sidebar.nav.dashboard'](),
     icon: IconDashboard,
-    items: [
-      {
-        title: () => m['components.sidebar.nav.main'](),
-        icon: IconCheckbox,
-        linkOptions: { to: '/admin', activeOptions: { includeSearch: false, exact: true } }
-      }
-    ]
+    linkOptions: { to: '/admin', activeOptions: { includeSearch: false, exact: true } }
   },
   {
     title: () => m['components.sidebar.nav.catalog'](),
-    icon: IconCategory,
+    icon: IconShoppingCart,
     items: [
       {
-        title: () => m['components.sidebar.nav.categories'](),
+        title: () => m['pages.categories.title'](),
         icon: IconCategory,
         linkOptions: { to: '/admin/categories', activeOptions: { includeSearch: false } }
       },
       {
-        title: () => m['components.sidebar.nav.gallery_sections'](),
-        icon: IconLayoutGrid,
+        title: () => m['pages.gallery.title'](),
+        icon: IconLibraryPhoto,
         linkOptions: { to: '/admin/gallery', activeOptions: { includeSearch: false } }
       }
     ]
@@ -98,12 +91,12 @@ const navMain: ISidebarMenuItem[] = [
     icon: IconShieldLock,
     items: [
       {
-        title: () => m['components.sidebar.nav.users'](),
+        title: () => m['pages.users.title'](),
         icon: IconUsers,
         linkOptions: { to: '/admin/users', activeOptions: { includeSearch: false } }
       },
       {
-        title: () => m['components.sidebar.nav.sessions'](),
+        title: () => m['pages.sessions.title'](),
         icon: IconKey,
         linkOptions: { to: '/admin/sessions', activeOptions: { includeSearch: false } }
       }
@@ -180,6 +173,7 @@ const NavSidebarGroup: FC<INavSidebarGroupProps> = ({ label, items, itemsSize, .
                   <SidebarMenuButton
                     size={itemsSize}
                     tooltip={item.title()}
+                    isActive={isLinkActive(pathname, item.linkOptions)}
                     onClick={() => setOpenMobile(false)}
                     asChild
                   >
@@ -358,14 +352,19 @@ const NavPreferences: FC<INavPreferencesProps> = ({ itemsSize, ...props }) => {
   );
 };
 
+const normalize = (p: string) => p.replace(/\/$/, '');
+
 const isLinkActive = (pathname: string, linkOptions?: LinkOptions) => {
   const path = linkOptions?.to ?? linkOptions?.href;
   const exact = linkOptions?.activeOptions?.exact ?? false;
   if (!path)
     return false;
 
-  if (exact)
-    return pathname === path;
+  const normalPath = normalize(String(path));
+  const normalCurrent = normalize(pathname);
 
-  return pathname === path || pathname.startsWith(`${path}/`);
+  if (exact)
+    return normalCurrent === normalPath;
+
+  return normalCurrent === normalPath || normalCurrent.startsWith(`${normalPath}/`);
 };

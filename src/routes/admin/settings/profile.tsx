@@ -15,6 +15,7 @@ import { UpdateNameDialog } from './-components/update-name-dialog';
 import { pickFirstLetters } from '@/lib/utils';
 
 export const Route = createFileRoute('/admin/settings/profile')({
+  staticData: { crumbs: { title: () => m['pages.settings.tabs.profile']() } },
   component: RouteComponent,
 });
 

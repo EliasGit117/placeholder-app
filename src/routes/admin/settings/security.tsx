@@ -1,8 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { ChangePasswordCard } from './-components/change-password-card';
 import { MySessionsCard } from './-components/my-sessions-card';
+import { m } from '@/paraglide/messages';
 
 export const Route = createFileRoute('/admin/settings/security')({
+  staticData: { crumbs: { title: () => m['pages.settings.tabs.security']() } },
   component: RouteComponent,
 });
 

@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { SidebarTrigger } from '@/components/ui/sidebar.tsx';
 import { Separator } from '@/components/ui/separator.tsx';
 import { UserDropdown } from '@/components/layout/common/user-dropdown.tsx';
+import { NavBreadcrumbs } from '@/components/layout/admin/nav-breadcrumbs';
 
 
 interface IProps extends ComponentProps<'header'> {}
@@ -53,6 +54,7 @@ export const Header: FC<IProps> = ({ className, ...props }) => {
           className="data-[orientation=vertical]:h-4 my-auto"
         />
 
+        <NavBreadcrumbs/>
         <UserDropdown size='md' className='ml-auto' align='end'/>
       </div>
     </header>
