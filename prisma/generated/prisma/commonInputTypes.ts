@@ -206,6 +206,57 @@ export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
 }
 
+export type EnumGallerySectionStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.GallerySectionState | Prisma.EnumGallerySectionStateFieldRefInput<$PrismaModel>
+  in?: $Enums.GallerySectionState[] | Prisma.ListEnumGallerySectionStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GallerySectionState[] | Prisma.ListEnumGallerySectionStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGallerySectionStateFilter<$PrismaModel> | $Enums.GallerySectionState
+}
+
+export type EnumGallerySectionStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GallerySectionState | Prisma.EnumGallerySectionStateFieldRefInput<$PrismaModel>
+  in?: $Enums.GallerySectionState[] | Prisma.ListEnumGallerySectionStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GallerySectionState[] | Prisma.ListEnumGallerySectionStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGallerySectionStateWithAggregatesFilter<$PrismaModel> | $Enums.GallerySectionState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGallerySectionStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGallerySectionStateFilter<$PrismaModel>
+}
+
+export type EnumImageResourceTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImageResourceType | Prisma.EnumImageResourceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ImageResourceType[] | Prisma.ListEnumImageResourceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImageResourceType[] | Prisma.ListEnumImageResourceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImageResourceTypeFilter<$PrismaModel> | $Enums.ImageResourceType
+}
+
+export type EnumImagePurposeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImagePurpose | Prisma.EnumImagePurposeFieldRefInput<$PrismaModel>
+  in?: $Enums.ImagePurpose[] | Prisma.ListEnumImagePurposeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImagePurpose[] | Prisma.ListEnumImagePurposeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImagePurposeFilter<$PrismaModel> | $Enums.ImagePurpose
+}
+
+export type EnumImageResourceTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImageResourceType | Prisma.EnumImageResourceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ImageResourceType[] | Prisma.ListEnumImageResourceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImageResourceType[] | Prisma.ListEnumImageResourceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImageResourceTypeWithAggregatesFilter<$PrismaModel> | $Enums.ImageResourceType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumImageResourceTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumImageResourceTypeFilter<$PrismaModel>
+}
+
+export type EnumImagePurposeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImagePurpose | Prisma.EnumImagePurposeFieldRefInput<$PrismaModel>
+  in?: $Enums.ImagePurpose[] | Prisma.ListEnumImagePurposeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImagePurpose[] | Prisma.ListEnumImagePurposeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImagePurposeWithAggregatesFilter<$PrismaModel> | $Enums.ImagePurpose
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumImagePurposeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumImagePurposeFilter<$PrismaModel>
+}
+
 export type EnumTodoStateFilter<$PrismaModel = never> = {
   equals?: $Enums.TodoState | Prisma.EnumTodoStateFieldRefInput<$PrismaModel>
   in?: $Enums.TodoState[] | Prisma.ListEnumTodoStateFieldRefInput<$PrismaModel>
@@ -452,6 +503,57 @@ export type NestedFloatNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type NestedEnumGallerySectionStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.GallerySectionState | Prisma.EnumGallerySectionStateFieldRefInput<$PrismaModel>
+  in?: $Enums.GallerySectionState[] | Prisma.ListEnumGallerySectionStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GallerySectionState[] | Prisma.ListEnumGallerySectionStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGallerySectionStateFilter<$PrismaModel> | $Enums.GallerySectionState
+}
+
+export type NestedEnumGallerySectionStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GallerySectionState | Prisma.EnumGallerySectionStateFieldRefInput<$PrismaModel>
+  in?: $Enums.GallerySectionState[] | Prisma.ListEnumGallerySectionStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.GallerySectionState[] | Prisma.ListEnumGallerySectionStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumGallerySectionStateWithAggregatesFilter<$PrismaModel> | $Enums.GallerySectionState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGallerySectionStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGallerySectionStateFilter<$PrismaModel>
+}
+
+export type NestedEnumImageResourceTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImageResourceType | Prisma.EnumImageResourceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ImageResourceType[] | Prisma.ListEnumImageResourceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImageResourceType[] | Prisma.ListEnumImageResourceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImageResourceTypeFilter<$PrismaModel> | $Enums.ImageResourceType
+}
+
+export type NestedEnumImagePurposeFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImagePurpose | Prisma.EnumImagePurposeFieldRefInput<$PrismaModel>
+  in?: $Enums.ImagePurpose[] | Prisma.ListEnumImagePurposeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImagePurpose[] | Prisma.ListEnumImagePurposeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImagePurposeFilter<$PrismaModel> | $Enums.ImagePurpose
+}
+
+export type NestedEnumImageResourceTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImageResourceType | Prisma.EnumImageResourceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.ImageResourceType[] | Prisma.ListEnumImageResourceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImageResourceType[] | Prisma.ListEnumImageResourceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImageResourceTypeWithAggregatesFilter<$PrismaModel> | $Enums.ImageResourceType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumImageResourceTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumImageResourceTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumImagePurposeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImagePurpose | Prisma.EnumImagePurposeFieldRefInput<$PrismaModel>
+  in?: $Enums.ImagePurpose[] | Prisma.ListEnumImagePurposeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImagePurpose[] | Prisma.ListEnumImagePurposeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImagePurposeWithAggregatesFilter<$PrismaModel> | $Enums.ImagePurpose
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumImagePurposeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumImagePurposeFilter<$PrismaModel>
 }
 
 export type NestedEnumTodoStateFilter<$PrismaModel = never> = {

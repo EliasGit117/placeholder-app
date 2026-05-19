@@ -1,0 +1,19 @@
+enum GallerySectionState {
+  active
+  hidden
+
+  @@map("gallery_section_state")
+}
+
+model GallerySection {
+  id            Int                  @id @default(autoincrement())
+  nameRo        String               @map("name_ro")
+  nameRu        String               @map("name_ru")
+  descriptionRo String?              @map("description_ro")
+  descriptionRu String?              @map("description_ru")
+  state         GallerySectionState  @default(active)
+  createdAt     DateTime             @default(now()) @map("created_at")
+  updatedAt     DateTime             @updatedAt @map("updated_at")
+
+  @@map("gallery_sections")
+}

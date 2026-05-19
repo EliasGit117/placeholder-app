@@ -9,10 +9,9 @@ import { accessControl, roles } from './permissions';
 
 
 export const auth = betterAuth({
-  database: prismaAdapter(prisma, {
-    provider: 'postgresql'
-  }),
   experimental: { joins: true },
+  database: prismaAdapter(prisma, { provider: 'postgresql' }),
+  baseURL: envConfig.appBaseUrl,
   trustedOrigins: [envConfig.appBaseUrl],
   secret: serverEnvConfig.betterAuthSecret,
   emailAndPassword: { enabled: true },

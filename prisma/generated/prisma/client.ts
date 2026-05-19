@@ -52,6 +52,16 @@ export type Account = Prisma.AccountModel
  */
 export type Category = Prisma.CategoryModel
 /**
+ * Model GallerySection
+ * 
+ */
+export type GallerySection = Prisma.GallerySectionModel
+/**
+ * Model Image
+ * 
+ */
+export type Image = Prisma.ImageModel
+/**
  * Model Session
  * 
  */

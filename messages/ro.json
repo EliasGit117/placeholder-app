@@ -36,7 +36,8 @@
     "search": "Căutare",
     "no_results": "Niciun rezultat",
     "selected_none": "Niciunul selectat",
-    "refresh": "Reîncarcă"
+    "refresh": "Reîncarcă",
+    "delete": "Ștergere"
   },
   "enums": {
     "user_role": {
@@ -71,7 +72,8 @@
         "users": "Utilizatori",
         "sessions": "Sesiuni",
         "catalog": "Catalog",
-        "categories": "Categorii"
+        "categories": "Categorii",
+        "gallery_sections": "Secțiuni galerie"
       }
     },
     "user_dropdown": {
@@ -180,6 +182,34 @@
           "deleting": "Ștergere...",
           "delete_success": "Categoria a fost ștearsă",
           "delete_error": "Eroare la ștergere"
+        }
+      }
+    },
+    "gallery_sections": {
+      "index": {
+        "table": {
+          "name_ro": "Denumire (RO)",
+          "name_ru": "Denumire (RU)",
+          "state": "Stare",
+          "state_active": "Activă",
+          "state_hidden": "Ascunsă",
+          "actions": "Acțiuni",
+          "delete_title": "Ștergere secțiune",
+          "delete_description": "Sigur doriți să ștergeți această secțiune de galerie?",
+          "delete_success": "Secțiunea a fost ștearsă",
+          "delete_error": "Eroare la ștergere"
+        },
+        "sheet": {
+          "create_title": "Creare secțiune galerie",
+          "create_description": "Completați câmpurile pentru a crea o secțiune nouă",
+          "edit_title": "Editare secțiune galerie",
+          "edit_description": "Modificați câmpurile secțiunii selectate",
+          "name_ro": "Denumire (RO)",
+          "name_ru": "Denumire (RU)",
+          "description_ro": "Descriere (RO)",
+          "description_ru": "Descriere (RU)",
+          "state_active": "Activă",
+          "state_hidden": "Ascunsă"
         }
       }
     },

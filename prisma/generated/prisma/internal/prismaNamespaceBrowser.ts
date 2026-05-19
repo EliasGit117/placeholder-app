@@ -53,6 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Account: 'Account',
   Category: 'Category',
+  GallerySection: 'GallerySection',
+  Image: 'Image',
   Session: 'Session',
   Todo: 'Todo',
   User: 'User',
@@ -109,6 +111,39 @@ export const CategoryScalarFieldEnum = {
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const GallerySectionScalarFieldEnum = {
+  id: 'id',
+  nameRo: 'nameRo',
+  nameRu: 'nameRu',
+  descriptionRo: 'descriptionRo',
+  descriptionRu: 'descriptionRu',
+  state: 'state',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GallerySectionScalarFieldEnum = (typeof GallerySectionScalarFieldEnum)[keyof typeof GallerySectionScalarFieldEnum]
+
+
+export const ImageScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  key: 'key',
+  size: 'size',
+  mimeType: 'mimeType',
+  width: 'width',
+  height: 'height',
+  thumbhash: 'thumbhash',
+  resourceType: 'resourceType',
+  resourceId: 'resourceId',
+  purpose: 'purpose',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ImageScalarFieldEnum = (typeof ImageScalarFieldEnum)[keyof typeof ImageScalarFieldEnum]
 
 
 export const SessionScalarFieldEnum = {

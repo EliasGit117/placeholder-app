@@ -6,6 +6,7 @@ import {
   IconDashboard,
   IconKey,
   IconLanguage,
+  IconLayoutGrid,
   IconMoon,
   IconPalette,
   IconSettings,
@@ -84,6 +85,11 @@ const navMain: ISidebarMenuItem[] = [
         title: () => m['components.sidebar.nav.categories'](),
         icon: IconCategory,
         linkOptions: { to: '/admin/categories', activeOptions: { includeSearch: false } }
+      },
+      {
+        title: () => m['components.sidebar.nav.gallery_sections'](),
+        icon: IconLayoutGrid,
+        linkOptions: { to: '/admin/gallery', activeOptions: { includeSearch: false } }
       }
     ]
   },

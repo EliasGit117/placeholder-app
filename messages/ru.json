@@ -30,13 +30,13 @@
     "create": "Создать",
     "close": "Закрыть",
     "edit": "Редактировать",
-    "optional": "Опционально",
     "expand": "Развернуть",
     "collapse": "Свернуть",
     "search": "Поиск",
     "no_results": "Нет результатов",
     "selected_none": "Ничего не выбрано",
-    "refresh": "Обновить"
+    "refresh": "Обновить",
+    "delete": "удаление"
   },
   "enums": {
     "user_role": {
@@ -71,7 +71,8 @@
         "users": "Пользователи",
         "sessions": "Сессии",
         "catalog": "Каталог",
-        "categories": "Категории"
+        "categories": "Категории",
+        "gallery_sections": "Разделы галереи"
       }
     },
     "user_dropdown": {
@@ -200,6 +201,34 @@
           "deleting": "Удаление...",
           "delete_success": "Категория удалена.",
           "delete_error": "Ошибка при удалении"
+        }
+      }
+    },
+    "gallery_sections": {
+      "index": {
+        "table": {
+          "name_ro": "Имя (RO)",
+          "name_ru": "Имя (RU)",
+          "state": "Состояние",
+          "state_active": "Активен",
+          "state_hidden": "Скрыт",
+          "actions": "Действия",
+          "delete_title": "Удалить раздел",
+          "delete_description": "Вы уверены, что хотите удалить этот раздел галереи?",
+          "delete_success": "Раздел удален",
+          "delete_error": "Ошибка при удалении"
+        },
+        "sheet": {
+          "create_title": "Создать раздел галереи",
+          "create_description": "Заполните поля, чтобы создать новый раздел.",
+          "edit_title": "Редактировать раздел галереи",
+          "edit_description": "Измените поля выбранного раздела.",
+          "name_ro": "Имя (RO)",
+          "name_ru": "Имя (RU)",
+          "description_ro": "Описание (RO)",
+          "description_ru": "Описание (RU)",
+          "state_active": "Активен",
+          "state_hidden": "Скрыт"
         }
       }
     }

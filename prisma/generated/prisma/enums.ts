@@ -17,6 +17,31 @@ export const CategoryState = {
 export type CategoryState = (typeof CategoryState)[keyof typeof CategoryState]
 
 
+export const GallerySectionState = {
+  active: 'active',
+  hidden: 'hidden'
+} as const
+
+export type GallerySectionState = (typeof GallerySectionState)[keyof typeof GallerySectionState]
+
+
+export const ImageResourceType = {
+  GALLERY_SECTION: 'GALLERY_SECTION',
+  AVATAR: 'AVATAR'
+} as const
+
+export type ImageResourceType = (typeof ImageResourceType)[keyof typeof ImageResourceType]
+
+
+export const ImagePurpose = {
+  PRIMARY: 'PRIMARY',
+  THUMBNAIL: 'THUMBNAIL',
+  BACKGROUND: 'BACKGROUND'
+} as const
+
+export type ImagePurpose = (typeof ImagePurpose)[keyof typeof ImagePurpose]
+
+
 export const TodoState = {
   TODO: 'TODO',
   IN_PROGRESS: 'IN_PROGRESS',

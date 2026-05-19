@@ -1,0 +1,34 @@
+enum ImageResourceType {
+  GALLERY_SECTION
+  AVATAR
+
+  @@map("image_resource_type")
+}
+
+enum ImagePurpose {
+  PRIMARY
+  THUMBNAIL
+  BACKGROUND
+
+  @@map("image_purpose")
+}
+
+model Image {
+  id           Int               @id @default(autoincrement())
+  url          String
+  key          String
+  size         Int
+  mimeType     String            @map("mime_type")
+  width        Int
+  height       Int
+  thumbhash    String?
+  resourceType ImageResourceType @map("resource_type")
+  resourceId   Int?              @map("resource_id")
+  purpose      ImagePurpose
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([resourceType, resourceId])
+  @@map("images")
+}
