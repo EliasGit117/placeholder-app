@@ -1,12 +1,13 @@
 import { createFileRoute, notFound, redirect } from '@tanstack/react-router';
 import { orpc } from '@/lib/orpc';
 import { roleHasPermission } from '@/lib/auth';
-import { m } from '@/paraglide/messages';
 import { Input } from '@/components/ui/input';
+import { getLocale } from '@/paraglide/runtime';
+import { capitalizeFirst } from '@/lib/utils';
+import type { IBreadcrumb } from '@/components/layout/admin/nav-breadcrumbs.tsx';
 
 
 export const Route = createFileRoute('/admin/gallery/sections/$sectionId/')({
-  staticData: { crumbs: { title: () => m['pages.gallery_sections.detail.title']() } },
   component: RouteComponent,
   params: {
     parse: ({ sectionId }) => ({ sectionId: parseInt(sectionId, 10) }),
@@ -27,6 +28,10 @@ export const Route = createFileRoute('/admin/gallery/sections/$sectionId/')({
 
     if (!section)
       throw notFound();
+
+    const locale = getLocale();
+    const crumbs: IBreadcrumb[] = [{ title: section[`name${capitalizeFirst(locale)}`] }];
+    return { crumbs: crumbs };
   }
 });
 

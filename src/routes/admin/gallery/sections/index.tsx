@@ -4,11 +4,10 @@ import { GallerySectionsTable } from '../-components/gallery-sections-table';
 import { roleHasPermission } from '@/lib/auth';
 import { awaitIfServer } from '@/lib/server';
 import { searchGallerySectionsRequestDtoSchema } from '@/features/gallery-sections/dtos/search-gallery-section.ts';
-import { m } from '@/paraglide/messages';
+
 
 
 export const Route = createFileRoute('/admin/gallery/sections/')({
-  staticData: { crumbs: { title: () => m['pages.gallery_sections.title']() } },
   component: RouteComponent,
   validateSearch: searchGallerySectionsRequestDtoSchema,
   beforeLoad: async ({ context: { user } }) => {

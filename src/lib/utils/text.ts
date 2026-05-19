@@ -24,3 +24,10 @@ export function pickFirstLetters(text: string, count: number = 1, transform: TTr
       return picked;
   }
 }
+
+export function capitalizeFirst<T extends string>(str: T): Capitalize<T> {
+  if (!str)
+    return str as Capitalize<T>;
+
+  return (str.charAt(0).toUpperCase() + str.slice(1)) as Capitalize<T>;
+}
