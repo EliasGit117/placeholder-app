@@ -54,7 +54,7 @@ export const Header: FC<IProps> = ({ className, ...props }) => {
           className="data-[orientation=vertical]:h-4 my-auto"
         />
 
-        <NavBreadcrumbs/>
+        <NavBreadcrumbs className='ml-2'/>
         <UserDropdown size='md' className='ml-auto' align='end'/>
       </div>
     </header>
