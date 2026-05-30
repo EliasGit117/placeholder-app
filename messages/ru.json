@@ -39,7 +39,9 @@
     "refresh": "Обновить",
     "delete": "Удалить",
     "open": "Открыть",
-    "admin": "Админ"
+    "admin": "Админ",
+    "retry": "Повторить",
+    "cancel": "Отмена"
   },
   "enums": {
     "user_role": {
@@ -105,6 +107,26 @@
         "show_passwords": "Показать пароли",
         "confirm_password": "Подтвердите пароль"
       }
+    },
+    "file_upload": {
+      "drop_zone": {
+        "title": "Загрузите ваши файлы",
+        "description": "Перетащите файлы сюда или нажмите для выбора",
+        "size_limit": "Поддерживаются разные типы файлов, до {size} каждый",
+        "select_files": "Выбрать файлы"
+      },
+      "item": {
+        "default_error": "Загрузка не удалась. Попробуйте снова."
+      },
+      "rejection": {
+        "too_large": "Превышает максимальный размер {size}.",
+        "invalid_type": "Тип файла не поддерживается.",
+        "too_many": "Превышен лимит в {max} файлов."
+      },
+      "errors": {
+        "upload_failed": "Ошибка загрузки",
+        "cancelled": "Отменено"
+      }
     }
   },
   "pages": {
@@ -165,10 +187,16 @@
       },
       "profile": {
         "title": "Информация профиля",
-        "description": "Просматривайте и обновляйте информацию своей учетной записи.",
-        "edit_name": "Изменить имя",
-        "edit_name_description": "Обновите отображаемое имя.",
-        "update_success": "Профиль обновлен."
+        "description": "Просматривайте и обновляйте информацию вашего аккаунта",
+        "edit_name": "Редактировать имя",
+        "edit_name_description": "Обновите отображаемое имя",
+        "update_success": "Профиль обновлён",
+        "change_avatar": "Сменить аватар",
+        "avatar_updated": "Аватар обновлён",
+        "edit_profile": "Редактирование профиля",
+        "edit_profile_description": "Обновите информацию вашего профиля",
+        "remove_avatar": "Удалить аватар",
+        "avatar_removed": "Аватар был удален"
       },
       "security": {
         "change_password": "Изменить пароль",
@@ -221,7 +249,19 @@
     "gallery_sections": {
       "title": "Разделы",
       "detail": {
-        "title": "Раздел"
+        "title": "Раздел",
+        "no_images": "Изображений пока нет.",
+        "purpose": {
+          "label": "Назначение",
+          "primary": "Основное",
+          "thumbnail": "Миниатюра",
+          "background": "Фон"
+        },
+        "upload_sheet": {
+          "title": "Загрузить изображения",
+          "description": "Перетащите изображения, чтобы загрузить их в этот раздел.",
+          "trigger": "Загрузить изображения"
+        }
       },
       "index": {
         "table": {

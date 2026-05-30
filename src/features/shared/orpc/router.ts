@@ -6,11 +6,13 @@ import { sessionsAdminRoutes } from '@/features/sessions/routes/admin';
 import { usersAdminRoutes } from '@/features/users/routes/admin';
 import { categoriesAdminRoutes } from '@/features/categories/routes/admin';
 import { galleryAdminRoutes } from '@/features/gallery-sections/routes/admin';
+import { profileRoutes } from '@/features/profile/routes';
 
 
 export const orpcRouter = base.router({
   sessions: sessionsPublicRoutes,
   categories: categoriesRoutes,
+  profile: profileRoutes,
   admin: {
     sessions: sessionsAdminRoutes,
     users: usersAdminRoutes,

@@ -40,7 +40,9 @@
     "refresh": "Reîncarcă",
     "delete": "Ștergere",
     "open": "Deschide",
-    "admin": "Admin"
+    "admin": "Admin",
+    "retry": "Reîncearcă",
+    "cancel": "Anulare"
   },
   "enums": {
     "user_role": {
@@ -106,6 +108,26 @@
         "show_passwords": "Afișează parolele",
         "confirm_password": "Confirmă parola"
       }
+    },
+    "file_upload": {
+      "drop_zone": {
+        "title": "Încarcă fișierele tale",
+        "description": "Trage și plasează fișierele aici sau dă click pentru a le selecta",
+        "size_limit": "Acceptă mai multe tipuri de fișiere, până la {size} fiecare",
+        "select_files": "Selectează fișiere"
+      },
+      "item": {
+        "default_error": "Încărcare eșuată. Te rog încearcă din nou."
+      },
+      "rejection": {
+        "too_large": "Depășește dimensiunea maximă de {size}.",
+        "invalid_type": "Tip de fișier nepermis.",
+        "too_many": "Depășește limita maximă de {max} fișiere."
+      },
+      "errors": {
+        "upload_failed": "Încărcare eșuată",
+        "cancelled": "Anulat"
+      }
     }
   },
   "pages": {
@@ -126,7 +148,13 @@
         "description": "Vizualizați și actualizați informațiile contului dvs.",
         "edit_name": "Editare nume",
         "edit_name_description": "Actualizați-vă numele afișat",
-        "update_success": "Profilul a fost actualizat"
+        "update_success": "Profilul a fost actualizat",
+        "change_avatar": "Schimbare avatar",
+        "avatar_updated": "Avatarul a fost actualizat",
+        "edit_profile": "Editare profil",
+        "edit_profile_description": "Actualizați informațiile profilului dvs.",
+        "remove_avatar": "Ștergere avatar",
+        "avatar_removed": "Avatarul a fost șters"
       },
       "security": {
         "change_password": "Schimbare parolă",
@@ -201,7 +229,19 @@
     "gallery_sections": {
       "title": "Secțiuni",
       "detail": {
-        "title": "Secțiune"
+        "title": "Secțiune",
+        "no_images": "Nu există imagini.",
+        "purpose": {
+          "label": "Scop",
+          "primary": "Principală",
+          "thumbnail": "Miniatură",
+          "background": "Fundal"
+        },
+        "upload_sheet": {
+          "title": "Încarcă imagini",
+          "description": "Plasează imagini pentru a le încărca în această secțiune.",
+          "trigger": "Încarcă imagini"
+        }
       },
       "index": {
         "table": {

@@ -68,8 +68,10 @@ function getWhere(input: TSearchUsersRequestDto): Prisma.UserWhereInput {
 
   if (input.createdAt?.from != null || input.createdAt?.to != null) {
     where.createdAt = {};
+
     if (input.createdAt.from != null)
       where.createdAt.gte = input.createdAt.from;
+
     if (input.createdAt.to != null)
       where.createdAt.lte = input.createdAt.to;
   }

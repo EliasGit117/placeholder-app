@@ -1,4 +1,4 @@
-import type { FileMetadata } from '@/hooks/use-file-upload.ts';
+import type { IFileMetadata } from 'src/hooks/use-file-upload.ts';
 import {
   IconFileExcel,
   IconFileText,
@@ -11,7 +11,7 @@ import {
 import type { FC } from 'react';
 
 interface IFileIconProps {
-  file: File | FileMetadata;
+  file: File | IFileMetadata;
   className?: string;
 }
 
@@ -26,7 +26,6 @@ const rules: [test: (t: string) => boolean, icon: typeof IconFileText][] = [
 ];
 
 export const FileIcon: FC<IFileIconProps> = ({ file: { type }, ...props }) => {
-
   const Icon = rules.find(([test]) => test(type))?.[1] ?? IconFileText;
   return <Icon {...props}/>;
 };

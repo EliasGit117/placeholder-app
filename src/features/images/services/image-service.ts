@@ -1,11 +1,80 @@
+import sharp from 'sharp';
 import { ORPCError } from '@orpc/server';
 import { ImagePurpose, ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import { prisma } from '@/lib/db';
+import { bytesToMb } from '@/lib/utils';
 import { s3Storage } from '@/features/shared/services/s3-storage.ts';
 import { ImageDtoFactory, type TImageDto } from '@/features/images/dtos/image-dto.ts';
+import { getImagePolicy } from '@/features/images/consts/image-resource-map.ts';
 import type { TCreateImageInput } from '@/features/images/schemas/image-mutations.ts';
 
+interface PrepareFileInput {
+  file: File;
+  resourceType: ImageResourceType;
+  purpose: ImagePurpose;
+}
+
+export interface PreparedImage {
+  file: File;
+  width: number;
+  height: number;
+  mimeType: string;
+}
+
 export class ImageService {
+
+  static validateAgainstPolicy(input: PrepareFileInput): void {
+    const policy = getImagePolicy(input.resourceType, input.purpose);
+    if (!policy)
+      throw new ORPCError('BAD_REQUEST', {
+        message: 'Image purpose not allowed for this resource.'
+      });
+
+    if (input.file.size === 0)
+      throw new ORPCError('BAD_REQUEST', { message: 'File is empty.' });
+
+    if (policy.maxSize && input.file.size > policy.maxSize)
+      throw new ORPCError('BAD_REQUEST', {
+        message: `File must be smaller than ${bytesToMb(policy.maxSize)}MB.`
+      });
+
+    if (policy.mimeTypes && !isMimeAllowed(input.file.type, policy.mimeTypes))
+      throw new ORPCError('BAD_REQUEST', {
+        message: `File type must be one of: ${policy.mimeTypes.join(', ')}.`,
+      });
+
+  }
+
+  static async prepareFile(input: PrepareFileInput): Promise<PreparedImage> {
+    ImageService.validateAgainstPolicy(input);
+
+    const policy = getImagePolicy(input.resourceType, input.purpose)!;
+    const inputBuffer = Buffer.from(await input.file.arrayBuffer());
+    let pipeline = sharp(inputBuffer).ensureAlpha();
+
+    if (policy.transform) {
+      pipeline = pipeline.resize({
+        width: policy.transform.width,
+        height: policy.transform.height,
+        fit: policy.transform.fit ?? 'inside',
+        position: policy.transform.position ?? 'center',
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+        withoutEnlargement: true
+      });
+    }
+
+    if (input.file.type !== 'image/webp')
+      pipeline = pipeline.webp({ alphaQuality: 100 });
+
+    const { data, info } = await pipeline.toBuffer({ resolveWithObject: true });
+
+    const baseName = input.file.name.replace(/\.[^.]+$/, '');
+    const file = new File([new Uint8Array(data)], `${baseName}.webp`, {
+      type: 'image/webp'
+    });
+
+    return { file, width: info.width, height: info.height, mimeType: 'image/webp' };
+  }
 
   static async create(input: TCreateImageInput): Promise<TImageDto> {
     const entity = await prisma.image.create({
@@ -19,8 +88,8 @@ export class ImageService {
         thumbhash: input.thumbhash ?? null,
         resourceType: input.resourceType,
         resourceId: input.resourceId ?? null,
-        purpose: input.purpose,
-      },
+        purpose: input.purpose
+      }
     });
 
     return ImageDtoFactory.fromEntity(entity);
@@ -34,15 +103,15 @@ export class ImageService {
   static async findByResource(
     resourceType: ImageResourceType,
     resourceId?: number | null,
-    purpose?: ImagePurpose,
+    purpose?: ImagePurpose
   ): Promise<TImageDto[]> {
     const entities = await prisma.image.findMany({
       where: {
         resourceType,
         ...(resourceId !== undefined && { resourceId }),
-        ...(purpose !== undefined && { purpose }),
+        ...(purpose !== undefined && { purpose })
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: 'desc' }
     });
 
     return ImageDtoFactory.fromEntities(entities);
@@ -74,12 +143,21 @@ export class ImageService {
         thumbhash: input.thumbhash ?? null,
         resourceType: input.resourceType,
         resourceId: input.resourceId ?? null,
-        purpose: input.purpose,
-      },
+        purpose: input.purpose
+      }
     });
 
     await s3Storage.delete(existing.key);
 
     return ImageDtoFactory.fromEntity(entity);
   }
+}
+
+function isMimeAllowed(fileType: string, allowed: readonly string[]) {
+  return allowed.some(type => {
+    if (type.endsWith('/*')) {
+      return fileType.startsWith(type.replace('/*', '/'));
+    }
+    return fileType === type;
+  });
 }

@@ -21,7 +21,6 @@ import { Link } from '@tanstack/react-router';
 import { m } from '@/paraglide/messages';
 
 
-
 interface IProps extends Omit<ComponentProps<typeof Avatar>, 'children' | 'onClick'> {
   align?: 'start' | 'center' | 'end';
 }
@@ -43,16 +42,16 @@ export const UserDropdown: FC<IProps> = ({ className, align, size, ...props }) =
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className={cn('rounded-full', className)} size={size} {...props}>
-          <AvatarFallback>
-            {!!user ? (
-              <>
-                <AvatarImage src={user?.image ?? ''}/>
+          {!!user ? (
+            <>
+              <AvatarImage src={user?.image ?? ''}/>
+              <AvatarFallback>
                 {pickFirstLetters(user?.name, 2)}
-              </>
-            ) : (
-              <IconUser/>
-            )}
-          </AvatarFallback>
+              </AvatarFallback>
+            </>
+          ) : (
+            <IconUser/>
+          )}
         </Avatar>
       </DropdownMenuTrigger>
 
@@ -61,9 +60,9 @@ export const UserDropdown: FC<IProps> = ({ className, align, size, ...props }) =
           <DropdownMenuGroup>
             <DropdownMenuLabel className="flex items-center gap-2">
               <Avatar size="lg" className="after:rounded-md">
-                <AvatarImage src={user.image ?? ''}/>
+                <AvatarImage src={user.image ?? ''} className="rounded-md"/>
                 <AvatarFallback className="rounded-md text-base">
-                  {pickFirstLetters(user.name, 4)}
+                  {pickFirstLetters(user.name, 2)}
                 </AvatarFallback>
               </Avatar>
 

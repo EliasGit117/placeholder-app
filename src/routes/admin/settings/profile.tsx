@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useAuth } from '@/hooks/use-auth';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Card,
   CardContent,
@@ -11,8 +11,9 @@ import {
 } from '@/components/ui/card';
 import { IconMail } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
-import { UpdateNameDialog } from './-components/update-name-dialog';
 import { pickFirstLetters } from '@/lib/utils';
+import { EditProfileDialog } from '@/routes/admin/settings/-components/edit-profile-dialog.tsx';
+
 
 export const Route = createFileRoute('/admin/settings/profile')({
   staticData: { crumbs: { title: () => m['pages.settings.tabs.profile']() } },
@@ -32,6 +33,7 @@ function RouteComponent() {
         <CardContent className="space-y-6">
           <div className="flex items-center gap-4">
             <Avatar size='lg'>
+              {user?.image && <AvatarImage src={user.image} alt={user.name ?? ''}/>}
               <AvatarFallback>
                 {pickFirstLetters(user?.name ?? '', 2, 'uppercase')}
               </AvatarFallback>
@@ -45,8 +47,8 @@ function RouteComponent() {
             </div>
           </div>
         </CardContent>
-        <CardFooter className='justify-end'>
-          <UpdateNameDialog/>
+        <CardFooter className='justify-end gap-2'>
+          <EditProfileDialog/>
         </CardFooter>
       </Card>
     </div>

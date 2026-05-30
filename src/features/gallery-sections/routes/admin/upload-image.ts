@@ -12,8 +12,6 @@ const uploadImageInputSchema = z.object({
   sectionId: z.number().int().positive(),
   file: z.instanceof(File),
   purpose: z.enum(ImagePurpose),
-  width: z.number().int().positive(),
-  height: z.number().int().positive(),
 });
 
 export const adminGallerySectionsUploadImage = galleryAdminBase
@@ -39,15 +37,21 @@ export const adminGallerySectionsUploadImage = galleryAdminBase
     if (section == null)
       errors.NOT_FOUND();
 
-    const uploaded = await s3Storage.upload(input.file, { acl: 'public-read' });
+    const prepared = await ImageService.prepareFile({
+      file: input.file,
+      resourceType: ImageResourceType.GALLERY_SECTION,
+      purpose: input.purpose,
+    });
+
+    const uploaded = await s3Storage.upload(prepared.file, { acl: 'public-read' });
 
     return ImageService.create({
       url: uploaded.url,
       key: uploaded.key,
       size: uploaded.size,
-      mimeType: input.file.type,
-      width: input.width,
-      height: input.height,
+      mimeType: prepared.mimeType,
+      width: prepared.width,
+      height: prepared.height,
       resourceType: ImageResourceType.GALLERY_SECTION,
       resourceId: input.sectionId,
       purpose: input.purpose,
