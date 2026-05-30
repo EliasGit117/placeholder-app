@@ -5,6 +5,7 @@ import { adminGallerySectionsGetAll } from './get-all.ts';
 import { adminGallerySectionsDelete } from './delete.ts';
 import { adminGallerySectionsSearch } from './search.ts';
 import { adminGallerySectionsGetImages } from './get-images.ts';
+import { adminGallerySectionsDeleteImages } from './delete-images.ts';
 
 
 export const galleryAdminRoutes = {
@@ -16,5 +17,6 @@ export const galleryAdminRoutes = {
     delete: adminGallerySectionsDelete,
     search: adminGallerySectionsSearch,
     getImages: adminGallerySectionsGetImages,
+    deleteImages: adminGallerySectionsDeleteImages,
   },
 };

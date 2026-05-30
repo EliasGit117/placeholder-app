@@ -165,6 +165,30 @@ export class ImageService {
     await prisma.image.delete({ where: { id } });
     await s3Storage.delete([entity.key, ...entity.variants.map(v => v.key)]);
   }
+
+  // Deletes the given images (and their variants) scoped to a resource, so
+  // callers can't remove images that belong to a different owner. Returns the
+  // number actually deleted.
+  static async deleteManyForResource(
+    resourceType: ImageResourceType,
+    resourceId: string,
+    ids: number[]
+  ): Promise<number> {
+    const entities = await prisma.image.findMany({
+      where: { id: { in: ids }, resourceType, resourceId },
+      include: { variants: true },
+    });
+
+    if (entities.length === 0)
+      return 0;
+
+    const keys = entities.flatMap(e => [e.key, ...e.variants.map(v => v.key)]);
+
+    await prisma.image.deleteMany({ where: { id: { in: entities.map(e => e.id) } } });
+    await s3Storage.delete(keys);
+
+    return entities.length;
+  }
 }
 
 async function transformToWebp(

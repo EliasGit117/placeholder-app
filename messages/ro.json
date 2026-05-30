@@ -241,6 +241,14 @@
           "title": "Încarcă imagini",
           "description": "Plasează imagini pentru a le încărca în această secțiune.",
           "trigger": "Încarcă"
+        },
+        "delete": {
+          "trigger": "Șterge",
+          "title": "Șterge imaginile",
+          "description": "Sigur vrei să ștergi imaginile selectate? Această acțiune este ireversibilă.",
+          "deleting": "Se șterge...",
+          "success": "Imaginile au fost șterse.",
+          "error": "Nu s-au putut șterge imaginile."
         }
       },
       "index": {
