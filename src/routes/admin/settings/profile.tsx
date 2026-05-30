@@ -33,7 +33,7 @@ function RouteComponent() {
         <CardContent className="space-y-6">
           <div className="flex items-center gap-4">
             <Avatar size='lg'>
-              {user?.image && <AvatarImage src={user.image} alt={user.name ?? ''}/>}
+              <AvatarImage src={user?.image ?? ''} alt={user?.name ?? ''}/>
               <AvatarFallback>
                 {pickFirstLetters(user?.name ?? '', 2, 'uppercase')}
               </AvatarFallback>

@@ -34,19 +34,9 @@ export type ImageResourceType = (typeof ImageResourceType)[keyof typeof ImageRes
 
 
 export const ImagePurpose = {
-  PRIMARY: 'PRIMARY',
-  THUMBNAIL: 'THUMBNAIL',
-  BACKGROUND: 'BACKGROUND'
+  BASE: 'BASE',
+  THUMB_256x256: 'THUMB_256x256',
+  THUMB_512x512: 'THUMB_512x512'
 } as const
 
 export type ImagePurpose = (typeof ImagePurpose)[keyof typeof ImagePurpose]
-
-
-export const TodoState = {
-  TODO: 'TODO',
-  IN_PROGRESS: 'IN_PROGRESS',
-  DONE: 'DONE',
-  CANCELED: 'CANCELED'
-} as const
-
-export type TodoState = (typeof TodoState)[keyof typeof TodoState]

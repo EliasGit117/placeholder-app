@@ -233,9 +233,9 @@
         "no_images": "Nu există imagini.",
         "purpose": {
           "label": "Scop",
-          "primary": "Principală",
-          "thumbnail": "Miniatură",
-          "background": "Fundal"
+          "base": "Originală",
+          "thumb_256": "Miniatură 256x256",
+          "thumb_512": "Miniatură 512x512"
         },
         "upload_sheet": {
           "title": "Încarcă imagini",

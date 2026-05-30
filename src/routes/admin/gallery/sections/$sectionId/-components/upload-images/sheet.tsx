@@ -35,9 +35,9 @@ const accept = 'image/jpeg,image/png,image/webp,image/gif,image/avif';
 const maxSize = 10 * 1024 * 1024;
 
 const purposeLabels: Record<ImagePurpose, () => string> = {
-  [ImagePurpose.PRIMARY]: () => m['pages.gallery_sections.detail.purpose.primary'](),
-  [ImagePurpose.THUMBNAIL]: () => m['pages.gallery_sections.detail.purpose.thumbnail'](),
-  [ImagePurpose.BACKGROUND]: () => m['pages.gallery_sections.detail.purpose.background'](),
+  [ImagePurpose.BASE]: () => m['pages.gallery_sections.detail.purpose.base'](),
+  [ImagePurpose.THUMB_256x256]: () => m['pages.gallery_sections.detail.purpose.thumb_256'](),
+  [ImagePurpose.THUMB_512x512]: () => m['pages.gallery_sections.detail.purpose.thumb_512'](),
 };
 
 
@@ -46,7 +46,7 @@ export const UploadImagesSheet: FC = () => {
   const queryClient = useQueryClient();
 
   const [purpose, setPurpose] = useState<ImagePurpose>(
-    options?.defaultPurpose ?? ImagePurpose.PRIMARY,
+    options?.defaultPurpose ?? ImagePurpose.BASE,
   );
 
   const sectionId = options?.sectionId;

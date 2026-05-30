@@ -67,11 +67,6 @@ export type Image = Prisma.ImageModel
  */
 export type Session = Prisma.SessionModel
 /**
- * Model Todo
- * 
- */
-export type Todo = Prisma.TodoModel
-/**
  * Model User
  * 
  */

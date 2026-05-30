@@ -10,7 +10,7 @@ export const createImageSchema = z.object({
   height: z.number().int().positive(),
   thumbhash: z.string().optional(),
   resourceType: z.enum(ImageResourceType),
-  resourceId: z.number().int().optional(),
+  resourceId: z.string().optional(),
   purpose: z.enum(ImagePurpose),
 });
 

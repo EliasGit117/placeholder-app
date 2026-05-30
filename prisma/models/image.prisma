@@ -6,9 +6,9 @@ enum ImageResourceType {
 }
 
 enum ImagePurpose {
-  PRIMARY
-  THUMBNAIL
-  BACKGROUND
+  BASE
+  THUMB_256x256
+  THUMB_512x512
 
   @@map("image_purpose")
 }
@@ -23,7 +23,7 @@ model Image {
   height       Int
   thumbhash    String?
   resourceType ImageResourceType @map("resource_type")
-  resourceId   Int?              @map("resource_id")
+  resourceId   String?           @map("resource_id")
   purpose      ImagePurpose
 
   createdAt DateTime @default(now()) @map("created_at")

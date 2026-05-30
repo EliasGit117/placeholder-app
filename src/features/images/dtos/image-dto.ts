@@ -14,7 +14,7 @@ export const imageDtoSchema = z.object({
   height: z.number(),
   thumbhash: z.string().nullable(),
   resourceType: z.enum(ImageResourceType),
-  resourceId: z.number().nullable(),
+  resourceId: z.string().nullable(),
   purpose: z.enum(ImagePurpose),
   createdAt: z.string(),
   updatedAt: z.string(),

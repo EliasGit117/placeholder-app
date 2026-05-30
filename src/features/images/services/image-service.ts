@@ -1,4 +1,5 @@
 import sharp from 'sharp';
+import { rgbaToThumbHash } from 'thumbhash';
 import { ORPCError } from '@orpc/server';
 import { ImagePurpose, ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import { prisma } from '@/lib/db';
@@ -19,6 +20,7 @@ export interface PreparedImage {
   width: number;
   height: number;
   mimeType: string;
+  thumbhash: string;
 }
 
 export class ImageService {
@@ -73,7 +75,9 @@ export class ImageService {
       type: 'image/webp'
     });
 
-    return { file, width: info.width, height: info.height, mimeType: 'image/webp' };
+    const thumbhash = await generateThumbhash(data);
+
+    return { file, width: info.width, height: info.height, mimeType: 'image/webp', thumbhash };
   }
 
   static async create(input: TCreateImageInput): Promise<TImageDto> {
@@ -102,7 +106,7 @@ export class ImageService {
 
   static async findByResource(
     resourceType: ImageResourceType,
-    resourceId?: number | null,
+    resourceId?: string | null,
     purpose?: ImagePurpose
   ): Promise<TImageDto[]> {
     const entities = await prisma.image.findMany({
@@ -151,6 +155,17 @@ export class ImageService {
 
     return ImageDtoFactory.fromEntity(entity);
   }
+}
+
+async function generateThumbhash(imageBuffer: Buffer): Promise<string> {
+  const { data, info } = await sharp(imageBuffer)
+    .resize({ width: 100, height: 100, fit: 'inside' })
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  const hash = rgbaToThumbHash(info.width, info.height, data);
+  return Buffer.from(hash).toString('base64');
 }
 
 function isMimeAllowed(fileType: string, allowed: readonly string[]) {

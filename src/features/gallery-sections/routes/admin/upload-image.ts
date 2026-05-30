@@ -52,8 +52,9 @@ export const adminGallerySectionsUploadImage = galleryAdminBase
       mimeType: prepared.mimeType,
       width: prepared.width,
       height: prepared.height,
+      thumbhash: prepared.thumbhash,
       resourceType: ImageResourceType.GALLERY_SECTION,
-      resourceId: input.sectionId,
+      resourceId: String(input.sectionId),
       purpose: input.purpose,
     });
   });

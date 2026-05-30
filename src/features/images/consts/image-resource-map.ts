@@ -22,7 +22,7 @@ type TImagePolicy = Record<ImageResourceType, Partial<Record<ImagePurpose, Image
 
 export const imagePolicy: TImagePolicy = {
   [ImageResourceType.AVATAR]: {
-    [ImagePurpose.PRIMARY]: {
+    [ImagePurpose.THUMB_256x256]: {
       transform: {
         width: 256,
         height: 256,
@@ -35,29 +35,33 @@ export const imagePolicy: TImagePolicy = {
   },
 
   [ImageResourceType.GALLERY_SECTION]: {
-    [ImagePurpose.PRIMARY]: {
-      transform: {
-        width: 1024,
-        height: 1024
-      },
-      maxSize: mbToBytes(5),
-      mimeTypes: ['image/jpeg', 'image/png', 'image/webp']
-    },
-    [ImagePurpose.BACKGROUND]: {
+    [ImagePurpose.BASE]: {
       transform: {
         width: 1920,
-        height: 1080
+        height: 1920
       },
       maxSize: mbToBytes(10),
       mimeTypes: ['image/jpeg', 'image/png', 'image/webp']
     },
-    [ImagePurpose.THUMBNAIL]: {
+    [ImagePurpose.THUMB_512x512]: {
+      transform: {
+        width: 512,
+        height: 512,
+        fit: 'cover',
+        position: 'center'
+      },
+      maxSize: mbToBytes(5),
+      mimeTypes: ['image/jpeg', 'image/png', 'image/webp']
+    },
+    [ImagePurpose.THUMB_256x256]: {
       transform: {
         width: 256,
-        height: 256
+        height: 256,
+        fit: 'cover',
+        position: 'center'
       },
       maxSize: mbToBytes(2),
-      mimeTypes: ['image/jpeg', 'image/png']
+      mimeTypes: ['image/jpeg', 'image/png', 'image/webp']
     }
   }
 };

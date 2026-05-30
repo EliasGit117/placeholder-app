@@ -131,7 +131,7 @@ export const EditProfileDialog: FC = () => {
 
         <div className="flex flex-col items-center gap-4 my-2">
           <Avatar className="size-24">
-            {user?.image && (<AvatarImage src={user.image} alt={user.name ?? ''} />)}
+            <AvatarImage src={user?.image ?? ''} alt={user?.name ?? ''} />
             <AvatarFallback className='text-4xl'>
               {pickFirstLetters(user?.name ?? '', 2, 'uppercase')}
             </AvatarFallback>

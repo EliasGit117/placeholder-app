@@ -31,7 +31,6 @@ export type ImageAvgAggregateOutputType = {
   size: number | null
   width: number | null
   height: number | null
-  resourceId: number | null
 }
 
 export type ImageSumAggregateOutputType = {
@@ -39,7 +38,6 @@ export type ImageSumAggregateOutputType = {
   size: number | null
   width: number | null
   height: number | null
-  resourceId: number | null
 }
 
 export type ImageMinAggregateOutputType = {
@@ -52,7 +50,7 @@ export type ImageMinAggregateOutputType = {
   height: number | null
   thumbhash: string | null
   resourceType: $Enums.ImageResourceType | null
-  resourceId: number | null
+  resourceId: string | null
   purpose: $Enums.ImagePurpose | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -68,7 +66,7 @@ export type ImageMaxAggregateOutputType = {
   height: number | null
   thumbhash: string | null
   resourceType: $Enums.ImageResourceType | null
-  resourceId: number | null
+  resourceId: string | null
   purpose: $Enums.ImagePurpose | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -97,7 +95,6 @@ export type ImageAvgAggregateInputType = {
   size?: true
   width?: true
   height?: true
-  resourceId?: true
 }
 
 export type ImageSumAggregateInputType = {
@@ -105,7 +102,6 @@ export type ImageSumAggregateInputType = {
   size?: true
   width?: true
   height?: true
-  resourceId?: true
 }
 
 export type ImageMinAggregateInputType = {
@@ -253,7 +249,7 @@ export type ImageGroupByOutputType = {
   height: number
   thumbhash: string | null
   resourceType: $Enums.ImageResourceType
-  resourceId: number | null
+  resourceId: string | null
   purpose: $Enums.ImagePurpose
   createdAt: Date
   updatedAt: Date
@@ -292,7 +288,7 @@ export type ImageWhereInput = {
   height?: Prisma.IntFilter<"Image"> | number
   thumbhash?: Prisma.StringNullableFilter<"Image"> | string | null
   resourceType?: Prisma.EnumImageResourceTypeFilter<"Image"> | $Enums.ImageResourceType
-  resourceId?: Prisma.IntNullableFilter<"Image"> | number | null
+  resourceId?: Prisma.StringNullableFilter<"Image"> | string | null
   purpose?: Prisma.EnumImagePurposeFilter<"Image"> | $Enums.ImagePurpose
   createdAt?: Prisma.DateTimeFilter<"Image"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Image"> | Date | string
@@ -327,7 +323,7 @@ export type ImageWhereUniqueInput = Prisma.AtLeast<{
   height?: Prisma.IntFilter<"Image"> | number
   thumbhash?: Prisma.StringNullableFilter<"Image"> | string | null
   resourceType?: Prisma.EnumImageResourceTypeFilter<"Image"> | $Enums.ImageResourceType
-  resourceId?: Prisma.IntNullableFilter<"Image"> | number | null
+  resourceId?: Prisma.StringNullableFilter<"Image"> | string | null
   purpose?: Prisma.EnumImagePurposeFilter<"Image"> | $Enums.ImagePurpose
   createdAt?: Prisma.DateTimeFilter<"Image"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Image"> | Date | string
@@ -367,7 +363,7 @@ export type ImageScalarWhereWithAggregatesInput = {
   height?: Prisma.IntWithAggregatesFilter<"Image"> | number
   thumbhash?: Prisma.StringNullableWithAggregatesFilter<"Image"> | string | null
   resourceType?: Prisma.EnumImageResourceTypeWithAggregatesFilter<"Image"> | $Enums.ImageResourceType
-  resourceId?: Prisma.IntNullableWithAggregatesFilter<"Image"> | number | null
+  resourceId?: Prisma.StringNullableWithAggregatesFilter<"Image"> | string | null
   purpose?: Prisma.EnumImagePurposeWithAggregatesFilter<"Image"> | $Enums.ImagePurpose
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Image"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Image"> | Date | string
@@ -382,7 +378,7 @@ export type ImageCreateInput = {
   height: number
   thumbhash?: string | null
   resourceType: $Enums.ImageResourceType
-  resourceId?: number | null
+  resourceId?: string | null
   purpose: $Enums.ImagePurpose
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -398,7 +394,7 @@ export type ImageUncheckedCreateInput = {
   height: number
   thumbhash?: string | null
   resourceType: $Enums.ImageResourceType
-  resourceId?: number | null
+  resourceId?: string | null
   purpose: $Enums.ImagePurpose
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -413,7 +409,7 @@ export type ImageUpdateInput = {
   height?: Prisma.IntFieldUpdateOperationsInput | number
   thumbhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resourceType?: Prisma.EnumImageResourceTypeFieldUpdateOperationsInput | $Enums.ImageResourceType
-  resourceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  resourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   purpose?: Prisma.EnumImagePurposeFieldUpdateOperationsInput | $Enums.ImagePurpose
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -429,7 +425,7 @@ export type ImageUncheckedUpdateInput = {
   height?: Prisma.IntFieldUpdateOperationsInput | number
   thumbhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resourceType?: Prisma.EnumImageResourceTypeFieldUpdateOperationsInput | $Enums.ImageResourceType
-  resourceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  resourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   purpose?: Prisma.EnumImagePurposeFieldUpdateOperationsInput | $Enums.ImagePurpose
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -445,7 +441,7 @@ export type ImageCreateManyInput = {
   height: number
   thumbhash?: string | null
   resourceType: $Enums.ImageResourceType
-  resourceId?: number | null
+  resourceId?: string | null
   purpose: $Enums.ImagePurpose
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -460,7 +456,7 @@ export type ImageUpdateManyMutationInput = {
   height?: Prisma.IntFieldUpdateOperationsInput | number
   thumbhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resourceType?: Prisma.EnumImageResourceTypeFieldUpdateOperationsInput | $Enums.ImageResourceType
-  resourceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  resourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   purpose?: Prisma.EnumImagePurposeFieldUpdateOperationsInput | $Enums.ImagePurpose
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -476,7 +472,7 @@ export type ImageUncheckedUpdateManyInput = {
   height?: Prisma.IntFieldUpdateOperationsInput | number
   thumbhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resourceType?: Prisma.EnumImageResourceTypeFieldUpdateOperationsInput | $Enums.ImageResourceType
-  resourceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  resourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   purpose?: Prisma.EnumImagePurposeFieldUpdateOperationsInput | $Enums.ImagePurpose
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -503,7 +499,6 @@ export type ImageAvgOrderByAggregateInput = {
   size?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
-  resourceId?: Prisma.SortOrder
 }
 
 export type ImageMaxOrderByAggregateInput = {
@@ -543,7 +538,6 @@ export type ImageSumOrderByAggregateInput = {
   size?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
-  resourceId?: Prisma.SortOrder
 }
 
 export type EnumImageResourceTypeFieldUpdateOperationsInput = {
@@ -635,7 +629,7 @@ export type $ImagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     height: number
     thumbhash: string | null
     resourceType: $Enums.ImageResourceType
-    resourceId: number | null
+    resourceId: string | null
     purpose: $Enums.ImagePurpose
     createdAt: Date
     updatedAt: Date
@@ -1071,7 +1065,7 @@ export interface ImageFieldRefs {
   readonly height: Prisma.FieldRef<"Image", 'Int'>
   readonly thumbhash: Prisma.FieldRef<"Image", 'String'>
   readonly resourceType: Prisma.FieldRef<"Image", 'ImageResourceType'>
-  readonly resourceId: Prisma.FieldRef<"Image", 'Int'>
+  readonly resourceId: Prisma.FieldRef<"Image", 'String'>
   readonly purpose: Prisma.FieldRef<"Image", 'ImagePurpose'>
   readonly createdAt: Prisma.FieldRef<"Image", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Image", 'DateTime'>

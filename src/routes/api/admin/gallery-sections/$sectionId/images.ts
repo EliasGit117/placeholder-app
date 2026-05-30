@@ -53,7 +53,7 @@ async function handle({ request, params }: { request: Request; params: Record<st
       width,
       height,
       resourceType: ImageResourceType.GALLERY_SECTION,
-      resourceId: sectionId,
+      resourceId: String(sectionId),
       purpose: purpose as ImagePurpose,
     });
 

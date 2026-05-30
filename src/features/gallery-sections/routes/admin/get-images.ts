@@ -30,5 +30,5 @@ export const adminGallerySectionsGetImages = galleryAdminBase
     if (section == null)
       errors.NOT_FOUND();
 
-    return ImageService.findByResource(ImageResourceType.GALLERY_SECTION, input.sectionId);
+    return ImageService.findByResource(ImageResourceType.GALLERY_SECTION, String(input.sectionId));
   });

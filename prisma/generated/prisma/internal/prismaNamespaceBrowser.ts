@@ -56,7 +56,6 @@ export const ModelName = {
   GallerySection: 'GallerySection',
   Image: 'Image',
   Session: 'Session',
-  Todo: 'Todo',
   User: 'User',
   Verification: 'Verification'
 } as const
@@ -159,18 +158,6 @@ export const SessionScalarFieldEnum = {
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
-
-
-export const TodoScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  description: 'description',
-  state: 'state',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type TodoScalarFieldEnum = (typeof TodoScalarFieldEnum)[keyof typeof TodoScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {

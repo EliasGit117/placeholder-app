@@ -52,9 +52,9 @@ export const Route = createFileRoute('/admin/gallery/sections/$sectionId/')({
 
 
 const purposeLabels: Record<ImagePurpose, () => string> = {
-  [ImagePurpose.PRIMARY]: () => m['pages.gallery_sections.detail.purpose.primary'](),
-  [ImagePurpose.THUMBNAIL]: () => m['pages.gallery_sections.detail.purpose.thumbnail'](),
-  [ImagePurpose.BACKGROUND]: () => m['pages.gallery_sections.detail.purpose.background'](),
+  [ImagePurpose.BASE]: () => m['pages.gallery_sections.detail.purpose.base'](),
+  [ImagePurpose.THUMB_256x256]: () => m['pages.gallery_sections.detail.purpose.thumb_256'](),
+  [ImagePurpose.THUMB_512x512]: () => m['pages.gallery_sections.detail.purpose.thumb_512'](),
 };
 
 

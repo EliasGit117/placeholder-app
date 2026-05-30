@@ -257,23 +257,6 @@ export type EnumImagePurposeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumImagePurposeFilter<$PrismaModel>
 }
 
-export type EnumTodoStateFilter<$PrismaModel = never> = {
-  equals?: $Enums.TodoState | Prisma.EnumTodoStateFieldRefInput<$PrismaModel>
-  in?: $Enums.TodoState[] | Prisma.ListEnumTodoStateFieldRefInput<$PrismaModel>
-  notIn?: $Enums.TodoState[] | Prisma.ListEnumTodoStateFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumTodoStateFilter<$PrismaModel> | $Enums.TodoState
-}
-
-export type EnumTodoStateWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.TodoState | Prisma.EnumTodoStateFieldRefInput<$PrismaModel>
-  in?: $Enums.TodoState[] | Prisma.ListEnumTodoStateFieldRefInput<$PrismaModel>
-  notIn?: $Enums.TodoState[] | Prisma.ListEnumTodoStateFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumTodoStateWithAggregatesFilter<$PrismaModel> | $Enums.TodoState
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumTodoStateFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumTodoStateFilter<$PrismaModel>
-}
-
 export type BoolFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
@@ -554,23 +537,6 @@ export type NestedEnumImagePurposeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumImagePurposeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumImagePurposeFilter<$PrismaModel>
-}
-
-export type NestedEnumTodoStateFilter<$PrismaModel = never> = {
-  equals?: $Enums.TodoState | Prisma.EnumTodoStateFieldRefInput<$PrismaModel>
-  in?: $Enums.TodoState[] | Prisma.ListEnumTodoStateFieldRefInput<$PrismaModel>
-  notIn?: $Enums.TodoState[] | Prisma.ListEnumTodoStateFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumTodoStateFilter<$PrismaModel> | $Enums.TodoState
-}
-
-export type NestedEnumTodoStateWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.TodoState | Prisma.EnumTodoStateFieldRefInput<$PrismaModel>
-  in?: $Enums.TodoState[] | Prisma.ListEnumTodoStateFieldRefInput<$PrismaModel>
-  notIn?: $Enums.TodoState[] | Prisma.ListEnumTodoStateFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumTodoStateWithAggregatesFilter<$PrismaModel> | $Enums.TodoState
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumTodoStateFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumTodoStateFilter<$PrismaModel>
 }
 
 export type NestedBoolFilter<$PrismaModel = never> = {

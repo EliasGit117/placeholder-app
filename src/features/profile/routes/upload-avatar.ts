@@ -28,32 +28,37 @@ export const uploadAvatar = profileBase
     const prepared = await ImageService.prepareFile({
       file: input.file,
       resourceType: ImageResourceType.AVATAR,
-      purpose: ImagePurpose.PRIMARY,
+      purpose: ImagePurpose.THUMB_256x256,
+    });
+
+    const existing = await prisma.image.findFirst({
+      where: { resourceType: ImageResourceType.AVATAR, resourceId: user.id },
     });
 
     const uploaded = await s3Storage.upload(prepared.file, { acl: 'public-read' });
 
-    const previousKey = await getPreviousAvatarKey(user.id);
+    const image = await ImageService.create({
+      url: uploaded.url,
+      key: uploaded.key,
+      size: uploaded.size,
+      mimeType: prepared.mimeType,
+      width: prepared.width,
+      height: prepared.height,
+      thumbhash: prepared.thumbhash,
+      resourceType: ImageResourceType.AVATAR,
+      resourceId: user.id,
+      purpose: ImagePurpose.THUMB_256x256,
+    });
 
     await prisma.user.update({
       where: { id: user.id },
       data: { image: uploaded.url },
     });
 
-    if (previousKey)
-      await s3Storage.delete(previousKey).catch(() => undefined);
+    if (existing) {
+      await prisma.image.delete({ where: { id: existing.id } });
+      await s3Storage.delete(existing.key).catch(() => undefined);
+    }
 
-    return { image: uploaded.url };
+    return { image: image.url };
   });
-
-async function getPreviousAvatarKey(userId: string): Promise<string | null> {
-  const existing = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { image: true },
-  });
-  const url = existing?.image;
-  if (!url) return null;
-
-  const match = url.match(/\/f\/([^/?#]+)$/) ?? url.match(/\/([^/?#]+)$/);
-  return match?.[1] ?? null;
-}
