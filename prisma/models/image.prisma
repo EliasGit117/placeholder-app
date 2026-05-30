@@ -6,17 +6,24 @@ enum ImageResourceType {
 }
 
 enum ImagePurpose {
-  BASE
-  THUMB_256x256
-  THUMB_512x512
+  GALLERY_SECTION_IMAGE
+  AVATAR_IMAGE
 
   @@map("image_purpose")
+}
+
+enum ImageVariantKind {
+  THUMB_512x512
+  THUMB_256x256
+
+  @@map("image_variant_kind")
 }
 
 model Image {
   id           Int               @id @default(autoincrement())
   url          String
   key          String
+  name         String
   size         Int
   mimeType     String            @map("mime_type")
   width        Int
@@ -25,10 +32,29 @@ model Image {
   resourceType ImageResourceType @map("resource_type")
   resourceId   String?           @map("resource_id")
   purpose      ImagePurpose
+  variants     ImageVariant[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@index([resourceType, resourceId])
   @@map("images")
+}
+
+model ImageVariant {
+  id      Int              @id @default(autoincrement())
+  imageId Int              @map("image_id")
+  image   Image            @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  kind    ImageVariantKind
+  url     String
+  key     String
+  name    String
+  size    Int
+  width   Int
+  height  Int
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([imageId, kind])
+  @@map("image_variants")
 }

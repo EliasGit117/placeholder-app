@@ -145,7 +145,7 @@ export const EditProfileDialog: FC = () => {
             onChange={onPickFile}
           />
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex gap-2 mx-auto">
             {user?.image && (
               <Button
                 type="button"

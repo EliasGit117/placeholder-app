@@ -1,6 +1,7 @@
 import {
   ImagePurpose,
-  ImageResourceType
+  ImageResourceType,
+  ImageVariantKind
 } from '~/prisma/generated/prisma/client';
 
 import { mbToBytes } from '@/lib/utils';
@@ -12,18 +13,24 @@ interface ImageTransform {
   position?: 'center' | 'top' | 'bottom' | 'left' | 'right';
 }
 
+export interface VariantSpec {
+  kind: ImageVariantKind;
+  transform: ImageTransform;
+}
+
 export interface ImageConfig {
   maxSize?: number;
   mimeTypes?: readonly string[];
-  transform?: ImageTransform;
+  original: ImageTransform;
+  variants?: VariantSpec[];
 }
 
 type TImagePolicy = Record<ImageResourceType, Partial<Record<ImagePurpose, ImageConfig>>>;
 
 export const imagePolicy: TImagePolicy = {
   [ImageResourceType.AVATAR]: {
-    [ImagePurpose.THUMB_256x256]: {
-      transform: {
+    [ImagePurpose.AVATAR_IMAGE]: {
+      original: {
         width: 256,
         height: 256,
         fit: 'cover',
@@ -35,33 +42,23 @@ export const imagePolicy: TImagePolicy = {
   },
 
   [ImageResourceType.GALLERY_SECTION]: {
-    [ImagePurpose.BASE]: {
-      transform: {
+    [ImagePurpose.GALLERY_SECTION_IMAGE]: {
+      original: {
         width: 1920,
         height: 1920
       },
       maxSize: mbToBytes(10),
-      mimeTypes: ['image/jpeg', 'image/png', 'image/webp']
-    },
-    [ImagePurpose.THUMB_512x512]: {
-      transform: {
-        width: 512,
-        height: 512,
-        fit: 'cover',
-        position: 'center'
-      },
-      maxSize: mbToBytes(5),
-      mimeTypes: ['image/jpeg', 'image/png', 'image/webp']
-    },
-    [ImagePurpose.THUMB_256x256]: {
-      transform: {
-        width: 256,
-        height: 256,
-        fit: 'cover',
-        position: 'center'
-      },
-      maxSize: mbToBytes(2),
-      mimeTypes: ['image/jpeg', 'image/png', 'image/webp']
+      mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+      variants: [
+        {
+          kind: ImageVariantKind.THUMB_512x512,
+          transform: { width: 512, height: 512, fit: 'cover', position: 'center' }
+        },
+        {
+          kind: ImageVariantKind.THUMB_256x256,
+          transform: { width: 256, height: 256, fit: 'cover', position: 'center' }
+        }
+      ]
     }
   }
 };

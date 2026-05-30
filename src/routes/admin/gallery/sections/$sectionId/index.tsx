@@ -3,16 +3,14 @@ import { useQuery } from '@tanstack/react-query';
 import { orpc } from '@/lib/orpc';
 import { roleHasPermission } from '@/lib/auth';
 import { getLocale } from '@/paraglide/runtime';
-import { capitalizeFirst } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
+import { capitalizeFirst, thumbhashToDataUrl } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ImagePurpose } from '~/prisma/generated/prisma/enums.ts';
 import type { IBreadcrumb } from '@/components/layout/admin/nav-breadcrumbs.tsx';
 import { m } from '@/paraglide/messages';
 import {
   UploadImagesSheet,
   UploadImagesSheetProvider,
-  UploadImagesSheetTrigger,
+  UploadImagesSheetTrigger
 } from './-components/upload-images';
 
 
@@ -38,7 +36,7 @@ export const Route = createFileRoute('/admin/gallery/sections/$sectionId/')({
       ),
       queryClient.prefetchQuery(
         orpc.admin.gallery.sections.getImages.queryOptions({ input: { sectionId } })
-      ),
+      )
     ]);
 
     if (!section)
@@ -51,13 +49,6 @@ export const Route = createFileRoute('/admin/gallery/sections/$sectionId/')({
 });
 
 
-const purposeLabels: Record<ImagePurpose, () => string> = {
-  [ImagePurpose.BASE]: () => m['pages.gallery_sections.detail.purpose.base'](),
-  [ImagePurpose.THUMB_256x256]: () => m['pages.gallery_sections.detail.purpose.thumb_256'](),
-  [ImagePurpose.THUMB_512x512]: () => m['pages.gallery_sections.detail.purpose.thumb_512'](),
-};
-
-
 function RouteComponent() {
   const { sectionId } = Route.useParams();
   const { canUpdate } = Route.useRouteContext();
@@ -68,16 +59,16 @@ function RouteComponent() {
 
   return (
     <UploadImagesSheetProvider>
-      <div className="space-y-6">
+      <div className="space-y-4">
         {canUpdate && (
           <div className="flex items-center gap-2">
-            <UploadImagesSheetTrigger options={{ sectionId }} size="sm" />
+            <UploadImagesSheetTrigger options={{ sectionId }} size="sm" variant="ghost" className="ml-auto"/>
           </div>
         )}
 
         {isPendingImages ? (
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {Array.from({ length: 4 }).map((_, i) => (
+            {Array.from({ length: 8 }).map((_, i) => (
               <Skeleton key={i} className="aspect-square rounded-lg"/>
             ))}
           </div>
@@ -85,22 +76,37 @@ function RouteComponent() {
           <p className="text-sm text-muted-foreground">{m['pages.gallery_sections.detail.no_images']()}</p>
         ) : (
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {images.map((img) => (
-              <div
-                key={img.id}
-                className="relative aspect-square overflow-hidden rounded-lg border bg-muted"
-              >
-                <img src={img.url} alt="" className="h-full w-full object-cover"/>
-                <Badge variant="secondary" className="absolute bottom-1.5 left-1.5 text-xs">
-                  {purposeLabels[img.purpose]()}
-                </Badge>
-              </div>
-            ))}
+            {images.map((img) => {
+              // Fall back to the original when a thumbnail is missing.
+              const small = img.variants.thumb256?.url ?? img.url;
+              const large = img.variants.thumb512?.url ?? small;
+              const placeholder = thumbhashToDataUrl(img.thumbhash);
+
+              return (
+                <div
+                  key={img.id}
+                  className="relative aspect-square overflow-hidden rounded-lg border bg-muted bg-cover bg-center"
+                  style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
+                >
+                  <picture className="block h-full w-full">
+                    {/* 256 on mobile, 512 from the sm breakpoint (640px) up */}
+                    <source media="(min-width: 640px)" srcSet={large}/>
+                    <img
+                      src={small}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover"
+                    />
+                  </picture>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
 
-      <UploadImagesSheet />
+      <UploadImagesSheet/>
     </UploadImagesSheetProvider>
   );
 }

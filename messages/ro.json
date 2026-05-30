@@ -240,7 +240,7 @@
         "upload_sheet": {
           "title": "Încarcă imagini",
           "description": "Plasează imagini pentru a le încărca în această secțiune.",
-          "trigger": "Încarcă imagini"
+          "trigger": "Încarcă"
         }
       },
       "index": {

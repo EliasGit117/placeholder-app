@@ -388,6 +388,7 @@ export const ModelName = {
   Category: 'Category',
   GallerySection: 'GallerySection',
   Image: 'Image',
+  ImageVariant: 'ImageVariant',
   Session: 'Session',
   User: 'User',
   Verification: 'Verification'
@@ -406,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "category" | "gallerySection" | "image" | "session" | "user" | "verification"
+    modelProps: "account" | "category" | "gallerySection" | "image" | "imageVariant" | "session" | "user" | "verification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -703,6 +704,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ImageCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ImageCountAggregateOutputType> | number
+        }
+      }
+    }
+    ImageVariant: {
+      payload: Prisma.$ImageVariantPayload<ExtArgs>
+      fields: Prisma.ImageVariantFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ImageVariantFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageVariantPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ImageVariantFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageVariantPayload>
+        }
+        findFirst: {
+          args: Prisma.ImageVariantFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageVariantPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ImageVariantFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageVariantPayload>
+        }
+        findMany: {
+          args: Prisma.ImageVariantFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageVariantPayload>[]
+        }
+        create: {
+          args: Prisma.ImageVariantCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageVariantPayload>
+        }
+        createMany: {
+          args: Prisma.ImageVariantCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ImageVariantCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageVariantPayload>[]
+        }
+        delete: {
+          args: Prisma.ImageVariantDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageVariantPayload>
+        }
+        update: {
+          args: Prisma.ImageVariantUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageVariantPayload>
+        }
+        deleteMany: {
+          args: Prisma.ImageVariantDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ImageVariantUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ImageVariantUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageVariantPayload>[]
+        }
+        upsert: {
+          args: Prisma.ImageVariantUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageVariantPayload>
+        }
+        aggregate: {
+          args: Prisma.ImageVariantAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateImageVariant>
+        }
+        groupBy: {
+          args: Prisma.ImageVariantGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ImageVariantGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ImageVariantCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ImageVariantCountAggregateOutputType> | number
         }
       }
     }
@@ -1021,6 +1096,7 @@ export const ImageScalarFieldEnum = {
   id: 'id',
   url: 'url',
   key: 'key',
+  name: 'name',
   size: 'size',
   mimeType: 'mimeType',
   width: 'width',
@@ -1034,6 +1110,22 @@ export const ImageScalarFieldEnum = {
 } as const
 
 export type ImageScalarFieldEnum = (typeof ImageScalarFieldEnum)[keyof typeof ImageScalarFieldEnum]
+
+
+export const ImageVariantScalarFieldEnum = {
+  id: 'id',
+  imageId: 'imageId',
+  kind: 'kind',
+  url: 'url',
+  key: 'key',
+  name: 'name',
+  size: 'size',
+  width: 'width',
+  height: 'height',
+  createdAt: 'createdAt'
+} as const
+
+export type ImageVariantScalarFieldEnum = (typeof ImageVariantScalarFieldEnum)[keyof typeof ImageVariantScalarFieldEnum]
 
 
 export const SessionScalarFieldEnum = {
@@ -1209,6 +1301,20 @@ export type ListEnumImagePurposeFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
+ * Reference to a field of type 'ImageVariantKind'
+ */
+export type EnumImageVariantKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ImageVariantKind'>
+    
+
+
+/**
+ * Reference to a field of type 'ImageVariantKind[]'
+ */
+export type ListEnumImageVariantKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ImageVariantKind[]'>
+    
+
+
+/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -1327,6 +1433,7 @@ export type GlobalOmitConfig = {
   category?: Prisma.CategoryOmit
   gallerySection?: Prisma.GallerySectionOmit
   image?: Prisma.ImageOmit
+  imageVariant?: Prisma.ImageVariantOmit
   session?: Prisma.SessionOmit
   user?: Prisma.UserOmit
   verification?: Prisma.VerificationOmit

@@ -55,6 +55,7 @@ export const ModelName = {
   Category: 'Category',
   GallerySection: 'GallerySection',
   Image: 'Image',
+  ImageVariant: 'ImageVariant',
   Session: 'Session',
   User: 'User',
   Verification: 'Verification'
@@ -130,6 +131,7 @@ export const ImageScalarFieldEnum = {
   id: 'id',
   url: 'url',
   key: 'key',
+  name: 'name',
   size: 'size',
   mimeType: 'mimeType',
   width: 'width',
@@ -143,6 +145,22 @@ export const ImageScalarFieldEnum = {
 } as const
 
 export type ImageScalarFieldEnum = (typeof ImageScalarFieldEnum)[keyof typeof ImageScalarFieldEnum]
+
+
+export const ImageVariantScalarFieldEnum = {
+  id: 'id',
+  imageId: 'imageId',
+  kind: 'kind',
+  url: 'url',
+  key: 'key',
+  name: 'name',
+  size: 'size',
+  width: 'width',
+  height: 'height',
+  createdAt: 'createdAt'
+} as const
+
+export type ImageVariantScalarFieldEnum = (typeof ImageVariantScalarFieldEnum)[keyof typeof ImageVariantScalarFieldEnum]
 
 
 export const SessionScalarFieldEnum = {

@@ -4,7 +4,10 @@ import { auth } from '@/lib/auth/better-auth.ts';
 import { galleryAdminBase, galleryAdminPath } from './base.ts';
 import { GallerySectionService } from '../../services/gallery-section-service.ts';
 import { ImageService } from '@/features/images/services/image-service.ts';
-import { imageDtoSchema } from '@/features/images/dtos/image-dto.ts';
+import {
+  gallerySectionImageDtoSchema,
+  GallerySectionImageDtoFactory,
+} from '../../dtos/gallery-section-image.ts';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 
 export const adminGallerySectionsGetImages = galleryAdminBase
@@ -17,7 +20,7 @@ export const adminGallerySectionsGetImages = galleryAdminBase
   .errors({ FORBIDDEN: {}, NOT_FOUND: {} })
   .use(authMiddleware)
   .input(z.object({ sectionId: z.number().int().positive() }))
-  .output(z.array(imageDtoSchema))
+  .output(z.array(gallerySectionImageDtoSchema))
   .handler(async ({ input, context: { user }, errors }) => {
     const canGet = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { gallerySections: ['get'] } },
@@ -30,5 +33,10 @@ export const adminGallerySectionsGetImages = galleryAdminBase
     if (section == null)
       errors.NOT_FOUND();
 
-    return ImageService.findByResource(ImageResourceType.GALLERY_SECTION, String(input.sectionId));
+    const images = await ImageService.findByResource(
+      ImageResourceType.GALLERY_SECTION,
+      String(input.sectionId)
+    );
+
+    return GallerySectionImageDtoFactory.fromImageDtos(images);
   });

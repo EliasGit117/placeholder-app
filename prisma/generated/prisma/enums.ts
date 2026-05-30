@@ -34,9 +34,16 @@ export type ImageResourceType = (typeof ImageResourceType)[keyof typeof ImageRes
 
 
 export const ImagePurpose = {
-  BASE: 'BASE',
-  THUMB_256x256: 'THUMB_256x256',
-  THUMB_512x512: 'THUMB_512x512'
+  GALLERY_SECTION_IMAGE: 'GALLERY_SECTION_IMAGE',
+  AVATAR_IMAGE: 'AVATAR_IMAGE'
 } as const
 
 export type ImagePurpose = (typeof ImagePurpose)[keyof typeof ImagePurpose]
+
+
+export const ImageVariantKind = {
+  THUMB_512x512: 'THUMB_512x512',
+  THUMB_256x256: 'THUMB_256x256'
+} as const
+
+export type ImageVariantKind = (typeof ImageVariantKind)[keyof typeof ImageVariantKind]

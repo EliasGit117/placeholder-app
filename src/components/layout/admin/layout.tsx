@@ -18,7 +18,7 @@ export const AdminLayout: FC<IProps> = ({ className, children, ...divProps }) =>
 
         <div className={cn('p-4 flex flex-col flex-1 gap-4', className)} {...divProps}>
           {children}
-          <Footer className="mt-auto px-0 py-2"/>
+          <Footer className="mt-auto p-0"/>
         </div>
       </SidebarInset>
     </SidebarProvider>

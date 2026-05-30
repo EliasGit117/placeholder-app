@@ -1,11 +1,9 @@
 import { type ReactNode, useState } from 'react';
 import { contextFactory } from 'src/lib/utils/context-factory.ts';
-import { ImagePurpose } from 'prisma/generated/prisma/enums.ts';
 
 
 export interface TUploadImagesSheetOptions {
   sectionId: number;
-  defaultPurpose?: ImagePurpose;
 }
 
 interface UploadImagesSheetContextValue {

@@ -62,6 +62,11 @@ export type GallerySection = Prisma.GallerySectionModel
  */
 export type Image = Prisma.ImageModel
 /**
+ * Model ImageVariant
+ * 
+ */
+export type ImageVariant = Prisma.ImageVariantModel
+/**
  * Model Session
  * 
  */

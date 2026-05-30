@@ -85,7 +85,19 @@ export const gallerySectionColumns = (options?: IOptions) => {
     columnHelper.accessor('nameRo', {
       size: 200,
       header: ({ column }) => <DataTableColumnHeader column={column}/>,
-      cell: ({ getValue }) => <span className="text-xs">{getValue()}</span>,
+      cell: ({ getValue, row }) => {
+        const value = getValue();
+
+        return (
+          <Link
+            className="text-xs underline underline-offset-2"
+            to='/admin/gallery/sections/$sectionId'
+            params={{ sectionId: row.original.id }}
+          >
+            {value}
+          </Link>
+        )
+      },
       meta: {
         label: m['pages.gallery_sections.index.table.name_ro'](),
         icon: IconLanguage,
@@ -97,7 +109,19 @@ export const gallerySectionColumns = (options?: IOptions) => {
     columnHelper.accessor('nameRu', {
       size: 200,
       header: ({ column }) => <DataTableColumnHeader column={column}/>,
-      cell: ({ getValue }) => <span className="text-xs">{getValue()}</span>,
+      cell: ({ getValue, row }) => {
+        const value = getValue();
+
+        return (
+          <Link
+            className="text-xs underline underline-offset-2"
+            to='/admin/gallery/sections/$sectionId'
+            params={{ sectionId: row.original.id }}
+          >
+            {value}
+          </Link>
+        )
+      },
       meta: {
         label: m['pages.gallery_sections.index.table.name_ru'](),
         icon: IconLanguage,

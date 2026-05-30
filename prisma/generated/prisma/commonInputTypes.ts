@@ -257,6 +257,23 @@ export type EnumImagePurposeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumImagePurposeFilter<$PrismaModel>
 }
 
+export type EnumImageVariantKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImageVariantKind | Prisma.EnumImageVariantKindFieldRefInput<$PrismaModel>
+  in?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImageVariantKindFilter<$PrismaModel> | $Enums.ImageVariantKind
+}
+
+export type EnumImageVariantKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImageVariantKind | Prisma.EnumImageVariantKindFieldRefInput<$PrismaModel>
+  in?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImageVariantKindWithAggregatesFilter<$PrismaModel> | $Enums.ImageVariantKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumImageVariantKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumImageVariantKindFilter<$PrismaModel>
+}
+
 export type BoolFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
   not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
@@ -537,6 +554,23 @@ export type NestedEnumImagePurposeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumImagePurposeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumImagePurposeFilter<$PrismaModel>
+}
+
+export type NestedEnumImageVariantKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImageVariantKind | Prisma.EnumImageVariantKindFieldRefInput<$PrismaModel>
+  in?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImageVariantKindFilter<$PrismaModel> | $Enums.ImageVariantKind
+}
+
+export type NestedEnumImageVariantKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ImageVariantKind | Prisma.EnumImageVariantKindFieldRefInput<$PrismaModel>
+  in?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ImageVariantKind[] | Prisma.ListEnumImageVariantKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumImageVariantKindWithAggregatesFilter<$PrismaModel> | $Enums.ImageVariantKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumImageVariantKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumImageVariantKindFilter<$PrismaModel>
 }
 
 export type NestedBoolFilter<$PrismaModel = never> = {

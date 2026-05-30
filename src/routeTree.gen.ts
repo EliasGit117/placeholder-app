@@ -32,7 +32,7 @@ import { Route as AdminSettingsProfileRouteImport } from './routes/admin/setting
 import { Route as AdminGallerySectionsRouteRouteImport } from './routes/admin/gallery/sections/route'
 import { Route as AdminGallerySectionsIndexRouteImport } from './routes/admin/gallery/sections/index'
 import { Route as AdminGallerySectionsSectionIdIndexRouteImport } from './routes/admin/gallery/sections/$sectionId/index'
-import { Route as ApiAdminGallerySectionsSectionIdImagesRouteImport } from './routes/api/admin/gallery-sections/$sectionId/images'
+import { Route as ApiAdminGallerySectionsSectionIdImagesRouteImport } from './routes/api/admin/gallery/sections/$sectionId/images'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
@@ -153,8 +153,8 @@ const AdminGallerySectionsSectionIdIndexRoute =
   } as any)
 const ApiAdminGallerySectionsSectionIdImagesRoute =
   ApiAdminGallerySectionsSectionIdImagesRouteImport.update({
-    id: '/api/admin/gallery-sections/$sectionId/images',
-    path: '/api/admin/gallery-sections/$sectionId/images',
+    id: '/api/admin/gallery/sections/$sectionId/images',
+    path: '/api/admin/gallery/sections/$sectionId/images',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -180,8 +180,8 @@ export interface FileRoutesByFullPath {
   '/auth/sign-in/': typeof AuthSignInIndexRoute
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
   '/admin/gallery/sections/': typeof AdminGallerySectionsIndexRoute
-  '/api/admin/gallery-sections/$sectionId/images': typeof ApiAdminGallerySectionsSectionIdImagesRoute
   '/admin/gallery/sections/$sectionId/': typeof AdminGallerySectionsSectionIdIndexRoute
+  '/api/admin/gallery/sections/$sectionId/images': typeof ApiAdminGallerySectionsSectionIdImagesRoute
 }
 export interface FileRoutesByTo {
   '/api/$': typeof ApiSplatRoute
@@ -200,8 +200,8 @@ export interface FileRoutesByTo {
   '/auth/sign-in': typeof AuthSignInIndexRoute
   '/auth/sign-up': typeof AuthSignUpIndexRoute
   '/admin/gallery/sections': typeof AdminGallerySectionsIndexRoute
-  '/api/admin/gallery-sections/$sectionId/images': typeof ApiAdminGallerySectionsSectionIdImagesRoute
   '/admin/gallery/sections/$sectionId': typeof AdminGallerySectionsSectionIdIndexRoute
+  '/api/admin/gallery/sections/$sectionId/images': typeof ApiAdminGallerySectionsSectionIdImagesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -227,8 +227,8 @@ export interface FileRoutesById {
   '/auth/sign-in/': typeof AuthSignInIndexRoute
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
   '/admin/gallery/sections/': typeof AdminGallerySectionsIndexRoute
-  '/api/admin/gallery-sections/$sectionId/images': typeof ApiAdminGallerySectionsSectionIdImagesRoute
   '/admin/gallery/sections/$sectionId/': typeof AdminGallerySectionsSectionIdIndexRoute
+  '/api/admin/gallery/sections/$sectionId/images': typeof ApiAdminGallerySectionsSectionIdImagesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -254,8 +254,8 @@ export interface FileRouteTypes {
     | '/auth/sign-in/'
     | '/auth/sign-up/'
     | '/admin/gallery/sections/'
-    | '/api/admin/gallery-sections/$sectionId/images'
     | '/admin/gallery/sections/$sectionId/'
+    | '/api/admin/gallery/sections/$sectionId/images'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/api/$'
@@ -274,8 +274,8 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/admin/gallery/sections'
-    | '/api/admin/gallery-sections/$sectionId/images'
     | '/admin/gallery/sections/$sectionId'
+    | '/api/admin/gallery/sections/$sectionId/images'
   id:
     | '__root__'
     | '/_public'
@@ -300,8 +300,8 @@ export interface FileRouteTypes {
     | '/auth/sign-in/'
     | '/auth/sign-up/'
     | '/admin/gallery/sections/'
-    | '/api/admin/gallery-sections/$sectionId/images'
     | '/admin/gallery/sections/$sectionId/'
+    | '/api/admin/gallery/sections/$sectionId/images'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -477,10 +477,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGallerySectionsSectionIdIndexRouteImport
       parentRoute: typeof AdminGallerySectionsRouteRoute
     }
-    '/api/admin/gallery-sections/$sectionId/images': {
-      id: '/api/admin/gallery-sections/$sectionId/images'
-      path: '/api/admin/gallery-sections/$sectionId/images'
-      fullPath: '/api/admin/gallery-sections/$sectionId/images'
+    '/api/admin/gallery/sections/$sectionId/images': {
+      id: '/api/admin/gallery/sections/$sectionId/images'
+      path: '/api/admin/gallery/sections/$sectionId/images'
+      fullPath: '/api/admin/gallery/sections/$sectionId/images'
       preLoaderRoute: typeof ApiAdminGallerySectionsSectionIdImagesRouteImport
       parentRoute: typeof rootRouteImport
     }

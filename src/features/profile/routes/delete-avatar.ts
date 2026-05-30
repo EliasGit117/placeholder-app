@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { prisma } from '@/lib/db';
-import { s3Storage } from '@/features/shared/services/s3-storage.ts';
+import { ImageService } from '@/features/images/services/image-service.ts';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import { profileBase, profilePath } from './base.ts';
 
@@ -28,10 +28,8 @@ export const deleteAvatar = profileBase
       data: { image: null },
     });
 
-    if (existing) {
-      await prisma.image.delete({ where: { id: existing.id } });
-      await s3Storage.delete(existing.key).catch(() => undefined);
-    }
+    if (existing)
+      await ImageService.delete(existing.id).catch(() => undefined);
 
     return { ok: true as const };
   });

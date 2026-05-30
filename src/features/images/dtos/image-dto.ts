@@ -1,8 +1,9 @@
 import { z } from 'zod';
 import { ImagePurpose, ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import type { Prisma } from '~/prisma/generated/prisma/client.ts';
+import { imageVariantDtoSchema, ImageVariantDtoFactory } from './image-variant-dto.ts';
 
-type TImage = Prisma.ImageGetPayload<Record<string, never>>;
+type TImage = Prisma.ImageGetPayload<{ include: { variants: true } }>;
 
 export const imageDtoSchema = z.object({
   id: z.number(),
@@ -16,6 +17,7 @@ export const imageDtoSchema = z.object({
   resourceType: z.enum(ImageResourceType),
   resourceId: z.string().nullable(),
   purpose: z.enum(ImagePurpose),
+  variants: z.array(imageVariantDtoSchema),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
@@ -36,6 +38,7 @@ export class ImageDtoFactory {
       resourceType: entity.resourceType,
       resourceId: entity.resourceId,
       purpose: entity.purpose,
+      variants: ImageVariantDtoFactory.fromEntities(entity.variants),
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
     };

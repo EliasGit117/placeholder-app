@@ -1,6 +1,6 @@
-import { type FC, useState } from 'react';
+import { type FC } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { IconChevronDown, IconX } from '@tabler/icons-react';
+import { IconX } from '@tabler/icons-react';
 import {
   Sheet,
   SheetClose,
@@ -12,42 +12,22 @@ import {
 } from 'src/components/ui/sheet';
 import { ScrollArea } from 'src/components/ui/scroll-area';
 import { Button } from 'src/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from 'src/components/ui/dropdown-menu';
 import { orpc } from 'src/lib/orpc';
 import { xhrUpload } from 'src/lib/utils';
 import { FileUploadStatus, useFileUpload, type IUploadHelpers } from 'src/hooks/use-file-upload';
 import { DropZone, FileItem, RejectedFile } from 'src/components/file-upload';
-import { ImagePurpose } from 'prisma/generated/prisma/enums.ts';
-import type { TOrpcOutputs } from 'src/features/shared/orpc/router';
+import type { TImageDto } from 'src/features/images/dtos/image-dto';
 import { m } from '@/paraglide/messages';
 import { useUploadImagesSheet } from './provider';
 
 
-type TUploadImageResponse = TOrpcOutputs['admin']['gallery']['sections']['uploadImage'];
-
 const accept = 'image/jpeg,image/png,image/webp,image/gif,image/avif';
 const maxSize = 10 * 1024 * 1024;
-
-const purposeLabels: Record<ImagePurpose, () => string> = {
-  [ImagePurpose.BASE]: () => m['pages.gallery_sections.detail.purpose.base'](),
-  [ImagePurpose.THUMB_256x256]: () => m['pages.gallery_sections.detail.purpose.thumb_256'](),
-  [ImagePurpose.THUMB_512x512]: () => m['pages.gallery_sections.detail.purpose.thumb_512'](),
-};
 
 
 export const UploadImagesSheet: FC = () => {
   const { isOpen, options, close } = useUploadImagesSheet();
   const queryClient = useQueryClient();
-
-  const [purpose, setPurpose] = useState<ImagePurpose>(
-    options?.defaultPurpose ?? ImagePurpose.BASE,
-  );
 
   const sectionId = options?.sectionId;
 
@@ -57,9 +37,8 @@ export const UploadImagesSheet: FC = () => {
 
     const body = new FormData();
     body.append('file', file);
-    body.append('purpose', purpose);
 
-    await xhrUpload<TUploadImageResponse>(
+    await xhrUpload<TImageDto>(
       `/api/admin/gallery/sections/${sectionId}/images`,
       body,
       { signal, onProgress },
@@ -99,30 +78,6 @@ export const UploadImagesSheet: FC = () => {
 
         <ScrollArea className="flex-1 overflow-y-auto mr-2 my-2" type="always">
           <div className="space-y-4 px-4 py-1">
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">{m['pages.gallery_sections.detail.purpose.label']()}:</span>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" disabled={isUploading}>
-                    <span>{purposeLabels[purpose]()}</span>
-                    <IconChevronDown className="ml-1 opacity-50" size={16} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuRadioGroup
-                    value={purpose}
-                    onValueChange={(v) => setPurpose(v as ImagePurpose)}
-                  >
-                    {Object.values(ImagePurpose).map((p) => (
-                      <DropdownMenuRadioItem key={p} value={p}>
-                        {purposeLabels[p]()}
-                      </DropdownMenuRadioItem>
-                    ))}
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-
             <DropZone multiple accept={accept} maxSize={maxSize} onFilesSelected={addFiles} />
 
             {rejected.length > 0 && (

@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { auth } from '@/lib/auth/better-auth.ts';
-import { s3Storage } from '@/features/shared/services/s3-storage.ts';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { GallerySectionService } from '@/features/gallery-sections/services/gallery-section-service.ts';
 import { ImagePurpose, ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
@@ -26,35 +25,15 @@ async function handle({ request, params }: { request: Request; params: Record<st
   }
 
   const file = formData.get('file');
-  const purpose = formData.get('purpose') as string;
-  const widthRaw = formData.get('width') as string;
-  const heightRaw = formData.get('height') as string;
-
   if (!(file instanceof File))
     return Response.json({ error: 'Missing file' }, { status: 400 });
 
-  if (!purpose || !(purpose in ImagePurpose))
-    return Response.json({ error: 'Invalid purpose' }, { status: 400 });
-
-  const width = parseInt(widthRaw, 10);
-  const height = parseInt(heightRaw, 10);
-
-  if (!width || !height || width <= 0 || height <= 0)
-    return Response.json({ error: 'Invalid dimensions' }, { status: 400 });
-
   try {
-    const uploaded = await s3Storage.upload(file, { acl: 'public-read' });
-
-    const image = await ImageService.create({
-      url: uploaded.url,
-      key: uploaded.key,
-      size: uploaded.size,
-      mimeType: file.type,
-      width,
-      height,
+    const image = await ImageService.upload({
+      file,
       resourceType: ImageResourceType.GALLERY_SECTION,
+      purpose: ImagePurpose.GALLERY_SECTION_IMAGE,
       resourceId: String(sectionId),
-      purpose: purpose as ImagePurpose,
     });
 
     return Response.json(image, { status: 201 });
@@ -64,7 +43,7 @@ async function handle({ request, params }: { request: Request; params: Record<st
   }
 }
 
-export const Route = createFileRoute('/api/admin/gallery-sections/$sectionId/images')({
+export const Route = createFileRoute('/api/admin/gallery/sections/$sectionId/images')({
   server: {
     handlers: {
       POST: handle,
