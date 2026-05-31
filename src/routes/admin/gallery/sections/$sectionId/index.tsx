@@ -5,7 +5,8 @@ import { getLocale } from '@/paraglide/runtime';
 import { capitalizeFirst } from '@/lib/utils';
 import type { IBreadcrumb } from '@/components/layout/admin/nav-breadcrumbs.tsx';
 import { UploadImagesSheet, UploadImagesSheetProvider } from './-components/upload-images';
-import { SectionImages, SectionImagesProvider } from './-components/section-images';
+import { SectionImages } from './-components/section-images';
+import { ImageSelectionProvider } from './-components/image-selection';
 
 
 
@@ -50,9 +51,9 @@ function RouteComponent() {
 
   return (
     <UploadImagesSheetProvider>
-      <SectionImagesProvider sectionId={sectionId} canUpdate={canUpdate} canDelete={canDelete}>
-        <SectionImages/>
-      </SectionImagesProvider>
+      <ImageSelectionProvider sectionId={sectionId}>
+        <SectionImages sectionId={sectionId} canUpdate={canUpdate} canDelete={canDelete}/>
+      </ImageSelectionProvider>
       <UploadImagesSheet/>
     </UploadImagesSheetProvider>
   );

@@ -2,14 +2,15 @@ import type { FC } from 'react';
 import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { Checkbox } from '@/components/ui/checkbox';
 import type { TGallerySectionImageDto } from '@/features/gallery-sections/dtos/gallery-section-image.ts';
-import { useSectionImages } from './provider';
+import { useImageSelection } from '../image-selection';
 
 interface IProps {
   image: TGallerySectionImageDto;
+  disabled?: boolean;
 }
 
-export const ImageCard: FC<IProps> = ({ image }) => {
-  const { selecting, selectedSet, isDeleting, toggle } = useSectionImages();
+export const ImageCard: FC<IProps> = ({ image, disabled }) => {
+  const { selecting, selectedSet, toggle } = useImageSelection();
 
   // Fall back to the original when a thumbnail is missing.
   const small = image.variants.thumb256?.url ?? image.url;
@@ -22,10 +23,11 @@ export const ImageCard: FC<IProps> = ({ image }) => {
       className={cn(
         'relative aspect-square overflow-hidden rounded-lg border bg-muted bg-cover bg-center',
         selecting && selected && 'ring ring-foreground ring-offset-4 ring-offset-background',
-        selecting && 'cursor-pointer',
+        selecting && !disabled && 'cursor-pointer',
+        disabled && 'pointer-events-none opacity-75',
       )}
       style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
-      onClick={selecting && !isDeleting ? () => toggle(image.id) : undefined}
+      onClick={selecting && !disabled ? () => toggle(image.id) : undefined}
     >
       <picture className="block h-full w-full">
         {/* 256 on mobile, 512 from the sm breakpoint (640px) up */}

@@ -28,12 +28,9 @@ export const NavBreadcrumbs: FC<IProps> = ({ className, ...props }) => {
   if (hideBreadcrumbs)
     return null;
 
-  const items: { label: string; link: LinkOptions }[] = matches
-    // @ts-ignore
-    .filter((match) => match.loaderData?.crumbs !== undefined || match.staticData?.crumbs !== undefined)
+  const items: { label: string; to: string }[] = matches
     .flatMap(({ pathname, loaderData, staticData }) => {
-      // @ts-ignore
-      const loaderCrumbs = parseBreadcrumbList(loaderData?.crumbs);
+      const loaderCrumbs = parseBreadcrumbList(extractCrumbs(loaderData));
       const staticCrumbs = parseBreadcrumbList(staticData?.crumbs);
       const crumbs = loaderCrumbs ?? staticCrumbs ?? [];
 
@@ -41,11 +38,11 @@ export const NavBreadcrumbs: FC<IProps> = ({ className, ...props }) => {
         .filter((crumb) => !crumb.disabled)
         .map((crumb) => ({
           label: typeof crumb.title === 'function' ? crumb.title() : crumb.title,
-          link: crumb.link ? crumb.link : { href: pathname }
+          to: crumb.link?.to ?? pathname
         }));
     });
 
-  items.unshift({ label: m['common.home'](), link: { to: '/' } });
+  items.unshift({ label: m['common.home'](), to: '/' });
 
   return (
     <nav className={cn(className)} {...props}>
@@ -59,7 +56,7 @@ export const NavBreadcrumbs: FC<IProps> = ({ className, ...props }) => {
                 return (
                   <Fragment key={`${index}-${item.label}`}>
                     <BreadcrumbLink className={responsiveClassName} asChild>
-                      <Link {...item.link}>
+                      <Link to={item.to}>
                         {item.label}
                       </Link>
                     </BreadcrumbLink>
@@ -82,6 +79,13 @@ export const NavBreadcrumbs: FC<IProps> = ({ className, ...props }) => {
     </nav>
   );
 };
+
+function extractCrumbs(data: unknown): unknown {
+  if (typeof data === 'object' && data !== null && 'crumbs' in data)
+    return data.crumbs;
+
+  return undefined;
+}
 
 function isBreadcrumb(value: unknown): value is IBreadcrumb {
   if (typeof value !== 'object' || value === null)

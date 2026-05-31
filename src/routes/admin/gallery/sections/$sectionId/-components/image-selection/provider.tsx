@@ -1,20 +1,12 @@
-import { type ReactNode, useMemo, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { type ReactNode, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { orpc } from '@/lib/orpc';
 import { contextFactory } from '@/lib/utils/context-factory.ts';
 import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
 import { m } from '@/paraglide/messages';
-import type { TGallerySectionImageDto } from '@/features/gallery-sections/dtos/gallery-section-image.ts';
 
-interface SectionImagesContextValue {
-  sectionId: number;
-  canUpdate: boolean;
-  canDelete: boolean;
-
-  images: TGallerySectionImageDto[];
-  isPending: boolean;
-
+interface ImageSelectionContextValue {
   selecting: boolean;
   selectedIds: number[];
   selectedSet: Set<number>;
@@ -29,22 +21,20 @@ interface SectionImagesContextValue {
   confirmDelete: () => Promise<void>;
 }
 
-const [SectionImagesContext, useSectionImages] =
-  contextFactory<SectionImagesContextValue>({
-    name: 'SectionImagesContext',
+const [ImageSelectionContext, useImageSelection] =
+  contextFactory<ImageSelectionContextValue>({
+    name: 'ImageSelectionContext',
   });
 
-export { useSectionImages };
+export { useImageSelection };
 
 interface IProps {
   sectionId: number;
-  canUpdate: boolean;
-  canDelete: boolean;
   children: ReactNode;
 }
 
-export function SectionImagesProvider(props: IProps) {
-  const { sectionId, canUpdate, canDelete, children } = props;
+export function ImageSelectionProvider(props: IProps) {
+  const { sectionId, children } = props;
 
   const queryClient = useQueryClient();
   const confirm = useConfirm();
@@ -52,16 +42,7 @@ export function SectionImagesProvider(props: IProps) {
   const [selecting, setSelecting] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
-  const selectedSet = useMemo(
-    () => new Set(selectedIds),
-    [selectedIds]
-  );
-
-  const { data: images = [], isPending } = useQuery(
-    orpc.admin.gallery.sections.getImages.queryOptions({
-      input: { sectionId },
-    })
-  );
+  const selectedSet = new Set(selectedIds);
 
   const { mutateAsync: deleteImages, isPending: isDeleting } = useMutation({
     ...orpc.admin.gallery.sections.deleteImages.mutationOptions(),
@@ -116,13 +97,8 @@ export function SectionImagesProvider(props: IProps) {
   };
 
   return (
-    <SectionImagesContext.Provider
+    <ImageSelectionContext.Provider
       value={{
-        sectionId,
-        canUpdate,
-        canDelete,
-        images,
-        isPending,
         selecting,
         selectedIds,
         selectedSet,
@@ -135,6 +111,6 @@ export function SectionImagesProvider(props: IProps) {
       }}
     >
       {children}
-    </SectionImagesContext.Provider>
+    </ImageSelectionContext.Provider>
   );
 }

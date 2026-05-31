@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
-import { IconFolderOff, IconHome, IconMoodSad, IconPhoto } from '@tabler/icons-react';
+import { IconHome, IconMoodSad, IconPhoto } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import type { TGallerySectionImageDto } from '@/features/gallery-sections/dtos/gallery-section-image.ts';
 import type { FC } from 'react';
