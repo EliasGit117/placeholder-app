@@ -114,7 +114,7 @@ export const GallerySectionSheet: FC<IProps> = ({ onSuccess }) => {
   };
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || mode === GallerySectionSheetMode.Update) return;
     form.reset(getFormValues());
   }, [isOpen, mode]);
 
