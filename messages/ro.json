@@ -252,6 +252,13 @@
           "deleting": "Se șterge...",
           "success": "Imaginile au fost șterse.",
           "error": "Nu s-au putut șterge imaginile."
+        },
+        "reorder": {
+          "trigger": "Reordonează",
+          "hint": "Trage imaginile pentru a le reordona.",
+          "saving": "Se salvează...",
+          "success": "Ordinea a fost salvată.",
+          "error": "Nu s-a putut salva ordinea."
         }
       },
       "index": {

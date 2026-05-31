@@ -10,17 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button.tsx';
 import { Badge } from '@/components/ui/badge.tsx';
 import {
@@ -246,33 +235,10 @@ export const gallerySectionColumns = (options?: IOptions) => {
                 )}
 
                 {canDelete && (
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <DropdownMenuItem
-                        variant="destructive"
-                        onSelect={(e) => e.preventDefault()}
-                      >
-                        <IconTrash className="mr-2 size-4"/>
-                        <span>{m['common.delete']()}</span>
-                      </DropdownMenuItem>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          {m['pages.gallery_sections.index.table.delete_title']()}
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          {m['pages.gallery_sections.index.table.delete_description']()}
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>{m['common.close']()}</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => onDelete?.(section.id)}>
-                          {m['common.delete']()}
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                  <DropdownMenuItem variant="destructive" onClick={() => onDelete?.(section.id)}>
+                    <IconTrash className="mr-2 size-4"/>
+                    <span>{m['common.delete']()}</span>
+                  </DropdownMenuItem>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>

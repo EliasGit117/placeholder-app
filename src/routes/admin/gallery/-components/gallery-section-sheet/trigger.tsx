@@ -1,28 +1,55 @@
 import { type ComponentProps, type FC } from 'react';
 import { Button } from '@/components/ui/button';
-import { useGallerySectionSheet, type TGallerySectionSheetOptions } from './provider';
-import { IconPlus } from '@tabler/icons-react';
+import { IconPlus, type Icon } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
+import { useGallerySectionSheet, type TGallerySectionSheetOptions } from './provider';
+import { Slot } from '@radix-ui/react-slot';
+import { AdaptiveButton } from '@/components/ui/adaptive-button.tsx';
+import type { TTailwindBreakpoint } from '@/hooks/use-media-breakpoint.ts';
 
 
 interface IProps extends Omit<ComponentProps<typeof Button>, 'onClick'> {
+  text?: string;
+  icon?: Icon;
   options: TGallerySectionSheetOptions;
+  tooltipAlign?: 'center' | 'end' | 'start';
+  tooltipSide?: 'top' | 'bottom' | 'left' | 'right';
+  breakpoint?: TTailwindBreakpoint;
 }
 
-export const GallerySectionSheetTrigger: FC<IProps> = ({ options, children, ...btnProps }) => {
+export const GallerySectionSheetTrigger: FC<IProps> = ({ ...props }) => {
+  const {
+    children,
+    text = m['common.create'](),
+    asChild = false,
+    size,
+    breakpoint,
+    tooltipSide,
+    tooltipAlign,
+    options,
+    icon: Icon = IconPlus,
+    ...btnProps
+  } = props;
+
   const { open } = useGallerySectionSheet();
 
-  if (children)
+  if (children && asChild)
     return (
-      <span onClick={() => open(options)} className="contents">
+      <Slot onClick={() => open(options)}>
         {children}
-      </span>
+      </Slot>
     );
 
   return (
-    <Button onClick={() => open(options)} {...btnProps}>
-      <IconPlus size={16}/>
-      <span>{m['common.create']()}</span>
-    </Button>
+    <AdaptiveButton
+      icon={Icon}
+      text={text}
+      size={size}
+      onClick={() => open(options)}
+      breakpoint={breakpoint}
+      tooltipSide={tooltipSide}
+      tooltipAlign={tooltipAlign}
+      {...btnProps}
+    />
   );
 };

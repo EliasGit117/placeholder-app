@@ -241,6 +241,49 @@ export class ImageService {
     return entities.length;
   }
 
+  // Applies a new display order for a resource scope. `orderedIds` must be the
+  // full set of images for that scope (the new sequence); the result is the
+  // canonical, freshly ordered list. Rejects a stale/partial id set so order
+  // stays a gapless, unique 1..N.
+  static async reorderForResource(
+    resourceType: ImageResourceType,
+    resourceId: string,
+    orderedIds: number[]
+  ): Promise<TImageDto[]> {
+    await prisma.$transaction(async (tx) => {
+      await ImageService.lockScope(tx, resourceType, resourceId);
+
+      const existing = await tx.image.findMany({
+        where: { resourceType, resourceId },
+        select: { id: true },
+      });
+      const existingIds = new Set(existing.map(e => e.id));
+      const uniqueIds = new Set(orderedIds);
+
+      // Must be exactly the current set: same size, no dupes, no strangers.
+      if (
+        orderedIds.length !== existingIds.size ||
+        uniqueIds.size !== orderedIds.length ||
+        orderedIds.some(id => !existingIds.has(id))
+      )
+        throw new ORPCError('BAD_REQUEST', {
+          message: 'Provided ids must match the images of this resource exactly.',
+        });
+
+      // A permutation can't be applied in place under the unique constraint, so
+      // park every row at a unique negative slot first, then flip to the final
+      // 1..N. Negatives never clash with leftover positives; finals never clash
+      // with the still-negative rows.
+      for (let i = 0; i < orderedIds.length; i++)
+        await tx.image.update({ where: { id: orderedIds[i] }, data: { order: -(i + 1) } });
+
+      for (let i = 0; i < orderedIds.length; i++)
+        await tx.image.update({ where: { id: orderedIds[i] }, data: { order: i + 1 } });
+    });
+
+    return ImageService.findByResource(resourceType, resourceId);
+  }
+
   // Serializes order mutations for a resource scope across connections, so
   // concurrent uploads/deletes can't race on the (resourceType, resourceId,
   // order) unique constraint. Released automatically when the transaction ends.

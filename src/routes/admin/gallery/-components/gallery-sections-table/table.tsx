@@ -14,7 +14,8 @@ import { exportToCsv } from '@/lib/utils/csv.ts';
 import { cn } from '@/lib/utils';
 import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
 import { IconFileDownload, IconRefresh } from '@tabler/icons-react';
-import { Button } from '@/components/ui/button.tsx';
+import { AdaptiveButton } from '@/components/ui/adaptive-button';
+import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
 import { toast } from 'sonner';
 import {
   GallerySectionSheet,
@@ -38,6 +39,7 @@ export const GallerySectionsTable: FC<IProps> = (props) => {
 
   const { className, search, canCreate, canUpdate, canDelete, ...divProps } = props;
   const queryClient = useQueryClient();
+  const confirm = useConfirm();
 
   const { data, isPending: isPendingData, isFetching: isFetchingData, refetch, error } = useQuery({
     ...orpc.admin.gallery.sections.search.queryOptions({ input: search ?? {} }),
@@ -61,8 +63,20 @@ export const GallerySectionsTable: FC<IProps> = (props) => {
     disabled: isFetchingData || isDeleting,
     canUpdate: canUpdate,
     canDelete: canDelete,
-    onDelete: (id: number) => deleteSection({ id: id })
-  }), [isFetchingData, isDeleting, canUpdate, canDelete, deleteSection]);
+    onDelete: async (id: number) => {
+      const confirmed = await confirm({
+        title: m['pages.gallery_sections.index.table.delete_title'](),
+        description: m['pages.gallery_sections.index.table.delete_description'](),
+        confirmText: m['common.delete'](),
+        cancelText: m['common.cancel'](),
+        confirmButton: { variant: 'destructive' },
+      });
+
+      if (!confirmed) return;
+
+      deleteSection({ id });
+    }
+  }), [isFetchingData, isDeleting, canUpdate, canDelete, deleteSection, confirm]);
 
   const { table, selectedItems, setRowSelection } = useDataTable({
     data: data?.items,
@@ -106,9 +120,14 @@ export const GallerySectionsTable: FC<IProps> = (props) => {
                 options={{ mode: GallerySectionSheetMode.Create }}
               />
             )}
-            <Button variant="ghost" size="icon-sm" onClick={() => refetch()} disabled={isFetchingData}>
-              <IconRefresh/>
-            </Button>
+            <AdaptiveButton
+              variant="ghost"
+              size="sm"
+              icon={IconRefresh}
+              text={m['common.refresh']()}
+              onClick={() => refetch()}
+              disabled={isFetchingData}
+            />
           </DataTableToolbar>
 
           <DataTable skeletonTableCellClassName="h-[49px]"/>

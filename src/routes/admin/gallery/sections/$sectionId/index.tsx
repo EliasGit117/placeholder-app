@@ -7,6 +7,7 @@ import type { IBreadcrumb } from '@/components/layout/admin/nav-breadcrumbs.tsx'
 import { UploadImagesSheet, UploadImagesSheetProvider } from './-components/upload-images';
 import { SectionImages } from './-components/section-images';
 import { ImageSelectionProvider } from './-components/image-selection';
+import { ImageReorderProvider } from './-components/image-reorder';
 
 
 
@@ -51,9 +52,11 @@ function RouteComponent() {
 
   return (
     <UploadImagesSheetProvider>
-      <ImageSelectionProvider sectionId={sectionId}>
-        <SectionImages sectionId={sectionId} canUpdate={canUpdate} canDelete={canDelete}/>
-      </ImageSelectionProvider>
+      <ImageReorderProvider sectionId={sectionId}>
+        <ImageSelectionProvider sectionId={sectionId}>
+          <SectionImages sectionId={sectionId} canUpdate={canUpdate} canDelete={canDelete}/>
+        </ImageSelectionProvider>
+      </ImageReorderProvider>
       <UploadImagesSheet/>
     </UploadImagesSheetProvider>
   );
