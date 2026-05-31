@@ -1,6 +1,8 @@
 import { ORPCError } from '@orpc/server';
 import { Prisma } from '~/prisma/generated/prisma/client.ts';
+import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import { prisma } from '@/lib/db';
+import { ImageService } from '@/features/images/services/image-service.ts';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
 import { GallerySectionDtoFactory } from '@/features/gallery-sections/dtos/gallery-section.ts';
 import type { TCreateGallerySectionDto } from '@/features/gallery-sections/dtos/create-gallery-section.ts';
@@ -69,6 +71,7 @@ export class GallerySectionService {
     if (!existing)
       throw new ORPCError('NOT_FOUND');
 
+    await ImageService.deleteAllForResource(ImageResourceType.GALLERY_SECTION, String(id));
     await prisma.gallerySection.delete({ where: { id } });
   }
 }

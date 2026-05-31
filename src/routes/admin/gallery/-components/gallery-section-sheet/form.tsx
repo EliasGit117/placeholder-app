@@ -15,13 +15,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { IconChevronDown, IconEye, IconEyeOff } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { GallerySectionState } from '~/prisma/generated/prisma/enums.ts';
-import type { TCreateGallerySectionForm, TUpdateGallerySectionForm } from './schemas';
+import type { TCreateGallerySectionDto } from '@/features/gallery-sections/dtos/create-gallery-section.ts';
+import type { TUpdateGallerySectionDto } from '@/features/gallery-sections/dtos/update-gallery-section.ts';
 
 
 interface IProps extends Omit<ComponentProps<'form'>, 'onSubmit'> {
   id?: string;
-  form: UseFormReturn<TCreateGallerySectionForm | TUpdateGallerySectionForm>;
-  onSubmit: (data: TCreateGallerySectionForm | TUpdateGallerySectionForm) => void;
+  form: UseFormReturn<TCreateGallerySectionDto | TUpdateGallerySectionDto>;
+  onSubmit: (data: TCreateGallerySectionDto | TUpdateGallerySectionDto) => void;
   loading?: boolean;
   disabled?: boolean;
 }

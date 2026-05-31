@@ -189,6 +189,29 @@ export class ImageService {
 
     return entities.length;
   }
+
+  // Deletes every image (and its variants + storage files) belonging to a
+  // resource. Used when the owning resource itself is deleted. Returns the
+  // number actually deleted.
+  static async deleteAllForResource(
+    resourceType: ImageResourceType,
+    resourceId: string
+  ): Promise<number> {
+    const entities = await prisma.image.findMany({
+      where: { resourceType, resourceId },
+      include: { variants: true },
+    });
+
+    if (entities.length === 0)
+      return 0;
+
+    const keys = entities.flatMap(e => [e.key, ...e.variants.map(v => v.key)]);
+
+    await prisma.image.deleteMany({ where: { id: { in: entities.map(e => e.id) } } });
+    await s3Storage.delete(keys);
+
+    return entities.length;
+  }
 }
 
 async function transformToWebp(

@@ -29,10 +29,10 @@ import {
   IconEye,
   IconEyeOff,
   IconExternalLink,
-  IconLanguage,
   IconPencil,
   IconTrash,
-  IconActivityHeartbeat
+  IconActivityHeartbeat,
+  IconTextSize
 } from '@tabler/icons-react';
 import { Link } from '@tanstack/react-router';
 import { m } from '@/paraglide/messages';
@@ -100,7 +100,7 @@ export const gallerySectionColumns = (options?: IOptions) => {
       },
       meta: {
         label: m['pages.gallery_sections.index.table.name_ro'](),
-        icon: IconLanguage,
+        icon: IconTextSize,
         skeletonClassName: 'h-4 w-32',
         filter: { type: ColumnFilterType.Text },
       },
@@ -114,9 +114,9 @@ export const gallerySectionColumns = (options?: IOptions) => {
 
         return (
           <Link
-            className="text-xs underline underline-offset-2"
             to='/admin/gallery/sections/$sectionId'
             params={{ sectionId: row.original.id }}
+            className="text-xs underline underline-offset-2"
           >
             {value}
           </Link>
@@ -124,7 +124,7 @@ export const gallerySectionColumns = (options?: IOptions) => {
       },
       meta: {
         label: m['pages.gallery_sections.index.table.name_ru'](),
-        icon: IconLanguage,
+        icon: IconTextSize,
         skeletonClassName: 'h-4 w-32',
       },
     }),

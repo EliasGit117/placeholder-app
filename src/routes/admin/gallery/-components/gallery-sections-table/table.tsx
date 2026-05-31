@@ -46,7 +46,7 @@ export const GallerySectionsTable: FC<IProps> = (props) => {
     gcTime: 0
   });
 
-  const { mutate: deleteSection } = useMutation({
+  const { mutate: deleteSection, isPending: isDeleting } = useMutation({
     ...orpc.admin.gallery.sections.delete.mutationOptions(),
     onSuccess: () => {
       toast.success(m['pages.gallery_sections.index.table.delete_success']());
@@ -58,11 +58,11 @@ export const GallerySectionsTable: FC<IProps> = (props) => {
   });
 
   const columns = useMemo(() => gallerySectionColumns({
-    disabled: isFetchingData,
-    canUpdate,
-    canDelete,
+    disabled: isFetchingData || isDeleting,
+    canUpdate: canUpdate,
+    canDelete: canDelete,
     onDelete: (id: number) => deleteSection({ id: id })
-  }), [isFetchingData, canUpdate, canDelete, deleteSection]);
+  }), [isFetchingData, isDeleting, canUpdate, canDelete, deleteSection]);
 
   const { table, selectedItems, setRowSelection } = useDataTable({
     data: data?.items,
@@ -84,7 +84,9 @@ export const GallerySectionsTable: FC<IProps> = (props) => {
   };
 
   useEffect(() => {
-    if (error == null) return;
+    if (error == null)
+      return;
+
     toast.error(error.name, { description: error.message });
   }, [error]);
 
