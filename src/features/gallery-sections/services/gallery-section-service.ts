@@ -22,6 +22,13 @@ export class GallerySectionService {
     return prisma.gallerySection.findUnique({ where: { slug } });
   }
 
+  static async findAllActive(): Promise<GallerySection[]> {
+    return prisma.gallerySection.findMany({
+      where: { state: 'active' },
+      orderBy: { createdAt: 'asc' },
+    });
+  }
+
   static async getAll(): Promise<GallerySection[]> {
     return prisma.gallerySection.findMany();
   }
