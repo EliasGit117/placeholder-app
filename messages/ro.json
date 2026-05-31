@@ -135,7 +135,9 @@
       "title": "Dashboard"
     },
     "gallery": {
-      "title": "Galerie"
+      "title": "Galerie",
+      "not_found": "Secțiunea nu a fost găsită.",
+      "not_found_description": "Secțiunea pe care o cauți nu există sau nu mai este disponibilă."
     },
     "settings": {
       "title": "Setări",

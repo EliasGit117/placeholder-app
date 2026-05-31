@@ -1,11 +1,11 @@
-import { createFileRoute, notFound } from '@tanstack/react-router';
+import { createFileRoute, Link, notFound } from '@tanstack/react-router';
 import { orpc } from '@/lib/orpc';
-import { awaitIfServer } from '@/lib/server';
 import { thumbhashToDataUrl } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Empty, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
-import { IconPhoto } from '@tabler/icons-react';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
+import { IconFolderOff, IconHome, IconMoodSad, IconPhoto } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import type { TGallerySectionImageDto } from '@/features/gallery-sections/dtos/gallery-section-image.ts';
 import type { FC } from 'react';
@@ -13,19 +13,26 @@ import type { FC } from 'react';
 
 export const Route = createFileRoute('/_public/gallery/$slug')({
   component: RouteComponent,
+  notFoundComponent: GallerySectionNotFound,
   loader: async ({ context: { queryClient }, params: { slug } }) => {
-    const section = await queryClient.fetchQuery(orpc.gallery.sections.getBySlug.queryOptions({ input: { slug } })).catch(() => null);
-    if (!section)
-      throw notFound();
+    const data = await queryClient.fetchQuery(
+      orpc.gallery.sections.getWithImages.queryOptions({ input: { slug } })
+    ).catch(() => null);
 
-    await awaitIfServer(queryClient.prefetchQuery(orpc.gallery.sections.getImages.queryOptions({ input: { slug } })));
-  }
+    if (!data)
+      throw notFound();
+  },
 });
 
 function RouteComponent() {
   const { slug } = Route.useParams();
-  const { data: section } = useQuery(orpc.gallery.sections.getBySlug.queryOptions({ input: { slug } }));
-  const { data: images = [], isPending } = useQuery(orpc.gallery.sections.getImages.queryOptions({ input: { slug } }));
+
+  const { data, isPending } = useQuery(
+    orpc.gallery.sections.getWithImages.queryOptions({ input: { slug } })
+  );
+
+  const section = data?.section;
+  const images = data?.images ?? [];
 
   return (
     <main className="container mx-auto pb-4 px-4 space-y-4">
@@ -61,6 +68,42 @@ function RouteComponent() {
           ))}
         </div>
       )}
+    </main>
+  );
+}
+
+function GallerySectionNotFound() {
+  return (
+    <main className="container mx-auto pb-4 px-4">
+      <Empty className="mt-16">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <IconMoodSad/>
+          </EmptyMedia>
+          <EmptyTitle>
+            {m['pages.gallery.not_found']()}
+          </EmptyTitle>
+          <EmptyDescription>
+            {m['pages.gallery.not_found_description']()}
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <div className="flex gap-2">
+            <Button variant="outline" asChild>
+              <Link to="/">
+                <IconHome/>
+                {m['common.home']()}
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link to="/gallery">
+                <IconPhoto/>
+                {m['pages.gallery.title']()}
+              </Link>
+            </Button>
+          </div>
+        </EmptyContent>
+      </Empty>
     </main>
   );
 }
