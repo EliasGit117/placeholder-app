@@ -6,7 +6,7 @@ import { prisma, type TxClient } from '@/lib/db';
 import { bytesToMb } from '@/lib/utils';
 import { s3Storage } from '@/features/shared/services/s3-storage.ts';
 import { ImageDtoFactory, type TImageDto } from '@/features/images/dtos/image-dto.ts';
-import { getImagePolicy, type ImageConfig } from '@/features/images/consts/image-resource-map.ts';
+import { allowsMultipleImages, getImagePolicy, type ImageConfig } from '@/features/images/consts/image-resource-map.ts';
 import type { TCreateImageInput } from '@/features/images/schemas/image-mutations.ts';
 
 interface UploadInput {
@@ -123,6 +123,18 @@ export class ImageService {
     // while leaving other resources unblocked; it auto-releases on commit.
     const entity = await prisma.$transaction(async (tx) => {
       await ImageService.lockScope(tx, input.resourceType, resourceId);
+
+      // Single-cardinality purposes (e.g. avatars) may have at most one image
+      // per resource scope. The scope lock makes this check race free.
+      if (!allowsMultipleImages(input.resourceType, input.purpose)) {
+        const count = await tx.image.count({
+          where: { resourceType: input.resourceType, resourceId, purpose: input.purpose },
+        });
+        if (count > 0)
+          throw new ORPCError('CONFLICT', {
+            message: 'This resource already has an image for this purpose.',
+          });
+      }
 
       const last = await tx.image.findFirst({
         where: { resourceType: input.resourceType, resourceId },

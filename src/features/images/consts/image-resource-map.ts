@@ -19,6 +19,9 @@ export interface VariantSpec {
 }
 
 export interface ImageConfig {
+  // Whether a resource can hold many images for this purpose (e.g. a gallery)
+  // or at most one (e.g. an avatar).
+  multiple: boolean;
   maxSize?: number;
   mimeTypes?: readonly string[];
   original: ImageTransform;
@@ -30,6 +33,7 @@ type TImagePolicy = Record<ImageResourceType, Partial<Record<ImagePurpose, Image
 export const imagePolicy: TImagePolicy = {
   [ImageResourceType.AVATAR]: {
     [ImagePurpose.AVATAR_IMAGE]: {
+      multiple: false,
       original: {
         width: 256,
         height: 256,
@@ -43,6 +47,7 @@ export const imagePolicy: TImagePolicy = {
 
   [ImageResourceType.GALLERY_SECTION]: {
     [ImagePurpose.GALLERY_SECTION_IMAGE]: {
+      multiple: true,
       original: {
         width: 1920,
         height: 1920
@@ -69,6 +74,12 @@ export function getImagePolicy(resource: ImageResourceType, purpose: ImagePurpos
 
 export function canUseImagePurpose(resource: ImageResourceType, purpose: ImagePurpose): boolean {
   return !!imagePolicy[resource]?.[purpose];
+}
+
+// Whether a resource may hold more than one image for the given purpose.
+// Defaults to single when the purpose isn't configured for the resource.
+export function allowsMultipleImages(resource: ImageResourceType, purpose: ImagePurpose): boolean {
+  return imagePolicy[resource]?.[purpose]?.multiple ?? false;
 }
 
 export function getImagePurposes(resource: ImageResourceType) {

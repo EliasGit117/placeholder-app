@@ -24,9 +24,15 @@ export const uploadAvatar = profileBase
   .input(uploadAvatarInputSchema)
   .output(uploadAvatarOutputSchema)
   .handler(async ({ input, context: { user } }) => {
+    // AVATAR_IMAGE is single-cardinality, so the new upload would be rejected
+    // while the old image still exists. Replace by deleting the previous avatar
+    // first, then uploading the new one.
     const existing = await prisma.image.findFirst({
       where: { resourceType: ImageResourceType.AVATAR, resourceId: user.id },
     });
+
+    if (existing)
+      await ImageService.delete(existing.id).catch(() => undefined);
 
     const image = await ImageService.upload({
       file: input.file,
@@ -40,9 +46,6 @@ export const uploadAvatar = profileBase
       where: { id: user.id },
       data: { image: image.url },
     });
-
-    if (existing)
-      await ImageService.delete(existing.id).catch(() => undefined);
 
     return { image: image.url };
   });
