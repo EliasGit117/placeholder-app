@@ -5,6 +5,7 @@ import { GallerySectionState } from '~/prisma/generated/prisma/enums.ts';
 
 export const gallerySectionDtoSchema = z.object({
   id: z.number(),
+  slug: z.string(),
   nameRo: z.string(),
   nameRu: z.string(),
   descriptionRo: z.string().nullish(),
@@ -21,6 +22,7 @@ export class GallerySectionDtoFactory {
   static fromEntity(entity: GallerySection): TGallerySectionDto {
     return {
       id: entity.id,
+      slug: entity.slug,
       nameRo: entity.nameRo,
       nameRu: entity.nameRu,
       descriptionRo: entity.descriptionRo,

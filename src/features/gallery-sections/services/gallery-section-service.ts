@@ -18,20 +18,29 @@ export class GallerySectionService {
     return prisma.gallerySection.findUnique({ where: { id } });
   }
 
+  static async findBySlug(slug: string): Promise<GallerySection | null> {
+    return prisma.gallerySection.findUnique({ where: { slug } });
+  }
+
   static async getAll(): Promise<GallerySection[]> {
     return prisma.gallerySection.findMany();
   }
 
   static async create(input: TCreateGallerySectionDto): Promise<GallerySection> {
-    return prisma.gallerySection.create({
-      data: {
-        nameRo: input.nameRo,
-        nameRu: input.nameRu,
-        descriptionRo: input.descriptionRo ?? null,
-        descriptionRu: input.descriptionRu ?? null,
-        state: input.state
-      }
-    });
+    try {
+      return await prisma.gallerySection.create({
+        data: {
+          slug: input.slug,
+          nameRo: input.nameRo,
+          nameRu: input.nameRu,
+          descriptionRo: input.descriptionRo ?? null,
+          descriptionRu: input.descriptionRu ?? null,
+          state: input.state
+        }
+      });
+    } catch (error) {
+      throw mapSlugConflict(error);
+    }
   }
 
   static async update(id: number, input: TUpdateGallerySectionDto): Promise<GallerySection> {
@@ -39,16 +48,21 @@ export class GallerySectionService {
     if (!existing)
       throw new ORPCError('NOT_FOUND');
 
-    return prisma.gallerySection.update({
-      where: { id: id },
-      data: {
-        ...(input.nameRo !== null && { nameRo: input.nameRo }),
-        ...(input.nameRu !== null && { nameRu: input.nameRu }),
-        ...(input.descriptionRo !== null && { descriptionRo: input.descriptionRo }),
-        ...(input.descriptionRu !== null && { descriptionRu: input.descriptionRu }),
-        ...(input.state !== null && { state: input.state })
-      }
-    });
+    try {
+      return await prisma.gallerySection.update({
+        where: { id: id },
+        data: {
+          ...(input.slug != null && { slug: input.slug }),
+          ...(input.nameRo !== null && { nameRo: input.nameRo }),
+          ...(input.nameRu !== null && { nameRu: input.nameRu }),
+          ...(input.descriptionRo !== null && { descriptionRo: input.descriptionRo }),
+          ...(input.descriptionRu !== null && { descriptionRu: input.descriptionRu }),
+          ...(input.state !== null && { state: input.state })
+        }
+      });
+    } catch (error) {
+      throw mapSlugConflict(error);
+    }
   }
 
   static async search(input: TSearchGallerySectionsRequestDto) {
@@ -76,6 +90,13 @@ export class GallerySectionService {
   }
 }
 
+
+function mapSlugConflict(error: unknown): unknown {
+  if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002')
+    return new ORPCError('CONFLICT', { message: 'A gallery section with this slug already exists' });
+
+  return error;
+}
 
 function getWhere(input: TSearchGallerySectionsRequestDto): Prisma.GallerySectionWhereInput {
   const where: Prisma.GallerySectionWhereInput = {};

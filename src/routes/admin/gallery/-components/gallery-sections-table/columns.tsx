@@ -29,6 +29,7 @@ import {
   IconEye,
   IconEyeOff,
   IconExternalLink,
+  IconLink,
   IconPencil,
   IconTrash,
   IconActivityHeartbeat,
@@ -125,6 +126,19 @@ export const gallerySectionColumns = (options?: IOptions) => {
       meta: {
         label: m['pages.gallery_sections.index.table.name_ru'](),
         icon: IconTextSize,
+        skeletonClassName: 'h-4 w-32',
+      },
+    }),
+
+    columnHelper.accessor('slug', {
+      size: 180,
+      header: ({ column }) => <DataTableColumnHeader column={column}/>,
+      cell: ({ getValue }) => (
+        <span className="text-xs text-muted-foreground">{getValue()}</span>
+      ),
+      meta: {
+        label: m['pages.gallery_sections.index.table.slug'](),
+        icon: IconLink,
         skeletonClassName: 'h-4 w-32',
       },
     }),

@@ -8,30 +8,18 @@ export const slowQueryLogger = Prisma.defineExtension({
     $allModels: {
       $allOperations: async ({ model, operation, args, query }) => {
         const start = Date.now();
+        const result = await query(args);
+        const duration = Date.now() - start;
 
-        try {
-          const result = await query(args);
-          const duration = Date.now() - start;
-
-          if (duration >= SLOW_QUERY_THRESHOLD_MS) {
-            console.warn('[Prisma] Slow query detected', {
-              model,
-              operation,
-              durationMs: duration,
-            });
-          }
-
-          return result;
-        } catch (error) {
-          const duration = Date.now() - start;
-
-          console.warn('[Prisma] Query failed', {
+        if (duration >= SLOW_QUERY_THRESHOLD_MS) {
+          console.warn('[Prisma] Slow query detected', {
             model,
             operation,
             durationMs: duration,
           });
-          throw error;
         }
+
+        return result;
       }
     }
   }

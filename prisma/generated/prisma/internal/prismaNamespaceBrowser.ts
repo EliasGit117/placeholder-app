@@ -115,6 +115,7 @@ export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typ
 
 export const GallerySectionScalarFieldEnum = {
   id: 'id',
+  slug: 'slug',
   nameRo: 'nameRo',
   nameRu: 'nameRu',
   descriptionRo: 'descriptionRo',

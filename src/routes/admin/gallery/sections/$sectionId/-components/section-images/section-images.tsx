@@ -1,4 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
+import { IconPhoto } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { useSectionImages } from './provider';
 import { SectionImagesToolbar } from './toolbar';
@@ -19,7 +21,16 @@ export function SectionImages() {
           ))}
         </div>
       ) : images.length === 0 ? (
-        <p className="text-sm text-muted-foreground">{m['pages.gallery_sections.detail.no_images']()}</p>
+        <Empty className='mt-16'>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <IconPhoto/>
+            </EmptyMedia>
+            <EmptyTitle className='text-muted-foreground'>
+              {m['pages.gallery_sections.detail.no_images']()}
+            </EmptyTitle>
+          </EmptyHeader>
+        </Empty>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {images.map((img) => (

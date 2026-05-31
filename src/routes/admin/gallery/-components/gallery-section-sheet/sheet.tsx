@@ -56,6 +56,7 @@ export const GallerySectionSheet: FC<IProps> = ({ onSuccess }) => {
   useEffect(() => {
     if (!sectionData) return;
     form.reset({
+      slug: sectionData.slug,
       nameRo: sectionData.nameRo,
       nameRu: sectionData.nameRu,
       descriptionRo: sectionData.descriptionRo ?? '',
@@ -175,6 +176,7 @@ export const GallerySectionSheet: FC<IProps> = ({ onSuccess }) => {
 
 function getFormValues(): TCreateGallerySectionDto | TUpdateGallerySectionDto {
   return {
+    slug: '',
     nameRo: '',
     nameRu: '',
     descriptionRo: '',

@@ -36,6 +36,7 @@ export type GallerySectionSumAggregateOutputType = {
 
 export type GallerySectionMinAggregateOutputType = {
   id: number | null
+  slug: string | null
   nameRo: string | null
   nameRu: string | null
   descriptionRo: string | null
@@ -47,6 +48,7 @@ export type GallerySectionMinAggregateOutputType = {
 
 export type GallerySectionMaxAggregateOutputType = {
   id: number | null
+  slug: string | null
   nameRo: string | null
   nameRu: string | null
   descriptionRo: string | null
@@ -58,6 +60,7 @@ export type GallerySectionMaxAggregateOutputType = {
 
 export type GallerySectionCountAggregateOutputType = {
   id: number
+  slug: number
   nameRo: number
   nameRu: number
   descriptionRo: number
@@ -79,6 +82,7 @@ export type GallerySectionSumAggregateInputType = {
 
 export type GallerySectionMinAggregateInputType = {
   id?: true
+  slug?: true
   nameRo?: true
   nameRu?: true
   descriptionRo?: true
@@ -90,6 +94,7 @@ export type GallerySectionMinAggregateInputType = {
 
 export type GallerySectionMaxAggregateInputType = {
   id?: true
+  slug?: true
   nameRo?: true
   nameRu?: true
   descriptionRo?: true
@@ -101,6 +106,7 @@ export type GallerySectionMaxAggregateInputType = {
 
 export type GallerySectionCountAggregateInputType = {
   id?: true
+  slug?: true
   nameRo?: true
   nameRu?: true
   descriptionRo?: true
@@ -199,6 +205,7 @@ export type GallerySectionGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
 
 export type GallerySectionGroupByOutputType = {
   id: number
+  slug: string
   nameRo: string
   nameRu: string
   descriptionRo: string | null
@@ -233,6 +240,7 @@ export type GallerySectionWhereInput = {
   OR?: Prisma.GallerySectionWhereInput[]
   NOT?: Prisma.GallerySectionWhereInput | Prisma.GallerySectionWhereInput[]
   id?: Prisma.IntFilter<"GallerySection"> | number
+  slug?: Prisma.StringFilter<"GallerySection"> | string
   nameRo?: Prisma.StringFilter<"GallerySection"> | string
   nameRu?: Prisma.StringFilter<"GallerySection"> | string
   descriptionRo?: Prisma.StringNullableFilter<"GallerySection"> | string | null
@@ -244,6 +252,7 @@ export type GallerySectionWhereInput = {
 
 export type GallerySectionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   nameRo?: Prisma.SortOrder
   nameRu?: Prisma.SortOrder
   descriptionRo?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -255,6 +264,7 @@ export type GallerySectionOrderByWithRelationInput = {
 
 export type GallerySectionWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  slug?: string
   AND?: Prisma.GallerySectionWhereInput | Prisma.GallerySectionWhereInput[]
   OR?: Prisma.GallerySectionWhereInput[]
   NOT?: Prisma.GallerySectionWhereInput | Prisma.GallerySectionWhereInput[]
@@ -265,10 +275,11 @@ export type GallerySectionWhereUniqueInput = Prisma.AtLeast<{
   state?: Prisma.EnumGallerySectionStateFilter<"GallerySection"> | $Enums.GallerySectionState
   createdAt?: Prisma.DateTimeFilter<"GallerySection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"GallerySection"> | Date | string
-}, "id">
+}, "id" | "slug">
 
 export type GallerySectionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   nameRo?: Prisma.SortOrder
   nameRu?: Prisma.SortOrder
   descriptionRo?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -288,6 +299,7 @@ export type GallerySectionScalarWhereWithAggregatesInput = {
   OR?: Prisma.GallerySectionScalarWhereWithAggregatesInput[]
   NOT?: Prisma.GallerySectionScalarWhereWithAggregatesInput | Prisma.GallerySectionScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"GallerySection"> | number
+  slug?: Prisma.StringWithAggregatesFilter<"GallerySection"> | string
   nameRo?: Prisma.StringWithAggregatesFilter<"GallerySection"> | string
   nameRu?: Prisma.StringWithAggregatesFilter<"GallerySection"> | string
   descriptionRo?: Prisma.StringNullableWithAggregatesFilter<"GallerySection"> | string | null
@@ -298,6 +310,7 @@ export type GallerySectionScalarWhereWithAggregatesInput = {
 }
 
 export type GallerySectionCreateInput = {
+  slug: string
   nameRo: string
   nameRu: string
   descriptionRo?: string | null
@@ -309,6 +322,7 @@ export type GallerySectionCreateInput = {
 
 export type GallerySectionUncheckedCreateInput = {
   id?: number
+  slug: string
   nameRo: string
   nameRu: string
   descriptionRo?: string | null
@@ -319,6 +333,7 @@ export type GallerySectionUncheckedCreateInput = {
 }
 
 export type GallerySectionUpdateInput = {
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -330,6 +345,7 @@ export type GallerySectionUpdateInput = {
 
 export type GallerySectionUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -341,6 +357,7 @@ export type GallerySectionUncheckedUpdateInput = {
 
 export type GallerySectionCreateManyInput = {
   id?: number
+  slug: string
   nameRo: string
   nameRu: string
   descriptionRo?: string | null
@@ -351,6 +368,7 @@ export type GallerySectionCreateManyInput = {
 }
 
 export type GallerySectionUpdateManyMutationInput = {
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -362,6 +380,7 @@ export type GallerySectionUpdateManyMutationInput = {
 
 export type GallerySectionUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
   descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -373,6 +392,7 @@ export type GallerySectionUncheckedUpdateManyInput = {
 
 export type GallerySectionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   nameRo?: Prisma.SortOrder
   nameRu?: Prisma.SortOrder
   descriptionRo?: Prisma.SortOrder
@@ -388,6 +408,7 @@ export type GallerySectionAvgOrderByAggregateInput = {
 
 export type GallerySectionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   nameRo?: Prisma.SortOrder
   nameRu?: Prisma.SortOrder
   descriptionRo?: Prisma.SortOrder
@@ -399,6 +420,7 @@ export type GallerySectionMaxOrderByAggregateInput = {
 
 export type GallerySectionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
   nameRo?: Prisma.SortOrder
   nameRu?: Prisma.SortOrder
   descriptionRo?: Prisma.SortOrder
@@ -420,6 +442,7 @@ export type EnumGallerySectionStateFieldUpdateOperationsInput = {
 
 export type GallerySectionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  slug?: boolean
   nameRo?: boolean
   nameRu?: boolean
   descriptionRo?: boolean
@@ -431,6 +454,7 @@ export type GallerySectionSelect<ExtArgs extends runtime.Types.Extensions.Intern
 
 export type GallerySectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  slug?: boolean
   nameRo?: boolean
   nameRu?: boolean
   descriptionRo?: boolean
@@ -442,6 +466,7 @@ export type GallerySectionSelectCreateManyAndReturn<ExtArgs extends runtime.Type
 
 export type GallerySectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  slug?: boolean
   nameRo?: boolean
   nameRu?: boolean
   descriptionRo?: boolean
@@ -453,6 +478,7 @@ export type GallerySectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
 
 export type GallerySectionSelectScalar = {
   id?: boolean
+  slug?: boolean
   nameRo?: boolean
   nameRu?: boolean
   descriptionRo?: boolean
@@ -462,13 +488,14 @@ export type GallerySectionSelectScalar = {
   updatedAt?: boolean
 }
 
-export type GallerySectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nameRo" | "nameRu" | "descriptionRo" | "descriptionRu" | "state" | "createdAt" | "updatedAt", ExtArgs["result"]["gallerySection"]>
+export type GallerySectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "nameRo" | "nameRu" | "descriptionRo" | "descriptionRu" | "state" | "createdAt" | "updatedAt", ExtArgs["result"]["gallerySection"]>
 
 export type $GallerySectionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "GallerySection"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
+    slug: string
     nameRo: string
     nameRu: string
     descriptionRo: string | null
@@ -900,6 +927,7 @@ export interface Prisma__GallerySectionClient<T, Null = never, ExtArgs extends r
  */
 export interface GallerySectionFieldRefs {
   readonly id: Prisma.FieldRef<"GallerySection", 'Int'>
+  readonly slug: Prisma.FieldRef<"GallerySection", 'String'>
   readonly nameRo: Prisma.FieldRef<"GallerySection", 'String'>
   readonly nameRu: Prisma.FieldRef<"GallerySection", 'String'>
   readonly descriptionRo: Prisma.FieldRef<"GallerySection", 'String'>

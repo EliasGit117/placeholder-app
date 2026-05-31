@@ -6,7 +6,7 @@ import { gallerySectionDtoSchema } from '@/features/gallery-sections/dtos/galler
 import { GallerySectionState } from '~/prisma/generated/prisma/enums.ts';
 
 
-const sortableFields = ['nameRo', 'nameRu', 'state', 'createdAt', 'updatedAt'] as const;
+const sortableFields = ['slug', 'nameRo', 'nameRu', 'state', 'createdAt', 'updatedAt'] as const;
 
 export const searchGallerySectionsRequestDtoSchema = paginatedRequestDtoSchema.extend({
   sort: z.enum(sortableFields).optional().catch(undefined),

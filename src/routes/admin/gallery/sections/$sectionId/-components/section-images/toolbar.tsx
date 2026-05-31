@@ -4,6 +4,7 @@ import { LoadingButton } from '@/components/ui/loading-button';
 import { m } from '@/paraglide/messages';
 import { UploadImagesSheetTrigger } from '../upload-images';
 import { useSectionImages } from './provider';
+import { Badge } from '@/components/ui/badge.tsx';
 
 
 export function SectionImagesToolbar() {
@@ -24,12 +25,15 @@ export function SectionImagesToolbar() {
     return null;
 
   return (
-    <div className="flex items-center justify-end gap-2">
+    <div className="flex items-center gap-2">
       {selecting ? (
         <>
           <span className="mr-auto text-sm text-muted-foreground">
             {selectedIds.length} {m['common.selected']()}
           </span>
+
+          <div className='flex-1'/>
+
           <Button variant="ghost" size="sm" onClick={cancel} disabled={isDeleting}>
             <IconX/>
             <span>{m['common.cancel']()}</span>
@@ -47,6 +51,12 @@ export function SectionImagesToolbar() {
         </>
       ) : (
         <>
+          <Badge variant='outline'>
+            {images.length} {m['pages.gallery_sections.detail.image_count']()}
+          </Badge>
+
+          <div className='flex-1'/>
+
           {canDelete && images.length > 0 && (
             <Button variant="ghost" size="sm" onClick={start}>
               <IconTrash/>

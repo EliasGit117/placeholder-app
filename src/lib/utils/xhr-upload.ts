@@ -31,16 +31,8 @@ export async function xhrUpload<T = unknown>(
 
     xhr.upload.addEventListener('progress', (e) => {
       if (e.lengthComputable && onProgress) {
-        // Upload phase occupies 0–90%; the rest is reserved for the
-        // server processing + response download, which the upload
-        // progress event cannot observe.
-        onProgress((e.loaded / e.total) * 90);
+        onProgress((e.loaded / e.total) * 100);
       }
-    });
-
-    xhr.upload.addEventListener('load', () => {
-      // Body fully sent — now waiting on the server.
-      onProgress?.(95);
     });
 
     xhr.addEventListener('load', () => {

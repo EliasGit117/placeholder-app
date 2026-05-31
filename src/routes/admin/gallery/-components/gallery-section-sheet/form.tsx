@@ -72,6 +72,18 @@ export const GallerySectionForm: FC<IProps> = ({
           />
 
           <Controller
+            name="slug"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid} className="col-span-full">
+                <FieldLabel>{m['pages.gallery_sections.index.sheet.slug']()}</FieldLabel>
+                <Input {...field} value={field.value ?? ''} autoComplete="off"/>
+                {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
+              </Field>
+            )}
+          />
+
+          <Controller
             name="state"
             control={form.control}
             render={({ field }) => (

@@ -250,7 +250,8 @@
       "title": "Разделы",
       "detail": {
         "title": "Раздел",
-        "no_images": "Изображений пока нет.",
+        "no_images": "Изображений пока нет",
+        "image_count": "изображений",
         "purpose": {
           "label": "Назначение",
           "base": "Оригинал",
@@ -275,6 +276,7 @@
         "table": {
           "name_ro": "Имя (RO)",
           "name_ru": "Имя (RU)",
+          "slug": "Slug",
           "state": "Состояние",
           "state_active": "Активен",
           "state_hidden": "Скрыт",
@@ -291,6 +293,7 @@
           "edit_description": "Измените поля выбранного раздела.",
           "name_ro": "Имя (RO)",
           "name_ru": "Имя (RU)",
+          "slug": "Slug",
           "description_ro": "Описание (RO)",
           "description_ru": "Описание (RU)",
           "state_active": "Активен",

@@ -230,7 +230,8 @@
       "title": "Secțiuni",
       "detail": {
         "title": "Secțiune",
-        "no_images": "Nu există imagini.",
+        "no_images": "Nu există imagini",
+        "image_count": "imagini",
         "purpose": {
           "label": "Scop",
           "base": "Originală",
@@ -255,6 +256,7 @@
         "table": {
           "name_ro": "Denumire (RO)",
           "name_ru": "Denumire (RU)",
+          "slug": "Slug",
           "state": "Stare",
           "state_active": "Activă",
           "state_hidden": "Ascunsă",
@@ -271,6 +273,7 @@
           "edit_description": "Modificați câmpurile secțiunii selectate",
           "name_ro": "Denumire (RO)",
           "name_ru": "Denumire (RU)",
+          "slug": "Slug",
           "description_ro": "Descriere (RO)",
           "description_ru": "Descriere (RU)",
           "state_active": "Activă",
