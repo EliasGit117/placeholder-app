@@ -2,7 +2,7 @@ import sharp from 'sharp';
 import { rgbaToThumbHash } from 'thumbhash';
 import { ORPCError } from '@orpc/server';
 import { ImagePurpose, ImageResourceType, ImageVariantKind } from '~/prisma/generated/prisma/enums.ts';
-import { prisma } from '@/lib/db';
+import { prisma, type TxClient } from '@/lib/db';
 import { bytesToMb } from '@/lib/utils';
 import { s3Storage } from '@/features/shared/services/s3-storage.ts';
 import { ImageDtoFactory, type TImageDto } from '@/features/images/dtos/image-dto.ts';
@@ -113,22 +113,41 @@ export class ImageService {
   }
 
   static async create(input: TCreateImageInput): Promise<TImageDto> {
-    const entity = await prisma.image.create({
-      data: {
-        url: input.url,
-        key: input.key,
-        name: input.name,
-        size: input.size,
-        mimeType: input.mimeType,
-        width: input.width,
-        height: input.height,
-        thumbhash: input.thumbhash ?? null,
-        resourceType: input.resourceType,
-        resourceId: input.resourceId ?? null,
-        purpose: input.purpose,
-        variants: input.variants?.length ? { create: input.variants } : undefined,
-      },
-      include: { variants: true },
+    const resourceId = input.resourceId ?? null;
+
+    // Assign the next order within the resource scope. Uploading many images
+    // fires parallel requests, so the max lookup and insert must be serialized
+    // per scope or they race and violate the (resourceType, resourceId, order)
+    // unique constraint. A transaction-level advisory lock keyed on the scope
+    // serializes concurrent creates for the same resource (across connections)
+    // while leaving other resources unblocked; it auto-releases on commit.
+    const entity = await prisma.$transaction(async (tx) => {
+      await ImageService.lockScope(tx, input.resourceType, resourceId);
+
+      const last = await tx.image.findFirst({
+        where: { resourceType: input.resourceType, resourceId },
+        orderBy: { order: 'desc' },
+        select: { order: true },
+      });
+
+      return tx.image.create({
+        data: {
+          url: input.url,
+          key: input.key,
+          name: input.name,
+          size: input.size,
+          mimeType: input.mimeType,
+          width: input.width,
+          height: input.height,
+          thumbhash: input.thumbhash ?? null,
+          resourceType: input.resourceType,
+          resourceId,
+          purpose: input.purpose,
+          order: last ? last.order + 1 : 1,
+          variants: input.variants?.length ? { create: input.variants } : undefined,
+        },
+        include: { variants: true },
+      });
     });
 
     return ImageDtoFactory.fromEntity(entity);
@@ -151,7 +170,7 @@ export class ImageService {
         ...(purpose !== undefined && { purpose })
       },
       include: { variants: true },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { order: 'asc' }
     });
 
     return ImageDtoFactory.fromEntities(entities);
@@ -162,7 +181,12 @@ export class ImageService {
     if (!entity)
       throw new ORPCError('NOT_FOUND');
 
-    await prisma.image.delete({ where: { id } });
+    await prisma.$transaction(async (tx) => {
+      await ImageService.lockScope(tx, entity.resourceType, entity.resourceId);
+      await tx.image.delete({ where: { id } });
+      await ImageService.resequence(tx, entity.resourceType, entity.resourceId);
+    });
+
     await s3Storage.delete([entity.key, ...entity.variants.map(v => v.key)]);
   }
 
@@ -184,7 +208,11 @@ export class ImageService {
 
     const keys = entities.flatMap(e => [e.key, ...e.variants.map(v => v.key)]);
 
-    await prisma.image.deleteMany({ where: { id: { in: entities.map(e => e.id) } } });
+    await prisma.$transaction(async (tx) => {
+      await ImageService.lockScope(tx, resourceType, resourceId);
+      await tx.image.deleteMany({ where: { id: { in: entities.map(e => e.id) } } });
+      await ImageService.resequence(tx, resourceType, resourceId);
+    });
     await s3Storage.delete(keys);
 
     return entities.length;
@@ -211,6 +239,38 @@ export class ImageService {
     await s3Storage.delete(keys);
 
     return entities.length;
+  }
+
+  // Serializes order mutations for a resource scope across connections, so
+  // concurrent uploads/deletes can't race on the (resourceType, resourceId,
+  // order) unique constraint. Released automatically when the transaction ends.
+  private static async lockScope(
+    tx: TxClient,
+    resourceType: ImageResourceType,
+    resourceId: string | null
+  ): Promise<void> {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`${resourceType}:${resourceId ?? ''}`}))`;
+  }
+
+  // Compacts orders to a gapless 1..N within a resource scope after deletions.
+  // Caller must hold the scope lock. Updating in ascending order is collision
+  // free because every new value only shrinks, so the target slot is free.
+  private static async resequence(
+    tx: TxClient,
+    resourceType: ImageResourceType,
+    resourceId: string | null
+  ): Promise<void> {
+    const remaining = await tx.image.findMany({
+      where: { resourceType, resourceId },
+      orderBy: { order: 'asc' },
+      select: { id: true, order: true },
+    });
+
+    for (let i = 0; i < remaining.length; i++) {
+      const desired = i + 1;
+      if (remaining[i].order !== desired)
+        await tx.image.update({ where: { id: remaining[i].id }, data: { order: desired } });
+    }
   }
 }
 

@@ -1106,6 +1106,7 @@ export const ImageScalarFieldEnum = {
   resourceType: 'resourceType',
   resourceId: 'resourceId',
   purpose: 'purpose',
+  order: 'order',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
