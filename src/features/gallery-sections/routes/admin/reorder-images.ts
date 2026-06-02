@@ -27,16 +27,16 @@ export const adminGallerySectionsReorderImages = galleryAdminBase
   .input(reorderImagesInputSchema)
   .output(z.array(gallerySectionImageDtoSchema))
   .handler(async ({ input, context: { user }, errors }) => {
-    const canUpdate = await auth.api.userHasPermission({
+    const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { gallerySections: ['update'] } },
     });
 
-    if (!canUpdate)
-      errors.FORBIDDEN();
+    if (!success)
+      throw errors.FORBIDDEN();
 
     const section = await GallerySectionService.findById(input.sectionId);
     if (section == null)
-      errors.NOT_FOUND();
+      throw errors.NOT_FOUND();
 
     const images = await ImageService.reorderForResource(
       ImageResourceType.GALLERY_SECTION,

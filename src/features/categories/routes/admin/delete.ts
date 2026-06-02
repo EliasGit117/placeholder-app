@@ -14,12 +14,12 @@ export const adminCategoriesDelete = categoriesAdminBase
   .use(authMiddleware)
   .input(z.object({ id: z.number() }))
   .handler(async ({ input: { id }, context: { user }, errors }) => {
-    const canDelete = await auth.api.userHasPermission({
+    const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { categories: ['delete'] } },
     });
 
-    if (!canDelete)
-      errors.FORBIDDEN();
+    if (!success)
+      throw errors.FORBIDDEN();
 
     await CategoryService.delete(id);
   });

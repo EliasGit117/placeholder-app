@@ -17,12 +17,12 @@ export const adminGallerySectionsCreate = galleryAdminBase
   .input(createGallerySectionDtoSchema)
   .output(gallerySectionDtoSchema)
   .handler(async ({ input, context: { user }, errors }) => {
-    const canCreate = await auth.api.userHasPermission({
+    const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { gallerySections: ['create'] } },
     });
 
-    if (!canCreate)
-      errors.FORBIDDEN();
+    if (!success)
+      throw errors.FORBIDDEN();
 
     const result = await GallerySectionService.create(input);
     return GallerySectionDtoFactory.fromEntity(result);

@@ -17,12 +17,12 @@ export const adminGallerySectionsGetAll = galleryAdminBase
   .use(authMiddleware)
   .output(z.array(gallerySectionDtoSchema))
   .handler(async ({ context: { user }, errors }) => {
-    const canList = await auth.api.userHasPermission({
+    const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { gallerySections: ['list'] } },
     });
 
-    if (!canList)
-      errors.FORBIDDEN();
+    if (!success)
+      throw errors.FORBIDDEN();
 
     const items = await GallerySectionService.getAll();
     return GallerySectionDtoFactory.fromEntities(items);

@@ -23,7 +23,7 @@ export const publicGallerySectionsGetImages = galleryPublicBase
   .handler(async ({ input: { slug }, errors }) => {
     const section = await GallerySectionService.findBySlug(slug);
     if (section == null || section.state !== GallerySectionState.active)
-      errors.NOT_FOUND();
+      throw errors.NOT_FOUND();
 
     const images = await ImageService.findByResource(ImageResourceType.GALLERY_SECTION, String(section!.id));
 

@@ -22,16 +22,16 @@ export const adminGallerySectionsGetImages = galleryAdminBase
   .input(z.object({ sectionId: z.number().int().positive() }))
   .output(z.array(gallerySectionImageDtoSchema))
   .handler(async ({ input, context: { user }, errors }) => {
-    const canGet = await auth.api.userHasPermission({
+    const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { gallerySections: ['get'] } },
     });
 
-    if (!canGet)
-      errors.FORBIDDEN();
+    if (!success)
+      throw errors.FORBIDDEN();
 
     const section = await GallerySectionService.findById(input.sectionId);
     if (section == null)
-      errors.NOT_FOUND();
+      throw errors.NOT_FOUND();
 
     const images = await ImageService.findByResource(
       ImageResourceType.GALLERY_SECTION,

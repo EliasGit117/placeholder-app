@@ -23,12 +23,12 @@ export const adminGallerySectionsUpdate = galleryAdminBase
   }))
   .output(gallerySectionDtoSchema)
   .handler(async ({ input: { params, body }, context: { user }, errors }) => {
-    const canUpdate = await auth.api.userHasPermission({
+    const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { gallerySections: ['update'] } }
     });
 
-    if (!canUpdate)
-      errors.FORBIDDEN();
+    if (!success)
+      throw errors.FORBIDDEN();
 
     const result = await GallerySectionService.update(params.id, body);
     return GallerySectionDtoFactory.fromEntity(result);

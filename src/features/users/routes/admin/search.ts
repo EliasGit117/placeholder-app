@@ -26,12 +26,12 @@ export const adminUsersSearch = usersAdminBase
   .input(searchUsersRequestDtoSchema)
   .output(searchUsersResultDtoSchema)
   .handler(async ({ input, context: { user }, errors }) => {
-    const canList = await auth.api.userHasPermission({
+    const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { user: ['list'] } }
     });
 
-    if (!canList)
-      errors.FORBIDDEN();
+    if (!success)
+      throw errors.FORBIDDEN();
 
     const [items, meta] = await prisma.user
       .paginate({

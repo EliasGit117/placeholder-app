@@ -19,12 +19,12 @@ export const adminCategoriesSearch = categoriesAdminBase
   .input(searchCategoriesRequestDtoSchema)
   .output(searchCategoriesResultDtoSchema)
   .handler(async ({ input, context: { user }, errors }) => {
-    const canList = await auth.api.userHasPermission({
+    const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { categories: ['list'] } },
     });
 
-    if (!canList)
-      errors.FORBIDDEN();
+    if (!success)
+      throw errors.FORBIDDEN();
 
     return CategoryService.search(input);
   });

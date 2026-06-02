@@ -19,12 +19,12 @@ export const adminCategoriesUpdate = categoriesAdminBase
   .input(updateCategoryInputSchema)
   .output(categorySchema)
   .handler(async ({ input: { id, ...data }, context: { user }, errors }) => {
-    const canUpdate = await auth.api.userHasPermission({
+    const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { categories: ['update'] } },
     });
 
-    if (!canUpdate)
-      errors.FORBIDDEN();
+    if (!success)
+      throw errors.FORBIDDEN();
 
     return CategoryService.update(id, data);
   });

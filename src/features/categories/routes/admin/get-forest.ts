@@ -15,12 +15,12 @@ export const adminCategoriesGetForest = categoriesAdminBase
   .use(authMiddleware)
   .output(categoryForestSchema)
   .handler(async ({ context: { user }, errors }) => {
-    const canList = await auth.api.userHasPermission({
+    const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { categories: ['list'] } },
     });
 
-    if (!canList)
-      errors.FORBIDDEN();
+    if (!success)
+      throw errors.FORBIDDEN();
 
     return CategoryService.getForest();
   });

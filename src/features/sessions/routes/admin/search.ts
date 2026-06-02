@@ -26,12 +26,12 @@ export const adminSessionsSearch = sessionsPublicBase
   .input(searchSessionsRequestDtoSchema)
   .output(searchSessionsResultDtoSchema)
   .handler(async ({ input, context: { user, session }, errors }) => {
-    const canList = await auth.api.userHasPermission({
+    const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { session: ['list'] } }
     });
 
-    if (!canList)
-      errors.FORBIDDEN();
+    if (!success)
+      throw errors.FORBIDDEN();
 
     const [items, meta] = await prisma.session
       .paginate({

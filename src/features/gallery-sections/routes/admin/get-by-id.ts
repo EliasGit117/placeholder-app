@@ -17,16 +17,16 @@ export const adminGallerySectionsGetById = galleryAdminBase
   .input(z.object({ id: z.coerce.number() }))
   .output(gallerySectionDtoSchema)
   .handler(async ({ input: { id }, context: { user }, errors }) => {
-    const canGet = await auth.api.userHasPermission({
+    const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { gallerySections: ['get'] } },
     });
 
-    if (!canGet)
-      errors.FORBIDDEN();
+    if (!success)
+      throw errors.FORBIDDEN();
 
     const result = await GallerySectionService.findById(id);
     if (result == null)
-      errors.NOT_FOUND();
+      throw errors.NOT_FOUND();
 
     return GallerySectionDtoFactory.fromEntity(result!);
   });

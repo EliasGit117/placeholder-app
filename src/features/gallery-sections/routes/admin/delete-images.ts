@@ -23,16 +23,16 @@ export const adminGallerySectionsDeleteImages = galleryAdminBase
   .input(deleteImagesInputSchema)
   .output(z.object({ deleted: z.number() }))
   .handler(async ({ input, context: { user }, errors }) => {
-    const canDelete = await auth.api.userHasPermission({
+    const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { gallerySections: ['delete'] } },
     });
 
-    if (!canDelete)
-      errors.FORBIDDEN();
+    if (!success)
+      throw errors.FORBIDDEN();
 
     const section = await GallerySectionService.findById(input.sectionId);
     if (section == null)
-      errors.NOT_FOUND();
+      throw errors.NOT_FOUND();
 
     const deleted = await ImageService.deleteManyForResource(
       ImageResourceType.GALLERY_SECTION,

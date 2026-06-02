@@ -15,12 +15,12 @@ export const adminGallerySectionsDelete = galleryAdminBase
   .use(authMiddleware)
   .input(z.object({ id: z.number() }))
   .handler(async ({ input: { id }, context: { user }, errors }) => {
-    const canDelete = await auth.api.userHasPermission({
+    const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { gallerySections: ['delete'] } },
     });
 
-    if (!canDelete)
-      errors.FORBIDDEN();
+    if (!success)
+      throw errors.FORBIDDEN();
 
     await GallerySectionService.delete(id);
   });

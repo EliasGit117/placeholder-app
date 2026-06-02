@@ -16,12 +16,12 @@ export const adminCategoriesCreate = categoriesAdminBase
   .input(createCategorySchema)
   .output(categorySchema)
   .handler(async ({ input, context: { user }, errors }) => {
-    const canCreate = await auth.api.userHasPermission({
+    const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { categories: ['create'] } },
     });
 
-    if (!canCreate)
-      errors.FORBIDDEN();
+    if (!success)
+      throw errors.FORBIDDEN();
 
     return CategoryService.create(input);
   });
