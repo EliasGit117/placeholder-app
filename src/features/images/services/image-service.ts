@@ -2,11 +2,12 @@ import sharp from 'sharp';
 import { rgbaToThumbHash } from 'thumbhash';
 import { ORPCError } from '@orpc/server';
 import { ImagePurpose, ImageResourceType, ImageVariantKind } from '~/prisma/generated/prisma/enums.ts';
+import { Prisma } from '~/prisma/generated/prisma/client.ts';
 import { prisma, type TxClient } from '@/lib/db';
 import { bytesToMb } from '@/lib/utils';
 import { s3Storage } from '@/features/shared/services/s3-storage.ts';
 import { ImageDtoFactory, type TImageDto } from '@/features/images/dtos/image-dto.ts';
-import { allowsMultipleImages, getImagePolicy, type ImageConfig } from '@/features/images/consts/image-resource-map.ts';
+import { getImagePolicy, type ImageConfig, type ImageTransform } from '@/features/images/consts/image-resource-map.ts';
 import type { TCreateImageInput } from '@/features/images/schemas/image-mutations.ts';
 
 interface UploadInput {
@@ -33,8 +34,6 @@ interface PreparedImage {
   original: PreparedFile & { thumbhash: string };
   variants: PreparedVariant[];
 }
-
-type ImageTransform = NonNullable<ImageConfig['original']>;
 
 export class ImageService {
 
@@ -65,12 +64,12 @@ export class ImageService {
     const baseName = input.fileName ?? input.file.name.replace(/\.[^.]+$/, '');
     const inputBuffer = Buffer.from(await input.file.arrayBuffer());
 
-    const original = await transformToWebp(inputBuffer, policy.original, `${baseName}.webp`);
+    const original = await transformToWebp(inputBuffer, policy, `${baseName}.webp`);
     const thumbhash = await generateThumbhash(inputBuffer);
 
     const variants: PreparedVariant[] = [];
     for (const spec of policy.variants ?? []) {
-      const prepared = await transformToWebp(inputBuffer, spec.transform, `${baseName}-${spec.kind}.webp`);
+      const prepared = await transformToWebp(inputBuffer, spec, `${baseName}-${spec.kind}.webp`);
       variants.push({ kind: spec.kind, ...prepared });
     }
 
@@ -126,7 +125,7 @@ export class ImageService {
 
       // Single-cardinality purposes (e.g. avatars) may have at most one image
       // per resource scope. The scope lock makes this check race free.
-      if (!allowsMultipleImages(input.resourceType, input.purpose)) {
+      if (!getImagePolicy(input.resourceType, input.purpose)?.multiple) {
         const count = await tx.image.count({
           where: { resourceType: input.resourceType, resourceId, purpose: input.purpose },
         });
@@ -282,15 +281,13 @@ export class ImageService {
           message: 'Provided ids must match the images of this resource exactly.',
         });
 
-      // A permutation can't be applied in place under the unique constraint, so
-      // park every row at a unique negative slot first, then flip to the final
-      // 1..N. Negatives never clash with leftover positives; finals never clash
-      // with the still-negative rows.
-      for (let i = 0; i < orderedIds.length; i++)
-        await tx.image.update({ where: { id: orderedIds[i] }, data: { order: -(i + 1) } });
-
-      for (let i = 0; i < orderedIds.length; i++)
-        await tx.image.update({ where: { id: orderedIds[i] }, data: { order: i + 1 } });
+      // A permutation can't be applied in place under the unique index, so park
+      // every row at a unique negative slot first, then flip to the final 1..N.
+      // Negatives never clash with leftover positives; finals never clash with
+      // the still-negative rows. Each phase is a single bulk statement (one
+      // round-trip), not one update per row.
+      await ImageService.applyOrders(tx, orderedIds.map((id, i) => ({ id, order: -(i + 1) })));
+      await ImageService.applyOrders(tx, orderedIds.map((id, i) => ({ id, order: i + 1 })));
     });
 
     return ImageService.findByResource(resourceType, resourceId);
@@ -318,14 +315,33 @@ export class ImageService {
     const remaining = await tx.image.findMany({
       where: { resourceType, resourceId },
       orderBy: { order: 'asc' },
-      select: { id: true, order: true },
+      select: { id: true },
     });
 
-    for (let i = 0; i < remaining.length; i++) {
-      const desired = i + 1;
-      if (remaining[i].order !== desired)
-        await tx.image.update({ where: { id: remaining[i].id }, data: { order: desired } });
-    }
+    // applyOrders no-ops when nothing remains (e.g. the last image was deleted).
+    await ImageService.applyOrders(tx, remaining.map((row, i) => ({ id: row.id, order: i + 1 })));
+  }
+
+  // Sets an explicit `order` per id in a single statement, so a reorder phase or
+  // a resequence is one round-trip instead of one update per row. Caller must
+  // hold the scope lock. No-op on an empty list — an empty VALUES clause is a
+  // SQL syntax error. Matching on the (globally unique) id PK is enough; the
+  // caller has already validated the ids belong to the intended scope.
+  private static async applyOrders(
+    tx: TxClient,
+    pairs: { id: number; order: number }[]
+  ): Promise<void> {
+    if (pairs.length === 0)
+      return;
+
+    const rows = Prisma.join(pairs.map(p => Prisma.sql`(${p.id}::int, ${p.order}::int)`));
+
+    await tx.$executeRaw`
+      UPDATE "images" AS img
+      SET "order" = v.ord
+      FROM (VALUES ${rows}) AS v(id, ord)
+      WHERE img.id = v.id
+    `;
   }
 }
 

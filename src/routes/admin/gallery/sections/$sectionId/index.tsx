@@ -1,5 +1,6 @@
 import { createFileRoute, notFound, redirect } from '@tanstack/react-router';
 import { orpc } from '@/lib/orpc';
+import { awaitIfServer } from '@/lib/server';
 import { roleHasPermission } from '@/lib/auth';
 import { getLocale } from '@/paraglide/runtime';
 import { capitalizeFirst } from '@/lib/utils';
@@ -8,7 +9,6 @@ import { UploadImagesSheet, UploadImagesSheetProvider } from './-components/uplo
 import { SectionImages } from './-components/section-images';
 import { ImageSelectionProvider } from './-components/image-selection';
 import { ImageReorderProvider } from './-components/image-reorder';
-
 
 
 export const Route = createFileRoute('/admin/gallery/sections/$sectionId/')({
@@ -24,18 +24,14 @@ export const Route = createFileRoute('/admin/gallery/sections/$sectionId/')({
 
     const canUpdate = await roleHasPermission(user?.role, { gallerySections: ['update'] });
     const canDelete = await roleHasPermission(user?.role, { gallerySections: ['delete'] });
+
     return { canUpdate, canDelete };
   },
   loader: async ({ context: { queryClient }, params: { sectionId } }) => {
-    const [section] = await Promise.all([
-      queryClient.fetchQuery(
-        orpc.admin.gallery.sections.getById.queryOptions({ input: { id: sectionId } })
-      ),
-      queryClient.prefetchQuery(
-        orpc.admin.gallery.sections.getImages.queryOptions({ input: { sectionId } })
-      )
-    ]);
+    const sectionPromise = queryClient.fetchQuery(orpc.admin.gallery.sections.getById.queryOptions({ input: { id: sectionId } }));
+    await awaitIfServer(queryClient.prefetchQuery(orpc.admin.gallery.sections.getImages.queryOptions({ input: { sectionId } })));
 
+    const section = await sectionPromise;
     if (!section)
       throw notFound();
 

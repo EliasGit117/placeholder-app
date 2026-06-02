@@ -25,7 +25,7 @@ export const publicGallerySectionsGetImages = galleryPublicBase
     if (section == null || section.state !== GallerySectionState.active)
       throw errors.NOT_FOUND();
 
-    const images = await ImageService.findByResource(ImageResourceType.GALLERY_SECTION, String(section!.id));
+    const images = await ImageService.findByResource(ImageResourceType.GALLERY_SECTION, String(section.id));
 
     return GallerySectionImageDtoFactory.fromImageDtos(images);
   });

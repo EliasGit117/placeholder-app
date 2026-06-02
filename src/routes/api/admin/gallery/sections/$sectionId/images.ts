@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { ORPCError } from '@orpc/server';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { GallerySectionService } from '@/features/gallery-sections/services/gallery-section-service.ts';
@@ -8,6 +9,14 @@ async function handle({ request, params }: { request: Request; params: Record<st
   const session = await auth.api.getSession({ headers: request.headers });
   if (!session?.user)
     return Response.json({ error: 'Unauthorized' }, { status: 401 });
+
+  // Match the get/delete/reorder routes: uploading requires the create
+  // permission, not just an authenticated session.
+  const { success } = await auth.api.userHasPermission({
+    body: { userId: session.user.id, permissions: { gallerySections: ['create'] } },
+  });
+  if (!success)
+    return Response.json({ error: 'Forbidden' }, { status: 403 });
 
   const sectionId = parseInt(params.sectionId, 10);
   if (isNaN(sectionId))
@@ -38,6 +47,11 @@ async function handle({ request, params }: { request: Request; params: Record<st
 
     return Response.json(image, { status: 201 });
   } catch (error) {
+    // Validation failures (too large, wrong type, …) are ORPCErrors carrying
+    // their own HTTP status — surface it instead of a blanket 500.
+    if (error instanceof ORPCError)
+      return Response.json({ error: error.message }, { status: error.status });
+
     const message = error instanceof Error ? error.message : 'Upload failed';
     return Response.json({ error: message }, { status: 500 });
   }

@@ -30,13 +30,14 @@ export const publicGallerySectionsGetWithImages = galleryPublicBase
     if (entity == null || entity.state !== GallerySectionState.active)
       throw errors.NOT_FOUND();
 
-    const [images] = await Promise.all([
-      ImageService.findByResource(ImageResourceType.GALLERY_SECTION, String(entity!.id)),
-    ]);
+    const images = await ImageService.findByResource(
+      ImageResourceType.GALLERY_SECTION,
+      String(entity.id)
+    );
 
     const locale = getLocale();
     return {
-      section: GallerySectionPublicDtoFactory.fromEntity(entity!, locale),
+      section: GallerySectionPublicDtoFactory.fromEntity(entity, locale),
       images: GallerySectionImageDtoFactory.fromImageDtos(images),
     };
   });

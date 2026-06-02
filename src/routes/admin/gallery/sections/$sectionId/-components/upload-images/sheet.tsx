@@ -17,12 +17,18 @@ import { xhrUpload } from 'src/lib/utils';
 import { FileUploadStatus, useFileUpload, type IUploadHelpers } from 'src/hooks/use-file-upload';
 import { DropZone, FileItem, RejectedFile } from 'src/components/file-upload';
 import type { TImageDto } from 'src/features/images/dtos/image-dto';
+import { getImageUploadConstraints } from 'src/features/images/consts/image-resource-map';
+import { ImagePurpose, ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import { m } from '@/paraglide/messages';
 import { useUploadImagesSheet } from './provider';
 
 
-const accept = 'image/jpeg,image/png,image/webp,image/gif,image/avif';
-const maxSize = 10 * 1024 * 1024;
+// Single source of truth: the picker accepts exactly what the server policy
+// allows for gallery-section images (see imagePolicy in image-resource-map).
+const { accept, maxSize } = getImageUploadConstraints(
+  ImageResourceType.GALLERY_SECTION,
+  ImagePurpose.GALLERY_SECTION_IMAGE
+);
 
 
 export const UploadImagesSheet: FC = () => {

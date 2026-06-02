@@ -1,5 +1,6 @@
-import { createFileRoute, Link, notFound } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { orpc } from '@/lib/orpc';
+import { awaitIfServer } from '@/lib/server';
 import { thumbhashToDataUrl } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
@@ -15,21 +16,13 @@ export const Route = createFileRoute('/_public/gallery/$slug')({
   component: RouteComponent,
   notFoundComponent: GallerySectionNotFound,
   loader: async ({ context: { queryClient }, params: { slug } }) => {
-    const data = await queryClient.fetchQuery(
-      orpc.gallery.sections.getWithImages.queryOptions({ input: { slug } })
-    ).catch(() => null);
-
-    if (!data)
-      throw notFound();
-  },
+    await awaitIfServer(queryClient.prefetchQuery(orpc.gallery.sections.getWithImages.queryOptions({ input: { slug } })));
+  }
 });
 
 function RouteComponent() {
   const { slug } = Route.useParams();
-
-  const { data, isPending } = useQuery(
-    orpc.gallery.sections.getWithImages.queryOptions({ input: { slug } })
-  );
+  const { data, isPending } = useQuery(orpc.gallery.sections.getWithImages.queryOptions({ input: { slug } }));
 
   const section = data?.section;
   const images = data?.images ?? [];

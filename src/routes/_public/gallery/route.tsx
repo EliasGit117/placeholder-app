@@ -8,9 +8,7 @@ import { Button } from '@/components/ui/button';
 export const Route = createFileRoute('/_public/gallery')({
   component: RouteComponent,
   loader: async ({ context: { queryClient } }) => {
-    await awaitIfServer(
-      queryClient.prefetchQuery(orpc.gallery.sections.getAll.queryOptions())
-    );
+    await awaitIfServer(queryClient.prefetchQuery(orpc.gallery.sections.getAll.queryOptions()));
   }
 });
 
