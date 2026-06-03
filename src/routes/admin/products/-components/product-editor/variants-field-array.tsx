@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/select';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
 import { emptyVariant, type TProductOptionForm } from './schemas.ts';
 
 
@@ -20,6 +21,7 @@ export const VariantsFieldArray: FC = () => {
   const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({ control, name: 'variants' });
   const options = (useWatch({ control, name: 'options' }) ?? []) as TProductOptionForm[];
+  const isRu = getLocale() === 'ru';
 
   // Only options with a machine key and at least one usable value can drive an attribute picker.
   const usableOptions = options.filter(o => o.key && o.values.some(v => v.value));
@@ -61,9 +63,9 @@ export const VariantsFieldArray: FC = () => {
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel>{m['pages.products.form.variants.price']()}</FieldLabel>
                   <NumberInput
+                    min={0}
                     value={field.value}
                     onValueChange={(v) => field.onChange(v ?? 0)}
-                    min={0}
                   />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
                 </Field>
@@ -86,29 +88,33 @@ export const VariantsFieldArray: FC = () => {
             <div className="space-y-2">
               <FieldLabel>{m['pages.products.form.variants.attributes']()}</FieldLabel>
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                {usableOptions.map((option) => (
-                  <Controller
-                    key={option.key}
-                    name={`variants.${index}.optionValues.${option.key}`}
-                    control={control}
-                    render={({ field }) => (
-                      <Field>
-                        <Select value={field.value ?? ''} onValueChange={field.onChange}>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder={option.labelRo || option.key}/>
-                          </SelectTrigger>
-                          <SelectContent>
-                            {option.values.filter(v => v.value).map((v) => (
-                              <SelectItem key={v.value} value={v.value}>
-                                {v.labelRo || v.value}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </Field>
-                    )}
-                  />
-                ))}
+                {usableOptions.map((option) => {
+                  const optionLabel = (isRu ? option.labelRu : option.labelRo) || option.key;
+                  return (
+                    <Controller
+                      key={option.key}
+                      name={`variants.${index}.optionValues.${option.key}`}
+                      control={control}
+                      render={({ field }) => (
+                        <Field>
+                          <FieldLabel>{optionLabel}</FieldLabel>
+                          <Select value={field.value ?? ''} onValueChange={field.onChange}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder={optionLabel}/>
+                            </SelectTrigger>
+                            <SelectContent>
+                              {option.values.filter(v => v.value).map((v) => (
+                                <SelectItem key={v.value} value={v.value}>
+                                  {(isRu ? v.labelRu : v.labelRo) || v.value}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </Field>
+                      )}
+                    />
+                  );
+                })}
               </div>
             </div>
           )}

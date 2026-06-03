@@ -79,13 +79,13 @@ export function recordToOptions(options: TOptions): TProductOptionForm[] {
   }));
 }
 
-/** Keeps only optionValues keys that still exist in the option list (drops stale picks). */
+/** Keeps only non-empty optionValues whose key still exists in the option list (drops stale/blank picks). */
 export function pruneOptionValues(
   optionValues: Record<string, string>,
   options: TProductOptionForm[],
 ): Record<string, string> {
   const keys = new Set(options.map(o => o.key));
-  return Object.fromEntries(Object.entries(optionValues).filter(([k]) => keys.has(k)));
+  return Object.fromEntries(Object.entries(optionValues).filter(([k, v]) => keys.has(k) && !!v));
 }
 
 export function emptyVariant(): TVariantForm {

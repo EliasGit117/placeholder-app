@@ -106,7 +106,7 @@ export const ProductsTable: FC<IProps> = (props) => {
 
           {canCreate && (
             <Button variant="ghost" size="sm" asChild>
-              <Link to="/admin/products/new">
+              <Link to="/admin/products/create">
                 <IconPlus className="size-4"/>
                 <span>{m['pages.products.index.create']()}</span>
               </Link>

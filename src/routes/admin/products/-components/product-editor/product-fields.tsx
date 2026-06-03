@@ -21,36 +21,12 @@ export const ProductFields: FC = () => {
   return (
     <FieldGroup className="grid grid-cols-2 gap-2 sm:gap-4">
       <Controller
-        name="nameRo"
-        control={control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="col-span-full sm:col-span-1">
-            <FieldLabel>{m['pages.products.form.name_ro']()}</FieldLabel>
-            <Input {...field} value={field.value ?? ''} autoComplete="off"/>
-            {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
-          </Field>
-        )}
-      />
-
-      <Controller
-        name="nameRu"
-        control={control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="col-span-full sm:col-span-1">
-            <FieldLabel>{m['pages.products.form.name_ru']()}</FieldLabel>
-            <Input {...field} value={field.value ?? ''} autoComplete="off"/>
-            {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
-          </Field>
-        )}
-      />
-
-      <Controller
         name="slug"
         control={control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid} className="col-span-full sm:col-span-1">
             <FieldLabel>{m['pages.products.form.slug']()}</FieldLabel>
-            <Input {...field} value={field.value ?? ''} autoComplete="off"/>
+            <Input {...field} value={field.value ?? ''} autoComplete="off" placeholder='some-product-slug'/>
             {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
           </Field>
         )}
@@ -82,10 +58,34 @@ export const ProductFields: FC = () => {
       />
 
       <Controller
+        name="nameRo"
+        control={control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid} className="col-span-full sm:col-span-1">
+            <FieldLabel>{m['pages.products.form.name_ro']()}</FieldLabel>
+            <Input {...field} value={field.value ?? ''} autoComplete="off"/>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
+          </Field>
+        )}
+      />
+
+      <Controller
+        name="nameRu"
+        control={control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid} className="col-span-full sm:col-span-1">
+            <FieldLabel>{m['pages.products.form.name_ru']()}</FieldLabel>
+            <Input {...field} value={field.value ?? ''} autoComplete="off"/>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
+          </Field>
+        )}
+      />
+
+      <Controller
         name="descriptionRo"
         control={control}
         render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="col-span-full">
+          <Field data-invalid={fieldState.invalid} className="col-span-full md:col-span-1">
             <FieldLabel>{m['pages.products.form.description_ro']()}</FieldLabel>
             <Textarea {...field} value={field.value ?? ''} rows={3}/>
             {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
@@ -97,7 +97,7 @@ export const ProductFields: FC = () => {
         name="descriptionRu"
         control={control}
         render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="col-span-full">
+          <Field data-invalid={fieldState.invalid} className="col-span-full md:col-span-1">
             <FieldLabel>{m['pages.products.form.description_ru']()}</FieldLabel>
             <Textarea {...field} value={field.value ?? ''} rows={3}/>
             {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}

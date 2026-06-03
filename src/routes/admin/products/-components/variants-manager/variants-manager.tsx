@@ -14,7 +14,8 @@ import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { IconDots, IconPackage, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
-import { VariantDialog, type TVariantDialogValues } from './variant-dialog.tsx';
+import { getLocale } from '@/paraglide/runtime';
+import { VariantSheet, type TVariantSheetValues } from './variant-sheet.tsx';
 import type { TOptions } from '@/features/products/schemas/option-schema.ts';
 import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
 
@@ -30,7 +31,7 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
   const queryClient = useQueryClient();
   const confirm = useConfirm();
 
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [editing, setEditing] = useState<TProductVariant | null>(null);
 
   const invalidate = () =>
@@ -45,7 +46,7 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
     ...orpc.admin.products.addVariant.mutationOptions(),
     onSuccess: () => {
       toast.success(m['pages.products.variants.add_success']());
-      setDialogOpen(false);
+      setSheetOpen(false);
       void invalidate();
     },
     onError,
@@ -55,7 +56,7 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
     ...orpc.admin.products.updateVariant.mutationOptions(),
     onSuccess: () => {
       toast.success(m['pages.products.variants.update_success']());
-      setDialogOpen(false);
+      setSheetOpen(false);
       void invalidate();
     },
     onError,
@@ -72,12 +73,12 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
 
   const onAddClick = () => {
     setEditing(null);
-    setDialogOpen(true);
+    setSheetOpen(true);
   };
 
   const onEditClick = (variant: TProductVariant) => {
     setEditing(variant);
-    setDialogOpen(true);
+    setSheetOpen(true);
   };
 
   const onDeleteClick = async (variant: TProductVariant) => {
@@ -92,18 +93,27 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
     deleteVariant({ id: variant.id });
   };
 
-  const onSubmit = (values: TVariantDialogValues) => {
+  const onSubmit = (values: TVariantSheetValues) => {
+    // Drop unselected options — variants don't need to cover every option.
+    const optionValues = Object.fromEntries(
+      Object.entries(values.optionValues).filter(([, v]) => !!v),
+    );
+    const payload = { ...values, optionValues };
+
     if (editing)
-      updateVariant({ id: editing.id, ...values });
+      updateVariant({ id: editing.id, ...payload });
     else
-      addVariant({ productId, ...values });
+      addVariant({ productId, ...payload });
   };
+
+  const isRu = getLocale() === 'ru';
 
   const optionValueBadges = (variant: TProductVariant) =>
     Object.entries(variant.optionValues).map(([key, value]) => {
       const option = options[key];
-      const label = option?.labelRo ?? key;
-      const valueLabel = option?.values.find(v => v.value === value)?.labelRo ?? value;
+      const label = (option && (isRu ? option.labelRu : option.labelRo)) ?? key;
+      const matched = option?.values.find(v => v.value === value);
+      const valueLabel = (matched && (isRu ? matched.labelRu : matched.labelRo)) ?? value;
       return (
         <Badge key={key} variant="secondary" className="rounded-sm">
           <span className="text-muted-foreground">{label}:</span>&nbsp;{valueLabel}
@@ -171,9 +181,9 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
         </ul>
       )}
 
-      <VariantDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
+      <VariantSheet
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
         options={options}
         variant={editing}
         loading={isAdding || isUpdating}

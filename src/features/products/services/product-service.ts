@@ -140,7 +140,7 @@ export class ProductService {
       throw new ORPCError('NOT_FOUND', { message: `Product '${input.productId}' not found` });
 
     const options = product.options as TOptions;
-    validateOptionValues(options, input.optionValues);
+    validatePartialOptionValues(options, input.optionValues);
 
     const slug = generateVariantSlug(options, input.optionValues);
     const fullSlug = buildFullSlug(product.slug, slug);
@@ -179,7 +179,7 @@ export class ProductService {
 
     if (input.optionValues !== undefined) {
       const options = existing.product.options as TOptions;
-      validateOptionValues(options, input.optionValues);
+      validatePartialOptionValues(options, input.optionValues);
       optionValues = input.optionValues;
       slug = generateVariantSlug(options, optionValues);
       fullSlug = buildFullSlug(existing.product.slug, slug);
@@ -233,8 +233,7 @@ export class ProductService {
 
     // Resolve new optionValues/slugs for every existing variant before touching the DB.
     const reconciled = (slugChanged || optionsChanged)
-      ? existing.variants.map(variant =>
-          reconcileVariant(variant, newOptions, newSlug, input.backfill ?? {}))
+      ? existing.variants.map(variant => reconcileVariant(variant, newOptions, newSlug))
       : [];
 
     if (optionsChanged)
@@ -310,8 +309,10 @@ export function slugifyValue(value: string): string {
 }
 
 export function generateVariantSlug(options: TOptions, optionValues: TOptionValues): string {
-  // Deterministic: follow options key order, slugify each selected value.
+  // Deterministic: follow options key order, slugify each selected value. Values may be missing
+  // (variants only need full coverage at creation), so skip absent ones.
   return Object.keys(options)
+    .filter(key => optionValues[key] != null && optionValues[key] !== '')
     .map(key => slugifyValue(optionValues[key]))
     .join('-');
 }
@@ -320,6 +321,7 @@ export function buildFullSlug(productSlug: string, variantSlug: string): string 
   return `${productSlug}-${variantSlug}`;
 }
 
+/** Strict validation used at product creation: every option must carry a valid value. */
 export function validateOptionValues(options: TOptions, optionValues: TOptionValues): void {
   for (const [key, option] of Object.entries(options)) {
     const value = optionValues[key];
@@ -335,6 +337,20 @@ export function validateOptionValues(options: TOptions, optionValues: TOptionVal
   }
 }
 
+/**
+ * Lenient validation for variant updates/additions: any provided value must reference a known option
+ * and an allowed value, but a variant need not specify every option.
+ */
+export function validatePartialOptionValues(options: TOptions, optionValues: TOptionValues): void {
+  for (const [key, value] of Object.entries(optionValues)) {
+    const option = options[key];
+    if (!option)
+      throw new ORPCError('BAD_REQUEST', { message: `Unknown option '${key}'` });
+    if (!option.values.some(v => v.value === value))
+      throw new ORPCError('BAD_REQUEST', { message: `Value '${value}' is not allowed for option '${key}'` });
+  }
+}
+
 interface IReconciledVariant {
   id: number;
   optionValues: TOptionValues;
@@ -344,34 +360,22 @@ interface IReconciledVariant {
 
 /**
  * Brings an existing variant in line with a (possibly changed) `options` definition and product slug:
- * keeps still-valid values, applies `backfill` for newly added keys, drops removed keys, then
- * recomputes slug/fullSlug. Throws CONFLICT/BAD_REQUEST when the variant can't be reconciled.
+ * keeps each value that still references a known option and an allowed value, drops the rest (removed
+ * options or values no longer allowed), and recomputes slug/fullSlug. Variants need not cover every
+ * option, so nothing is required or back-filled here.
  */
 function reconcileVariant(
   variant: ProductVariant,
   options: TOptions,
   productSlug: string,
-  backfill: Record<string, string>,
 ): IReconciledVariant {
   const current = variant.optionValues as TOptionValues;
   const next: TOptionValues = {};
 
   for (const [key, option] of Object.entries(options)) {
-    let value = current[key];
-    if (value === undefined)
-      value = backfill[key]; // newly added key — needs a backfill value
-
-    if (value === undefined)
-      throw new ORPCError('CONFLICT', {
-        message: `Option '${key}' was added but variant ${variant.id} has no value; provide a backfill value for '${key}'`,
-      });
-
-    if (!option.values.some(v => v.value === value))
-      throw new ORPCError('CONFLICT', {
-        message: `Variant ${variant.id} uses value '${value}' for '${key}', which is no longer allowed`,
-      });
-
-    next[key] = value;
+    const value = current[key];
+    if (value !== undefined && option.values.some(v => v.value === value))
+      next[key] = value;
   }
 
   const slug = generateVariantSlug(options, next);

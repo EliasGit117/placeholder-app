@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { createFileRoute, Link, notFound, redirect } from '@tanstack/react-router';
+import { createFileRoute, notFound, redirect } from '@tanstack/react-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -10,9 +10,8 @@ import { getLocale } from '@/paraglide/runtime';
 import { capitalizeFirst } from '@/lib/utils';
 import type { IBreadcrumb } from '@/components/layout/admin/nav-breadcrumbs.tsx';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { LoadingButton } from '@/components/ui/loading-button';
-import { IconArrowLeft, IconDeviceFloppy } from '@tabler/icons-react';
+import { IconDeviceFloppy } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import {
@@ -22,11 +21,11 @@ import {
   optionsToRecord,
   productDetailsFormSchema,
   type TProductDetailsForm,
-} from './-components/product-editor';
-import { VariantsManager } from './-components/variants-manager';
+} from './../-components/product-editor';
+import { VariantsManager } from './../-components/variants-manager';
 
 
-export const Route = createFileRoute('/admin/products/$productId')({
+export const Route = createFileRoute('/admin/products/$productId/')({
   component: RouteComponent,
   params: {
     parse: ({ productId }) => ({ productId: parseInt(productId, 10) }),
@@ -101,15 +100,6 @@ function RouteComponent() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <Button type="button" variant="ghost" size="icon-sm" asChild>
-          <Link to="/admin/products">
-            <IconArrowLeft className="size-4"/>
-          </Link>
-        </Button>
-        <h1 className="flex-1 text-lg font-semibold truncate">{product.nameRo}</h1>
-      </div>
-
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit((values) => update(values))} className="space-y-4">
           <Card>

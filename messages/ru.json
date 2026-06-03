@@ -136,7 +136,7 @@
     "products": {
       "title": "Товары",
       "index": {
-        "create": "Добавить товар",
+        "create": "Создать товар",
         "table": {
           "name_ro": "Название (RO)",
           "name_ru": "Название (RU)",
@@ -150,7 +150,7 @@
         }
       },
       "form": {
-        "create_title": "Новый товар",
+        "create_title": "Создать товар",
         "create_success": "Товар создан",
         "save_success": "Товар сохранён",
         "name_ro": "Название (RO)",
@@ -161,7 +161,7 @@
         "state_active": "Активен",
         "state_hidden": "Скрыт",
         "section_general": "Общая информация",
-        "section_general_description": "Название, slug и состояние товара.",
+        "section_general_description": "Основаная информация о продукте.",
         "section_options": "Опции",
         "section_options_description": "Задайте опции (напр. цвет, размер) и их переведённые значения.",
         "section_options_edit_description": "Изменение опций может потребовать заполнения значений для существующих вариантов.",

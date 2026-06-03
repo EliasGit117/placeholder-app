@@ -1,4 +1,4 @@
-import { createFileRoute, redirect, useNavigate, Link } from '@tanstack/react-router';
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
@@ -6,9 +6,8 @@ import { toast } from 'sonner';
 import { orpc } from '@/lib/orpc';
 import { roleHasPermission } from '@/lib/auth';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { LoadingButton } from '@/components/ui/loading-button';
-import { IconArrowLeft, IconDeviceFloppy } from '@tabler/icons-react';
+import { IconDeviceFloppy } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import {
@@ -19,18 +18,18 @@ import {
   optionsToRecord,
   productFormSchema,
   pruneOptionValues,
-  type TProductForm,
+  type TProductForm
 } from './-components/product-editor';
 
 
-export const Route = createFileRoute('/admin/products/new')({
+export const Route = createFileRoute('/admin/products/create')({
   component: RouteComponent,
   staticData: { crumbs: { title: () => m['pages.products.form.create_title']() } },
   beforeLoad: async ({ context: { user } }) => {
     const canCreate = await roleHasPermission(user?.role, { products: ['create'] });
     if (!canCreate)
       throw redirect({ to: '/admin/products', replace: true });
-  },
+  }
 });
 
 
@@ -47,8 +46,8 @@ function RouteComponent() {
       slug: '',
       state: ProductState.active,
       options: [],
-      variants: [emptyVariant()],
-    },
+      variants: [emptyVariant()]
+    }
   });
 
   const { mutate: create, isPending } = useMutation({
@@ -66,8 +65,8 @@ function RouteComponent() {
           nameRu: v.nameRu,
           price: v.price,
           stock: v.stock,
-          optionValues: pruneOptionValues(v.optionValues, values.options),
-        })),
+          optionValues: pruneOptionValues(v.optionValues, values.options)
+        }))
       }),
     onSuccess: (product) => {
       toast.success(m['pages.products.form.create_success']());
@@ -76,24 +75,16 @@ function RouteComponent() {
     onError: (error: unknown) => {
       const message = error instanceof Error ? error.message : m['common.error']();
       toast.error(m['common.error'](), { description: message });
-    },
+    }
   });
 
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit((values) => create(values))} className="space-y-4">
-        <div className="flex items-center gap-2">
-          <Button type="button" variant="ghost" size="icon-sm" asChild>
-            <Link to="/admin/products">
-              <IconArrowLeft className="size-4"/>
-            </Link>
-          </Button>
-          <h1 className="flex-1 text-lg font-semibold">{m['pages.products.form.create_title']()}</h1>
-          <LoadingButton type="submit" size="sm" loading={isPending}>
-            <IconDeviceFloppy className="size-4"/>
-            <span>{m['common.create']()}</span>
-          </LoadingButton>
-        </div>
+        <LoadingButton type="submit" loading={isPending} className='fixed -bottom-2 right-4 z-10'>
+          <IconDeviceFloppy className="size-4"/>
+          <span>{m['common.create']()}</span>
+        </LoadingButton>
 
         <Card>
           <CardHeader>

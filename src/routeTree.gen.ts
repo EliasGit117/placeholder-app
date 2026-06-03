@@ -33,10 +33,10 @@ import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as AdminSettingsSecurityRouteImport } from './routes/admin/settings/security'
 import { Route as AdminSettingsProfileRouteImport } from './routes/admin/settings/profile'
-import { Route as AdminProductsNewRouteImport } from './routes/admin/products/new'
-import { Route as AdminProductsProductIdRouteImport } from './routes/admin/products/$productId'
+import { Route as AdminProductsCreateRouteImport } from './routes/admin/products/create'
 import { Route as PublicGallerySlugRouteImport } from './routes/_public/gallery/$slug'
 import { Route as AdminGallerySectionsRouteRouteImport } from './routes/admin/gallery/sections/route'
+import { Route as AdminProductsProductIdIndexRouteImport } from './routes/admin/products/$productId/index'
 import { Route as AdminGallerySectionsIndexRouteImport } from './routes/admin/gallery/sections/index'
 import { Route as AdminGallerySectionsSectionIdIndexRouteImport } from './routes/admin/gallery/sections/$sectionId/index'
 import { Route as ApiAdminGallerySectionsSectionIdImagesRouteImport } from './routes/api/admin/gallery/sections/$sectionId/images'
@@ -160,14 +160,9 @@ const AdminSettingsProfileRoute = AdminSettingsProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AdminSettingsRouteRoute,
 } as any)
-const AdminProductsNewRoute = AdminProductsNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => AdminProductsRouteRoute,
-} as any)
-const AdminProductsProductIdRoute = AdminProductsProductIdRouteImport.update({
-  id: '/$productId',
-  path: '/$productId',
+const AdminProductsCreateRoute = AdminProductsCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
   getParentRoute: () => AdminProductsRouteRoute,
 } as any)
 const PublicGallerySlugRoute = PublicGallerySlugRouteImport.update({
@@ -180,6 +175,12 @@ const AdminGallerySectionsRouteRoute =
     id: '/sections',
     path: '/sections',
     getParentRoute: () => AdminGalleryRouteRoute,
+  } as any)
+const AdminProductsProductIdIndexRoute =
+  AdminProductsProductIdIndexRouteImport.update({
+    id: '/$productId/',
+    path: '/$productId/',
+    getParentRoute: () => AdminProductsRouteRoute,
   } as any)
 const AdminGallerySectionsIndexRoute =
   AdminGallerySectionsIndexRouteImport.update({
@@ -213,8 +214,7 @@ export interface FileRoutesByFullPath {
   '/auth/': typeof AuthIndexRoute
   '/admin/gallery/sections': typeof AdminGallerySectionsRouteRouteWithChildren
   '/gallery/$slug': typeof PublicGallerySlugRoute
-  '/admin/products/$productId': typeof AdminProductsProductIdRoute
-  '/admin/products/new': typeof AdminProductsNewRoute
+  '/admin/products/create': typeof AdminProductsCreateRoute
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -229,6 +229,7 @@ export interface FileRoutesByFullPath {
   '/auth/sign-in/': typeof AuthSignInIndexRoute
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
   '/admin/gallery/sections/': typeof AdminGallerySectionsIndexRoute
+  '/admin/products/$productId/': typeof AdminProductsProductIdIndexRoute
   '/admin/gallery/sections/$sectionId/': typeof AdminGallerySectionsSectionIdIndexRoute
   '/api/admin/gallery/sections/$sectionId/images': typeof ApiAdminGallerySectionsSectionIdImagesRoute
 }
@@ -238,8 +239,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/auth': typeof AuthIndexRoute
   '/gallery/$slug': typeof PublicGallerySlugRoute
-  '/admin/products/$productId': typeof AdminProductsProductIdRoute
-  '/admin/products/new': typeof AdminProductsNewRoute
+  '/admin/products/create': typeof AdminProductsCreateRoute
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -254,6 +254,7 @@ export interface FileRoutesByTo {
   '/auth/sign-in': typeof AuthSignInIndexRoute
   '/auth/sign-up': typeof AuthSignUpIndexRoute
   '/admin/gallery/sections': typeof AdminGallerySectionsIndexRoute
+  '/admin/products/$productId': typeof AdminProductsProductIdIndexRoute
   '/admin/gallery/sections/$sectionId': typeof AdminGallerySectionsSectionIdIndexRoute
   '/api/admin/gallery/sections/$sectionId/images': typeof ApiAdminGallerySectionsSectionIdImagesRoute
 }
@@ -272,8 +273,7 @@ export interface FileRoutesById {
   '/auth/': typeof AuthIndexRoute
   '/admin/gallery/sections': typeof AdminGallerySectionsRouteRouteWithChildren
   '/_public/gallery/$slug': typeof PublicGallerySlugRoute
-  '/admin/products/$productId': typeof AdminProductsProductIdRoute
-  '/admin/products/new': typeof AdminProductsNewRoute
+  '/admin/products/create': typeof AdminProductsCreateRoute
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -288,6 +288,7 @@ export interface FileRoutesById {
   '/auth/sign-in/': typeof AuthSignInIndexRoute
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
   '/admin/gallery/sections/': typeof AdminGallerySectionsIndexRoute
+  '/admin/products/$productId/': typeof AdminProductsProductIdIndexRoute
   '/admin/gallery/sections/$sectionId/': typeof AdminGallerySectionsSectionIdIndexRoute
   '/api/admin/gallery/sections/$sectionId/images': typeof ApiAdminGallerySectionsSectionIdImagesRoute
 }
@@ -306,8 +307,7 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/admin/gallery/sections'
     | '/gallery/$slug'
-    | '/admin/products/$productId'
-    | '/admin/products/new'
+    | '/admin/products/create'
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
@@ -322,6 +322,7 @@ export interface FileRouteTypes {
     | '/auth/sign-in/'
     | '/auth/sign-up/'
     | '/admin/gallery/sections/'
+    | '/admin/products/$productId/'
     | '/admin/gallery/sections/$sectionId/'
     | '/api/admin/gallery/sections/$sectionId/images'
   fileRoutesByTo: FileRoutesByTo
@@ -331,8 +332,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/gallery/$slug'
-    | '/admin/products/$productId'
-    | '/admin/products/new'
+    | '/admin/products/create'
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
@@ -347,6 +347,7 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/admin/gallery/sections'
+    | '/admin/products/$productId'
     | '/admin/gallery/sections/$sectionId'
     | '/api/admin/gallery/sections/$sectionId/images'
   id:
@@ -364,8 +365,7 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/admin/gallery/sections'
     | '/_public/gallery/$slug'
-    | '/admin/products/$productId'
-    | '/admin/products/new'
+    | '/admin/products/create'
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
@@ -380,6 +380,7 @@ export interface FileRouteTypes {
     | '/auth/sign-in/'
     | '/auth/sign-up/'
     | '/admin/gallery/sections/'
+    | '/admin/products/$productId/'
     | '/admin/gallery/sections/$sectionId/'
     | '/api/admin/gallery/sections/$sectionId/images'
   fileRoutesById: FileRoutesById
@@ -564,18 +565,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsProfileRouteImport
       parentRoute: typeof AdminSettingsRouteRoute
     }
-    '/admin/products/new': {
-      id: '/admin/products/new'
-      path: '/new'
-      fullPath: '/admin/products/new'
-      preLoaderRoute: typeof AdminProductsNewRouteImport
-      parentRoute: typeof AdminProductsRouteRoute
-    }
-    '/admin/products/$productId': {
-      id: '/admin/products/$productId'
-      path: '/$productId'
-      fullPath: '/admin/products/$productId'
-      preLoaderRoute: typeof AdminProductsProductIdRouteImport
+    '/admin/products/create': {
+      id: '/admin/products/create'
+      path: '/create'
+      fullPath: '/admin/products/create'
+      preLoaderRoute: typeof AdminProductsCreateRouteImport
       parentRoute: typeof AdminProductsRouteRoute
     }
     '/_public/gallery/$slug': {
@@ -591,6 +585,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/gallery/sections'
       preLoaderRoute: typeof AdminGallerySectionsRouteRouteImport
       parentRoute: typeof AdminGalleryRouteRoute
+    }
+    '/admin/products/$productId/': {
+      id: '/admin/products/$productId/'
+      path: '/$productId'
+      fullPath: '/admin/products/$productId/'
+      preLoaderRoute: typeof AdminProductsProductIdIndexRouteImport
+      parentRoute: typeof AdminProductsRouteRoute
     }
     '/admin/gallery/sections/': {
       id: '/admin/gallery/sections/'
@@ -674,15 +675,15 @@ const AdminGalleryRouteRouteWithChildren =
   AdminGalleryRouteRoute._addFileChildren(AdminGalleryRouteRouteChildren)
 
 interface AdminProductsRouteRouteChildren {
-  AdminProductsProductIdRoute: typeof AdminProductsProductIdRoute
-  AdminProductsNewRoute: typeof AdminProductsNewRoute
+  AdminProductsCreateRoute: typeof AdminProductsCreateRoute
   AdminProductsIndexRoute: typeof AdminProductsIndexRoute
+  AdminProductsProductIdIndexRoute: typeof AdminProductsProductIdIndexRoute
 }
 
 const AdminProductsRouteRouteChildren: AdminProductsRouteRouteChildren = {
-  AdminProductsProductIdRoute: AdminProductsProductIdRoute,
-  AdminProductsNewRoute: AdminProductsNewRoute,
+  AdminProductsCreateRoute: AdminProductsCreateRoute,
   AdminProductsIndexRoute: AdminProductsIndexRoute,
+  AdminProductsProductIdIndexRoute: AdminProductsProductIdIndexRoute,
 }
 
 const AdminProductsRouteRouteWithChildren =

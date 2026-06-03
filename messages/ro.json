@@ -137,7 +137,7 @@
     "products": {
       "title": "Produse",
       "index": {
-        "create": "Adaugă produs",
+        "create": "Creazǎ produs",
         "table": {
           "name_ro": "Denumire (RO)",
           "name_ru": "Denumire (RU)",
@@ -151,7 +151,7 @@
         }
       },
       "form": {
-        "create_title": "Produs nou",
+        "create_title": "Crearea produsului nou",
         "create_success": "Produsul a fost creat",
         "save_success": "Produsul a fost salvat",
         "name_ro": "Denumire (RO)",
@@ -162,7 +162,7 @@
         "state_active": "Activ",
         "state_hidden": "Ascuns",
         "section_general": "Informații generale",
-        "section_general_description": "Denumirea, slug-ul și starea produsului.",
+        "section_general_description": "Informația de bază despre produs.",
         "section_options": "Opțiuni",
         "section_options_description": "Definiți opțiunile (ex. culoare, mărime) și valorile lor traduse.",
         "section_options_edit_description": "Modificarea opțiunilor poate necesita completarea valorilor pentru variantele existente.",
