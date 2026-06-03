@@ -4,15 +4,16 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { IconEye, IconEyeOff } from '@tabler/icons-react';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { IconChevronDown } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
-import { ProductState } from '~/prisma/generated/prisma/enums.ts';
+import { getProductStateOption, productStateOptions } from './product-state.ts';
 
 
 export const ProductFields: FC = () => {
@@ -35,26 +36,34 @@ export const ProductFields: FC = () => {
       <Controller
         name="state"
         control={control}
-        render={({ field }) => (
-          <Field className="col-span-full sm:col-span-1">
-            <FieldLabel>{m['common.status']()}</FieldLabel>
-            <Select value={field.value} onValueChange={field.onChange}>
-              <SelectTrigger className="w-full">
-                <SelectValue/>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={ProductState.active}>
-                  <IconEye className="text-muted-foreground" size={16}/>
-                  <span>{m['pages.products.form.state_active']()}</span>
-                </SelectItem>
-                <SelectItem value={ProductState.hidden}>
-                  <IconEyeOff className="text-muted-foreground" size={16}/>
-                  <span>{m['pages.products.form.state_hidden']()}</span>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </Field>
-        )}
+        render={({ field }) => {
+          const current = getProductStateOption(field.value);
+          const CurrentIcon = current.icon;
+          return (
+            <Field className="col-span-full sm:col-span-1">
+              <FieldLabel>{m['common.status']()}</FieldLabel>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start">
+                    <CurrentIcon className="text-muted-foreground" size={16}/>
+                    <span>{current.label()}</span>
+                    <IconChevronDown className="ml-auto opacity-50" size={16}/>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
+                  <DropdownMenuRadioGroup value={field.value ?? ''} onValueChange={field.onChange}>
+                    {productStateOptions.map(({ value, label, icon: Icon }) => (
+                      <DropdownMenuRadioItem key={value} value={value}>
+                        <Icon className="text-muted-foreground" size={16}/>
+                        <span>{label()}</span>
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </Field>
+          );
+        }}
       />
 
       <Controller
@@ -82,11 +91,11 @@ export const ProductFields: FC = () => {
       />
 
       <Controller
-        name="descriptionRo"
+        name="shortDescriptionRo"
         control={control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid} className="col-span-full md:col-span-1">
-            <FieldLabel>{m['pages.products.form.description_ro']()}</FieldLabel>
+            <FieldLabel>{m['pages.products.form.short_description_ro']()}</FieldLabel>
             <Textarea {...field} value={field.value ?? ''} rows={3}/>
             {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
           </Field>
@@ -94,11 +103,11 @@ export const ProductFields: FC = () => {
       />
 
       <Controller
-        name="descriptionRu"
+        name="shortDescriptionRu"
         control={control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid} className="col-span-full md:col-span-1">
-            <FieldLabel>{m['pages.products.form.description_ru']()}</FieldLabel>
+            <FieldLabel>{m['pages.products.form.short_description_ru']()}</FieldLabel>
             <Textarea {...field} value={field.value ?? ''} rows={3}/>
             {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
           </Field>

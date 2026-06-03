@@ -17,8 +17,6 @@ import {
   IconCalendar,
   IconDots,
   IconExternalLink,
-  IconEye,
-  IconEyeOff,
   IconLink,
   IconTextSize,
   IconTrash,
@@ -26,6 +24,7 @@ import {
 import { Link } from '@tanstack/react-router';
 import { m } from '@/paraglide/messages';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
+import { getProductStateOption, productStateOptions } from '../product-editor';
 import type { TProduct } from '@/features/products/schemas/product.ts';
 
 
@@ -127,15 +126,12 @@ export const productColumns = (options?: IOptions) => {
       enableSorting: false,
       header: ({ column }) => <DataTableColumnHeader column={column}/>,
       cell: ({ getValue }) => {
-        const isActive = getValue() === ProductState.active;
+        const option = getProductStateOption(getValue());
+        const Icon = option.icon;
         return (
-          <Badge variant={isActive ? 'outline' : 'secondary'} className="rounded-sm min-h-6">
-            {isActive ? <IconEye size={12}/> : <IconEyeOff size={12}/>}
-            <span>
-              {isActive
-                ? m['pages.products.form.state_active']()
-                : m['pages.products.form.state_hidden']()}
-            </span>
+          <Badge variant={getValue() === ProductState.active ? 'outline' : 'secondary'} className="rounded-sm min-h-6">
+            <Icon size={12}/>
+            <span>{option.label()}</span>
           </Badge>
         );
       },
@@ -145,10 +141,7 @@ export const productColumns = (options?: IOptions) => {
         skeletonClassName: 'h-5.5 w-20 rounded-sm',
         filter: {
           type: ColumnFilterType.Select,
-          options: [
-            { title: m['pages.products.form.state_active'](), value: ProductState.active, icon: IconEye },
-            { title: m['pages.products.form.state_hidden'](), value: ProductState.hidden, icon: IconEyeOff },
-          ],
+          options: productStateOptions.map(({ value, label, icon }) => ({ title: label(), value, icon })),
         },
       },
     }),

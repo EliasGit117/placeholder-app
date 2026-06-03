@@ -4,11 +4,12 @@ import { toast } from 'sonner';
 import { orpc } from '@/lib/orpc';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
@@ -16,6 +17,7 @@ import { IconDots, IconPackage, IconPencil, IconPlus, IconTrash } from '@tabler/
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
 import { VariantSheet, type TVariantSheetValues } from './variant-sheet.tsx';
+import { getProductStateOption } from '../product-editor';
 import type { TOptions } from '@/features/products/schemas/option-schema.ts';
 import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
 
@@ -49,7 +51,7 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
       setSheetOpen(false);
       void invalidate();
     },
-    onError,
+    onError
   });
 
   const { mutate: updateVariant, isPending: isUpdating } = useMutation({
@@ -59,7 +61,7 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
       setSheetOpen(false);
       void invalidate();
     },
-    onError,
+    onError
   });
 
   const { mutate: deleteVariant } = useMutation({
@@ -68,7 +70,7 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
       toast.success(m['pages.products.variants.delete_success']());
       void invalidate();
     },
-    onError,
+    onError
   });
 
   const onAddClick = () => {
@@ -87,7 +89,7 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
       description: m['pages.products.variants.delete_description'](),
       confirmText: m['common.delete'](),
       cancelText: m['common.cancel'](),
-      confirmButton: { variant: 'destructive' },
+      confirmButton: { variant: 'destructive' }
     });
     if (!confirmed) return;
     deleteVariant({ id: variant.id });
@@ -96,7 +98,7 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
   const onSubmit = (values: TVariantSheetValues) => {
     // Drop unselected options — variants don't need to cover every option.
     const optionValues = Object.fromEntries(
-      Object.entries(values.optionValues).filter(([, v]) => !!v),
+      Object.entries(values.optionValues).filter(([, v]) => !!v)
     );
     const payload = { ...values, optionValues };
 
@@ -111,9 +113,9 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
   const optionValueBadges = (variant: TProductVariant) =>
     Object.entries(variant.optionValues).map(([key, value]) => {
       const option = options[key];
-      const label = (option && (isRu ? option.labelRu : option.labelRo)) ?? key;
+      const label = (option && (isRu ? option.nameRu : option.nameRo)) ?? key;
       const matched = option?.values.find(v => v.value === value);
-      const valueLabel = (matched && (isRu ? matched.labelRu : matched.labelRo)) ?? value;
+      const valueLabel = (matched && (isRu ? matched.nameRu : matched.nameRo)) ?? value;
       return (
         <Badge key={key} variant="secondary" className="rounded-sm">
           <span className="text-muted-foreground">{label}:</span>&nbsp;{valueLabel}
@@ -122,16 +124,20 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
     });
 
   return (
-    <div className="space-y-3">
-      <div className="flex justify-end">
+    <Card>
+      <CardHeader>
+        <CardTitle>{m['pages.products.form.section_variants']()}</CardTitle>
+        <CardDescription>{m['pages.products.variants.manage_description']()}</CardDescription>
         {canUpdate && (
-          <Button variant="outline" size="sm" onClick={onAddClick}>
-            <IconPlus className="size-4"/>
-            <span>{m['pages.products.variants.add']()}</span>
-          </Button>
+          <CardAction>
+            <Button variant="ghost" size="icon-sm" onClick={onAddClick}>
+              <IconPlus className="size-4"/>
+            </Button>
+          </CardAction>
         )}
-      </div>
+      </CardHeader>
 
+      <CardContent className="space-y-3">
       {variants.length === 0 ? (
         <Empty className="border border-dashed rounded-md py-8">
           <EmptyHeader>
@@ -145,12 +151,24 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
           {variants.map((variant) => (
             <li key={variant.id} className="flex items-center gap-3 p-3">
               <div className="min-w-0 flex-1 space-y-1">
-                <div className="text-sm font-medium truncate">{variant.nameRo}</div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium truncate">{isRu ? variant.nameRu : variant.nameRo}</span>
+                  {(() => {
+                    const opt = getProductStateOption(variant.state);
+                    const Icon = opt.icon;
+                    return (
+                      <Badge variant="outline" className="rounded-sm shrink-0">
+                        <Icon size={12}/>
+                        <span>{opt.label()}</span>
+                      </Badge>
+                    );
+                  })()}
+                </div>
                 <div className="flex flex-wrap items-center gap-1">{optionValueBadges(variant)}</div>
               </div>
 
               <div className="text-right text-xs text-muted-foreground shrink-0">
-                <div>{m['pages.products.variants.stock_short']()}: {variant.stock}</div>
+                <div>{m['pages.products.variants.sku']()}: {variant.sku}</div>
               </div>
 
               {canUpdate && (
@@ -181,14 +199,15 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
         </ul>
       )}
 
-      <VariantSheet
-        open={sheetOpen}
-        onOpenChange={setSheetOpen}
-        options={options}
-        variant={editing}
-        loading={isAdding || isUpdating}
-        onSubmit={onSubmit}
-      />
-    </div>
+        <VariantSheet
+          open={sheetOpen}
+          onOpenChange={setSheetOpen}
+          options={options}
+          variant={editing}
+          loading={isAdding || isUpdating}
+          onSubmit={onSubmit}
+        />
+      </CardContent>
+    </Card>
   );
 };

@@ -9,20 +9,20 @@ import type { TOptions } from '@/features/products/schemas/option-schema.ts';
 
 const options: TOptions = {
   color: {
-    labelRo: 'Culoare',
-    labelRu: 'Цвет',
+    nameRo: 'Culoare',
+    nameRu: 'Цвет',
     values: [
-      { value: 'red', labelRo: 'Roșu', labelRu: 'Красный' },
-      { value: 'blue', labelRo: 'Albastru', labelRu: 'Синий' },
+      { value: 'red', nameRo: 'Roșu', nameRu: 'Красный' },
+      { value: 'blue', nameRo: 'Albastru', nameRu: 'Синий' },
     ],
   },
   size: {
-    labelRo: 'Mărime',
-    labelRu: 'Размер',
+    nameRo: 'Mărime',
+    nameRu: 'Размер',
     values: [
-      { value: 'S', labelRo: 'S', labelRu: 'S' },
-      { value: 'M', labelRo: 'M', labelRu: 'M' },
-      { value: 'L', labelRo: 'L', labelRu: 'L' },
+      { value: 'S', nameRo: 'S', nameRu: 'S' },
+      { value: 'M', nameRo: 'M', nameRu: 'M' },
+      { value: 'L', nameRo: 'L', nameRu: 'L' },
     ],
   },
 };

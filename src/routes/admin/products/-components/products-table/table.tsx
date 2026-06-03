@@ -1,8 +1,8 @@
 import { useEffect, useMemo, type ComponentProps, type FC } from 'react';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
 import { orpc } from '@/lib/orpc';
 import { productColumns } from './columns.tsx';
+import { ProductSheet, ProductSheetProvider, ProductSheetTrigger } from '../product-sheet';
 import {
   DataTable,
   DataTableActionBar,
@@ -14,11 +14,10 @@ import {
 import { exportToCsv } from '@/lib/utils/csv.ts';
 import { cn } from '@/lib/utils';
 import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
-import { Button } from '@/components/ui/button';
 import { AdaptiveButton } from '@/components/ui/adaptive-button';
 import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
 import { toast } from 'sonner';
-import { IconFileDownload, IconPlus, IconRefresh } from '@tabler/icons-react';
+import { IconFileDownload, IconRefresh } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import type { TSearchProductsRequestDto } from '@/features/products/schemas/search-products.ts';
 
@@ -99,36 +98,33 @@ export const ProductsTable: FC<IProps> = (props) => {
   }, [error]);
 
   return (
-    <div className={cn('space-y-2 relative', className)} {...divProps}>
-      <DataTableProvider table={table} loading={isPendingData}>
-        <DataTableToolbar>
-          <div className="flex-1"/>
+    <ProductSheetProvider>
+      <div className={cn('space-y-2 relative', className)} {...divProps}>
+        <DataTableProvider table={table} loading={isPendingData}>
+          <DataTableToolbar>
+            <div className="flex-1"/>
 
-          {canCreate && (
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/admin/products/create">
-                <IconPlus className="size-4"/>
-                <span>{m['pages.products.index.create']()}</span>
-              </Link>
-            </Button>
-          )}
-          <AdaptiveButton
-            variant="ghost"
-            size="sm"
-            icon={IconRefresh}
-            text={m['common.refresh']()}
-            onClick={() => refetch()}
-            disabled={isFetchingData}
-          />
-        </DataTableToolbar>
+            {canCreate && <ProductSheetTrigger/>}
+            <AdaptiveButton
+              variant="ghost"
+              size="sm"
+              icon={IconRefresh}
+              text={m['common.refresh']()}
+              onClick={() => refetch()}
+              disabled={isFetchingData}
+            />
+          </DataTableToolbar>
 
-        <DataTable skeletonTableCellClassName="h-[49px]"/>
-        <DataTablePagination/>
+          <DataTable skeletonTableCellClassName="h-[49px]"/>
+          <DataTablePagination/>
 
-        <DataTableActionBar disabled={isFetchingData}>
-          <ActionBarButton text="CSV" icon={IconFileDownload} onClick={onExportToCsvClick}/>
-        </DataTableActionBar>
-      </DataTableProvider>
-    </div>
+          <DataTableActionBar disabled={isFetchingData}>
+            <ActionBarButton text="CSV" icon={IconFileDownload} onClick={onExportToCsvClick}/>
+          </DataTableActionBar>
+        </DataTableProvider>
+      </div>
+
+      <ProductSheet/>
+    </ProductSheetProvider>
   );
 };

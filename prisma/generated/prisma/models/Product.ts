@@ -38,8 +38,8 @@ export type ProductMinAggregateOutputType = {
   id: number | null
   nameRo: string | null
   nameRu: string | null
-  descriptionRo: string | null
-  descriptionRu: string | null
+  shortDescriptionRo: string | null
+  shortDescriptionRu: string | null
   state: $Enums.ProductState | null
   slug: string | null
   createdAt: Date | null
@@ -50,8 +50,8 @@ export type ProductMaxAggregateOutputType = {
   id: number | null
   nameRo: string | null
   nameRu: string | null
-  descriptionRo: string | null
-  descriptionRu: string | null
+  shortDescriptionRo: string | null
+  shortDescriptionRu: string | null
   state: $Enums.ProductState | null
   slug: string | null
   createdAt: Date | null
@@ -62,8 +62,8 @@ export type ProductCountAggregateOutputType = {
   id: number
   nameRo: number
   nameRu: number
-  descriptionRo: number
-  descriptionRu: number
+  shortDescriptionRo: number
+  shortDescriptionRu: number
   state: number
   slug: number
   options: number
@@ -85,8 +85,8 @@ export type ProductMinAggregateInputType = {
   id?: true
   nameRo?: true
   nameRu?: true
-  descriptionRo?: true
-  descriptionRu?: true
+  shortDescriptionRo?: true
+  shortDescriptionRu?: true
   state?: true
   slug?: true
   createdAt?: true
@@ -97,8 +97,8 @@ export type ProductMaxAggregateInputType = {
   id?: true
   nameRo?: true
   nameRu?: true
-  descriptionRo?: true
-  descriptionRu?: true
+  shortDescriptionRo?: true
+  shortDescriptionRu?: true
   state?: true
   slug?: true
   createdAt?: true
@@ -109,8 +109,8 @@ export type ProductCountAggregateInputType = {
   id?: true
   nameRo?: true
   nameRu?: true
-  descriptionRo?: true
-  descriptionRu?: true
+  shortDescriptionRo?: true
+  shortDescriptionRu?: true
   state?: true
   slug?: true
   options?: true
@@ -209,8 +209,8 @@ export type ProductGroupByOutputType = {
   id: number
   nameRo: string
   nameRu: string
-  descriptionRo: string | null
-  descriptionRu: string | null
+  shortDescriptionRo: string | null
+  shortDescriptionRu: string | null
   state: $Enums.ProductState
   slug: string
   options: runtime.JsonValue
@@ -245,8 +245,8 @@ export type ProductWhereInput = {
   id?: Prisma.IntFilter<"Product"> | number
   nameRo?: Prisma.StringFilter<"Product"> | string
   nameRu?: Prisma.StringFilter<"Product"> | string
-  descriptionRo?: Prisma.StringNullableFilter<"Product"> | string | null
-  descriptionRu?: Prisma.StringNullableFilter<"Product"> | string | null
+  shortDescriptionRo?: Prisma.StringNullableFilter<"Product"> | string | null
+  shortDescriptionRu?: Prisma.StringNullableFilter<"Product"> | string | null
   state?: Prisma.EnumProductStateFilter<"Product"> | $Enums.ProductState
   slug?: Prisma.StringFilter<"Product"> | string
   options?: Prisma.JsonFilter<"Product">
@@ -259,8 +259,8 @@ export type ProductOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   nameRo?: Prisma.SortOrder
   nameRu?: Prisma.SortOrder
-  descriptionRo?: Prisma.SortOrderInput | Prisma.SortOrder
-  descriptionRu?: Prisma.SortOrderInput | Prisma.SortOrder
+  shortDescriptionRo?: Prisma.SortOrderInput | Prisma.SortOrder
+  shortDescriptionRu?: Prisma.SortOrderInput | Prisma.SortOrder
   state?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   options?: Prisma.SortOrder
@@ -277,8 +277,8 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ProductWhereInput | Prisma.ProductWhereInput[]
   nameRo?: Prisma.StringFilter<"Product"> | string
   nameRu?: Prisma.StringFilter<"Product"> | string
-  descriptionRo?: Prisma.StringNullableFilter<"Product"> | string | null
-  descriptionRu?: Prisma.StringNullableFilter<"Product"> | string | null
+  shortDescriptionRo?: Prisma.StringNullableFilter<"Product"> | string | null
+  shortDescriptionRu?: Prisma.StringNullableFilter<"Product"> | string | null
   state?: Prisma.EnumProductStateFilter<"Product"> | $Enums.ProductState
   options?: Prisma.JsonFilter<"Product">
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
@@ -290,8 +290,8 @@ export type ProductOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   nameRo?: Prisma.SortOrder
   nameRu?: Prisma.SortOrder
-  descriptionRo?: Prisma.SortOrderInput | Prisma.SortOrder
-  descriptionRu?: Prisma.SortOrderInput | Prisma.SortOrder
+  shortDescriptionRo?: Prisma.SortOrderInput | Prisma.SortOrder
+  shortDescriptionRu?: Prisma.SortOrderInput | Prisma.SortOrder
   state?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   options?: Prisma.SortOrder
@@ -311,8 +311,8 @@ export type ProductScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Product"> | number
   nameRo?: Prisma.StringWithAggregatesFilter<"Product"> | string
   nameRu?: Prisma.StringWithAggregatesFilter<"Product"> | string
-  descriptionRo?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
-  descriptionRu?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
+  shortDescriptionRo?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
+  shortDescriptionRu?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
   state?: Prisma.EnumProductStateWithAggregatesFilter<"Product"> | $Enums.ProductState
   slug?: Prisma.StringWithAggregatesFilter<"Product"> | string
   options?: Prisma.JsonWithAggregatesFilter<"Product">
@@ -323,8 +323,8 @@ export type ProductScalarWhereWithAggregatesInput = {
 export type ProductCreateInput = {
   nameRo: string
   nameRu: string
-  descriptionRo?: string | null
-  descriptionRu?: string | null
+  shortDescriptionRo?: string | null
+  shortDescriptionRu?: string | null
   state?: $Enums.ProductState
   slug: string
   options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -337,8 +337,8 @@ export type ProductUncheckedCreateInput = {
   id?: number
   nameRo: string
   nameRu: string
-  descriptionRo?: string | null
-  descriptionRu?: string | null
+  shortDescriptionRo?: string | null
+  shortDescriptionRu?: string | null
   state?: $Enums.ProductState
   slug: string
   options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -350,8 +350,8 @@ export type ProductUncheckedCreateInput = {
 export type ProductUpdateInput = {
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -364,8 +364,8 @@ export type ProductUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -378,8 +378,8 @@ export type ProductCreateManyInput = {
   id?: number
   nameRo: string
   nameRu: string
-  descriptionRo?: string | null
-  descriptionRu?: string | null
+  shortDescriptionRo?: string | null
+  shortDescriptionRu?: string | null
   state?: $Enums.ProductState
   slug: string
   options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -390,8 +390,8 @@ export type ProductCreateManyInput = {
 export type ProductUpdateManyMutationInput = {
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -403,8 +403,8 @@ export type ProductUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -416,8 +416,8 @@ export type ProductCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   nameRo?: Prisma.SortOrder
   nameRu?: Prisma.SortOrder
-  descriptionRo?: Prisma.SortOrder
-  descriptionRu?: Prisma.SortOrder
+  shortDescriptionRo?: Prisma.SortOrder
+  shortDescriptionRu?: Prisma.SortOrder
   state?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   options?: Prisma.SortOrder
@@ -433,8 +433,8 @@ export type ProductMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   nameRo?: Prisma.SortOrder
   nameRu?: Prisma.SortOrder
-  descriptionRo?: Prisma.SortOrder
-  descriptionRu?: Prisma.SortOrder
+  shortDescriptionRo?: Prisma.SortOrder
+  shortDescriptionRu?: Prisma.SortOrder
   state?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -445,8 +445,8 @@ export type ProductMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   nameRo?: Prisma.SortOrder
   nameRu?: Prisma.SortOrder
-  descriptionRo?: Prisma.SortOrder
-  descriptionRu?: Prisma.SortOrder
+  shortDescriptionRo?: Prisma.SortOrder
+  shortDescriptionRu?: Prisma.SortOrder
   state?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -483,8 +483,8 @@ export type ProductUpdateOneRequiredWithoutVariantsNestedInput = {
 export type ProductCreateWithoutVariantsInput = {
   nameRo: string
   nameRu: string
-  descriptionRo?: string | null
-  descriptionRu?: string | null
+  shortDescriptionRo?: string | null
+  shortDescriptionRu?: string | null
   state?: $Enums.ProductState
   slug: string
   options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -496,8 +496,8 @@ export type ProductUncheckedCreateWithoutVariantsInput = {
   id?: number
   nameRo: string
   nameRu: string
-  descriptionRo?: string | null
-  descriptionRu?: string | null
+  shortDescriptionRo?: string | null
+  shortDescriptionRu?: string | null
   state?: $Enums.ProductState
   slug: string
   options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -524,8 +524,8 @@ export type ProductUpdateToOneWithWhereWithoutVariantsInput = {
 export type ProductUpdateWithoutVariantsInput = {
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -537,8 +537,8 @@ export type ProductUncheckedUpdateWithoutVariantsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
-  descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
@@ -581,8 +581,8 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id?: boolean
   nameRo?: boolean
   nameRu?: boolean
-  descriptionRo?: boolean
-  descriptionRu?: boolean
+  shortDescriptionRo?: boolean
+  shortDescriptionRu?: boolean
   state?: boolean
   slug?: boolean
   options?: boolean
@@ -596,8 +596,8 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   nameRo?: boolean
   nameRu?: boolean
-  descriptionRo?: boolean
-  descriptionRu?: boolean
+  shortDescriptionRo?: boolean
+  shortDescriptionRu?: boolean
   state?: boolean
   slug?: boolean
   options?: boolean
@@ -609,8 +609,8 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   nameRo?: boolean
   nameRu?: boolean
-  descriptionRo?: boolean
-  descriptionRu?: boolean
+  shortDescriptionRo?: boolean
+  shortDescriptionRu?: boolean
   state?: boolean
   slug?: boolean
   options?: boolean
@@ -622,8 +622,8 @@ export type ProductSelectScalar = {
   id?: boolean
   nameRo?: boolean
   nameRu?: boolean
-  descriptionRo?: boolean
-  descriptionRu?: boolean
+  shortDescriptionRo?: boolean
+  shortDescriptionRu?: boolean
   state?: boolean
   slug?: boolean
   options?: boolean
@@ -631,7 +631,7 @@ export type ProductSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nameRo" | "nameRu" | "descriptionRo" | "descriptionRu" | "state" | "slug" | "options" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nameRo" | "nameRu" | "shortDescriptionRo" | "shortDescriptionRu" | "state" | "slug" | "options" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   variants?: boolean | Prisma.Product$variantsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -648,8 +648,8 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     id: number
     nameRo: string
     nameRu: string
-    descriptionRo: string | null
-    descriptionRu: string | null
+    shortDescriptionRo: string | null
+    shortDescriptionRu: string | null
     state: $Enums.ProductState
     slug: string
     options: runtime.JsonValue
@@ -1082,8 +1082,8 @@ export interface ProductFieldRefs {
   readonly id: Prisma.FieldRef<"Product", 'Int'>
   readonly nameRo: Prisma.FieldRef<"Product", 'String'>
   readonly nameRu: Prisma.FieldRef<"Product", 'String'>
-  readonly descriptionRo: Prisma.FieldRef<"Product", 'String'>
-  readonly descriptionRu: Prisma.FieldRef<"Product", 'String'>
+  readonly shortDescriptionRo: Prisma.FieldRef<"Product", 'String'>
+  readonly shortDescriptionRu: Prisma.FieldRef<"Product", 'String'>
   readonly state: Prisma.FieldRef<"Product", 'ProductState'>
   readonly slug: Prisma.FieldRef<"Product", 'String'>
   readonly options: Prisma.FieldRef<"Product", 'Json'>

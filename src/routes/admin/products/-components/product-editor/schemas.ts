@@ -13,30 +13,38 @@ const machineKey = z.string().trim().min(1).max(64)
 
 export const optionValueFormSchema = z.object({
   value: machineKey,
-  labelRo: z.string().trim().min(1).max(64),
-  labelRu: z.string().trim().min(1).max(64),
+  nameRo: z.string().trim().min(1).max(64),
+  nameRu: z.string().trim().min(1).max(64),
 });
 
 export const productOptionFormSchema = z.object({
   key: machineKey,
-  labelRo: z.string().trim().min(1).max(64),
-  labelRu: z.string().trim().min(1).max(64),
+  nameRo: z.string().trim().min(1).max(64),
+  nameRu: z.string().trim().min(1).max(64),
   values: z.array(optionValueFormSchema).min(1),
+}).superRefine((option, ctx) => {
+  const seen = new Set<string>();
+  option.values.forEach((v, i) => {
+    if (v.value && seen.has(v.value))
+      ctx.addIssue({ code: 'custom', path: ['values', i, 'value'], message: 'Duplicate value' });
+    else
+      seen.add(v.value);
+  });
 });
 
 export const variantFormSchema = z.object({
   nameRo: z.string().trim().min(1).max(128),
   nameRu: z.string().trim().min(1).max(128),
+  sku: z.string().trim().min(1).max(128),
   price: z.number().int().nonnegative(),
-  stock: z.number().int().nonnegative(),
   optionValues: z.record(z.string(), z.string()),
 });
 
 export const productFormSchema = z.object({
   nameRo: z.string().trim().min(1).max(128),
   nameRu: z.string().trim().min(1).max(128),
-  descriptionRo: z.string().trim().max(512).optional(),
-  descriptionRu: z.string().trim().max(512).optional(),
+  shortDescriptionRo: z.string().trim().max(512).optional(),
+  shortDescriptionRu: z.string().trim().max(512).optional(),
   slug: slugSchema,
   state: z.enum(ProductState),
   options: z.array(productOptionFormSchema),
@@ -48,16 +56,15 @@ export type TProductOptionForm = z.infer<typeof productOptionFormSchema>;
 export type TVariantForm = z.infer<typeof variantFormSchema>;
 export type TProductForm = z.infer<typeof productFormSchema>;
 
-// Product fields without the variant array — used by the edit form, which manages
-// variants through the dedicated endpoints rather than as a nested array.
+// Basic product fields only — options and variants are managed by their own cards/sheets on the
+// details page, not as part of this form.
 export const productDetailsFormSchema = productFormSchema.pick({
   nameRo: true,
   nameRu: true,
-  descriptionRo: true,
-  descriptionRu: true,
+  shortDescriptionRo: true,
+  shortDescriptionRu: true,
   slug: true,
   state: true,
-  options: true,
 });
 
 export type TProductDetailsForm = z.infer<typeof productDetailsFormSchema>;
@@ -65,7 +72,7 @@ export type TProductDetailsForm = z.infer<typeof productDetailsFormSchema>;
 /** Builds the API `options` record from the flat form option list (key order preserved). */
 export function optionsToRecord(options: TProductOptionForm[]): TOptions {
   return Object.fromEntries(
-    options.map(o => [o.key, { labelRo: o.labelRo, labelRu: o.labelRu, values: o.values }]),
+    options.map(o => [o.key, { nameRo: o.nameRo, nameRu: o.nameRu, values: o.values }]),
   );
 }
 
@@ -73,37 +80,23 @@ export function optionsToRecord(options: TProductOptionForm[]): TOptions {
 export function recordToOptions(options: TOptions): TProductOptionForm[] {
   return Object.entries(options).map(([key, option]) => ({
     key,
-    labelRo: option.labelRo,
-    labelRu: option.labelRu,
-    values: option.values.map(v => ({ value: v.value, labelRo: v.labelRo, labelRu: v.labelRu })),
+    nameRo: option.nameRo,
+    nameRu: option.nameRu,
+    values: option.values.map(v => ({ value: v.value, nameRo: v.nameRo, nameRu: v.nameRu })),
   }));
 }
 
-/** Keeps only non-empty optionValues whose key still exists in the option list (drops stale/blank picks). */
-export function pruneOptionValues(
-  optionValues: Record<string, string>,
-  options: TProductOptionForm[],
-): Record<string, string> {
-  const keys = new Set(options.map(o => o.key));
-  return Object.fromEntries(Object.entries(optionValues).filter(([k, v]) => keys.has(k) && !!v));
-}
-
-export function emptyVariant(): TVariantForm {
-  return { nameRo: '', nameRu: '', price: 0, stock: 0, optionValues: {} };
-}
-
 export function emptyOption(): TProductOptionForm {
-  return { key: '', labelRo: '', labelRu: '', values: [{ value: '', labelRo: '', labelRu: '' }] };
+  return { key: '', nameRo: '', nameRu: '', values: [{ value: '', nameRo: '', nameRu: '' }] };
 }
 
 export function detailsDefaultsFromProduct(product: TProductWithVariants): TProductDetailsForm {
   return {
     nameRo: product.nameRo,
     nameRu: product.nameRu,
-    descriptionRo: product.descriptionRo ?? '',
-    descriptionRu: product.descriptionRu ?? '',
+    shortDescriptionRo: product.shortDescriptionRo ?? '',
+    shortDescriptionRu: product.shortDescriptionRu ?? '',
     slug: product.slug,
     state: product.state,
-    options: recordToOptions(product.options),
   };
 }

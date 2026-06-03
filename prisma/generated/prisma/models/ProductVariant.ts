@@ -30,14 +30,12 @@ export type ProductVariantAvgAggregateOutputType = {
   id: number | null
   productId: number | null
   price: number | null
-  stock: number | null
 }
 
 export type ProductVariantSumAggregateOutputType = {
   id: number | null
   productId: number | null
   price: number | null
-  stock: number | null
 }
 
 export type ProductVariantMinAggregateOutputType = {
@@ -45,10 +43,11 @@ export type ProductVariantMinAggregateOutputType = {
   productId: number | null
   nameRo: string | null
   nameRu: string | null
+  state: $Enums.ProductState | null
   slug: string | null
   fullSlug: string | null
+  sku: string | null
   price: number | null
-  stock: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -58,10 +57,11 @@ export type ProductVariantMaxAggregateOutputType = {
   productId: number | null
   nameRo: string | null
   nameRu: string | null
+  state: $Enums.ProductState | null
   slug: string | null
   fullSlug: string | null
+  sku: string | null
   price: number | null
-  stock: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -71,11 +71,12 @@ export type ProductVariantCountAggregateOutputType = {
   productId: number
   nameRo: number
   nameRu: number
+  state: number
   slug: number
   fullSlug: number
+  sku: number
   optionValues: number
   price: number
-  stock: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -86,14 +87,12 @@ export type ProductVariantAvgAggregateInputType = {
   id?: true
   productId?: true
   price?: true
-  stock?: true
 }
 
 export type ProductVariantSumAggregateInputType = {
   id?: true
   productId?: true
   price?: true
-  stock?: true
 }
 
 export type ProductVariantMinAggregateInputType = {
@@ -101,10 +100,11 @@ export type ProductVariantMinAggregateInputType = {
   productId?: true
   nameRo?: true
   nameRu?: true
+  state?: true
   slug?: true
   fullSlug?: true
+  sku?: true
   price?: true
-  stock?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -114,10 +114,11 @@ export type ProductVariantMaxAggregateInputType = {
   productId?: true
   nameRo?: true
   nameRu?: true
+  state?: true
   slug?: true
   fullSlug?: true
+  sku?: true
   price?: true
-  stock?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -127,11 +128,12 @@ export type ProductVariantCountAggregateInputType = {
   productId?: true
   nameRo?: true
   nameRu?: true
+  state?: true
   slug?: true
   fullSlug?: true
+  sku?: true
   optionValues?: true
   price?: true
-  stock?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -228,11 +230,12 @@ export type ProductVariantGroupByOutputType = {
   productId: number
   nameRo: string
   nameRu: string
+  state: $Enums.ProductState
   slug: string
   fullSlug: string
+  sku: string
   optionValues: runtime.JsonValue
   price: number
-  stock: number
   createdAt: Date
   updatedAt: Date
   _count: ProductVariantCountAggregateOutputType | null
@@ -265,11 +268,12 @@ export type ProductVariantWhereInput = {
   productId?: Prisma.IntFilter<"ProductVariant"> | number
   nameRo?: Prisma.StringFilter<"ProductVariant"> | string
   nameRu?: Prisma.StringFilter<"ProductVariant"> | string
+  state?: Prisma.EnumProductStateFilter<"ProductVariant"> | $Enums.ProductState
   slug?: Prisma.StringFilter<"ProductVariant"> | string
   fullSlug?: Prisma.StringFilter<"ProductVariant"> | string
+  sku?: Prisma.StringFilter<"ProductVariant"> | string
   optionValues?: Prisma.JsonFilter<"ProductVariant">
   price?: Prisma.IntFilter<"ProductVariant"> | number
-  stock?: Prisma.IntFilter<"ProductVariant"> | number
   createdAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
@@ -280,11 +284,12 @@ export type ProductVariantOrderByWithRelationInput = {
   productId?: Prisma.SortOrder
   nameRo?: Prisma.SortOrder
   nameRu?: Prisma.SortOrder
+  state?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   fullSlug?: Prisma.SortOrder
+  sku?: Prisma.SortOrder
   optionValues?: Prisma.SortOrder
   price?: Prisma.SortOrder
-  stock?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   product?: Prisma.ProductOrderByWithRelationInput
@@ -300,10 +305,11 @@ export type ProductVariantWhereUniqueInput = Prisma.AtLeast<{
   productId?: Prisma.IntFilter<"ProductVariant"> | number
   nameRo?: Prisma.StringFilter<"ProductVariant"> | string
   nameRu?: Prisma.StringFilter<"ProductVariant"> | string
+  state?: Prisma.EnumProductStateFilter<"ProductVariant"> | $Enums.ProductState
   slug?: Prisma.StringFilter<"ProductVariant"> | string
+  sku?: Prisma.StringFilter<"ProductVariant"> | string
   optionValues?: Prisma.JsonFilter<"ProductVariant">
   price?: Prisma.IntFilter<"ProductVariant"> | number
-  stock?: Prisma.IntFilter<"ProductVariant"> | number
   createdAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
@@ -314,11 +320,12 @@ export type ProductVariantOrderByWithAggregationInput = {
   productId?: Prisma.SortOrder
   nameRo?: Prisma.SortOrder
   nameRu?: Prisma.SortOrder
+  state?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   fullSlug?: Prisma.SortOrder
+  sku?: Prisma.SortOrder
   optionValues?: Prisma.SortOrder
   price?: Prisma.SortOrder
-  stock?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProductVariantCountOrderByAggregateInput
@@ -336,11 +343,12 @@ export type ProductVariantScalarWhereWithAggregatesInput = {
   productId?: Prisma.IntWithAggregatesFilter<"ProductVariant"> | number
   nameRo?: Prisma.StringWithAggregatesFilter<"ProductVariant"> | string
   nameRu?: Prisma.StringWithAggregatesFilter<"ProductVariant"> | string
+  state?: Prisma.EnumProductStateWithAggregatesFilter<"ProductVariant"> | $Enums.ProductState
   slug?: Prisma.StringWithAggregatesFilter<"ProductVariant"> | string
   fullSlug?: Prisma.StringWithAggregatesFilter<"ProductVariant"> | string
+  sku?: Prisma.StringWithAggregatesFilter<"ProductVariant"> | string
   optionValues?: Prisma.JsonWithAggregatesFilter<"ProductVariant">
   price?: Prisma.IntWithAggregatesFilter<"ProductVariant"> | number
-  stock?: Prisma.IntWithAggregatesFilter<"ProductVariant"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProductVariant"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ProductVariant"> | Date | string
 }
@@ -348,11 +356,12 @@ export type ProductVariantScalarWhereWithAggregatesInput = {
 export type ProductVariantCreateInput = {
   nameRo: string
   nameRu: string
+  state?: $Enums.ProductState
   slug: string
   fullSlug: string
+  sku: string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price: number
-  stock?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   product: Prisma.ProductCreateNestedOneWithoutVariantsInput
@@ -363,11 +372,12 @@ export type ProductVariantUncheckedCreateInput = {
   productId: number
   nameRo: string
   nameRu: string
+  state?: $Enums.ProductState
   slug: string
   fullSlug: string
+  sku: string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price: number
-  stock?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -375,11 +385,12 @@ export type ProductVariantUncheckedCreateInput = {
 export type ProductVariantUpdateInput = {
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   fullSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.StringFieldUpdateOperationsInput | string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price?: Prisma.IntFieldUpdateOperationsInput | number
-  stock?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   product?: Prisma.ProductUpdateOneRequiredWithoutVariantsNestedInput
@@ -390,11 +401,12 @@ export type ProductVariantUncheckedUpdateInput = {
   productId?: Prisma.IntFieldUpdateOperationsInput | number
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   fullSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.StringFieldUpdateOperationsInput | string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price?: Prisma.IntFieldUpdateOperationsInput | number
-  stock?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -404,11 +416,12 @@ export type ProductVariantCreateManyInput = {
   productId: number
   nameRo: string
   nameRu: string
+  state?: $Enums.ProductState
   slug: string
   fullSlug: string
+  sku: string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price: number
-  stock?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -416,11 +429,12 @@ export type ProductVariantCreateManyInput = {
 export type ProductVariantUpdateManyMutationInput = {
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   fullSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.StringFieldUpdateOperationsInput | string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price?: Prisma.IntFieldUpdateOperationsInput | number
-  stock?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -430,11 +444,12 @@ export type ProductVariantUncheckedUpdateManyInput = {
   productId?: Prisma.IntFieldUpdateOperationsInput | number
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   fullSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.StringFieldUpdateOperationsInput | string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price?: Prisma.IntFieldUpdateOperationsInput | number
-  stock?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -459,11 +474,12 @@ export type ProductVariantCountOrderByAggregateInput = {
   productId?: Prisma.SortOrder
   nameRo?: Prisma.SortOrder
   nameRu?: Prisma.SortOrder
+  state?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   fullSlug?: Prisma.SortOrder
+  sku?: Prisma.SortOrder
   optionValues?: Prisma.SortOrder
   price?: Prisma.SortOrder
-  stock?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -472,7 +488,6 @@ export type ProductVariantAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   price?: Prisma.SortOrder
-  stock?: Prisma.SortOrder
 }
 
 export type ProductVariantMaxOrderByAggregateInput = {
@@ -480,10 +495,11 @@ export type ProductVariantMaxOrderByAggregateInput = {
   productId?: Prisma.SortOrder
   nameRo?: Prisma.SortOrder
   nameRu?: Prisma.SortOrder
+  state?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   fullSlug?: Prisma.SortOrder
+  sku?: Prisma.SortOrder
   price?: Prisma.SortOrder
-  stock?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -493,10 +509,11 @@ export type ProductVariantMinOrderByAggregateInput = {
   productId?: Prisma.SortOrder
   nameRo?: Prisma.SortOrder
   nameRu?: Prisma.SortOrder
+  state?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   fullSlug?: Prisma.SortOrder
+  sku?: Prisma.SortOrder
   price?: Prisma.SortOrder
-  stock?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -505,7 +522,6 @@ export type ProductVariantSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   price?: Prisma.SortOrder
-  stock?: Prisma.SortOrder
 }
 
 export type ProductVariantCreateNestedManyWithoutProductInput = {
@@ -553,11 +569,12 @@ export type ProductVariantUncheckedUpdateManyWithoutProductNestedInput = {
 export type ProductVariantCreateWithoutProductInput = {
   nameRo: string
   nameRu: string
+  state?: $Enums.ProductState
   slug: string
   fullSlug: string
+  sku: string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price: number
-  stock?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -566,11 +583,12 @@ export type ProductVariantUncheckedCreateWithoutProductInput = {
   id?: number
   nameRo: string
   nameRu: string
+  state?: $Enums.ProductState
   slug: string
   fullSlug: string
+  sku: string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price: number
-  stock?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -609,11 +627,12 @@ export type ProductVariantScalarWhereInput = {
   productId?: Prisma.IntFilter<"ProductVariant"> | number
   nameRo?: Prisma.StringFilter<"ProductVariant"> | string
   nameRu?: Prisma.StringFilter<"ProductVariant"> | string
+  state?: Prisma.EnumProductStateFilter<"ProductVariant"> | $Enums.ProductState
   slug?: Prisma.StringFilter<"ProductVariant"> | string
   fullSlug?: Prisma.StringFilter<"ProductVariant"> | string
+  sku?: Prisma.StringFilter<"ProductVariant"> | string
   optionValues?: Prisma.JsonFilter<"ProductVariant">
   price?: Prisma.IntFilter<"ProductVariant"> | number
-  stock?: Prisma.IntFilter<"ProductVariant"> | number
   createdAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string
 }
@@ -622,11 +641,12 @@ export type ProductVariantCreateManyProductInput = {
   id?: number
   nameRo: string
   nameRu: string
+  state?: $Enums.ProductState
   slug: string
   fullSlug: string
+  sku: string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price: number
-  stock?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -634,11 +654,12 @@ export type ProductVariantCreateManyProductInput = {
 export type ProductVariantUpdateWithoutProductInput = {
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   fullSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.StringFieldUpdateOperationsInput | string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price?: Prisma.IntFieldUpdateOperationsInput | number
-  stock?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -647,11 +668,12 @@ export type ProductVariantUncheckedUpdateWithoutProductInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   fullSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.StringFieldUpdateOperationsInput | string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price?: Prisma.IntFieldUpdateOperationsInput | number
-  stock?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -660,11 +682,12 @@ export type ProductVariantUncheckedUpdateManyWithoutProductInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   nameRo?: Prisma.StringFieldUpdateOperationsInput | string
   nameRu?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   fullSlug?: Prisma.StringFieldUpdateOperationsInput | string
+  sku?: Prisma.StringFieldUpdateOperationsInput | string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price?: Prisma.IntFieldUpdateOperationsInput | number
-  stock?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -676,11 +699,12 @@ export type ProductVariantSelect<ExtArgs extends runtime.Types.Extensions.Intern
   productId?: boolean
   nameRo?: boolean
   nameRu?: boolean
+  state?: boolean
   slug?: boolean
   fullSlug?: boolean
+  sku?: boolean
   optionValues?: boolean
   price?: boolean
-  stock?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
@@ -691,11 +715,12 @@ export type ProductVariantSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   productId?: boolean
   nameRo?: boolean
   nameRu?: boolean
+  state?: boolean
   slug?: boolean
   fullSlug?: boolean
+  sku?: boolean
   optionValues?: boolean
   price?: boolean
-  stock?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
@@ -706,11 +731,12 @@ export type ProductVariantSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   productId?: boolean
   nameRo?: boolean
   nameRu?: boolean
+  state?: boolean
   slug?: boolean
   fullSlug?: boolean
+  sku?: boolean
   optionValues?: boolean
   price?: boolean
-  stock?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
@@ -721,16 +747,17 @@ export type ProductVariantSelectScalar = {
   productId?: boolean
   nameRo?: boolean
   nameRu?: boolean
+  state?: boolean
   slug?: boolean
   fullSlug?: boolean
+  sku?: boolean
   optionValues?: boolean
   price?: boolean
-  stock?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProductVariantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "nameRo" | "nameRu" | "slug" | "fullSlug" | "optionValues" | "price" | "stock" | "createdAt" | "updatedAt", ExtArgs["result"]["productVariant"]>
+export type ProductVariantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "nameRo" | "nameRu" | "state" | "slug" | "fullSlug" | "sku" | "optionValues" | "price" | "createdAt" | "updatedAt", ExtArgs["result"]["productVariant"]>
 export type ProductVariantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
 }
@@ -751,11 +778,12 @@ export type $ProductVariantPayload<ExtArgs extends runtime.Types.Extensions.Inte
     productId: number
     nameRo: string
     nameRu: string
+    state: $Enums.ProductState
     slug: string
     fullSlug: string
+    sku: string
     optionValues: runtime.JsonValue
     price: number
-    stock: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["productVariant"]>
@@ -1186,11 +1214,12 @@ export interface ProductVariantFieldRefs {
   readonly productId: Prisma.FieldRef<"ProductVariant", 'Int'>
   readonly nameRo: Prisma.FieldRef<"ProductVariant", 'String'>
   readonly nameRu: Prisma.FieldRef<"ProductVariant", 'String'>
+  readonly state: Prisma.FieldRef<"ProductVariant", 'ProductState'>
   readonly slug: Prisma.FieldRef<"ProductVariant", 'String'>
   readonly fullSlug: Prisma.FieldRef<"ProductVariant", 'String'>
+  readonly sku: Prisma.FieldRef<"ProductVariant", 'String'>
   readonly optionValues: Prisma.FieldRef<"ProductVariant", 'Json'>
   readonly price: Prisma.FieldRef<"ProductVariant", 'Int'>
-  readonly stock: Prisma.FieldRef<"ProductVariant", 'Int'>
   readonly createdAt: Prisma.FieldRef<"ProductVariant", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ProductVariant", 'DateTime'>
 }

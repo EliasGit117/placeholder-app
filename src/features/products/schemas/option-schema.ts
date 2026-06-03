@@ -2,17 +2,17 @@ import { z } from 'zod';
 
 
 // A single allowed value for an option. `value` is the stable machine identifier stored in a
-// variant's optionValues and used to derive slugs; labelRo/labelRu are the localized display labels.
+// variant's optionValues and used to derive slugs; nameRo/nameRu are the localized display labels.
 export const optionValueSchema = z.object({
   value: z.string().trim().min(1).max(64),
-  labelRo: z.string().trim().min(1).max(64),
-  labelRu: z.string().trim().min(1).max(64),
+  nameRo: z.string().trim().min(1).max(64),
+  nameRu: z.string().trim().min(1).max(64),
 });
 
 // One option (e.g. "color") with a localized label and its list of allowed values.
 export const productOptionSchema = z.object({
-  labelRo: z.string().trim().min(1).max(64),
-  labelRu: z.string().trim().min(1).max(64),
+  nameRo: z.string().trim().min(1).max(64),
+  nameRu: z.string().trim().min(1).max(64),
   values: z.array(optionValueSchema).min(1),
 });
 

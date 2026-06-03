@@ -136,6 +136,8 @@
     },
     "products": {
       "title": "Produse",
+      "not_found": "Produsul nu a fost găsit",
+      "not_found_description": "Produsul pe care îl cauți nu există sau a fost șters.",
       "index": {
         "create": "Creazǎ produs",
         "table": {
@@ -157,15 +159,16 @@
         "name_ro": "Denumire (RO)",
         "name_ru": "Denumire (RU)",
         "slug": "Slug",
-        "description_ro": "Descriere (RO)",
-        "description_ru": "Descriere (RU)",
+        "short_description_ro": "Descriere scurtă (RO)",
+        "short_description_ru": "Descriere scurtă (RU)",
         "state_active": "Activ",
+        "state_not_available": "Indisponibil",
         "state_hidden": "Ascuns",
         "section_general": "Informații generale",
         "section_general_description": "Informația de bază despre produs.",
         "section_options": "Opțiuni",
         "section_options_description": "Definiți opțiunile (ex. culoare, mărime) și valorile lor traduse.",
-        "section_options_edit_description": "Modificarea opțiunilor poate necesita completarea valorilor pentru variantele existente.",
+        "section_options_edit_description": "Opțiunile și valorile lor.",
         "section_variants": "Variante",
         "section_variants_description": "Fiecare produs are nevoie de cel puțin o variantă.",
         "options": {
@@ -173,8 +176,8 @@
           "add_value": "Adaugă valoare",
           "remove_option": "Elimină opțiunea",
           "key": "Cheie",
-          "label_ro": "Etichetă (RO)",
-          "label_ru": "Etichetă (RU)",
+          "name_ro": "Denumire (RO)",
+          "name_ru": "Denumire (RU)",
           "values": "Valori",
           "value_machine": "Valoare",
           "empty_title": "Nicio opțiune",
@@ -186,9 +189,16 @@
           "name_ro": "Denumire (RO)",
           "name_ru": "Denumire (RU)",
           "price": "Preț (MDL)",
-          "stock": "Stoc",
+          "sku": "SKU",
           "attributes": "Atribute"
         }
+      },
+      "options": {
+        "create_title": "Adăugare opțiune",
+        "edit_title": "Editare opțiune",
+        "duplicate_key": "O opțiune cu această cheie există deja",
+        "delete_title": "Ștergere opțiune",
+        "delete_description": "Sigur doriți să ștergeți această opțiune? Valorile ei vor fi eliminate din variante."
       },
       "variants": {
         "add": "Adaugă variantă",
@@ -197,7 +207,7 @@
         "edit_title": "Editare variantă",
         "edit_description": "Modificați detaliile variantei.",
         "manage_description": "Adăugați, modificați sau ștergeți variantele produsului.",
-        "stock_short": "Stoc",
+        "sku": "SKU",
         "add_success": "Varianta a fost adăugată",
         "update_success": "Varianta a fost actualizată",
         "delete_success": "Varianta a fost ștearsă",

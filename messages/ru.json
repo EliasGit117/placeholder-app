@@ -135,6 +135,8 @@
     },
     "products": {
       "title": "Товары",
+      "not_found": "Товар не найден",
+      "not_found_description": "Товар, который вы ищете, не существует или был удалён.",
       "index": {
         "create": "Создать товар",
         "table": {
@@ -156,15 +158,16 @@
         "name_ro": "Название (RO)",
         "name_ru": "Название (RU)",
         "slug": "Slug",
-        "description_ro": "Описание (RO)",
-        "description_ru": "Описание (RU)",
+        "short_description_ro": "Краткое описание (RO)",
+        "short_description_ru": "Краткое описание (RU)",
         "state_active": "Активен",
+        "state_not_available": "Недоступен",
         "state_hidden": "Скрыт",
         "section_general": "Общая информация",
         "section_general_description": "Основаная информация о продукте.",
         "section_options": "Опции",
         "section_options_description": "Задайте опции (напр. цвет, размер) и их переведённые значения.",
-        "section_options_edit_description": "Изменение опций может потребовать заполнения значений для существующих вариантов.",
+        "section_options_edit_description": "Опции и их значения.",
         "section_variants": "Варианты",
         "section_variants_description": "У каждого товара должен быть хотя бы один вариант.",
         "options": {
@@ -172,8 +175,8 @@
           "add_value": "Добавить значение",
           "remove_option": "Удалить опцию",
           "key": "Ключ",
-          "label_ro": "Метка (RO)",
-          "label_ru": "Метка (RU)",
+          "name_ro": "Название (RO)",
+          "name_ru": "Название (RU)",
           "values": "Значения",
           "value_machine": "Значение",
           "empty_title": "Нет опций",
@@ -185,9 +188,16 @@
           "name_ro": "Название (RO)",
           "name_ru": "Название (RU)",
           "price": "Цена (MDL)",
-          "stock": "Остаток",
+          "sku": "Артикул",
           "attributes": "Атрибуты"
         }
+      },
+      "options": {
+        "create_title": "Добавление опции",
+        "edit_title": "Редактирование опции",
+        "duplicate_key": "Опция с таким ключом уже существует",
+        "delete_title": "Удаление опции",
+        "delete_description": "Вы уверены, что хотите удалить эту опцию? Её значения будут удалены из вариантов."
       },
       "variants": {
         "add": "Добавить вариант",
@@ -196,7 +206,7 @@
         "edit_title": "Редактирование варианта",
         "edit_description": "Измените данные варианта.",
         "manage_description": "Добавляйте, изменяйте или удаляйте варианты товара.",
-        "stock_short": "Остаток",
+        "sku": "Артикул",
         "add_success": "Вариант добавлен",
         "update_success": "Вариант обновлён",
         "delete_success": "Вариант удалён",

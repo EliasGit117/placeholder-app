@@ -33,7 +33,6 @@ import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as AdminSettingsSecurityRouteImport } from './routes/admin/settings/security'
 import { Route as AdminSettingsProfileRouteImport } from './routes/admin/settings/profile'
-import { Route as AdminProductsCreateRouteImport } from './routes/admin/products/create'
 import { Route as PublicGallerySlugRouteImport } from './routes/_public/gallery/$slug'
 import { Route as AdminGallerySectionsRouteRouteImport } from './routes/admin/gallery/sections/route'
 import { Route as AdminProductsProductIdIndexRouteImport } from './routes/admin/products/$productId/index'
@@ -160,11 +159,6 @@ const AdminSettingsProfileRoute = AdminSettingsProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AdminSettingsRouteRoute,
 } as any)
-const AdminProductsCreateRoute = AdminProductsCreateRouteImport.update({
-  id: '/create',
-  path: '/create',
-  getParentRoute: () => AdminProductsRouteRoute,
-} as any)
 const PublicGallerySlugRoute = PublicGallerySlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -214,7 +208,6 @@ export interface FileRoutesByFullPath {
   '/auth/': typeof AuthIndexRoute
   '/admin/gallery/sections': typeof AdminGallerySectionsRouteRouteWithChildren
   '/gallery/$slug': typeof PublicGallerySlugRoute
-  '/admin/products/create': typeof AdminProductsCreateRoute
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -239,7 +232,6 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/auth': typeof AuthIndexRoute
   '/gallery/$slug': typeof PublicGallerySlugRoute
-  '/admin/products/create': typeof AdminProductsCreateRoute
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -273,7 +265,6 @@ export interface FileRoutesById {
   '/auth/': typeof AuthIndexRoute
   '/admin/gallery/sections': typeof AdminGallerySectionsRouteRouteWithChildren
   '/_public/gallery/$slug': typeof PublicGallerySlugRoute
-  '/admin/products/create': typeof AdminProductsCreateRoute
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -307,7 +298,6 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/admin/gallery/sections'
     | '/gallery/$slug'
-    | '/admin/products/create'
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
@@ -332,7 +322,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/gallery/$slug'
-    | '/admin/products/create'
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
@@ -365,7 +354,6 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/admin/gallery/sections'
     | '/_public/gallery/$slug'
-    | '/admin/products/create'
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
@@ -565,13 +553,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsProfileRouteImport
       parentRoute: typeof AdminSettingsRouteRoute
     }
-    '/admin/products/create': {
-      id: '/admin/products/create'
-      path: '/create'
-      fullPath: '/admin/products/create'
-      preLoaderRoute: typeof AdminProductsCreateRouteImport
-      parentRoute: typeof AdminProductsRouteRoute
-    }
     '/_public/gallery/$slug': {
       id: '/_public/gallery/$slug'
       path: '/$slug'
@@ -675,13 +656,11 @@ const AdminGalleryRouteRouteWithChildren =
   AdminGalleryRouteRoute._addFileChildren(AdminGalleryRouteRouteChildren)
 
 interface AdminProductsRouteRouteChildren {
-  AdminProductsCreateRoute: typeof AdminProductsCreateRoute
   AdminProductsIndexRoute: typeof AdminProductsIndexRoute
   AdminProductsProductIdIndexRoute: typeof AdminProductsProductIdIndexRoute
 }
 
 const AdminProductsRouteRouteChildren: AdminProductsRouteRouteChildren = {
-  AdminProductsCreateRoute: AdminProductsCreateRoute,
   AdminProductsIndexRoute: AdminProductsIndexRoute,
   AdminProductsProductIdIndexRoute: AdminProductsProductIdIndexRoute,
 }

@@ -18,15 +18,17 @@ import { Button } from '@/components/ui/button';
 import { LoadingButton } from '@/components/ui/loading-button';
 import { NumberInput } from '@/components/ui/number-input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { IconDeviceFloppy, IconFilePlus, IconX } from '@tabler/icons-react';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { IconChevronDown, IconDeviceFloppy, IconFilePlus, IconX } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
+import { ProductState } from '~/prisma/generated/prisma/enums.ts';
+import { getProductStateOption, productStateOptions } from '../product-editor';
 import type { TOptions } from '@/features/products/schemas/option-schema.ts';
 import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
 
@@ -34,8 +36,9 @@ import type { TProductVariant } from '@/features/products/schemas/product-varian
 const variantSheetSchema = z.object({
   nameRo: z.string().trim().min(1).max(128),
   nameRu: z.string().trim().min(1).max(128),
+  state: z.enum(ProductState),
+  sku: z.string().trim().min(1).max(128),
   price: z.number().int().nonnegative(),
-  stock: z.number().int().nonnegative(),
   optionValues: z.record(z.string(), z.string()),
 });
 
@@ -60,7 +63,7 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
 
   const form = useForm<TVariantSheetValues>({
     resolver: zodResolver(variantSheetSchema),
-    defaultValues: { nameRo: '', nameRu: '', price: 0, stock: 0, optionValues: {} },
+    defaultValues: { nameRo: '', nameRu: '', state: ProductState.active, sku: '', price: 0, optionValues: {} },
   });
 
   useEffect(() => {
@@ -69,11 +72,12 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
       ? {
           nameRo: variant.nameRo,
           nameRu: variant.nameRu,
+          state: variant.state,
+          sku: variant.sku,
           price: variant.price,
-          stock: variant.stock,
           optionValues: { ...variant.optionValues },
         }
-      : { nameRo: '', nameRu: '', price: 0, stock: 0, optionValues: {} });
+      : { nameRo: '', nameRu: '', state: ProductState.active, sku: '', price: 0, optionValues: {} });
   }, [open, variant]);
 
   const handleOpenChange = (v: boolean) => {
@@ -125,6 +129,39 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
                   />
                 </div>
 
+                <Controller
+                  name="state"
+                  control={form.control}
+                  render={({ field }) => {
+                    const current = getProductStateOption(field.value);
+                    const CurrentIcon = current.icon;
+                    return (
+                      <Field>
+                        <FieldLabel>{m['common.status']()}</FieldLabel>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="outline" className="w-full justify-start font-normal">
+                              <CurrentIcon className="text-muted-foreground" size={16}/>
+                              <span>{current.label()}</span>
+                              <IconChevronDown className="ml-auto opacity-50" size={16}/>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
+                            <DropdownMenuRadioGroup value={field.value ?? ''} onValueChange={field.onChange}>
+                              {productStateOptions.map(({ value, label, icon: Icon }) => (
+                                <DropdownMenuRadioItem key={value} value={value}>
+                                  <Icon className="text-muted-foreground" size={16}/>
+                                  <span>{label()}</span>
+                                </DropdownMenuRadioItem>
+                              ))}
+                            </DropdownMenuRadioGroup>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </Field>
+                    );
+                  }}
+                />
+
                 <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   <Controller
                     name="price"
@@ -138,12 +175,12 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
                     )}
                   />
                   <Controller
-                    name="stock"
+                    name="sku"
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel>{m['pages.products.form.variants.stock']()}</FieldLabel>
-                        <NumberInput value={field.value} onValueChange={(v) => field.onChange(v ?? 0)} min={0}/>
+                        <FieldLabel>{m['pages.products.form.variants.sku']()}</FieldLabel>
+                        <Input {...field} value={field.value ?? ''} autoComplete="off"/>
                         {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
                       </Field>
                     )}
@@ -156,29 +193,43 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
                     <div className="grid grid-cols-2 gap-2 sm:gap-3">
                       {optionKeys.map((key) => {
                         const option = options[key];
-                        const optionLabel = (isRu ? option.labelRu : option.labelRo) || key;
+                        const optionLabel = (isRu ? option.nameRu : option.nameRo) || key;
                         return (
                           <Controller
                             key={key}
                             name={`optionValues.${key}`}
                             control={form.control}
-                            render={({ field }) => (
-                              <Field>
-                                <FieldLabel>{optionLabel}</FieldLabel>
-                                <Select value={field.value ?? ''} onValueChange={field.onChange}>
-                                  <SelectTrigger className="w-full">
-                                    <SelectValue placeholder={optionLabel}/>
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    {option.values.map((v) => (
-                                      <SelectItem key={v.value} value={v.value}>
-                                        {(isRu ? v.labelRu : v.labelRo) || v.value}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                              </Field>
-                            )}
+                            render={({ field }) => {
+                              const selected = option.values.find((v) => v.value === field.value);
+                              const selectedLabel = selected
+                                ? (isRu ? selected.nameRu : selected.nameRo) || selected.value
+                                : null;
+
+                              return (
+                                <Field>
+                                  <FieldLabel>{optionLabel}</FieldLabel>
+                                  <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                      <Button variant="outline" className="w-full justify-start font-normal">
+                                        <span className={selectedLabel ? undefined : 'text-muted-foreground'}>
+                                          {selectedLabel ?? optionLabel}
+                                        </span>
+                                        <IconChevronDown className="ml-auto opacity-50" size={16}/>
+                                      </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
+                                      <DropdownMenuRadioGroup value={field.value ?? ''} onValueChange={field.onChange}>
+                                        {option.values.map((v) => (
+                                          <DropdownMenuRadioItem key={v.value} value={v.value}>
+                                            {(isRu ? v.nameRu : v.nameRo) || v.value}
+                                          </DropdownMenuRadioItem>
+                                        ))}
+                                      </DropdownMenuRadioGroup>
+                                    </DropdownMenuContent>
+                                  </DropdownMenu>
+                                </Field>
+                              );
+                            }}
                           />
                         );
                       })}

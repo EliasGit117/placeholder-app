@@ -15,6 +15,7 @@ import { getLocale } from '@/paraglide/runtime';
 import { z } from 'zod';
 import { ConfirmDialogProvider } from '@/components/ui/confirm-dialog.tsx';
 import { Toaster } from '@/components/ui/sonner.tsx';
+import { RouteProgressController, RouteProgressProvider } from '@/components/layout/common/route-progress.tsx';
 
 
 interface IRouterContext {
@@ -59,10 +60,13 @@ function RootDocument({ children }: { children: ReactNode }) {
 
     <body className="font-sans antialiased wrap-anywhere min-h-screen flex flex-col">
     <ThemeProvider attribute="class" disableTransitionOnChange>
-      <ConfirmDialogProvider>
-        {children}
-        <Toaster/>
-      </ConfirmDialogProvider>
+      <RouteProgressProvider>
+        <ConfirmDialogProvider>
+          {children}
+          <Toaster/>
+          <RouteProgressController/>
+        </ConfirmDialogProvider>
+      </RouteProgressProvider>
     </ThemeProvider>
 
     <Scripts/>

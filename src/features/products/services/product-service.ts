@@ -18,8 +18,8 @@ export class ProductService {
       id: entity.id,
       nameRo: entity.nameRo,
       nameRu: entity.nameRu,
-      descriptionRo: entity.descriptionRo,
-      descriptionRu: entity.descriptionRu,
+      shortDescriptionRo: entity.shortDescriptionRo,
+      shortDescriptionRu: entity.shortDescriptionRu,
       state: entity.state,
       slug: entity.slug,
       options: entity.options as TOptions,
@@ -34,11 +34,12 @@ export class ProductService {
       productId: entity.productId,
       nameRo: entity.nameRo,
       nameRu: entity.nameRu,
+      state: entity.state,
+      sku: entity.sku,
       slug: entity.slug,
       fullSlug: entity.fullSlug,
       optionValues: entity.optionValues as TOptionValues,
       price: entity.price,
-      stock: entity.stock,
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
     };
@@ -90,43 +91,16 @@ export class ProductService {
   }
 
   static async create(input: TCreateProductInput): Promise<TProductWithVariants> {
-    // Validate and resolve every variant up front so creation is all-or-nothing.
-    const resolved = input.variants.map((variant) => {
-      validateOptionValues(input.options, variant.optionValues);
-      const slug = generateVariantSlug(input.options, variant.optionValues);
-      return {
-        nameRo: variant.nameRo,
-        nameRu: variant.nameRu,
-        slug,
-        fullSlug: buildFullSlug(input.slug, slug),
-        optionValues: variant.optionValues,
-        price: variant.price,
-        stock: variant.stock,
-      };
-    });
-
-    assertNoDuplicateSlugs(resolved.map(v => v.slug));
-
+    // Products are created with basic fields only; options and variants are added afterwards.
     const product = await prisma.product.create({
       data: {
         nameRo: input.nameRo,
         nameRu: input.nameRu,
-        descriptionRo: input.descriptionRo ?? null,
-        descriptionRu: input.descriptionRu ?? null,
+        shortDescriptionRo: input.shortDescriptionRo ?? null,
+        shortDescriptionRu: input.shortDescriptionRu ?? null,
         state: input.state,
         slug: input.slug,
-        options: input.options as Prisma.InputJsonValue,
-        variants: {
-          create: resolved.map(v => ({
-            nameRo: v.nameRo,
-            nameRu: v.nameRu,
-            slug: v.slug,
-            fullSlug: v.fullSlug,
-            optionValues: v.optionValues as Prisma.InputJsonValue,
-            price: v.price,
-            stock: v.stock,
-          })),
-        },
+        options: (input.options ?? {}) as Prisma.InputJsonValue,
       },
       include: { variants: true },
     });
@@ -154,11 +128,12 @@ export class ProductService {
         productId: product.id,
         nameRo: input.nameRo,
         nameRu: input.nameRu,
+        state: input.state,
+        sku: input.sku,
         slug,
         fullSlug,
         optionValues: input.optionValues as Prisma.InputJsonValue,
         price: input.price,
-        stock: input.stock,
       },
     });
 
@@ -198,9 +173,10 @@ export class ProductService {
       data: {
         ...(input.nameRo !== undefined && { nameRo: input.nameRo }),
         ...(input.nameRu !== undefined && { nameRu: input.nameRu }),
+        ...(input.state !== undefined && { state: input.state }),
+        ...(input.sku !== undefined && { sku: input.sku }),
         ...(input.optionValues !== undefined && { optionValues: optionValues as Prisma.InputJsonValue, slug, fullSlug }),
         ...(input.price !== undefined && { price: input.price }),
-        ...(input.stock !== undefined && { stock: input.stock }),
       },
     });
 
@@ -208,13 +184,9 @@ export class ProductService {
   }
 
   static async deleteVariant(id: number): Promise<void> {
-    const existing = await prisma.productVariant.findUnique({ where: { id }, select: { productId: true } });
+    const existing = await prisma.productVariant.findUnique({ where: { id }, select: { id: true } });
     if (!existing)
       throw new ORPCError('NOT_FOUND');
-
-    const count = await prisma.productVariant.count({ where: { productId: existing.productId } });
-    if (count <= 1)
-      throw new ORPCError('CONFLICT', { message: 'Cannot delete the last variant of a product' });
 
     await prisma.productVariant.delete({ where: { id } });
   }
@@ -245,8 +217,8 @@ export class ProductService {
         data: {
           ...(input.nameRo !== undefined && { nameRo: input.nameRo }),
           ...(input.nameRu !== undefined && { nameRu: input.nameRu }),
-          ...(input.descriptionRo !== undefined && { descriptionRo: input.descriptionRo }),
-          ...(input.descriptionRu !== undefined && { descriptionRu: input.descriptionRu }),
+          ...(input.shortDescriptionRo !== undefined && { shortDescriptionRo: input.shortDescriptionRo }),
+          ...(input.shortDescriptionRu !== undefined && { shortDescriptionRu: input.shortDescriptionRu }),
           ...(input.state !== undefined && { state: input.state }),
           ...(input.slug !== undefined && { slug: input.slug }),
           ...(input.options !== undefined && { options: input.options as Prisma.InputJsonValue }),

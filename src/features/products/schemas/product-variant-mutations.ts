@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { optionValuesSchema } from '@/features/products/schemas/option-schema.ts';
 
 
@@ -6,9 +7,10 @@ import { optionValuesSchema } from '@/features/products/schemas/option-schema.ts
 export const variantBaseSchema = z.object({
   nameRo: z.string().trim().min(1).max(128),
   nameRu: z.string().trim().min(1).max(128),
+  state: z.enum(ProductState).default(ProductState.active),
+  sku: z.string().trim().min(1).max(128),
   optionValues: optionValuesSchema,
   price: z.number().int().nonnegative(),
-  stock: z.number().int().nonnegative().default(0),
 });
 
 // Used for the variants nested in a product create payload.

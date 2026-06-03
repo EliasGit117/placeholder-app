@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
-import { createFileRoute, notFound, redirect } from '@tanstack/react-router';
+import { createFileRoute, Link, notFound, redirect } from '@tanstack/react-router';
+import { Button } from '@/components/ui/button';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
+import { IconHome, IconPackage, IconPackageOff } from '@tabler/icons-react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -9,27 +12,26 @@ import { roleHasPermission } from '@/lib/auth';
 import { getLocale } from '@/paraglide/runtime';
 import { capitalizeFirst } from '@/lib/utils';
 import type { IBreadcrumb } from '@/components/layout/admin/nav-breadcrumbs.tsx';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { LoadingButton } from '@/components/ui/loading-button';
 import { IconDeviceFloppy } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
-import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import {
-  OptionSchemaEditor,
   ProductFields,
   detailsDefaultsFromProduct,
-  optionsToRecord,
   productDetailsFormSchema,
-  type TProductDetailsForm,
+  type TProductDetailsForm
 } from './../-components/product-editor';
+import { OptionsManager } from './../-components/options-manager';
 import { VariantsManager } from './../-components/variants-manager';
 
 
 export const Route = createFileRoute('/admin/products/$productId/')({
   component: RouteComponent,
+  notFoundComponent: NotFound,
   params: {
     parse: ({ productId }) => ({ productId: parseInt(productId, 10) }),
-    stringify: ({ productId }) => ({ productId: String(productId) }),
+    stringify: ({ productId }) => ({ productId: String(productId) })
   },
   beforeLoad: async ({ context: { user } }) => {
     const canGet = await roleHasPermission(user?.role, { products: ['get'] });
@@ -40,32 +42,76 @@ export const Route = createFileRoute('/admin/products/$productId/')({
     return { canUpdate };
   },
   loader: async ({ context: { queryClient }, params: { productId } }) => {
-    const product = await queryClient.fetchQuery(
-      orpc.admin.products.get.queryOptions({ input: { id: productId } })
-    );
+    if (!Number.isInteger(productId))
+      throw notFound();
+
+    let product;
+    try {
+      product = await queryClient.fetchQuery(
+        orpc.admin.products.get.queryOptions({ input: { id: productId } })
+      );
+    } catch (error) {
+      if (error && typeof error === 'object' && 'code' in error && (error as { code?: string }).code === 'NOT_FOUND')
+        throw notFound();
+      throw error;
+    }
+
     if (!product)
       throw notFound();
 
     const locale = getLocale();
     const crumbs: IBreadcrumb[] = [{ title: product[`name${capitalizeFirst(locale)}`] }];
-    return { crumbs };
-  },
+    return { crumbs, product };
+  }
 });
+
+
+function NotFound() {
+
+  return (
+    <main className="container mx-auto pb-4 px-4">
+      <Empty className="mt-16">
+        <EmptyHeader>
+          <EmptyMedia variant="icon"><IconPackageOff/></EmptyMedia>
+          <EmptyTitle>{m['pages.products.not_found']()}</EmptyTitle>
+          <EmptyDescription>{m['pages.products.not_found_description']()}</EmptyDescription>
+        </EmptyHeader>
+
+        <EmptyContent className="flex-row justify-center gap-2">
+          <Button asChild variant="outline" size="sm">
+            <Link to="/admin">
+              <IconHome/>
+              <span>{m['common.home']()}</span>
+            </Link>
+          </Button>
+
+          <Button asChild variant="outline" size="sm">
+            <Link to="/admin/products">
+              <IconPackage/>
+              <span>{m['pages.products.title']()}</span>
+            </Link>
+          </Button>
+        </EmptyContent>
+      </Empty>
+    </main>
+  );
+}
 
 
 function RouteComponent() {
   const { productId } = Route.useParams();
   const { canUpdate } = Route.useRouteContext();
+  const { product: initialProduct } = Route.useLoaderData();
   const queryClient = useQueryClient();
 
-  const { data: product } = useQuery(orpc.admin.products.get.queryOptions({ input: { id: productId } }));
+  const { data: product } = useQuery({
+    ...orpc.admin.products.get.queryOptions({ input: { id: productId } }),
+    initialData: initialProduct
+  });
 
   const form = useForm<TProductDetailsForm>({
     resolver: zodResolver(productDetailsFormSchema),
-    defaultValues: {
-      nameRo: '', nameRu: '', descriptionRo: '', descriptionRu: '', slug: '',
-      state: ProductState.active, options: [],
-    },
+    defaultValues: detailsDefaultsFromProduct(initialProduct)
   });
 
   useEffect(() => {
@@ -79,11 +125,10 @@ function RouteComponent() {
         id: productId,
         nameRo: values.nameRo,
         nameRu: values.nameRu,
-        descriptionRo: values.descriptionRo,
-        descriptionRu: values.descriptionRu,
+        shortDescriptionRo: values.shortDescriptionRo,
+        shortDescriptionRu: values.shortDescriptionRu,
         slug: values.slug,
-        state: values.state,
-        options: optionsToRecord(values.options),
+        state: values.state
       }),
     onSuccess: () => {
       toast.success(m['pages.products.form.save_success']());
@@ -92,7 +137,7 @@ function RouteComponent() {
     onError: (error: unknown) => {
       const message = error instanceof Error ? error.message : m['common.error']();
       toast.error(m['common.error'](), { description: message });
-    },
+    }
   });
 
   if (!product)
@@ -100,57 +145,45 @@ function RouteComponent() {
 
   return (
     <div className="space-y-4">
-      <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit((values) => update(values))} className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>{m['pages.products.form.section_general']()}</CardTitle>
-              <CardDescription>{m['pages.products.form.section_general_description']()}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <fieldset disabled={!canUpdate}>
-                <ProductFields/>
-              </fieldset>
-            </CardContent>
-          </Card>
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+        <FormProvider {...form}>
+          <form onSubmit={form.handleSubmit((values) => update(values))} className="space-y-4 xl:col-span-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>{m['pages.products.form.section_general']()}</CardTitle>
+                <CardDescription>{m['pages.products.form.section_general_description']()}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <fieldset disabled={!canUpdate}>
+                  <ProductFields/>
+                </fieldset>
+              </CardContent>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>{m['pages.products.form.section_options']()}</CardTitle>
-              <CardDescription>{m['pages.products.form.section_options_edit_description']()}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <fieldset disabled={!canUpdate}>
-                <OptionSchemaEditor/>
-              </fieldset>
-            </CardContent>
-          </Card>
+              {canUpdate && (
+                <CardFooter className='justify-end'>
+                  <LoadingButton type="submit" loading={isPending}>
+                    <IconDeviceFloppy className="size-4"/>
+                    <span>{m['common.save']()}</span>
+                  </LoadingButton>
+                </CardFooter>
+              )}
+            </Card>
+          </form>
+        </FormProvider>
 
-          {canUpdate && (
-            <div className="flex justify-end">
-              <LoadingButton type="submit" size="sm" loading={isPending}>
-                <IconDeviceFloppy className="size-4"/>
-                <span>{m['common.save']()}</span>
-              </LoadingButton>
-            </div>
-          )}
-        </form>
-      </FormProvider>
+        <OptionsManager
+          productId={productId}
+          options={product.options}
+          canUpdate={canUpdate}
+        />
+      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{m['pages.products.form.section_variants']()}</CardTitle>
-          <CardDescription>{m['pages.products.variants.manage_description']()}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <VariantsManager
-            productId={productId}
-            options={product.options}
-            variants={product.variants}
-            canUpdate={canUpdate}
-          />
-        </CardContent>
-      </Card>
+      <VariantsManager
+        productId={productId}
+        options={product.options}
+        variants={product.variants}
+        canUpdate={canUpdate}
+      />
     </div>
   );
 }
