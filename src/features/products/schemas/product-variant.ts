@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { attributesSchema } from '@/features/products/schemas/option-schema.ts';
+import { optionValuesSchema } from '@/features/products/schemas/option-schema.ts';
 
 
 export const productVariantSchema = z.object({
@@ -9,7 +9,7 @@ export const productVariantSchema = z.object({
   nameRu: z.string(),
   slug: z.string(),
   fullSlug: z.string(),
-  attributes: attributesSchema,
+  optionValues: optionValuesSchema,
   price: z.number().int(),
   stock: z.number().int(),
   createdAt: z.string(),

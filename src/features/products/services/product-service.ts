@@ -4,7 +4,7 @@ import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { prisma } from '@/lib/db';
 import type { TxClient } from '@/lib/db/prisma.ts';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
-import type { TAttributes, TOptionSchema } from '@/features/products/schemas/option-schema.ts';
+import type { TOptions, TOptionValues } from '@/features/products/schemas/option-schema.ts';
 import type { TProduct, TProductWithVariants } from '@/features/products/schemas/product.ts';
 import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
 import type { TCreateProductInput, TUpdateProductInput } from '@/features/products/schemas/product-mutations.ts';
@@ -22,7 +22,7 @@ export class ProductService {
       descriptionRu: entity.descriptionRu,
       state: entity.state,
       slug: entity.slug,
-      optionSchema: entity.optionSchema as TOptionSchema,
+      options: entity.options as TOptions,
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
     };
@@ -36,7 +36,7 @@ export class ProductService {
       nameRu: entity.nameRu,
       slug: entity.slug,
       fullSlug: entity.fullSlug,
-      attributes: entity.attributes as TAttributes,
+      optionValues: entity.optionValues as TOptionValues,
       price: entity.price,
       stock: entity.stock,
       createdAt: entity.createdAt.toISOString(),
@@ -92,14 +92,14 @@ export class ProductService {
   static async create(input: TCreateProductInput): Promise<TProductWithVariants> {
     // Validate and resolve every variant up front so creation is all-or-nothing.
     const resolved = input.variants.map((variant) => {
-      validateAttributesAgainstSchema(input.optionSchema, variant.attributes);
-      const slug = generateVariantSlug(input.optionSchema, variant.attributes);
+      validateOptionValues(input.options, variant.optionValues);
+      const slug = generateVariantSlug(input.options, variant.optionValues);
       return {
         nameRo: variant.nameRo,
         nameRu: variant.nameRu,
         slug,
         fullSlug: buildFullSlug(input.slug, slug),
-        attributes: variant.attributes,
+        optionValues: variant.optionValues,
         price: variant.price,
         stock: variant.stock,
       };
@@ -115,14 +115,14 @@ export class ProductService {
         descriptionRu: input.descriptionRu ?? null,
         state: input.state,
         slug: input.slug,
-        optionSchema: input.optionSchema as Prisma.InputJsonValue,
+        options: input.options as Prisma.InputJsonValue,
         variants: {
           create: resolved.map(v => ({
             nameRo: v.nameRo,
             nameRu: v.nameRu,
             slug: v.slug,
             fullSlug: v.fullSlug,
-            attributes: v.attributes as Prisma.InputJsonValue,
+            optionValues: v.optionValues as Prisma.InputJsonValue,
             price: v.price,
             stock: v.stock,
           })),
@@ -139,15 +139,15 @@ export class ProductService {
     if (!product)
       throw new ORPCError('NOT_FOUND', { message: `Product '${input.productId}' not found` });
 
-    const optionSchema = product.optionSchema as TOptionSchema;
-    validateAttributesAgainstSchema(optionSchema, input.attributes);
+    const options = product.options as TOptions;
+    validateOptionValues(options, input.optionValues);
 
-    const slug = generateVariantSlug(optionSchema, input.attributes);
+    const slug = generateVariantSlug(options, input.optionValues);
     const fullSlug = buildFullSlug(product.slug, slug);
 
     const existing = await prisma.productVariant.findFirst({ where: { productId: product.id, slug } });
     if (existing)
-      throw new ORPCError('CONFLICT', { message: `A variant with attributes resolving to '${slug}' already exists` });
+      throw new ORPCError('CONFLICT', { message: `A variant resolving to '${slug}' already exists` });
 
     const variant = await prisma.productVariant.create({
       data: {
@@ -156,7 +156,7 @@ export class ProductService {
         nameRu: input.nameRu,
         slug,
         fullSlug,
-        attributes: input.attributes as Prisma.InputJsonValue,
+        optionValues: input.optionValues as Prisma.InputJsonValue,
         price: input.price,
         stock: input.stock,
       },
@@ -175,13 +175,13 @@ export class ProductService {
 
     let slug = existing.slug;
     let fullSlug = existing.fullSlug;
-    let attributes = existing.attributes as TAttributes;
+    let optionValues = existing.optionValues as TOptionValues;
 
-    if (input.attributes !== undefined) {
-      const optionSchema = existing.product.optionSchema as TOptionSchema;
-      validateAttributesAgainstSchema(optionSchema, input.attributes);
-      attributes = input.attributes;
-      slug = generateVariantSlug(optionSchema, attributes);
+    if (input.optionValues !== undefined) {
+      const options = existing.product.options as TOptions;
+      validateOptionValues(options, input.optionValues);
+      optionValues = input.optionValues;
+      slug = generateVariantSlug(options, optionValues);
       fullSlug = buildFullSlug(existing.product.slug, slug);
 
       if (slug !== existing.slug) {
@@ -189,7 +189,7 @@ export class ProductService {
           where: { productId: existing.productId, slug, id: { not: existing.id } },
         });
         if (clash)
-          throw new ORPCError('CONFLICT', { message: `A variant with attributes resolving to '${slug}' already exists` });
+          throw new ORPCError('CONFLICT', { message: `A variant resolving to '${slug}' already exists` });
       }
     }
 
@@ -198,7 +198,7 @@ export class ProductService {
       data: {
         ...(input.nameRo !== undefined && { nameRo: input.nameRo }),
         ...(input.nameRu !== undefined && { nameRu: input.nameRu }),
-        ...(input.attributes !== undefined && { attributes: attributes as Prisma.InputJsonValue, slug, fullSlug }),
+        ...(input.optionValues !== undefined && { optionValues: optionValues as Prisma.InputJsonValue, slug, fullSlug }),
         ...(input.price !== undefined && { price: input.price }),
         ...(input.stock !== undefined && { stock: input.stock }),
       },
@@ -225,19 +225,19 @@ export class ProductService {
       throw new ORPCError('NOT_FOUND');
 
     const newSlug = input.slug ?? existing.slug;
-    const newOptionSchema = input.optionSchema ?? (existing.optionSchema as TOptionSchema);
+    const newOptions = input.options ?? (existing.options as TOptions);
     const slugChanged = input.slug !== undefined && input.slug !== existing.slug;
-    const optionSchemaChanged =
-      input.optionSchema !== undefined &&
-      JSON.stringify(input.optionSchema) !== JSON.stringify(existing.optionSchema);
+    const optionsChanged =
+      input.options !== undefined &&
+      JSON.stringify(input.options) !== JSON.stringify(existing.options);
 
-    // Resolve new attributes/slugs for every existing variant before touching the DB.
-    const reconciled = (slugChanged || optionSchemaChanged)
+    // Resolve new optionValues/slugs for every existing variant before touching the DB.
+    const reconciled = (slugChanged || optionsChanged)
       ? existing.variants.map(variant =>
-          reconcileVariant(variant, newOptionSchema, newSlug, input.backfill ?? {}))
+          reconcileVariant(variant, newOptions, newSlug, input.backfill ?? {}))
       : [];
 
-    if (optionSchemaChanged)
+    if (optionsChanged)
       assertNoDuplicateSlugs(reconciled.map(v => v.slug));
 
     return prisma.$transaction(async (tx) => {
@@ -250,18 +250,18 @@ export class ProductService {
           ...(input.descriptionRu !== undefined && { descriptionRu: input.descriptionRu }),
           ...(input.state !== undefined && { state: input.state }),
           ...(input.slug !== undefined && { slug: input.slug }),
-          ...(input.optionSchema !== undefined && { optionSchema: input.optionSchema as Prisma.InputJsonValue }),
+          ...(input.options !== undefined && { options: input.options as Prisma.InputJsonValue }),
         },
       });
 
-      if (slugChanged || optionSchemaChanged) {
+      if (slugChanged || optionsChanged) {
         for (const r of reconciled) {
           await tx.productVariant.update({
             where: { id: r.id },
             data: {
               slug: r.slug,
               fullSlug: r.fullSlug,
-              attributes: r.attributes as Prisma.InputJsonValue,
+              optionValues: r.optionValues as Prisma.InputJsonValue,
             },
           });
         }
@@ -274,7 +274,7 @@ export class ProductService {
 
   /**
    * Recomputes every variant's slug/fullSlug for the product's current slug. Used when only the
-   * product slug changes (variant attributes are untouched). Kept as a standalone, transaction-aware
+   * product slug changes (variant optionValues are untouched). Kept as a standalone, transaction-aware
    * helper to mirror CategoryService.updateDescendantPaths.
    */
   static async rebuildFullSlugsForProduct(tx: TxClient, productId: number): Promise<void> {
@@ -309,10 +309,10 @@ export function slugifyValue(value: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
-export function generateVariantSlug(optionSchema: TOptionSchema, attributes: TAttributes): string {
-  // Deterministic: follow optionSchema key order, slugify each selected value.
-  return Object.keys(optionSchema)
-    .map(key => slugifyValue(attributes[key]))
+export function generateVariantSlug(options: TOptions, optionValues: TOptionValues): string {
+  // Deterministic: follow options key order, slugify each selected value.
+  return Object.keys(options)
+    .map(key => slugifyValue(optionValues[key]))
     .join('-');
 }
 
@@ -320,43 +320,43 @@ export function buildFullSlug(productSlug: string, variantSlug: string): string 
   return `${productSlug}-${variantSlug}`;
 }
 
-export function validateAttributesAgainstSchema(optionSchema: TOptionSchema, attributes: TAttributes): void {
-  for (const [key, option] of Object.entries(optionSchema)) {
-    const value = attributes[key];
+export function validateOptionValues(options: TOptions, optionValues: TOptionValues): void {
+  for (const [key, option] of Object.entries(options)) {
+    const value = optionValues[key];
     if (value === undefined)
-      throw new ORPCError('BAD_REQUEST', { message: `Missing attribute '${key}'` });
+      throw new ORPCError('BAD_REQUEST', { message: `Missing value for option '${key}'` });
     if (!option.values.some(v => v.value === value))
       throw new ORPCError('BAD_REQUEST', { message: `Value '${value}' is not allowed for option '${key}'` });
   }
 
-  for (const key of Object.keys(attributes)) {
-    if (!(key in optionSchema))
-      throw new ORPCError('BAD_REQUEST', { message: `Unknown attribute '${key}'` });
+  for (const key of Object.keys(optionValues)) {
+    if (!(key in options))
+      throw new ORPCError('BAD_REQUEST', { message: `Unknown option '${key}'` });
   }
 }
 
 interface IReconciledVariant {
   id: number;
-  attributes: TAttributes;
+  optionValues: TOptionValues;
   slug: string;
   fullSlug: string;
 }
 
 /**
- * Brings an existing variant in line with a (possibly changed) optionSchema and product slug:
+ * Brings an existing variant in line with a (possibly changed) `options` definition and product slug:
  * keeps still-valid values, applies `backfill` for newly added keys, drops removed keys, then
  * recomputes slug/fullSlug. Throws CONFLICT/BAD_REQUEST when the variant can't be reconciled.
  */
 function reconcileVariant(
   variant: ProductVariant,
-  optionSchema: TOptionSchema,
+  options: TOptions,
   productSlug: string,
   backfill: Record<string, string>,
 ): IReconciledVariant {
-  const current = variant.attributes as TAttributes;
-  const next: TAttributes = {};
+  const current = variant.optionValues as TOptionValues;
+  const next: TOptionValues = {};
 
-  for (const [key, option] of Object.entries(optionSchema)) {
+  for (const [key, option] of Object.entries(options)) {
     let value = current[key];
     if (value === undefined)
       value = backfill[key]; // newly added key — needs a backfill value
@@ -374,8 +374,8 @@ function reconcileVariant(
     next[key] = value;
   }
 
-  const slug = generateVariantSlug(optionSchema, next);
-  return { id: variant.id, attributes: next, slug, fullSlug: buildFullSlug(productSlug, slug) };
+  const slug = generateVariantSlug(options, next);
+  return { id: variant.id, optionValues: next, slug, fullSlug: buildFullSlug(productSlug, slug) };
 }
 
 function assertNoDuplicateSlugs(slugs: string[]): void {

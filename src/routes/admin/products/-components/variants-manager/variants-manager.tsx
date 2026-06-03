@@ -15,18 +15,18 @@ import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/
 import { IconDots, IconPackage, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { VariantDialog, type TVariantDialogValues } from './variant-dialog.tsx';
-import type { TOptionSchema } from '@/features/products/schemas/option-schema.ts';
+import type { TOptions } from '@/features/products/schemas/option-schema.ts';
 import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
 
 
 interface IProps {
   productId: number;
-  optionSchema: TOptionSchema;
+  options: TOptions;
   variants: TProductVariant[];
   canUpdate?: boolean;
 }
 
-export const VariantsManager: FC<IProps> = ({ productId, optionSchema, variants, canUpdate }) => {
+export const VariantsManager: FC<IProps> = ({ productId, options, variants, canUpdate }) => {
   const queryClient = useQueryClient();
   const confirm = useConfirm();
 
@@ -99,9 +99,9 @@ export const VariantsManager: FC<IProps> = ({ productId, optionSchema, variants,
       addVariant({ productId, ...values });
   };
 
-  const attributeBadges = (variant: TProductVariant) =>
-    Object.entries(variant.attributes).map(([key, value]) => {
-      const option = optionSchema[key];
+  const optionValueBadges = (variant: TProductVariant) =>
+    Object.entries(variant.optionValues).map(([key, value]) => {
+      const option = options[key];
       const label = option?.labelRo ?? key;
       const valueLabel = option?.values.find(v => v.value === value)?.labelRo ?? value;
       return (
@@ -136,7 +136,7 @@ export const VariantsManager: FC<IProps> = ({ productId, optionSchema, variants,
             <li key={variant.id} className="flex items-center gap-3 p-3">
               <div className="min-w-0 flex-1 space-y-1">
                 <div className="text-sm font-medium truncate">{variant.nameRo}</div>
-                <div className="flex flex-wrap items-center gap-1">{attributeBadges(variant)}</div>
+                <div className="flex flex-wrap items-center gap-1">{optionValueBadges(variant)}</div>
               </div>
 
               <div className="text-right text-xs text-muted-foreground shrink-0">
@@ -174,7 +174,7 @@ export const VariantsManager: FC<IProps> = ({ productId, optionSchema, variants,
       <VariantDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
-        optionSchema={optionSchema}
+        options={options}
         variant={editing}
         loading={isAdding || isUpdating}
         onSubmit={onSubmit}

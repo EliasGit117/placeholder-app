@@ -89,7 +89,7 @@ export const VariantsFieldArray: FC = () => {
                 {usableOptions.map((option) => (
                   <Controller
                     key={option.key}
-                    name={`variants.${index}.attributes.${option.key}`}
+                    name={`variants.${index}.optionValues.${option.key}`}
                     control={control}
                     render={({ field }) => (
                       <Field>

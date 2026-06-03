@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
-import { optionSchemaSchema } from '@/features/products/schemas/option-schema.ts';
+import { optionsSchema } from '@/features/products/schemas/option-schema.ts';
 import { productVariantSchema } from '@/features/products/schemas/product-variant.ts';
 
 
@@ -12,7 +12,7 @@ export const productSchema = z.object({
   descriptionRu: z.string().nullable(),
   state: z.enum(ProductState),
   slug: z.string(),
-  optionSchema: optionSchemaSchema,
+  options: optionsSchema,
   createdAt: z.string(),
   updatedAt: z.string(),
 });

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
-import type { TOptionSchema } from '@/features/products/schemas/option-schema.ts';
+import type { TOptions } from '@/features/products/schemas/option-schema.ts';
 import type { TProductWithVariants } from '@/features/products/schemas/product.ts';
 
 const slugSchema = z.string().trim().min(1).max(128)
@@ -29,7 +29,7 @@ export const variantFormSchema = z.object({
   nameRu: z.string().trim().min(1).max(128),
   price: z.number().int().nonnegative(),
   stock: z.number().int().nonnegative(),
-  attributes: z.record(z.string(), z.string()),
+  optionValues: z.record(z.string(), z.string()),
 });
 
 export const productFormSchema = z.object({
@@ -48,7 +48,7 @@ export type TProductOptionForm = z.infer<typeof productOptionFormSchema>;
 export type TVariantForm = z.infer<typeof variantFormSchema>;
 export type TProductForm = z.infer<typeof productFormSchema>;
 
-// Product fields without the variant/option arrays — used by the edit form, which manages
+// Product fields without the variant array — used by the edit form, which manages
 // variants through the dedicated endpoints rather than as a nested array.
 export const productDetailsFormSchema = productFormSchema.pick({
   nameRo: true,
@@ -62,16 +62,16 @@ export const productDetailsFormSchema = productFormSchema.pick({
 
 export type TProductDetailsForm = z.infer<typeof productDetailsFormSchema>;
 
-/** Builds the API `optionSchema` JSON shape from the flat form option list (key order preserved). */
-export function optionsToSchema(options: TProductOptionForm[]): TOptionSchema {
+/** Builds the API `options` record from the flat form option list (key order preserved). */
+export function optionsToRecord(options: TProductOptionForm[]): TOptions {
   return Object.fromEntries(
     options.map(o => [o.key, { labelRo: o.labelRo, labelRu: o.labelRu, values: o.values }]),
   );
 }
 
-/** Reverses optionsToSchema for editing an existing product. */
-export function schemaToOptions(schema: TOptionSchema): TProductOptionForm[] {
-  return Object.entries(schema).map(([key, option]) => ({
+/** Reverses optionsToRecord for editing an existing product. */
+export function recordToOptions(options: TOptions): TProductOptionForm[] {
+  return Object.entries(options).map(([key, option]) => ({
     key,
     labelRo: option.labelRo,
     labelRu: option.labelRu,
@@ -79,17 +79,17 @@ export function schemaToOptions(schema: TOptionSchema): TProductOptionForm[] {
   }));
 }
 
-/** Keeps only attribute keys that still exist in the option list (drops stale picks). */
-export function pruneAttributes(
-  attributes: Record<string, string>,
+/** Keeps only optionValues keys that still exist in the option list (drops stale picks). */
+export function pruneOptionValues(
+  optionValues: Record<string, string>,
   options: TProductOptionForm[],
 ): Record<string, string> {
   const keys = new Set(options.map(o => o.key));
-  return Object.fromEntries(Object.entries(attributes).filter(([k]) => keys.has(k)));
+  return Object.fromEntries(Object.entries(optionValues).filter(([k]) => keys.has(k)));
 }
 
 export function emptyVariant(): TVariantForm {
-  return { nameRo: '', nameRu: '', price: 0, stock: 0, attributes: {} };
+  return { nameRo: '', nameRu: '', price: 0, stock: 0, optionValues: {} };
 }
 
 export function emptyOption(): TProductOptionForm {
@@ -104,6 +104,6 @@ export function detailsDefaultsFromProduct(product: TProductWithVariants): TProd
     descriptionRu: product.descriptionRu ?? '',
     slug: product.slug,
     state: product.state,
-    options: schemaToOptions(product.optionSchema),
+    options: recordToOptions(product.options),
   };
 }

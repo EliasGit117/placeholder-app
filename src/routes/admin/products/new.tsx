@@ -16,9 +16,9 @@ import {
   ProductFields,
   VariantsFieldArray,
   emptyVariant,
-  optionsToSchema,
+  optionsToRecord,
   productFormSchema,
-  pruneAttributes,
+  pruneOptionValues,
   type TProductForm,
 } from './-components/product-editor';
 
@@ -60,13 +60,13 @@ function RouteComponent() {
         descriptionRu: values.descriptionRu,
         slug: values.slug,
         state: values.state,
-        optionSchema: optionsToSchema(values.options),
+        options: optionsToRecord(values.options),
         variants: values.variants.map(v => ({
           nameRo: v.nameRo,
           nameRu: v.nameRu,
           price: v.price,
           stock: v.stock,
-          attributes: pruneAttributes(v.attributes, values.options),
+          optionValues: pruneOptionValues(v.optionValues, values.options),
         })),
       }),
     onSuccess: (product) => {

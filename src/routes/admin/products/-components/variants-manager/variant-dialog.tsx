@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/select';
 import { IconDeviceFloppy } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
-import type { TOptionSchema } from '@/features/products/schemas/option-schema.ts';
+import type { TOptions } from '@/features/products/schemas/option-schema.ts';
 import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
 
 
@@ -33,7 +33,7 @@ const variantDialogSchema = z.object({
   nameRu: z.string().trim().min(1).max(128),
   price: z.number().int().nonnegative(),
   stock: z.number().int().nonnegative(),
-  attributes: z.record(z.string(), z.string()),
+  optionValues: z.record(z.string(), z.string()),
 });
 
 export type TVariantDialogValues = z.infer<typeof variantDialogSchema>;
@@ -41,20 +41,20 @@ export type TVariantDialogValues = z.infer<typeof variantDialogSchema>;
 interface IProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  optionSchema: TOptionSchema;
+  options: TOptions;
   /** When set, the dialog edits this variant; otherwise it creates a new one. */
   variant?: TProductVariant | null;
   loading?: boolean;
   onSubmit: (values: TVariantDialogValues) => void;
 }
 
-export const VariantDialog: FC<IProps> = ({ open, onOpenChange, optionSchema, variant, loading, onSubmit }) => {
+export const VariantDialog: FC<IProps> = ({ open, onOpenChange, options, variant, loading, onSubmit }) => {
   const isEdit = !!variant;
-  const optionKeys = Object.keys(optionSchema);
+  const optionKeys = Object.keys(options);
 
   const form = useForm<TVariantDialogValues>({
     resolver: zodResolver(variantDialogSchema),
-    defaultValues: { nameRo: '', nameRu: '', price: 0, stock: 0, attributes: {} },
+    defaultValues: { nameRo: '', nameRu: '', price: 0, stock: 0, optionValues: {} },
   });
 
   useEffect(() => {
@@ -65,9 +65,9 @@ export const VariantDialog: FC<IProps> = ({ open, onOpenChange, optionSchema, va
           nameRu: variant.nameRu,
           price: variant.price,
           stock: variant.stock,
-          attributes: { ...variant.attributes },
+          optionValues: { ...variant.optionValues },
         }
-      : { nameRo: '', nameRu: '', price: 0, stock: 0, attributes: {} });
+      : { nameRo: '', nameRu: '', price: 0, stock: 0, optionValues: {} });
   }, [open, variant]);
 
   return (
@@ -142,11 +142,11 @@ export const VariantDialog: FC<IProps> = ({ open, onOpenChange, optionSchema, va
               <FieldLabel>{m['pages.products.form.variants.attributes']()}</FieldLabel>
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 {optionKeys.map((key) => {
-                  const option = optionSchema[key];
+                  const option = options[key];
                   return (
                     <Controller
                       key={key}
-                      name={`attributes.${key}`}
+                      name={`optionValues.${key}`}
                       control={form.control}
                       render={({ field }) => (
                         <Field>

@@ -3,11 +3,11 @@ import {
   buildFullSlug,
   generateVariantSlug,
   slugifyValue,
-  validateAttributesAgainstSchema,
+  validateOptionValues,
 } from './product-service.ts';
-import type { TOptionSchema } from '@/features/products/schemas/option-schema.ts';
+import type { TOptions } from '@/features/products/schemas/option-schema.ts';
 
-const schema: TOptionSchema = {
+const options: TOptions = {
   color: {
     labelRo: 'Culoare',
     labelRu: 'Цвет',
@@ -36,14 +36,14 @@ describe('slugifyValue', () => {
 });
 
 describe('generateVariantSlug', () => {
-  it('follows optionSchema key order regardless of attribute order', () => {
-    expect(generateVariantSlug(schema, { size: 'M', color: 'red' })).toBe('red-m');
-    expect(generateVariantSlug(schema, { color: 'red', size: 'M' })).toBe('red-m');
+  it('follows options key order regardless of optionValues order', () => {
+    expect(generateVariantSlug(options, { size: 'M', color: 'red' })).toBe('red-m');
+    expect(generateVariantSlug(options, { color: 'red', size: 'M' })).toBe('red-m');
   });
 
   it('is deterministic for the same input', () => {
-    const a = generateVariantSlug(schema, { color: 'blue', size: 'L' });
-    const b = generateVariantSlug(schema, { color: 'blue', size: 'L' });
+    const a = generateVariantSlug(options, { color: 'blue', size: 'L' });
+    const b = generateVariantSlug(options, { color: 'blue', size: 'L' });
     expect(a).toBe(b);
     expect(a).toBe('blue-l');
   });
@@ -55,21 +55,21 @@ describe('buildFullSlug', () => {
   });
 });
 
-describe('validateAttributesAgainstSchema', () => {
-  it('accepts a fully-specified valid attribute set', () => {
-    expect(() => validateAttributesAgainstSchema(schema, { color: 'red', size: 'M' })).not.toThrow();
+describe('validateOptionValues', () => {
+  it('accepts a fully-specified valid selection', () => {
+    expect(() => validateOptionValues(options, { color: 'red', size: 'M' })).not.toThrow();
   });
 
-  it('rejects a missing key', () => {
-    expect(() => validateAttributesAgainstSchema(schema, { color: 'red' })).toThrow(/Missing attribute 'size'/);
+  it('rejects a missing option', () => {
+    expect(() => validateOptionValues(options, { color: 'red' })).toThrow(/Missing value for option 'size'/);
   });
 
   it('rejects a value outside the allowed list', () => {
-    expect(() => validateAttributesAgainstSchema(schema, { color: 'green', size: 'M' })).toThrow(/not allowed/);
+    expect(() => validateOptionValues(options, { color: 'green', size: 'M' })).toThrow(/not allowed/);
   });
 
-  it('rejects an unknown key', () => {
-    expect(() => validateAttributesAgainstSchema(schema, { color: 'red', size: 'M', material: 'cotton' }))
-      .toThrow(/Unknown attribute 'material'/);
+  it('rejects an unknown option', () => {
+    expect(() => validateOptionValues(options, { color: 'red', size: 'M', material: 'cotton' }))
+      .toThrow(/Unknown option 'material'/);
   });
 });

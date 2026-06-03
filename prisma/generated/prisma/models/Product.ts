@@ -66,7 +66,7 @@ export type ProductCountAggregateOutputType = {
   descriptionRu: number
   state: number
   slug: number
-  optionSchema: number
+  options: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -113,7 +113,7 @@ export type ProductCountAggregateInputType = {
   descriptionRu?: true
   state?: true
   slug?: true
-  optionSchema?: true
+  options?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -213,7 +213,7 @@ export type ProductGroupByOutputType = {
   descriptionRu: string | null
   state: $Enums.ProductState
   slug: string
-  optionSchema: runtime.JsonValue
+  options: runtime.JsonValue
   createdAt: Date
   updatedAt: Date
   _count: ProductCountAggregateOutputType | null
@@ -249,7 +249,7 @@ export type ProductWhereInput = {
   descriptionRu?: Prisma.StringNullableFilter<"Product"> | string | null
   state?: Prisma.EnumProductStateFilter<"Product"> | $Enums.ProductState
   slug?: Prisma.StringFilter<"Product"> | string
-  optionSchema?: Prisma.JsonFilter<"Product">
+  options?: Prisma.JsonFilter<"Product">
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   variants?: Prisma.ProductVariantListRelationFilter
@@ -263,7 +263,7 @@ export type ProductOrderByWithRelationInput = {
   descriptionRu?: Prisma.SortOrderInput | Prisma.SortOrder
   state?: Prisma.SortOrder
   slug?: Prisma.SortOrder
-  optionSchema?: Prisma.SortOrder
+  options?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   variants?: Prisma.ProductVariantOrderByRelationAggregateInput
@@ -280,7 +280,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   descriptionRo?: Prisma.StringNullableFilter<"Product"> | string | null
   descriptionRu?: Prisma.StringNullableFilter<"Product"> | string | null
   state?: Prisma.EnumProductStateFilter<"Product"> | $Enums.ProductState
-  optionSchema?: Prisma.JsonFilter<"Product">
+  options?: Prisma.JsonFilter<"Product">
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   variants?: Prisma.ProductVariantListRelationFilter
@@ -294,7 +294,7 @@ export type ProductOrderByWithAggregationInput = {
   descriptionRu?: Prisma.SortOrderInput | Prisma.SortOrder
   state?: Prisma.SortOrder
   slug?: Prisma.SortOrder
-  optionSchema?: Prisma.SortOrder
+  options?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProductCountOrderByAggregateInput
@@ -315,7 +315,7 @@ export type ProductScalarWhereWithAggregatesInput = {
   descriptionRu?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
   state?: Prisma.EnumProductStateWithAggregatesFilter<"Product"> | $Enums.ProductState
   slug?: Prisma.StringWithAggregatesFilter<"Product"> | string
-  optionSchema?: Prisma.JsonWithAggregatesFilter<"Product">
+  options?: Prisma.JsonWithAggregatesFilter<"Product">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Product"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Product"> | Date | string
 }
@@ -327,7 +327,7 @@ export type ProductCreateInput = {
   descriptionRu?: string | null
   state?: $Enums.ProductState
   slug: string
-  optionSchema?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantCreateNestedManyWithoutProductInput
@@ -341,7 +341,7 @@ export type ProductUncheckedCreateInput = {
   descriptionRu?: string | null
   state?: $Enums.ProductState
   slug: string
-  optionSchema?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantUncheckedCreateNestedManyWithoutProductInput
@@ -354,7 +354,7 @@ export type ProductUpdateInput = {
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  optionSchema?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUpdateManyWithoutProductNestedInput
@@ -368,7 +368,7 @@ export type ProductUncheckedUpdateInput = {
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  optionSchema?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUncheckedUpdateManyWithoutProductNestedInput
@@ -382,7 +382,7 @@ export type ProductCreateManyInput = {
   descriptionRu?: string | null
   state?: $Enums.ProductState
   slug: string
-  optionSchema?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -394,7 +394,7 @@ export type ProductUpdateManyMutationInput = {
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  optionSchema?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -407,7 +407,7 @@ export type ProductUncheckedUpdateManyInput = {
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  optionSchema?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -420,7 +420,7 @@ export type ProductCountOrderByAggregateInput = {
   descriptionRu?: Prisma.SortOrder
   state?: Prisma.SortOrder
   slug?: Prisma.SortOrder
-  optionSchema?: Prisma.SortOrder
+  options?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -487,7 +487,7 @@ export type ProductCreateWithoutVariantsInput = {
   descriptionRu?: string | null
   state?: $Enums.ProductState
   slug: string
-  optionSchema?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -500,7 +500,7 @@ export type ProductUncheckedCreateWithoutVariantsInput = {
   descriptionRu?: string | null
   state?: $Enums.ProductState
   slug: string
-  optionSchema?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -528,7 +528,7 @@ export type ProductUpdateWithoutVariantsInput = {
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  optionSchema?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -541,7 +541,7 @@ export type ProductUncheckedUpdateWithoutVariantsInput = {
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumProductStateFieldUpdateOperationsInput | $Enums.ProductState
   slug?: Prisma.StringFieldUpdateOperationsInput | string
-  optionSchema?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  options?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -585,7 +585,7 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   descriptionRu?: boolean
   state?: boolean
   slug?: boolean
-  optionSchema?: boolean
+  options?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   variants?: boolean | Prisma.Product$variantsArgs<ExtArgs>
@@ -600,7 +600,7 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   descriptionRu?: boolean
   state?: boolean
   slug?: boolean
-  optionSchema?: boolean
+  options?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["product"]>
@@ -613,7 +613,7 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   descriptionRu?: boolean
   state?: boolean
   slug?: boolean
-  optionSchema?: boolean
+  options?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["product"]>
@@ -626,12 +626,12 @@ export type ProductSelectScalar = {
   descriptionRu?: boolean
   state?: boolean
   slug?: boolean
-  optionSchema?: boolean
+  options?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nameRo" | "nameRu" | "descriptionRo" | "descriptionRu" | "state" | "slug" | "optionSchema" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nameRo" | "nameRu" | "descriptionRo" | "descriptionRu" | "state" | "slug" | "options" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   variants?: boolean | Prisma.Product$variantsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -652,7 +652,7 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     descriptionRu: string | null
     state: $Enums.ProductState
     slug: string
-    optionSchema: runtime.JsonValue
+    options: runtime.JsonValue
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["product"]>
@@ -1086,7 +1086,7 @@ export interface ProductFieldRefs {
   readonly descriptionRu: Prisma.FieldRef<"Product", 'String'>
   readonly state: Prisma.FieldRef<"Product", 'ProductState'>
   readonly slug: Prisma.FieldRef<"Product", 'String'>
-  readonly optionSchema: Prisma.FieldRef<"Product", 'Json'>
+  readonly options: Prisma.FieldRef<"Product", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Product", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Product", 'DateTime'>
 }

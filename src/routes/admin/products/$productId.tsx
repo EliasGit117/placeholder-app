@@ -19,7 +19,7 @@ import {
   OptionSchemaEditor,
   ProductFields,
   detailsDefaultsFromProduct,
-  optionsToSchema,
+  optionsToRecord,
   productDetailsFormSchema,
   type TProductDetailsForm,
 } from './-components/product-editor';
@@ -84,7 +84,7 @@ function RouteComponent() {
         descriptionRu: values.descriptionRu,
         slug: values.slug,
         state: values.state,
-        optionSchema: optionsToSchema(values.options),
+        options: optionsToRecord(values.options),
       }),
     onSuccess: () => {
       toast.success(m['pages.products.form.save_success']());
@@ -155,7 +155,7 @@ function RouteComponent() {
         <CardContent>
           <VariantsManager
             productId={productId}
-            optionSchema={product.optionSchema}
+            options={product.options}
             variants={product.variants}
             canUpdate={canUpdate}
           />

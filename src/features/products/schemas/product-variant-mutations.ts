@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import { attributesSchema } from '@/features/products/schemas/option-schema.ts';
+import { optionValuesSchema } from '@/features/products/schemas/option-schema.ts';
 
 
 export const createVariantSchema = z.object({
   nameRo: z.string().trim().min(1).max(128),
   nameRu: z.string().trim().min(1).max(128),
-  attributes: attributesSchema,
+  optionValues: optionValuesSchema,
   price: z.number().int().nonnegative(),
   stock: z.number().int().nonnegative().default(0),
 });
@@ -18,7 +18,7 @@ export const updateVariantSchema = z.object({
   id: z.number(),
   nameRo: z.string().trim().min(1).max(128).optional(),
   nameRu: z.string().trim().min(1).max(128).optional(),
-  attributes: attributesSchema.optional(),
+  optionValues: optionValuesSchema.optional(),
   price: z.number().int().nonnegative().optional(),
   stock: z.number().int().nonnegative().optional(),
 });

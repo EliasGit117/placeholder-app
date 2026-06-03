@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
-import { optionSchemaSchema } from '@/features/products/schemas/option-schema.ts';
+import { optionsSchema } from '@/features/products/schemas/option-schema.ts';
 import { createVariantSchema } from '@/features/products/schemas/product-variant-mutations.ts';
 
 
@@ -13,7 +13,7 @@ export const createProductSchema = z.object({
   descriptionRu: z.string().trim().max(512).optional(),
   state: z.enum(ProductState).default(ProductState.active),
   slug: slugSchema,
-  optionSchema: optionSchemaSchema,
+  options: optionsSchema,
   variants: z.array(createVariantSchema).min(1),
 });
 
@@ -24,9 +24,9 @@ export const updateProductSchema = z.object({
   descriptionRu: z.string().trim().max(512).optional(),
   state: z.enum(ProductState).optional(),
   slug: slugSchema.optional(),
-  optionSchema: optionSchemaSchema.optional(),
+  options: optionsSchema.optional(),
   // Values to backfill into existing variants for option keys newly added by this update.
-  // Required (per key) whenever optionSchema gains a key while variants exist.
+  // Required (per key) whenever `options` gains a key while variants exist.
   backfill: z.record(z.string().trim().min(1), z.string().trim().min(1)).optional(),
 });
 

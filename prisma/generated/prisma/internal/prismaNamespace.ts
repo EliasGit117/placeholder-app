@@ -1288,7 +1288,7 @@ export const ProductScalarFieldEnum = {
   descriptionRu: 'descriptionRu',
   state: 'state',
   slug: 'slug',
-  optionSchema: 'optionSchema',
+  options: 'options',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1303,7 +1303,7 @@ export const ProductVariantScalarFieldEnum = {
   nameRu: 'nameRu',
   slug: 'slug',
   fullSlug: 'fullSlug',
-  attributes: 'attributes',
+  optionValues: 'optionValues',
   price: 'price',
   stock: 'stock',
   createdAt: 'createdAt',
