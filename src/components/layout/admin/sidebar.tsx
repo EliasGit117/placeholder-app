@@ -7,6 +7,7 @@ import {
   IconLanguage,
   IconLibraryPhoto,
   IconMoon,
+  IconPackage,
   IconPalette,
   IconSettings,
   IconShieldLock, IconShoppingCart,
@@ -78,6 +79,11 @@ const navMain: ISidebarMenuItem[] = [
         title: () => m['pages.categories.title'](),
         icon: IconCategory,
         linkOptions: { to: '/admin/categories', activeOptions: { includeSearch: false } }
+      },
+      {
+        title: () => m['pages.products.title'](),
+        icon: IconPackage,
+        linkOptions: { to: '/admin/products', activeOptions: { includeSearch: false } }
       },
       {
         title: () => m['pages.gallery.title'](),

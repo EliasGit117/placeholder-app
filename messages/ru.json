@@ -133,6 +133,79 @@
     "dashboard": {
       "title": "Дэшборд"
     },
+    "products": {
+      "title": "Товары",
+      "index": {
+        "create": "Добавить товар",
+        "table": {
+          "name_ro": "Название (RO)",
+          "name_ru": "Название (RU)",
+          "slug": "Slug",
+          "state": "Состояние",
+          "actions": "Действия",
+          "delete_title": "Удаление товара",
+          "delete_description": "Вы уверены, что хотите удалить этот товар? Все варианты будут удалены.",
+          "delete_success": "Товар удалён",
+          "delete_error": "Ошибка при удалении"
+        }
+      },
+      "form": {
+        "create_title": "Новый товар",
+        "create_success": "Товар создан",
+        "save_success": "Товар сохранён",
+        "name_ro": "Название (RO)",
+        "name_ru": "Название (RU)",
+        "slug": "Slug",
+        "description_ro": "Описание (RO)",
+        "description_ru": "Описание (RU)",
+        "state_active": "Активен",
+        "state_hidden": "Скрыт",
+        "section_general": "Общая информация",
+        "section_general_description": "Название, slug и состояние товара.",
+        "section_options": "Опции",
+        "section_options_description": "Задайте опции (напр. цвет, размер) и их переведённые значения.",
+        "section_options_edit_description": "Изменение опций может потребовать заполнения значений для существующих вариантов.",
+        "section_variants": "Варианты",
+        "section_variants_description": "У каждого товара должен быть хотя бы один вариант.",
+        "options": {
+          "add": "Добавить опцию",
+          "add_value": "Добавить значение",
+          "remove_option": "Удалить опцию",
+          "key": "Ключ",
+          "label_ro": "Метка (RO)",
+          "label_ru": "Метка (RU)",
+          "values": "Значения",
+          "value_machine": "Значение",
+          "empty_title": "Нет опций",
+          "empty_description": "У товара нет опций. Добавьте одну для вариантов с атрибутами."
+        },
+        "variants": {
+          "add": "Добавить вариант",
+          "remove": "Удалить вариант",
+          "name_ro": "Название (RO)",
+          "name_ru": "Название (RU)",
+          "price": "Цена (MDL)",
+          "stock": "Остаток",
+          "attributes": "Атрибуты"
+        }
+      },
+      "variants": {
+        "add": "Добавить вариант",
+        "add_title": "Добавление варианта",
+        "add_description": "Заполните данные нового варианта.",
+        "edit_title": "Редактирование варианта",
+        "edit_description": "Измените данные варианта.",
+        "manage_description": "Добавляйте, изменяйте или удаляйте варианты товара.",
+        "stock_short": "Остаток",
+        "add_success": "Вариант добавлен",
+        "update_success": "Вариант обновлён",
+        "delete_success": "Вариант удалён",
+        "delete_title": "Удаление варианта",
+        "delete_description": "Вы уверены, что хотите удалить этот вариант?",
+        "empty_title": "Нет вариантов",
+        "empty_description": "У этого товара пока нет вариантов."
+      }
+    },
     "gallery": {
       "title": "Галерея",
       "not_found": "Раздел не найден.",

@@ -17,6 +17,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as AdminSettingsRouteRouteImport } from './routes/admin/settings/route'
+import { Route as AdminProductsRouteRouteImport } from './routes/admin/products/route'
 import { Route as AdminGalleryRouteRouteImport } from './routes/admin/gallery/route'
 import { Route as PublicGalleryRouteRouteImport } from './routes/_public/gallery/route'
 import { Route as AuthSignUpIndexRouteImport } from './routes/auth/sign-up/index'
@@ -24,6 +25,7 @@ import { Route as AuthSignInIndexRouteImport } from './routes/auth/sign-in/index
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminSettingsIndexRouteImport } from './routes/admin/settings/index'
 import { Route as AdminSessionsIndexRouteImport } from './routes/admin/sessions/index'
+import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
 import { Route as AdminGalleryIndexRouteImport } from './routes/admin/gallery/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as PublicGalleryIndexRouteImport } from './routes/_public/gallery/index'
@@ -31,6 +33,8 @@ import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as AdminSettingsSecurityRouteImport } from './routes/admin/settings/security'
 import { Route as AdminSettingsProfileRouteImport } from './routes/admin/settings/profile'
+import { Route as AdminProductsNewRouteImport } from './routes/admin/products/new'
+import { Route as AdminProductsProductIdRouteImport } from './routes/admin/products/$productId'
 import { Route as PublicGallerySlugRouteImport } from './routes/_public/gallery/$slug'
 import { Route as AdminGallerySectionsRouteRouteImport } from './routes/admin/gallery/sections/route'
 import { Route as AdminGallerySectionsIndexRouteImport } from './routes/admin/gallery/sections/index'
@@ -76,6 +80,11 @@ const AdminSettingsRouteRoute = AdminSettingsRouteRouteImport.update({
   path: '/settings',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminProductsRouteRoute = AdminProductsRouteRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminGalleryRouteRoute = AdminGalleryRouteRouteImport.update({
   id: '/gallery',
   path: '/gallery',
@@ -111,6 +120,11 @@ const AdminSessionsIndexRoute = AdminSessionsIndexRouteImport.update({
   path: '/sessions/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminProductsIndexRoute = AdminProductsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminProductsRouteRoute,
+} as any)
 const AdminGalleryIndexRoute = AdminGalleryIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -145,6 +159,16 @@ const AdminSettingsProfileRoute = AdminSettingsProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => AdminSettingsRouteRoute,
+} as any)
+const AdminProductsNewRoute = AdminProductsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AdminProductsRouteRoute,
+} as any)
+const AdminProductsProductIdRoute = AdminProductsProductIdRouteImport.update({
+  id: '/$productId',
+  path: '/$productId',
+  getParentRoute: () => AdminProductsRouteRoute,
 } as any)
 const PublicGallerySlugRoute = PublicGallerySlugRouteImport.update({
   id: '/$slug',
@@ -182,12 +206,15 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/gallery': typeof PublicGalleryRouteRouteWithChildren
   '/admin/gallery': typeof AdminGalleryRouteRouteWithChildren
+  '/admin/products': typeof AdminProductsRouteRouteWithChildren
   '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
   '/admin/gallery/sections': typeof AdminGallerySectionsRouteRouteWithChildren
   '/gallery/$slug': typeof PublicGallerySlugRoute
+  '/admin/products/$productId': typeof AdminProductsProductIdRoute
+  '/admin/products/new': typeof AdminProductsNewRoute
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -195,6 +222,7 @@ export interface FileRoutesByFullPath {
   '/gallery/': typeof PublicGalleryIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/gallery/': typeof AdminGalleryIndexRoute
+  '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/sessions/': typeof AdminSessionsIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
@@ -210,6 +238,8 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/auth': typeof AuthIndexRoute
   '/gallery/$slug': typeof PublicGallerySlugRoute
+  '/admin/products/$productId': typeof AdminProductsProductIdRoute
+  '/admin/products/new': typeof AdminProductsNewRoute
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -217,6 +247,7 @@ export interface FileRoutesByTo {
   '/gallery': typeof PublicGalleryIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/gallery': typeof AdminGalleryIndexRoute
+  '/admin/products': typeof AdminProductsIndexRoute
   '/admin/sessions': typeof AdminSessionsIndexRoute
   '/admin/settings': typeof AdminSettingsIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
@@ -233,6 +264,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteRouteWithChildren
   '/_public/gallery': typeof PublicGalleryRouteRouteWithChildren
   '/admin/gallery': typeof AdminGalleryRouteRouteWithChildren
+  '/admin/products': typeof AdminProductsRouteRouteWithChildren
   '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
   '/_public/': typeof PublicIndexRoute
@@ -240,6 +272,8 @@ export interface FileRoutesById {
   '/auth/': typeof AuthIndexRoute
   '/admin/gallery/sections': typeof AdminGallerySectionsRouteRouteWithChildren
   '/_public/gallery/$slug': typeof PublicGallerySlugRoute
+  '/admin/products/$productId': typeof AdminProductsProductIdRoute
+  '/admin/products/new': typeof AdminProductsNewRoute
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -247,6 +281,7 @@ export interface FileRoutesById {
   '/_public/gallery/': typeof PublicGalleryIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/gallery/': typeof AdminGalleryIndexRoute
+  '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/sessions/': typeof AdminSessionsIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
@@ -264,12 +299,15 @@ export interface FileRouteTypes {
     | '/auth'
     | '/gallery'
     | '/admin/gallery'
+    | '/admin/products'
     | '/admin/settings'
     | '/api/$'
     | '/admin/'
     | '/auth/'
     | '/admin/gallery/sections'
     | '/gallery/$slug'
+    | '/admin/products/$productId'
+    | '/admin/products/new'
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
@@ -277,6 +315,7 @@ export interface FileRouteTypes {
     | '/gallery/'
     | '/admin/categories/'
     | '/admin/gallery/'
+    | '/admin/products/'
     | '/admin/sessions/'
     | '/admin/settings/'
     | '/admin/users/'
@@ -292,6 +331,8 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/gallery/$slug'
+    | '/admin/products/$productId'
+    | '/admin/products/new'
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
@@ -299,6 +340,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/admin/categories'
     | '/admin/gallery'
+    | '/admin/products'
     | '/admin/sessions'
     | '/admin/settings'
     | '/admin/users'
@@ -314,6 +356,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_public/gallery'
     | '/admin/gallery'
+    | '/admin/products'
     | '/admin/settings'
     | '/api/$'
     | '/_public/'
@@ -321,6 +364,8 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/admin/gallery/sections'
     | '/_public/gallery/$slug'
+    | '/admin/products/$productId'
+    | '/admin/products/new'
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
@@ -328,6 +373,7 @@ export interface FileRouteTypes {
     | '/_public/gallery/'
     | '/admin/categories/'
     | '/admin/gallery/'
+    | '/admin/products/'
     | '/admin/sessions/'
     | '/admin/settings/'
     | '/admin/users/'
@@ -406,6 +452,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsRouteRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/products': {
+      id: '/admin/products'
+      path: '/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AdminProductsRouteRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/gallery': {
       id: '/admin/gallery'
       path: '/gallery'
@@ -455,6 +508,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSessionsIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/products/': {
+      id: '/admin/products/'
+      path: '/'
+      fullPath: '/admin/products/'
+      preLoaderRoute: typeof AdminProductsIndexRouteImport
+      parentRoute: typeof AdminProductsRouteRoute
+    }
     '/admin/gallery/': {
       id: '/admin/gallery/'
       path: '/'
@@ -503,6 +563,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/settings/profile'
       preLoaderRoute: typeof AdminSettingsProfileRouteImport
       parentRoute: typeof AdminSettingsRouteRoute
+    }
+    '/admin/products/new': {
+      id: '/admin/products/new'
+      path: '/new'
+      fullPath: '/admin/products/new'
+      preLoaderRoute: typeof AdminProductsNewRouteImport
+      parentRoute: typeof AdminProductsRouteRoute
+    }
+    '/admin/products/$productId': {
+      id: '/admin/products/$productId'
+      path: '/$productId'
+      fullPath: '/admin/products/$productId'
+      preLoaderRoute: typeof AdminProductsProductIdRouteImport
+      parentRoute: typeof AdminProductsRouteRoute
     }
     '/_public/gallery/$slug': {
       id: '/_public/gallery/$slug'
@@ -599,6 +673,21 @@ const AdminGalleryRouteRouteChildren: AdminGalleryRouteRouteChildren = {
 const AdminGalleryRouteRouteWithChildren =
   AdminGalleryRouteRoute._addFileChildren(AdminGalleryRouteRouteChildren)
 
+interface AdminProductsRouteRouteChildren {
+  AdminProductsProductIdRoute: typeof AdminProductsProductIdRoute
+  AdminProductsNewRoute: typeof AdminProductsNewRoute
+  AdminProductsIndexRoute: typeof AdminProductsIndexRoute
+}
+
+const AdminProductsRouteRouteChildren: AdminProductsRouteRouteChildren = {
+  AdminProductsProductIdRoute: AdminProductsProductIdRoute,
+  AdminProductsNewRoute: AdminProductsNewRoute,
+  AdminProductsIndexRoute: AdminProductsIndexRoute,
+}
+
+const AdminProductsRouteRouteWithChildren =
+  AdminProductsRouteRoute._addFileChildren(AdminProductsRouteRouteChildren)
+
 interface AdminSettingsRouteRouteChildren {
   AdminSettingsProfileRoute: typeof AdminSettingsProfileRoute
   AdminSettingsSecurityRoute: typeof AdminSettingsSecurityRoute
@@ -616,6 +705,7 @@ const AdminSettingsRouteRouteWithChildren =
 
 interface AdminRouteRouteChildren {
   AdminGalleryRouteRoute: typeof AdminGalleryRouteRouteWithChildren
+  AdminProductsRouteRoute: typeof AdminProductsRouteRouteWithChildren
   AdminSettingsRouteRoute: typeof AdminSettingsRouteRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCategoriesIndexRoute: typeof AdminCategoriesIndexRoute
@@ -625,6 +715,7 @@ interface AdminRouteRouteChildren {
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminGalleryRouteRoute: AdminGalleryRouteRouteWithChildren,
+  AdminProductsRouteRoute: AdminProductsRouteRouteWithChildren,
   AdminSettingsRouteRoute: AdminSettingsRouteRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
   AdminCategoriesIndexRoute: AdminCategoriesIndexRoute,

@@ -47,3 +47,11 @@ export const ImageVariantKind = {
 } as const
 
 export type ImageVariantKind = (typeof ImageVariantKind)[keyof typeof ImageVariantKind]
+
+
+export const ProductState = {
+  active: 'active',
+  hidden: 'hidden'
+} as const
+
+export type ProductState = (typeof ProductState)[keyof typeof ProductState]

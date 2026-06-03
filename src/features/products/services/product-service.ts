@@ -1,0 +1,415 @@
+import { ORPCError } from '@orpc/server';
+import { type Prisma, type Product, type ProductVariant } from '~/prisma/generated/prisma/client.ts';
+import { ProductState } from '~/prisma/generated/prisma/enums.ts';
+import { prisma } from '@/lib/db';
+import type { TxClient } from '@/lib/db/prisma.ts';
+import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
+import type { TAttributes, TOptionSchema } from '@/features/products/schemas/option-schema.ts';
+import type { TProduct, TProductWithVariants } from '@/features/products/schemas/product.ts';
+import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
+import type { TCreateProductInput, TUpdateProductInput } from '@/features/products/schemas/product-mutations.ts';
+import type { TAddVariantInput, TUpdateVariantInput } from '@/features/products/schemas/product-variant-mutations.ts';
+import type { TSearchProductsRequestDto } from '@/features/products/schemas/search-products.ts';
+
+export class ProductService {
+
+  static fromEntity(entity: Product): TProduct {
+    return {
+      id: entity.id,
+      nameRo: entity.nameRo,
+      nameRu: entity.nameRu,
+      descriptionRo: entity.descriptionRo,
+      descriptionRu: entity.descriptionRu,
+      state: entity.state,
+      slug: entity.slug,
+      optionSchema: entity.optionSchema as TOptionSchema,
+      createdAt: entity.createdAt.toISOString(),
+      updatedAt: entity.updatedAt.toISOString(),
+    };
+  }
+
+  static variantFromEntity(entity: ProductVariant): TProductVariant {
+    return {
+      id: entity.id,
+      productId: entity.productId,
+      nameRo: entity.nameRo,
+      nameRu: entity.nameRu,
+      slug: entity.slug,
+      fullSlug: entity.fullSlug,
+      attributes: entity.attributes as TAttributes,
+      price: entity.price,
+      stock: entity.stock,
+      createdAt: entity.createdAt.toISOString(),
+      updatedAt: entity.updatedAt.toISOString(),
+    };
+  }
+
+  static withVariants(product: Product, variants: ProductVariant[]): TProductWithVariants {
+    return {
+      ...ProductService.fromEntity(product),
+      variants: variants.map(ProductService.variantFromEntity),
+    };
+  }
+
+  static async list(): Promise<TProduct[]> {
+    const entities = await prisma.product.findMany({ orderBy: { nameRo: 'asc' } });
+    return entities.map(ProductService.fromEntity);
+  }
+
+  static async listActive(): Promise<TProduct[]> {
+    const entities = await prisma.product.findMany({
+      where: { state: ProductState.active },
+      orderBy: { nameRo: 'asc' },
+    });
+    return entities.map(ProductService.fromEntity);
+  }
+
+  static async findById(id: number): Promise<TProductWithVariants | null> {
+    const entity = await prisma.product.findUnique({ where: { id }, include: { variants: true } });
+    return entity ? ProductService.withVariants(entity, entity.variants) : null;
+  }
+
+  static async findBySlug(slug: string): Promise<TProductWithVariants | null> {
+    const entity = await prisma.product.findUnique({ where: { slug }, include: { variants: true } });
+    return entity ? ProductService.withVariants(entity, entity.variants) : null;
+  }
+
+  static async search(input: TSearchProductsRequestDto) {
+    const [items, meta] = await prisma.product
+      .paginate({
+        where: getWhere(input),
+        orderBy: { [input.sort ?? 'createdAt']: input.dir ?? 'desc' },
+      })
+      .withPages({
+        page: input.page ?? 1,
+        limit: input.limit ?? 10,
+        includePageCount: true,
+      });
+
+    return PaginationResultDtoFactory.getWithCount(items.map(ProductService.fromEntity), meta);
+  }
+
+  static async create(input: TCreateProductInput): Promise<TProductWithVariants> {
+    // Validate and resolve every variant up front so creation is all-or-nothing.
+    const resolved = input.variants.map((variant) => {
+      validateAttributesAgainstSchema(input.optionSchema, variant.attributes);
+      const slug = generateVariantSlug(input.optionSchema, variant.attributes);
+      return {
+        nameRo: variant.nameRo,
+        nameRu: variant.nameRu,
+        slug,
+        fullSlug: buildFullSlug(input.slug, slug),
+        attributes: variant.attributes,
+        price: variant.price,
+        stock: variant.stock,
+      };
+    });
+
+    assertNoDuplicateSlugs(resolved.map(v => v.slug));
+
+    const product = await prisma.product.create({
+      data: {
+        nameRo: input.nameRo,
+        nameRu: input.nameRu,
+        descriptionRo: input.descriptionRo ?? null,
+        descriptionRu: input.descriptionRu ?? null,
+        state: input.state,
+        slug: input.slug,
+        optionSchema: input.optionSchema as Prisma.InputJsonValue,
+        variants: {
+          create: resolved.map(v => ({
+            nameRo: v.nameRo,
+            nameRu: v.nameRu,
+            slug: v.slug,
+            fullSlug: v.fullSlug,
+            attributes: v.attributes as Prisma.InputJsonValue,
+            price: v.price,
+            stock: v.stock,
+          })),
+        },
+      },
+      include: { variants: true },
+    });
+
+    return ProductService.withVariants(product, product.variants);
+  }
+
+  static async addVariant(input: TAddVariantInput): Promise<TProductVariant> {
+    const product = await prisma.product.findUnique({ where: { id: input.productId } });
+    if (!product)
+      throw new ORPCError('NOT_FOUND', { message: `Product '${input.productId}' not found` });
+
+    const optionSchema = product.optionSchema as TOptionSchema;
+    validateAttributesAgainstSchema(optionSchema, input.attributes);
+
+    const slug = generateVariantSlug(optionSchema, input.attributes);
+    const fullSlug = buildFullSlug(product.slug, slug);
+
+    const existing = await prisma.productVariant.findFirst({ where: { productId: product.id, slug } });
+    if (existing)
+      throw new ORPCError('CONFLICT', { message: `A variant with attributes resolving to '${slug}' already exists` });
+
+    const variant = await prisma.productVariant.create({
+      data: {
+        productId: product.id,
+        nameRo: input.nameRo,
+        nameRu: input.nameRu,
+        slug,
+        fullSlug,
+        attributes: input.attributes as Prisma.InputJsonValue,
+        price: input.price,
+        stock: input.stock,
+      },
+    });
+
+    return ProductService.variantFromEntity(variant);
+  }
+
+  static async updateVariant(input: TUpdateVariantInput): Promise<TProductVariant> {
+    const existing = await prisma.productVariant.findUnique({
+      where: { id: input.id },
+      include: { product: true },
+    });
+    if (!existing)
+      throw new ORPCError('NOT_FOUND');
+
+    let slug = existing.slug;
+    let fullSlug = existing.fullSlug;
+    let attributes = existing.attributes as TAttributes;
+
+    if (input.attributes !== undefined) {
+      const optionSchema = existing.product.optionSchema as TOptionSchema;
+      validateAttributesAgainstSchema(optionSchema, input.attributes);
+      attributes = input.attributes;
+      slug = generateVariantSlug(optionSchema, attributes);
+      fullSlug = buildFullSlug(existing.product.slug, slug);
+
+      if (slug !== existing.slug) {
+        const clash = await prisma.productVariant.findFirst({
+          where: { productId: existing.productId, slug, id: { not: existing.id } },
+        });
+        if (clash)
+          throw new ORPCError('CONFLICT', { message: `A variant with attributes resolving to '${slug}' already exists` });
+      }
+    }
+
+    const variant = await prisma.productVariant.update({
+      where: { id: input.id },
+      data: {
+        ...(input.nameRo !== undefined && { nameRo: input.nameRo }),
+        ...(input.nameRu !== undefined && { nameRu: input.nameRu }),
+        ...(input.attributes !== undefined && { attributes: attributes as Prisma.InputJsonValue, slug, fullSlug }),
+        ...(input.price !== undefined && { price: input.price }),
+        ...(input.stock !== undefined && { stock: input.stock }),
+      },
+    });
+
+    return ProductService.variantFromEntity(variant);
+  }
+
+  static async deleteVariant(id: number): Promise<void> {
+    const existing = await prisma.productVariant.findUnique({ where: { id }, select: { productId: true } });
+    if (!existing)
+      throw new ORPCError('NOT_FOUND');
+
+    const count = await prisma.productVariant.count({ where: { productId: existing.productId } });
+    if (count <= 1)
+      throw new ORPCError('CONFLICT', { message: 'Cannot delete the last variant of a product' });
+
+    await prisma.productVariant.delete({ where: { id } });
+  }
+
+  static async update(id: number, input: TUpdateProductInput): Promise<TProductWithVariants> {
+    const existing = await prisma.product.findUnique({ where: { id }, include: { variants: true } });
+    if (!existing)
+      throw new ORPCError('NOT_FOUND');
+
+    const newSlug = input.slug ?? existing.slug;
+    const newOptionSchema = input.optionSchema ?? (existing.optionSchema as TOptionSchema);
+    const slugChanged = input.slug !== undefined && input.slug !== existing.slug;
+    const optionSchemaChanged =
+      input.optionSchema !== undefined &&
+      JSON.stringify(input.optionSchema) !== JSON.stringify(existing.optionSchema);
+
+    // Resolve new attributes/slugs for every existing variant before touching the DB.
+    const reconciled = (slugChanged || optionSchemaChanged)
+      ? existing.variants.map(variant =>
+          reconcileVariant(variant, newOptionSchema, newSlug, input.backfill ?? {}))
+      : [];
+
+    if (optionSchemaChanged)
+      assertNoDuplicateSlugs(reconciled.map(v => v.slug));
+
+    return prisma.$transaction(async (tx) => {
+      const product = await tx.product.update({
+        where: { id },
+        data: {
+          ...(input.nameRo !== undefined && { nameRo: input.nameRo }),
+          ...(input.nameRu !== undefined && { nameRu: input.nameRu }),
+          ...(input.descriptionRo !== undefined && { descriptionRo: input.descriptionRo }),
+          ...(input.descriptionRu !== undefined && { descriptionRu: input.descriptionRu }),
+          ...(input.state !== undefined && { state: input.state }),
+          ...(input.slug !== undefined && { slug: input.slug }),
+          ...(input.optionSchema !== undefined && { optionSchema: input.optionSchema as Prisma.InputJsonValue }),
+        },
+      });
+
+      if (slugChanged || optionSchemaChanged) {
+        for (const r of reconciled) {
+          await tx.productVariant.update({
+            where: { id: r.id },
+            data: {
+              slug: r.slug,
+              fullSlug: r.fullSlug,
+              attributes: r.attributes as Prisma.InputJsonValue,
+            },
+          });
+        }
+      }
+
+      const variants = await tx.productVariant.findMany({ where: { productId: id } });
+      return ProductService.withVariants(product, variants);
+    });
+  }
+
+  /**
+   * Recomputes every variant's slug/fullSlug for the product's current slug. Used when only the
+   * product slug changes (variant attributes are untouched). Kept as a standalone, transaction-aware
+   * helper to mirror CategoryService.updateDescendantPaths.
+   */
+  static async rebuildFullSlugsForProduct(tx: TxClient, productId: number): Promise<void> {
+    const product = await tx.product.findUnique({ where: { id: productId } });
+    if (!product)
+      throw new ORPCError('NOT_FOUND');
+
+    const variants = await tx.productVariant.findMany({ where: { productId } });
+    for (const variant of variants) {
+      await tx.productVariant.update({
+        where: { id: variant.id },
+        data: { fullSlug: buildFullSlug(product.slug, variant.slug) },
+      });
+    }
+  }
+
+  static async delete(id: number): Promise<void> {
+    const existing = await prisma.product.findUnique({ where: { id }, select: { id: true } });
+    if (!existing)
+      throw new ORPCError('NOT_FOUND');
+
+    await prisma.product.delete({ where: { id } });
+  }
+}
+
+
+export function slugifyValue(value: string): string {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+export function generateVariantSlug(optionSchema: TOptionSchema, attributes: TAttributes): string {
+  // Deterministic: follow optionSchema key order, slugify each selected value.
+  return Object.keys(optionSchema)
+    .map(key => slugifyValue(attributes[key]))
+    .join('-');
+}
+
+export function buildFullSlug(productSlug: string, variantSlug: string): string {
+  return `${productSlug}-${variantSlug}`;
+}
+
+export function validateAttributesAgainstSchema(optionSchema: TOptionSchema, attributes: TAttributes): void {
+  for (const [key, option] of Object.entries(optionSchema)) {
+    const value = attributes[key];
+    if (value === undefined)
+      throw new ORPCError('BAD_REQUEST', { message: `Missing attribute '${key}'` });
+    if (!option.values.some(v => v.value === value))
+      throw new ORPCError('BAD_REQUEST', { message: `Value '${value}' is not allowed for option '${key}'` });
+  }
+
+  for (const key of Object.keys(attributes)) {
+    if (!(key in optionSchema))
+      throw new ORPCError('BAD_REQUEST', { message: `Unknown attribute '${key}'` });
+  }
+}
+
+interface IReconciledVariant {
+  id: number;
+  attributes: TAttributes;
+  slug: string;
+  fullSlug: string;
+}
+
+/**
+ * Brings an existing variant in line with a (possibly changed) optionSchema and product slug:
+ * keeps still-valid values, applies `backfill` for newly added keys, drops removed keys, then
+ * recomputes slug/fullSlug. Throws CONFLICT/BAD_REQUEST when the variant can't be reconciled.
+ */
+function reconcileVariant(
+  variant: ProductVariant,
+  optionSchema: TOptionSchema,
+  productSlug: string,
+  backfill: Record<string, string>,
+): IReconciledVariant {
+  const current = variant.attributes as TAttributes;
+  const next: TAttributes = {};
+
+  for (const [key, option] of Object.entries(optionSchema)) {
+    let value = current[key];
+    if (value === undefined)
+      value = backfill[key]; // newly added key — needs a backfill value
+
+    if (value === undefined)
+      throw new ORPCError('CONFLICT', {
+        message: `Option '${key}' was added but variant ${variant.id} has no value; provide a backfill value for '${key}'`,
+      });
+
+    if (!option.values.some(v => v.value === value))
+      throw new ORPCError('CONFLICT', {
+        message: `Variant ${variant.id} uses value '${value}' for '${key}', which is no longer allowed`,
+      });
+
+    next[key] = value;
+  }
+
+  const slug = generateVariantSlug(optionSchema, next);
+  return { id: variant.id, attributes: next, slug, fullSlug: buildFullSlug(productSlug, slug) };
+}
+
+function assertNoDuplicateSlugs(slugs: string[]): void {
+  const seen = new Set<string>();
+  for (const slug of slugs) {
+    if (seen.has(slug))
+      throw new ORPCError('CONFLICT', { message: `Multiple variants resolve to the same slug '${slug}'` });
+    seen.add(slug);
+  }
+}
+
+function getWhere(input: TSearchProductsRequestDto): Prisma.ProductWhereInput {
+  const where: Prisma.ProductWhereInput = {};
+
+  if (input.nameRo != null)
+    where.nameRo = { contains: input.nameRo, mode: 'insensitive' };
+
+  if (input.nameRu != null)
+    where.nameRu = { contains: input.nameRu, mode: 'insensitive' };
+
+  if (input.state != null)
+    where.state = input.state;
+
+  if (input.createdAt?.from != null || input.createdAt?.to != null) {
+    where.createdAt = {};
+    if (input.createdAt.from != null) where.createdAt.gte = input.createdAt.from;
+    if (input.createdAt.to != null) where.createdAt.lte = input.createdAt.to;
+  }
+
+  if (input.updatedAt?.from != null || input.updatedAt?.to != null) {
+    where.updatedAt = {};
+    if (input.updatedAt.from != null) where.updatedAt.gte = input.updatedAt.from;
+    if (input.updatedAt.to != null) where.updatedAt.lte = input.updatedAt.to;
+  }
+
+  return where;
+}

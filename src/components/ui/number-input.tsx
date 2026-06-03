@@ -110,7 +110,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
             type='button'
             aria-label="Increase value"
             className={cn(
-              'px-2 w-7 h-4.5 rounded-l-none rounded-br-none border-input border-l-0 border-b-[0.5px] focus-visible:relative',
+              'px-2 w-7 h-4 rounded-l-none rounded-br-none border-input border-l-0 border-b-[0.5px] focus-visible:relative',
               inputSize === 'sm' && 'h-4 w-6 py-1'
             )}
             variant="outline"
@@ -126,7 +126,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
             type='button'
             aria-label="Decrease value"
             className={cn(
-              'px-2 w-8 h-4.5 rounded-l-none rounded-tr-none border-input border-l-0 border-t-[0.5px] focus-visible:relative',
+              'px-2 w-7 h-4 rounded-l-none rounded-tr-none border-input border-l-0 border-t-[0.5px] focus-visible:relative',
               inputSize === 'sm' && 'h-4 w-6 py-1'
             )}
             variant="outline"
