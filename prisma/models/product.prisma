@@ -29,7 +29,7 @@ model ProductVariant {
   nameRu     String   @map("name_ru")
   slug         String
   fullSlug     String   @unique @map("full_slug")
-  optionValues Json     @default("{}") @map("attributes")
+  optionValues Json     @default("{}") @map("option_values")
   price        Int
   stock        Int      @default(0)
   createdAt    DateTime @default(now()) @map("created_at")
