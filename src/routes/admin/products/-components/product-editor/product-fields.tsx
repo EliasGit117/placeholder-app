@@ -20,12 +20,12 @@ export const ProductFields: FC = () => {
   const { control } = useFormContext();
 
   return (
-    <FieldGroup className="grid grid-cols-2 gap-2 sm:gap-4">
+    <FieldGroup className="@container grid grid-cols-2 gap-2 @sm:gap-4">
       <Controller
         name="slug"
         control={control}
         render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="col-span-full sm:col-span-1">
+          <Field data-invalid={fieldState.invalid} className="col-span-full @sm:col-span-1">
             <FieldLabel>{m['pages.products.form.slug']()}</FieldLabel>
             <Input {...field} value={field.value ?? ''} autoComplete="off" placeholder='some-product-slug'/>
             {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
@@ -40,7 +40,7 @@ export const ProductFields: FC = () => {
           const current = getProductStateOption(field.value);
           const CurrentIcon = current.icon;
           return (
-            <Field className="col-span-full sm:col-span-1">
+            <Field className="col-span-full @sm:col-span-1">
               <FieldLabel>{m['common.status']()}</FieldLabel>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -70,7 +70,7 @@ export const ProductFields: FC = () => {
         name="nameRo"
         control={control}
         render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="col-span-full sm:col-span-1">
+          <Field data-invalid={fieldState.invalid} className="col-span-full @sm:col-span-1">
             <FieldLabel>{m['pages.products.form.name_ro']()}</FieldLabel>
             <Input {...field} value={field.value ?? ''} autoComplete="off"/>
             {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
@@ -82,7 +82,7 @@ export const ProductFields: FC = () => {
         name="nameRu"
         control={control}
         render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="col-span-full sm:col-span-1">
+          <Field data-invalid={fieldState.invalid} className="col-span-full @sm:col-span-1">
             <FieldLabel>{m['pages.products.form.name_ru']()}</FieldLabel>
             <Input {...field} value={field.value ?? ''} autoComplete="off"/>
             {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
@@ -94,7 +94,7 @@ export const ProductFields: FC = () => {
         name="shortDescriptionRo"
         control={control}
         render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="col-span-full md:col-span-1">
+          <Field data-invalid={fieldState.invalid} className="col-span-full @md:col-span-1">
             <FieldLabel>{m['pages.products.form.short_description_ro']()}</FieldLabel>
             <Textarea {...field} value={field.value ?? ''} rows={3}/>
             {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
@@ -106,7 +106,7 @@ export const ProductFields: FC = () => {
         name="shortDescriptionRu"
         control={control}
         render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="col-span-full md:col-span-1">
+          <Field data-invalid={fieldState.invalid} className="col-span-full @md:col-span-1">
             <FieldLabel>{m['pages.products.form.short_description_ru']()}</FieldLabel>
             <Textarea {...field} value={field.value ?? ''} rows={3}/>
             {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}

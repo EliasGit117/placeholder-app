@@ -190,7 +190,7 @@
           "name_ru": "Denumire (RU)",
           "price": "Preț (MDL)",
           "sku": "SKU",
-          "attributes": "Atribute"
+          "values": "Valori"
         }
       },
       "options": {

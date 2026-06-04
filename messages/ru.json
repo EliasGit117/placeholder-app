@@ -189,7 +189,7 @@
           "name_ru": "Название (RU)",
           "price": "Цена (MDL)",
           "sku": "Артикул",
-          "attributes": "Атрибуты"
+          "values": "Значения"
         }
       },
       "options": {

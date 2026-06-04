@@ -108,7 +108,7 @@ export const OptionSheet: FC<IProps> = ({ open, onOpenChange, option, loading, o
                 />
               </FieldGroup>
 
-              <Separator/>
+              <Separator className='mt-8 opacity-50'/>
 
               <div className="space-y-3">
                 <div className="flex items-center justify-between">

@@ -144,10 +144,13 @@ function RouteComponent() {
     return null;
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+    <div className="@container space-y-4">
+      <div className="grid grid-cols-1 @5xl:grid-cols-3 gap-4">
         <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit((values) => update(values))} className="space-y-4 xl:col-span-2">
+          <form
+            className="space-y-4 @5xl:col-span-2"
+            onSubmit={form.handleSubmit((values) => update(values))}
+          >
             <Card>
               <CardHeader>
                 <CardTitle>{m['pages.products.form.section_general']()}</CardTitle>
@@ -160,7 +163,7 @@ function RouteComponent() {
               </CardContent>
 
               {canUpdate && (
-                <CardFooter className='justify-end'>
+                <CardFooter className="justify-end">
                   <LoadingButton type="submit" loading={isPending}>
                     <IconDeviceFloppy className="size-4"/>
                     <span>{m['common.save']()}</span>

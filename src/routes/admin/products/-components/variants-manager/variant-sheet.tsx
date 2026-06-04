@@ -9,7 +9,7 @@ import {
   SheetDescription,
   SheetFooter,
   SheetHeader,
-  SheetTitle,
+  SheetTitle
 } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
@@ -22,7 +22,7 @@ import {
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { IconChevronDown, IconDeviceFloppy, IconFilePlus, IconX } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
@@ -31,6 +31,7 @@ import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { getProductStateOption, productStateOptions } from '../product-editor';
 import type { TOptions } from '@/features/products/schemas/option-schema.ts';
 import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
+import { Separator } from '@/components/ui/separator.tsx';
 
 
 const variantSheetSchema = z.object({
@@ -39,7 +40,7 @@ const variantSheetSchema = z.object({
   state: z.enum(ProductState),
   sku: z.string().trim().min(1).max(128),
   price: z.number().int().nonnegative(),
-  optionValues: z.record(z.string(), z.string()),
+  optionValues: z.record(z.string(), z.string())
 });
 
 export type TVariantSheetValues = z.infer<typeof variantSheetSchema>;
@@ -63,20 +64,20 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
 
   const form = useForm<TVariantSheetValues>({
     resolver: zodResolver(variantSheetSchema),
-    defaultValues: { nameRo: '', nameRu: '', state: ProductState.active, sku: '', price: 0, optionValues: {} },
+    defaultValues: { nameRo: '', nameRu: '', state: ProductState.active, sku: '', price: 0, optionValues: {} }
   });
 
   useEffect(() => {
     if (!open) return;
     form.reset(variant
       ? {
-          nameRo: variant.nameRo,
-          nameRu: variant.nameRu,
-          state: variant.state,
-          sku: variant.sku,
-          price: variant.price,
-          optionValues: { ...variant.optionValues },
-        }
+        nameRo: variant.nameRo,
+        nameRu: variant.nameRu,
+        state: variant.state,
+        sku: variant.sku,
+        price: variant.price,
+        optionValues: { ...variant.optionValues }
+      }
       : { nameRo: '', nameRu: '', state: ProductState.active, sku: '', price: 0, optionValues: {} });
   }, [open, variant]);
 
@@ -187,9 +188,11 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
                   />
                 </div>
 
+                <Separator className="mt-4 opacity-50"/>
+
                 {optionKeys.length > 0 && (
-                  <div className="space-y-2">
-                    <FieldLabel>{m['pages.products.form.variants.attributes']()}</FieldLabel>
+                  <div className="space-y-4">
+                    <FieldLabel>{m['pages.products.form.variants.values']()}</FieldLabel>
                     <div className="grid grid-cols-2 gap-2 sm:gap-3">
                       {optionKeys.map((key) => {
                         const option = options[key];
