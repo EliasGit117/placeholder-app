@@ -12,7 +12,7 @@ export const searchProductsRequestDtoSchema = paginatedRequestDtoSchema.extend({
   sort: z.enum(sortableFields).optional().catch(undefined),
   nameRo: z.string().optional().catch(undefined),
   nameRu: z.string().optional().catch(undefined),
-  state: z.enum(ProductState).optional().catch(undefined),
+  state: z.array(z.enum(ProductState)).optional().catch(undefined),
   createdAt: dateRangeSchema.optional().catch(undefined),
   updatedAt: dateRangeSchema.optional().catch(undefined),
 });

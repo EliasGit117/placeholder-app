@@ -52,7 +52,8 @@ export type ImageVariantKind = (typeof ImageVariantKind)[keyof typeof ImageVaria
 export const ProductState = {
   active: 'active',
   not_available: 'not_available',
-  hidden: 'hidden'
+  hidden: 'hidden',
+  archived: 'archived'
 } as const
 
 export type ProductState = (typeof ProductState)[keyof typeof ProductState]

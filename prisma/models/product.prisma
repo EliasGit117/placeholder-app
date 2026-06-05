@@ -2,6 +2,7 @@ enum ProductState {
   active
   not_available
   hidden
+  archived
 
   @@map("product_state")
 }

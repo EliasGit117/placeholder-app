@@ -21,6 +21,7 @@
     "of": "din",
     "filter_by": "Filtrare după {name}",
     "select": "Selectează",
+    "id": "ID",
     "created": "Creat",
     "updated": "Actualizat",
     "expires": "Expiră",
@@ -191,7 +192,8 @@
           "price": "Preț (MDL)",
           "sku": "SKU",
           "values": "Valori"
-        }
+        },
+        "state_archived": "Arhivat"
       },
       "options": {
         "create_title": "Adăugare opțiune",

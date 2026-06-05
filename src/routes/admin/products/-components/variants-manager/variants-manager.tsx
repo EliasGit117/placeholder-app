@@ -150,31 +150,28 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
         <ul className="divide-y rounded-md border">
           {variants.map((variant) => (
             <li key={variant.id} className="flex items-center gap-3 p-3">
-              <div className="min-w-0 flex-1 space-y-1">
-                <div className="flex items-center gap-2">
+              <div className="min-w-0 flex-1 space-y-2">
+                <div className="flex items-baseline gap-1.5 min-w-0">
                   <span className="text-sm font-medium truncate">{isRu ? variant.nameRu : variant.nameRo}</span>
-                  {(() => {
-                    const opt = getProductStateOption(variant.state);
-                    const Icon = opt.icon;
-                    return (
-                      <Badge variant="outline" className="rounded-sm shrink-0">
-                        <Icon size={12}/>
-                        <span>{opt.label()}</span>
-                      </Badge>
-                    );
-                  })()}
+                  <span className="text-xs text-muted-foreground shrink-0">({variant.sku})</span>
                 </div>
+                {(() => {
+                  const opt = getProductStateOption(variant.state);
+                  const Icon = opt.icon;
+                  return (
+                    <Badge variant="outline" className="rounded-sm shrink-0">
+                      <Icon size={12}/>
+                      <span>{opt.label()}</span>
+                    </Badge>
+                  );
+                })()}
                 <div className="flex flex-wrap items-center gap-1">{optionValueBadges(variant)}</div>
-              </div>
-
-              <div className="text-right text-xs text-muted-foreground shrink-0">
-                <div>{m['pages.products.variants.sku']()}: {variant.sku}</div>
               </div>
 
               {canUpdate && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button size="icon-xs" variant="ghost">
+                    <Button size="icon-xs" variant="ghost" className="self-start">
                       <IconDots/>
                     </Button>
                   </DropdownMenuTrigger>
@@ -185,7 +182,6 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       variant="destructive"
-                      disabled={variants.length <= 1}
                       onClick={() => onDeleteClick(variant)}
                     >
                       <IconTrash className="mr-2 size-4"/>

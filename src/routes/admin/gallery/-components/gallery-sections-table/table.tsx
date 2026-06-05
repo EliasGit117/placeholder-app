@@ -86,7 +86,7 @@ export const GallerySectionsTable: FC<IProps> = (props) => {
     pageCount: data?.pageCount,
     columns,
     initialState: {
-      columnVisibility: { updatedAt: false },
+      columnVisibility: { id: false, updatedAt: false },
       columnPinning: { left: ['select'], right: ['actions'] }
     }
   });

@@ -17,6 +17,7 @@ import {
   IconCalendar,
   IconDots,
   IconExternalLink,
+  IconHash,
   IconLink,
   IconTextSize,
   IconTrash,
@@ -66,6 +67,19 @@ export const productColumns = (options?: IOptions) => {
           />
         </div>
       ),
+    }),
+
+    columnHelper.accessor('id', {
+      size: 80,
+      header: ({ column }) => <DataTableColumnHeader column={column}/>,
+      cell: ({ getValue }) => (
+        <span className="text-xs text-muted-foreground tabular-nums">{getValue()}</span>
+      ),
+      meta: {
+        label: m['common.id'](),
+        icon: IconHash,
+        skeletonClassName: 'h-4 w-10',
+      },
     }),
 
     columnHelper.accessor('nameRo', {
@@ -140,7 +154,7 @@ export const productColumns = (options?: IOptions) => {
         label: m['pages.products.index.table.state'](),
         skeletonClassName: 'h-5.5 w-20 rounded-sm',
         filter: {
-          type: ColumnFilterType.Select,
+          type: ColumnFilterType.MultiSelect,
           options: productStateOptions.map(({ value, label, icon }) => ({ title: label(), value, icon })),
         },
       },

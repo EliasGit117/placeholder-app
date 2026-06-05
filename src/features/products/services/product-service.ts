@@ -373,7 +373,7 @@ function getWhere(input: TSearchProductsRequestDto): Prisma.ProductWhereInput {
     where.nameRu = { contains: input.nameRu, mode: 'insensitive' };
 
   if (input.state != null)
-    where.state = input.state;
+    where.state = { in: input.state };
 
   if (input.createdAt?.from != null || input.createdAt?.to != null) {
     where.createdAt = {};

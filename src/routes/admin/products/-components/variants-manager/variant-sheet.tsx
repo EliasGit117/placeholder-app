@@ -32,6 +32,7 @@ import { getProductStateOption, productStateOptions } from '../product-editor';
 import type { TOptions } from '@/features/products/schemas/option-schema.ts';
 import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
 import { Separator } from '@/components/ui/separator.tsx';
+import { capitalizeFirst } from '@/lib/utils';
 
 
 const variantSheetSchema = z.object({
@@ -60,7 +61,7 @@ interface IProps {
 export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant, loading, onSubmit }) => {
   const isEdit = !!variant;
   const optionKeys = Object.keys(options);
-  const isRu = getLocale() === 'ru';
+  const locale = getLocale();
 
   const form = useForm<TVariantSheetValues>({
     resolver: zodResolver(variantSheetSchema),
@@ -196,7 +197,8 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
                     <div className="grid grid-cols-2 gap-2 sm:gap-3">
                       {optionKeys.map((key) => {
                         const option = options[key];
-                        const optionLabel = (isRu ? option.nameRu : option.nameRo) || key;
+                        const optionLabel = option[`name${capitalizeFirst(locale)}`] ?? key;
+
                         return (
                           <Controller
                             key={key}
@@ -204,9 +206,7 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
                             control={form.control}
                             render={({ field }) => {
                               const selected = option.values.find((v) => v.value === field.value);
-                              const selectedLabel = selected
-                                ? (isRu ? selected.nameRu : selected.nameRo) || selected.value
-                                : null;
+                              const selectedLabel = selected?.[`name${capitalizeFirst(locale)}`];
 
                               return (
                                 <Field>
@@ -224,7 +224,7 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
                                       <DropdownMenuRadioGroup value={field.value ?? ''} onValueChange={field.onChange}>
                                         {option.values.map((v) => (
                                           <DropdownMenuRadioItem key={v.value} value={v.value}>
-                                            {(isRu ? v.nameRu : v.nameRo) || v.value}
+                                            {v[`name${capitalizeFirst(locale)}`] ?? v.value}
                                           </DropdownMenuRadioItem>
                                         ))}
                                       </DropdownMenuRadioGroup>

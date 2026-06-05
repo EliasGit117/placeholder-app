@@ -21,6 +21,7 @@
     "of": "из",
     "filter_by": "Фильтр по {name}",
     "select": "Выбрать",
+    "id": "ID",
     "created": "Создан",
     "updated": "Обновлен",
     "expires": "Истекает",
@@ -190,7 +191,8 @@
           "price": "Цена (MDL)",
           "sku": "Артикул",
           "values": "Значения"
-        }
+        },
+        "state_archived": "Архивирован"
       },
       "options": {
         "create_title": "Добавление опции",

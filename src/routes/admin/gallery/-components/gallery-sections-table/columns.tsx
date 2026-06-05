@@ -18,6 +18,7 @@ import {
   IconEye,
   IconEyeOff,
   IconExternalLink,
+  IconHash,
   IconLink,
   IconPencil,
   IconTrash,
@@ -70,6 +71,19 @@ export const gallerySectionColumns = (options?: IOptions) => {
           />
         </div>
       ),
+    }),
+
+    columnHelper.accessor('id', {
+      size: 80,
+      header: ({ column }) => <DataTableColumnHeader column={column}/>,
+      cell: ({ getValue }) => (
+        <span className="text-xs text-muted-foreground tabular-nums">{getValue()}</span>
+      ),
+      meta: {
+        label: m['common.id'](),
+        icon: IconHash,
+        skeletonClassName: 'h-4 w-10',
+      },
     }),
 
     columnHelper.accessor('nameRo', {
