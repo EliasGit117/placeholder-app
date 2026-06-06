@@ -124,6 +124,10 @@ export class CategoryService {
     if (hasChildren > 0)
       throw new ORPCError('CONFLICT', { message: 'Cannot delete a category that has subcategories' });
 
+    const hasProducts = await prisma.product.count({ where: { categoryId: id } });
+    if (hasProducts > 0)
+      throw new ORPCError('CONFLICT', { message: 'Cannot delete a category that has assigned products' });
+
     await prisma.category.delete({ where: { id } });
   }
 

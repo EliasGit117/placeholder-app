@@ -14,6 +14,7 @@ export const productBaseSchema = z.object({
   state: z.enum(ProductState).default(ProductState.active),
   slug: slugSchema,
   options: optionsSchema,
+  categoryId: z.number().int().positive().nullable().optional(),
 });
 
 // Creating a product takes only the basic fields; options and variants are added afterwards on the

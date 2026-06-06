@@ -1,4 +1,4 @@
-import { type ComponentProps, type FC, type ReactNode, useState } from 'react';
+import { type ComponentProps, type CSSProperties, type FC, type ReactNode, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from '@/components/ui/input-group.tsx';
@@ -78,10 +78,10 @@ export const CategorySelectDropdown: FC<IProps> = ({
       <PopoverContent
         align="start"
         sideOffset={4}
-        className="p-0 w-(--radix-popover-trigger-width) min-w-56"
+        className="p-0 w-(--radix-popover-trigger-width) min-w-56 gap-0"
       >
         {/* Search */}
-        <div className="p-1 border-b border-border">
+        <div className="p-1">
           <InputGroup>
             <InputGroupAddon align="inline-start">
               <InputGroupText>
@@ -98,7 +98,7 @@ export const CategorySelectDropdown: FC<IProps> = ({
         </div>
 
         {/* List */}
-        <div className="max-h-64 overflow-y-auto p-1">
+        <div className="max-h-64 overflow-y-auto p-1 pt-0">
           {/* None option */}
           <DropdownItem
             selected={!value}
@@ -134,7 +134,7 @@ export const CategorySelectDropdown: FC<IProps> = ({
 interface IDropdownItemProps {
   selected?: boolean;
   onClick: () => void;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   children: ReactNode;
 }
 
@@ -151,8 +151,8 @@ const DropdownItem: FC<IDropdownItemProps> = ({ selected, onClick, style, childr
       selected && 'bg-accent/50',
     )}
   >
-    <IconCheck className={cn('size-3.5 shrink-0', selected ? 'opacity-100' : 'opacity-0')} />
     <span className="truncate">{children}</span>
+    {selected && <IconCheck className='size-3.5 shrink-0 ml-auto'/>}
   </button>
 );
 
@@ -167,7 +167,7 @@ interface FlatItem {
 function flattenForest(
   nodes: TCategoryTreeNode[],
   excludeId: number | undefined,
-  level = 1,
+  level = 0,
 ): FlatItem[] {
   const result: FlatItem[] = [];
   for (const node of nodes) {

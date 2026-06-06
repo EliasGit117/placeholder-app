@@ -17,7 +17,7 @@ import { LoadingButton } from '@/components/ui/loading-button';
 import { IconDeviceFloppy } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import {
-  ProductFields,
+  ProductFormFields,
   detailsDefaultsFromProduct,
   productDetailsFormSchema,
   type TProductDetailsForm
@@ -128,7 +128,8 @@ function RouteComponent() {
         shortDescriptionRo: values.shortDescriptionRo,
         shortDescriptionRu: values.shortDescriptionRu,
         slug: values.slug,
-        state: values.state
+        state: values.state,
+        categoryId: values.categoryId
       }),
     onSuccess: () => {
       toast.success(m['pages.products.form.save_success']());
@@ -158,7 +159,7 @@ function RouteComponent() {
               </CardHeader>
               <CardContent>
                 <fieldset disabled={!canUpdate}>
-                  <ProductFields/>
+                  <ProductFormFields/>
                 </fieldset>
               </CardContent>
 

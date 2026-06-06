@@ -15,6 +15,7 @@ model Category {
   parentId      Int?          @map("parent_id")
   parent        Category?     @relation("CategoryHierarchy", fields: [parentId], references: [id])
   children      Category[]    @relation("CategoryHierarchy")
+  products      Product[]
   createdAt     DateTime      @default(now()) @map("created_at")
   updatedAt     DateTime      @updatedAt @map("updated_at")
 

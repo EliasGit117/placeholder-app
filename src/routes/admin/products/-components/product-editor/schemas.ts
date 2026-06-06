@@ -47,6 +47,7 @@ export const productFormSchema = z.object({
   shortDescriptionRu: z.string().trim().max(512).optional(),
   slug: slugSchema,
   state: z.enum(ProductState),
+  categoryId: z.number().int().positive().nullable(),
   options: z.array(productOptionFormSchema),
   variants: z.array(variantFormSchema).min(1),
 });
@@ -65,6 +66,7 @@ export const productDetailsFormSchema = productFormSchema.pick({
   shortDescriptionRu: true,
   slug: true,
   state: true,
+  categoryId: true,
 });
 
 export type TProductDetailsForm = z.infer<typeof productDetailsFormSchema>;
@@ -98,5 +100,6 @@ export function detailsDefaultsFromProduct(product: TProductWithVariants): TProd
     shortDescriptionRu: product.shortDescriptionRu ?? '',
     slug: product.slug,
     state: product.state,
+    categoryId: product.categoryId,
   };
 }

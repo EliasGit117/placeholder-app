@@ -132,7 +132,7 @@ export const OptionsManager: FC<IProps> = ({ productId, options, canUpdate }) =>
               {canUpdate && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button size="icon-xs" variant="ghost">
+                    <Button size="icon-xs" variant="ghost" className="self-start">
                       <IconDots/>
                     </Button>
                   </DropdownMenuTrigger>

@@ -1,4 +1,4 @@
-import { type FC, useEffect } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
@@ -16,11 +16,13 @@ import {
 } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 import { LoadingButton } from '@/components/ui/loading-button';
 import { IconFilePlus, IconX } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
-import { ProductFields } from '../product-editor';
+import { ProductFormFields } from '../product-editor';
 import { useProductSheet } from './provider.tsx';
 import { createProductFormSchema, type TCreateProductForm } from './schemas.ts';
 
@@ -35,12 +37,14 @@ function getDefaults(): TCreateProductForm {
     shortDescriptionRu: '',
     slug: '',
     state: ProductState.active,
+    categoryId: null,
   };
 }
 
 export const ProductSheet: FC = () => {
   const { isOpen, close } = useProductSheet();
   const navigate = useNavigate();
+  const [openAfterCreation, setOpenAfterCreation] = useState(true);
 
   const form = useForm<TCreateProductForm>({
     resolver: zodResolver(createProductFormSchema),
@@ -48,8 +52,10 @@ export const ProductSheet: FC = () => {
   });
 
   useEffect(() => {
-    if (isOpen)
+    if (isOpen) {
       form.reset(getDefaults());
+      setOpenAfterCreation(true);
+    }
   }, [isOpen]);
 
   const { mutate: create, isPending } = useMutation({
@@ -57,7 +63,8 @@ export const ProductSheet: FC = () => {
     onSuccess: (product) => {
       toast.success(m['pages.products.form.create_success']());
       close();
-      void navigate({ to: '/admin/products/$productId', params: { productId: product.id } });
+      if (openAfterCreation)
+        void navigate({ to: '/admin/products/$productId', params: { productId: product.id } });
     },
     onError: (error: unknown) => {
       const message = error instanceof Error ? error.message : m['common.error']();
@@ -87,13 +94,26 @@ export const ProductSheet: FC = () => {
           <FormProvider {...form}>
             <form id={FORM_ID} onSubmit={form.handleSubmit((values) => create(values))} className="px-4 py-1">
               <fieldset disabled={isPending}>
-                <ProductFields/>
+                <ProductFormFields/>
               </fieldset>
             </form>
           </FormProvider>
         </ScrollArea>
 
-        <SheetFooter className="flex flex-col sm:flex-row gap-4 justify-between items-end pt-0">
+        <SheetFooter className="flex flex-col sm:flex-row gap-4 pt-0">
+          <div className="flex items-center gap-2 w-full">
+            <Checkbox
+              id="open-after-creation"
+              checked={openAfterCreation}
+              onCheckedChange={(value) => setOpenAfterCreation(value === true)}
+              disabled={isPending}
+            />
+
+            <Label htmlFor="open-after-creation" className="font-normal flex-1">
+              {m['pages.products.form.open_after_creation']()}
+            </Label>
+          </div>
+
           <div className="flex flex-row sm:justify-end gap-2 w-full">
             <SheetClose className="grow sm:grow-0 sm:min-w-32" asChild>
               <Button variant="outline" disabled={isPending}>

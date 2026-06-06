@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+import { useQuery } from '@tanstack/react-query';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -13,14 +14,35 @@ import {
 import { Button } from '@/components/ui/button';
 import { IconChevronDown } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
+import { orpc } from '@/lib/orpc';
+import { CategorySelectDropdown } from '@/routes/admin/categories/-components/category-sheet/category-select-dropdown.tsx';
 import { getProductStateOption, productStateOptions } from './product-state.ts';
 
 
-export const ProductFields: FC = () => {
+export const ProductFormFields: FC = () => {
   const { control } = useFormContext();
+
+  const { data: forest } = useQuery(orpc.admin.categories.getForest.queryOptions());
 
   return (
     <FieldGroup className="@container grid grid-cols-2 gap-2 @sm:gap-4">
+      <Controller
+        name="categoryId"
+        control={control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid} className="col-span-full">
+            <FieldLabel>{m['pages.products.form.category']()}</FieldLabel>
+            <CategorySelectDropdown
+              forest={forest ?? []}
+              value={field.value ?? null}
+              onValueChange={(value) => field.onChange(value)}
+              placeholder={m['pages.products.form.category_none']()}
+            />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
+          </Field>
+        )}
+      />
+
       <Controller
         name="slug"
         control={control}

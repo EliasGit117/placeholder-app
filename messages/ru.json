@@ -192,7 +192,9 @@
           "sku": "Артикул",
           "values": "Значения"
         },
-        "state_archived": "Архивирован"
+        "state_archived": "Архивирован",
+        "category": "Категория",
+        "category_none": "Без категории"
       },
       "options": {
         "create_title": "Добавление опции",

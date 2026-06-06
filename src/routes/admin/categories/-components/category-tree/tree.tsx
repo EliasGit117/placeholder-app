@@ -54,7 +54,7 @@ export const CategoryTree: FC<{ className?: string }> = ({ className }) => {
     const isConfirmed = await confirm({
       title: m['pages.categories.index.tree.delete_title'](),
       description: m['pages.categories.index.tree.delete_description'](),
-      confirmText: m['common.revoke'](),
+      confirmText: m['common.delete'](),
       cancelText: m['common.close'](),
     });
 
@@ -156,7 +156,7 @@ export const CategoryTree: FC<{ className?: string }> = ({ className }) => {
                       onClick={() => setTimeout(() => deleteWithConfirm(Number(item.getId())), 0)}
                     >
                       <IconTrash className="size-4"/>
-                      <span>{m['common.revoke']()}</span>
+                      <span>{m['common.delete']()}</span>
                     </ContextMenuItem>
                   </>
                 )}

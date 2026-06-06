@@ -8,7 +8,7 @@ export const adminCategoriesDelete = categoriesAdminBase
   .route({
     method: 'DELETE',
     summary: 'Delete category',
-    description: 'Hard deletes a category. Fails if the category has subcategories.',
+    description: 'Hard deletes a category. Fails if the category has subcategories or assigned products.',
   })
   .errors({ FORBIDDEN: {}, NOT_FOUND: {}, CONFLICT: {} })
   .use(authMiddleware)

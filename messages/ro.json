@@ -156,6 +156,7 @@
       "form": {
         "create_title": "Crearea produsului nou",
         "create_success": "Produsul a fost creat",
+        "open_after_creation": "Deschide după creare",
         "save_success": "Produsul a fost salvat",
         "name_ro": "Denumire (RO)",
         "name_ru": "Denumire (RU)",
@@ -193,7 +194,9 @@
           "sku": "SKU",
           "values": "Valori"
         },
-        "state_archived": "Arhivat"
+        "state_archived": "Arhivat",
+        "category": "Categorie",
+        "category_none": "Fără categorie"
       },
       "options": {
         "create_title": "Adăugare opțiune",

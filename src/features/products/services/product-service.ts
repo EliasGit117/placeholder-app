@@ -23,6 +23,7 @@ export class ProductService {
       state: entity.state,
       slug: entity.slug,
       options: entity.options as TOptions,
+      categoryId: entity.categoryId,
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
     };
@@ -101,6 +102,7 @@ export class ProductService {
         state: input.state,
         slug: input.slug,
         options: (input.options ?? {}) as Prisma.InputJsonValue,
+        categoryId: input.categoryId ?? null,
       },
       include: { variants: true },
     });
@@ -222,6 +224,7 @@ export class ProductService {
           ...(input.state !== undefined && { state: input.state }),
           ...(input.slug !== undefined && { slug: input.slug }),
           ...(input.options !== undefined && { options: input.options as Prisma.InputJsonValue }),
+          ...(input.categoryId !== undefined && { categoryId: input.categoryId }),
         },
       });
 

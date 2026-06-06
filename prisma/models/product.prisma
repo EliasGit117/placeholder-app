@@ -16,10 +16,13 @@ model Product {
   state              ProductState     @default(active)
   slug          String           @unique
   options       Json             @default("{}") @map("option_schema")
+  categoryId    Int?             @map("category_id")
+  category      Category?        @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   variants      ProductVariant[]
   createdAt     DateTime         @default(now()) @map("created_at")
   updatedAt     DateTime         @updatedAt @map("updated_at")
 
+  @@index([categoryId])
   @@map("products")
 }
 

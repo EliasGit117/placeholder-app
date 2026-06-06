@@ -13,6 +13,7 @@ export const productSchema = z.object({
   state: z.enum(ProductState),
   slug: z.string(),
   options: optionsSchema,
+  categoryId: z.number().nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

@@ -12,6 +12,7 @@ export const createProductFormSchema = z.object({
   shortDescriptionRu: z.string().trim().max(512).optional(),
   slug: slugSchema,
   state: z.enum(ProductState),
+  categoryId: z.number().int().positive().nullable(),
 });
 
 export type TCreateProductForm = z.infer<typeof createProductFormSchema>;
