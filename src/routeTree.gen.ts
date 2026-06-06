@@ -38,6 +38,7 @@ import { Route as AdminGallerySectionsRouteRouteImport } from './routes/admin/ga
 import { Route as AdminProductsProductIdIndexRouteImport } from './routes/admin/products/$productId/index'
 import { Route as AdminGallerySectionsIndexRouteImport } from './routes/admin/gallery/sections/index'
 import { Route as AdminGallerySectionsSectionIdIndexRouteImport } from './routes/admin/gallery/sections/$sectionId/index'
+import { Route as ApiAdminProductsVariantsVariantIdImagesRouteImport } from './routes/api/admin/products/variants/$variantId/images'
 import { Route as ApiAdminGallerySectionsSectionIdImagesRouteImport } from './routes/api/admin/gallery/sections/$sectionId/images'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
@@ -188,6 +189,12 @@ const AdminGallerySectionsSectionIdIndexRoute =
     path: '/$sectionId/',
     getParentRoute: () => AdminGallerySectionsRouteRoute,
   } as any)
+const ApiAdminProductsVariantsVariantIdImagesRoute =
+  ApiAdminProductsVariantsVariantIdImagesRouteImport.update({
+    id: '/api/admin/products/variants/$variantId/images',
+    path: '/api/admin/products/variants/$variantId/images',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiAdminGallerySectionsSectionIdImagesRoute =
   ApiAdminGallerySectionsSectionIdImagesRouteImport.update({
     id: '/api/admin/gallery/sections/$sectionId/images',
@@ -225,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/admin/products/$productId/': typeof AdminProductsProductIdIndexRoute
   '/admin/gallery/sections/$sectionId/': typeof AdminGallerySectionsSectionIdIndexRoute
   '/api/admin/gallery/sections/$sectionId/images': typeof ApiAdminGallerySectionsSectionIdImagesRoute
+  '/api/admin/products/variants/$variantId/images': typeof ApiAdminProductsVariantsVariantIdImagesRoute
 }
 export interface FileRoutesByTo {
   '/api/$': typeof ApiSplatRoute
@@ -249,6 +257,7 @@ export interface FileRoutesByTo {
   '/admin/products/$productId': typeof AdminProductsProductIdIndexRoute
   '/admin/gallery/sections/$sectionId': typeof AdminGallerySectionsSectionIdIndexRoute
   '/api/admin/gallery/sections/$sectionId/images': typeof ApiAdminGallerySectionsSectionIdImagesRoute
+  '/api/admin/products/variants/$variantId/images': typeof ApiAdminProductsVariantsVariantIdImagesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -282,6 +291,7 @@ export interface FileRoutesById {
   '/admin/products/$productId/': typeof AdminProductsProductIdIndexRoute
   '/admin/gallery/sections/$sectionId/': typeof AdminGallerySectionsSectionIdIndexRoute
   '/api/admin/gallery/sections/$sectionId/images': typeof ApiAdminGallerySectionsSectionIdImagesRoute
+  '/api/admin/products/variants/$variantId/images': typeof ApiAdminProductsVariantsVariantIdImagesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -315,6 +325,7 @@ export interface FileRouteTypes {
     | '/admin/products/$productId/'
     | '/admin/gallery/sections/$sectionId/'
     | '/api/admin/gallery/sections/$sectionId/images'
+    | '/api/admin/products/variants/$variantId/images'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/api/$'
@@ -339,6 +350,7 @@ export interface FileRouteTypes {
     | '/admin/products/$productId'
     | '/admin/gallery/sections/$sectionId'
     | '/api/admin/gallery/sections/$sectionId/images'
+    | '/api/admin/products/variants/$variantId/images'
   id:
     | '__root__'
     | '/_public'
@@ -371,6 +383,7 @@ export interface FileRouteTypes {
     | '/admin/products/$productId/'
     | '/admin/gallery/sections/$sectionId/'
     | '/api/admin/gallery/sections/$sectionId/images'
+    | '/api/admin/products/variants/$variantId/images'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -381,6 +394,7 @@ export interface RootRouteChildren {
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
   ApiAdminGallerySectionsSectionIdImagesRoute: typeof ApiAdminGallerySectionsSectionIdImagesRoute
+  ApiAdminProductsVariantsVariantIdImagesRoute: typeof ApiAdminProductsVariantsVariantIdImagesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -588,6 +602,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGallerySectionsSectionIdIndexRouteImport
       parentRoute: typeof AdminGallerySectionsRouteRoute
     }
+    '/api/admin/products/variants/$variantId/images': {
+      id: '/api/admin/products/variants/$variantId/images'
+      path: '/api/admin/products/variants/$variantId/images'
+      fullPath: '/api/admin/products/variants/$variantId/images'
+      preLoaderRoute: typeof ApiAdminProductsVariantsVariantIdImagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/admin/gallery/sections/$sectionId/images': {
       id: '/api/admin/gallery/sections/$sectionId/images'
       path: '/api/admin/gallery/sections/$sectionId/images'
@@ -732,6 +753,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiRpcSplatRoute: ApiRpcSplatRoute,
   ApiAdminGallerySectionsSectionIdImagesRoute:
     ApiAdminGallerySectionsSectionIdImagesRoute,
+  ApiAdminProductsVariantsVariantIdImagesRoute:
+    ApiAdminProductsVariantsVariantIdImagesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

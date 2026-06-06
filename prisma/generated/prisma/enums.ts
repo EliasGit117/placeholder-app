@@ -27,7 +27,8 @@ export type GallerySectionState = (typeof GallerySectionState)[keyof typeof Gall
 
 export const ImageResourceType = {
   GALLERY_SECTION: 'GALLERY_SECTION',
-  AVATAR: 'AVATAR'
+  AVATAR: 'AVATAR',
+  PRODUCT_VARIANT: 'PRODUCT_VARIANT'
 } as const
 
 export type ImageResourceType = (typeof ImageResourceType)[keyof typeof ImageResourceType]
@@ -35,7 +36,8 @@ export type ImageResourceType = (typeof ImageResourceType)[keyof typeof ImageRes
 
 export const ImagePurpose = {
   GALLERY_SECTION_IMAGE: 'GALLERY_SECTION_IMAGE',
-  AVATAR_IMAGE: 'AVATAR_IMAGE'
+  AVATAR_IMAGE: 'AVATAR_IMAGE',
+  PRODUCT_VARIANT_IMAGE: 'PRODUCT_VARIANT_IMAGE'
 } as const
 
 export type ImagePurpose = (typeof ImagePurpose)[keyof typeof ImagePurpose]

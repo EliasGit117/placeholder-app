@@ -187,6 +187,25 @@ export class ImageService {
     return ImageDtoFactory.fromEntities(entities);
   }
 
+  // Batch variant of findByResource: fetches images for many resource ids of
+  // the same type in one query (ordered by resource then display order). Callers
+  // group by resourceId. Avoids an N+1 when listing images for sibling resources.
+  static async findByResources(
+    resourceType: ImageResourceType,
+    resourceIds: string[]
+  ): Promise<TImageDto[]> {
+    if (resourceIds.length === 0)
+      return [];
+
+    const entities = await prisma.image.findMany({
+      where: { resourceType, resourceId: { in: resourceIds } },
+      include: { variants: true },
+      orderBy: [{ resourceId: 'asc' }, { order: 'asc' }]
+    });
+
+    return ImageDtoFactory.fromEntities(entities);
+  }
+
   static async delete(id: number): Promise<void> {
     const entity = await prisma.image.findUnique({ where: { id }, include: { variants: true } });
     if (!entity)

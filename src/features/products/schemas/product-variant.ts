@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { optionValuesSchema } from '@/features/products/schemas/option-schema.ts';
+import { productVariantImageDtoSchema } from '@/features/products/dtos/product-variant-image.ts';
 
 
 export const productVariantSchema = z.object({
@@ -14,6 +15,7 @@ export const productVariantSchema = z.object({
   sku: z.string(),
   optionValues: optionValuesSchema,
   price: z.number().int(),
+  images: z.array(productVariantImageDtoSchema),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

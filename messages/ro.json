@@ -31,6 +31,7 @@
     "save": "Salvare",
     "create": "Creare",
     "close": "Închide",
+    "back": "Înapoi",
     "edit": "Editare",
     "optional": "opțional",
     "expand": "Extinde",
@@ -219,7 +220,23 @@
         "delete_title": "Ștergere variantă",
         "delete_description": "Sigur doriți să ștergeți această variantă?",
         "empty_title": "Nicio variantă",
-        "empty_description": "Acest produs nu are încă variante."
+        "empty_description": "Acest produs nu are încă variante.",
+        "col_name": "Denumire",
+        "col_state": "Stare",
+        "col_options": "Opțiuni",
+        "col_images": "Imagini",
+        "images": {
+          "manage": "Imagini",
+          "upload": "Încarcă",
+          "title": "Imaginile variantei",
+          "description": "Încarcă, șterge și reordonează imaginile variantei.",
+          "empty": "Nicio imagine",
+          "delete_title": "Ștergere imagine",
+          "delete_description": "Sigur doriți să ștergeți această imagine?",
+          "reorder": "Reordonează",
+          "reorder_hint": "Trageți imaginile pentru a le reordona.",
+          "reorder_error": "Salvarea ordinii a eșuat"
+        }
       }
     },
     "gallery": {

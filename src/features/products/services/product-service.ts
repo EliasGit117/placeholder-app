@@ -1,7 +1,9 @@
 import { ORPCError } from '@orpc/server';
 import { type Prisma, type Product, type ProductVariant } from '~/prisma/generated/prisma/client.ts';
-import { ProductState } from '~/prisma/generated/prisma/enums.ts';
+import { ImageResourceType, ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { prisma } from '@/lib/db';
+import { ImageService } from '@/features/images/services/image-service.ts';
+import { ProductVariantImageDtoFactory, type TProductVariantImageDto } from '@/features/products/dtos/product-variant-image.ts';
 import type { TxClient } from '@/lib/db/prisma.ts';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
 import type { TOptions, TOptionValues } from '@/features/products/schemas/option-schema.ts';
@@ -29,7 +31,10 @@ export class ProductService {
     };
   }
 
-  static variantFromEntity(entity: ProductVariant): TProductVariant {
+  static variantFromEntity(
+    entity: ProductVariant,
+    images: TProductVariantImageDto[] = []
+  ): TProductVariant {
     return {
       id: entity.id,
       productId: entity.productId,
@@ -41,16 +46,44 @@ export class ProductService {
       fullSlug: entity.fullSlug,
       optionValues: entity.optionValues as TOptionValues,
       price: entity.price,
+      images,
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
     };
   }
 
-  static withVariants(product: Product, variants: ProductVariant[]): TProductWithVariants {
+  static withVariants(
+    product: Product,
+    variants: ProductVariant[],
+    imagesByVariant?: Map<number, TProductVariantImageDto[]>
+  ): TProductWithVariants {
     return {
       ...ProductService.fromEntity(product),
-      variants: variants.map(ProductService.variantFromEntity),
+      variants: variants.map((v) =>
+        ProductService.variantFromEntity(v, imagesByVariant?.get(v.id) ?? [])
+      ),
     };
+  }
+
+  // Batch-fetch images for the given variants, grouped by variant id, preserving
+  // each variant's image display order.
+  private static async variantImagesMap(
+    variants: ProductVariant[]
+  ): Promise<Map<number, TProductVariantImageDto[]>> {
+    const images = await ImageService.findByResources(
+      ImageResourceType.PRODUCT_VARIANT,
+      variants.map((v) => String(v.id))
+    );
+
+    const map = new Map<number, TProductVariantImageDto[]>();
+    for (const image of images) {
+      const variantId = Number(image.resourceId);
+      const list = map.get(variantId) ?? [];
+      list.push(ProductVariantImageDtoFactory.fromImageDto(image));
+      map.set(variantId, list);
+    }
+
+    return map;
   }
 
   static async list(): Promise<TProduct[]> {
@@ -68,7 +101,11 @@ export class ProductService {
 
   static async findById(id: number): Promise<TProductWithVariants | null> {
     const entity = await prisma.product.findUnique({ where: { id }, include: { variants: true } });
-    return entity ? ProductService.withVariants(entity, entity.variants) : null;
+    if (entity == null)
+      return null;
+
+    const imagesByVariant = await ProductService.variantImagesMap(entity.variants);
+    return ProductService.withVariants(entity, entity.variants, imagesByVariant);
   }
 
   static async findBySlug(slug: string): Promise<TProductWithVariants | null> {
@@ -185,12 +222,21 @@ export class ProductService {
     return ProductService.variantFromEntity(variant);
   }
 
+  static async findVariantById(id: number): Promise<TProductVariant | null> {
+    const entity = await prisma.productVariant.findUnique({ where: { id } });
+    return entity ? ProductService.variantFromEntity(entity) : null;
+  }
+
   static async deleteVariant(id: number): Promise<void> {
     const existing = await prisma.productVariant.findUnique({ where: { id }, select: { id: true } });
     if (!existing)
       throw new ORPCError('NOT_FOUND');
 
     await prisma.productVariant.delete({ where: { id } });
+
+    // Variant images are owned via the polymorphic image resource map (no FK
+    // cascade), so clean them out of storage + DB after the variant is gone.
+    await ImageService.deleteAllForResource(ImageResourceType.PRODUCT_VARIANT, String(id));
   }
 
   static async update(id: number, input: TUpdateProductInput): Promise<TProductWithVariants> {

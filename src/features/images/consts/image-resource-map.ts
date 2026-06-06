@@ -50,6 +50,19 @@ export const imagePolicy: Record<ImageResourceType, Partial<Record<ImagePurpose,
       ],
     },
   },
+  PRODUCT_VARIANT: {
+    PRODUCT_VARIANT_IMAGE: {
+      multiple: true,
+      maxSize: mbToBytes(10),
+      mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+      width: 1920,
+      height: 1920,
+      variants: [
+        { kind: ImageVariantKind.THUMB_512x512, width: 512, height: 512, fit: 'cover' },
+        { kind: ImageVariantKind.THUMB_256x256, width: 256, height: 256, fit: 'cover' },
+      ],
+    },
+  },
 };
 
 export function getImagePolicy(

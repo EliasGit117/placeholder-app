@@ -1,6 +1,7 @@
 enum ImageResourceType {
   GALLERY_SECTION
   AVATAR
+  PRODUCT_VARIANT
 
   @@map("image_resource_type")
 }
@@ -8,6 +9,7 @@ enum ImageResourceType {
 enum ImagePurpose {
   GALLERY_SECTION_IMAGE
   AVATAR_IMAGE
+  PRODUCT_VARIANT_IMAGE
 
   @@map("image_purpose")
 }
