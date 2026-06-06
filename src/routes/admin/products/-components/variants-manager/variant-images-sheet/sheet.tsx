@@ -17,7 +17,11 @@ import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
 import { IconArrowLeft, IconArrowsSort, IconUpload, IconX } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
-import { UploadImages } from './upload-images.tsx';
+import {
+  UploadProductVariantImagesProvider,
+  UploadDropZone,
+  UploadFileList,
+} from '../upload-product-variant-images';
 import { ImagesPreview } from './images-preview.tsx';
 import {
   ReorderProductVariantImagesProvider,
@@ -142,11 +146,16 @@ export const VariantImagesSheet: FC<IProps> = ({ open, onOpenChange, variant }) 
                 </div>
               </ReorderProductVariantImagesProvider>
             ) : mode === Mode.Upload ? (
-              <UploadImages
+              <UploadProductVariantImagesProvider
                 variantId={variantId}
                 onUploaded={invalidate}
-                onLoadingChange={setIsLoading}
-              />
+                onPendingChange={setIsLoading}
+              >
+                <div className="space-y-4">
+                  <UploadDropZone/>
+                  <UploadFileList/>
+                </div>
+              </UploadProductVariantImagesProvider>
             ) : (
               <>
                 <div className="flex justify-end gap-2">

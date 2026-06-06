@@ -84,13 +84,13 @@ const navMain: ISidebarMenuItem[] = [
         title: () => m['pages.products.title'](),
         icon: IconPackage,
         linkOptions: { to: '/admin/products', activeOptions: { includeSearch: false } }
-      },
-      {
-        title: () => m['pages.gallery.title'](),
-        icon: IconLibraryPhoto,
-        linkOptions: { to: '/admin/gallery', activeOptions: { includeSearch: false } }
       }
     ]
+  },
+  {
+    title: () => m['pages.gallery.title'](),
+    icon: IconLibraryPhoto,
+    linkOptions: { to: '/admin/gallery', activeOptions: { includeSearch: false } }
   },
   {
     title: () => m['components.sidebar.nav.security'](),

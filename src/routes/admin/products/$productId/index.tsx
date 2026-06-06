@@ -12,7 +12,7 @@ import { roleHasPermission } from '@/lib/auth';
 import { getLocale } from '@/paraglide/runtime';
 import { capitalizeFirst } from '@/lib/utils';
 import type { IBreadcrumb } from '@/components/layout/admin/nav-breadcrumbs.tsx';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LoadingButton } from '@/components/ui/loading-button';
 import { IconDeviceFloppy } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
@@ -156,21 +156,20 @@ function RouteComponent() {
               <CardHeader>
                 <CardTitle>{m['pages.products.form.section_general']()}</CardTitle>
                 <CardDescription>{m['pages.products.form.section_general_description']()}</CardDescription>
+                {canUpdate && (
+                  <CardAction>
+                    <LoadingButton variant='secondary' type="submit" size="sm" loading={isPending}>
+                      <IconDeviceFloppy className="size-4"/>
+                      <span>{m['common.save']()}</span>
+                    </LoadingButton>
+                  </CardAction>
+                )}
               </CardHeader>
               <CardContent>
                 <fieldset disabled={!canUpdate}>
                   <ProductFormFields/>
                 </fieldset>
               </CardContent>
-
-              {canUpdate && (
-                <CardFooter className="justify-end">
-                  <LoadingButton type="submit" loading={isPending}>
-                    <IconDeviceFloppy className="size-4"/>
-                    <span>{m['common.save']()}</span>
-                  </LoadingButton>
-                </CardFooter>
-              )}
             </Card>
           </form>
         </FormProvider>
