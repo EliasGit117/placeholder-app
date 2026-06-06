@@ -19,7 +19,11 @@ import { m } from '@/paraglide/messages';
 import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
 import { UploadImages } from './upload-images.tsx';
 import { ImagesPreview } from './images-preview.tsx';
-import { ReorderImages } from './reorder-images.tsx';
+import {
+  ReorderProductVariantImagesProvider,
+  ReorderGrid,
+  ReorderSaveButton,
+} from '../reorder-product-variant-images';
 
 // Only one view is visible at a time.
 enum Mode {
@@ -45,6 +49,9 @@ export const VariantImagesSheet: FC<IProps> = ({ open, onOpenChange, variant }) 
     orpc.admin.products.getVariantImages.queryOptions({
       input: { variantId: variantId ?? 0 },
       enabled: open && variantId != null,
+      // Override the global staleTime so reopening the sheet always refetches
+      // (otherwise cached-fresh data within the global window shows no update).
+      staleTime: 0,
     })
   );
 
@@ -64,9 +71,10 @@ export const VariantImagesSheet: FC<IProps> = ({ open, onOpenChange, variant }) 
     void queryClient.invalidateQueries({ queryKey: orpc.admin.products.get.key() });
   };
 
-  const { mutateAsync: deleteImages, isPending: isDeleting } = useMutation({
+  const { mutate: deleteImages, isPending: isDeleting } = useMutation({
     ...orpc.admin.products.deleteVariantImages.mutationOptions(),
     onSuccess: () => invalidate(),
+    onError: (err: Error) => toast.error(m['common.error'](), { description: err.message }),
   });
 
   // Any in-flight work (upload, delete, reorder save) blocks closing/leaving.
@@ -83,12 +91,7 @@ export const VariantImagesSheet: FC<IProps> = ({ open, onOpenChange, variant }) 
     });
     if (!confirmed) return;
 
-    try {
-      await deleteImages({ variantId, ids: [id] });
-    } catch (err) {
-      const message = err instanceof Error ? err.message : m['common.error']();
-      toast.error(m['common.error'](), { description: message });
-    }
+    deleteImages({ variantId, ids: [id] });
   };
 
   const handleOpenChange = (v: boolean) => {
@@ -111,12 +114,33 @@ export const VariantImagesSheet: FC<IProps> = ({ open, onOpenChange, variant }) 
         <ScrollArea className="flex-1 overflow-y-auto mr-2 my-2" type="always">
           <div className="space-y-4 px-4 py-1">
             {variantId == null ? null : mode === Mode.Reorder ? (
-              <ReorderImages
+              <ReorderProductVariantImagesProvider
                 variantId={variantId}
-                images={images}
-                onDone={() => setMode(Mode.Preview)}
-                onLoadingChange={setIsLoading}
-              />
+                initialData={images}
+                onSuccess={() => setMode(Mode.Preview)}
+                onPendingChange={setIsLoading}
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm text-muted-foreground">
+                      {m['pages.products.variants.images.reorder_hint']()}
+                    </span>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={isLoading}
+                        onClick={() => setMode(Mode.Preview)}
+                      >
+                        <IconX className="size-4"/>
+                        <span>{m['common.cancel']()}</span>
+                      </Button>
+                      <ReorderSaveButton/>
+                    </div>
+                  </div>
+                  <ReorderGrid/>
+                </div>
+              </ReorderProductVariantImagesProvider>
             ) : mode === Mode.Upload ? (
               <UploadImages
                 variantId={variantId}
@@ -126,16 +150,24 @@ export const VariantImagesSheet: FC<IProps> = ({ open, onOpenChange, variant }) 
             ) : (
               <>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" size="sm" disabled={isDeleting} onClick={() => setMode(Mode.Upload)}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={isPending || isDeleting}
+                    onClick={() => setMode(Mode.Upload)}
+                  >
                     <IconUpload className="size-4"/>
                     <span>{m['pages.products.variants.images.upload']()}</span>
                   </Button>
-                  {!isPending && images.length > 1 && (
-                    <Button variant="outline" size="sm" disabled={isDeleting} onClick={() => setMode(Mode.Reorder)}>
-                      <IconArrowsSort className="size-4"/>
-                      <span>{m['pages.products.variants.images.reorder']()}</span>
-                    </Button>
-                  )}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={isPending || isDeleting || images.length <= 1}
+                    onClick={() => setMode(Mode.Reorder)}
+                  >
+                    <IconArrowsSort className="size-4"/>
+                    <span>{m['pages.products.variants.images.reorder']()}</span>
+                  </Button>
                 </div>
 
                 <ImagesPreview

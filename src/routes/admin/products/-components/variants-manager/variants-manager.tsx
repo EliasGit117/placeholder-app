@@ -216,13 +216,14 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent className="w-fit min-w-36" align="end">
-                            <DropdownMenuItem onClick={() => onEditClick(variant)}>
-                              <IconPencil className="mr-2 size-4"/>
-                              <span>{m['common.edit']()}</span>
-                            </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => onManageImagesClick(variant)}>
                               <IconPhoto className="mr-2 size-4"/>
                               <span>{m['pages.products.variants.images.manage']()}</span>
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem onClick={() => onEditClick(variant)}>
+                              <IconPencil className="mr-2 size-4"/>
+                              <span>{m['common.edit']()}</span>
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               variant="destructive"
