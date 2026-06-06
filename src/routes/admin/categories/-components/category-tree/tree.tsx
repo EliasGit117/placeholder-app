@@ -56,6 +56,7 @@ export const CategoryTree: FC<{ className?: string }> = ({ className }) => {
       description: m['pages.categories.index.tree.delete_description'](),
       confirmText: m['common.delete'](),
       cancelText: m['common.close'](),
+      confirmButton: { variant: 'destructive' },
     });
 
     if (!isConfirmed) return;
