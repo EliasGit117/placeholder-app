@@ -5,6 +5,7 @@ export const createImageVariantSchema = z.object({
   kind: z.enum(ImageVariantKind),
   url: z.string().url(),
   key: z.string().min(1),
+  customId: z.string().optional(),
   name: z.string().min(1),
   size: z.number().int().positive(),
   width: z.number().int().positive(),
@@ -14,6 +15,7 @@ export const createImageVariantSchema = z.object({
 export const createImageSchema = z.object({
   url: z.string().url(),
   key: z.string().min(1),
+  customId: z.string().optional(),
   name: z.string().min(1),
   size: z.number().int().positive(),
   mimeType: z.string().min(1),

@@ -121,7 +121,7 @@ export const AdminSidebar: FC<ComponentPropsWithoutRef<typeof Sidebar>> = ({ cla
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link to="/admin" onClick={() => setOpenMobile(false)}>
+              <Link to="/" onClick={() => setOpenMobile(false)}>
                 <figure
                   className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center overflow-clip rounded-md">
                   <img src={logo} alt="" className="size-full grayscale invert dark:invert-0"/>

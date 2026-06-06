@@ -172,7 +172,7 @@ export const productColumns = (options?: IOptions) => {
       meta: {
         label: m['pages.products.index.table.variants'](),
         icon: IconStack2,
-        skeletonClassName: 'h-6 w-40',
+        skeletonClassName: 'h-6.5 w-40',
       },
     }),
 

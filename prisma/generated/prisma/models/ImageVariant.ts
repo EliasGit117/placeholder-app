@@ -48,6 +48,7 @@ export type ImageVariantMinAggregateOutputType = {
   kind: $Enums.ImageVariantKind | null
   url: string | null
   key: string | null
+  customId: string | null
   name: string | null
   size: number | null
   width: number | null
@@ -61,6 +62,7 @@ export type ImageVariantMaxAggregateOutputType = {
   kind: $Enums.ImageVariantKind | null
   url: string | null
   key: string | null
+  customId: string | null
   name: string | null
   size: number | null
   width: number | null
@@ -74,6 +76,7 @@ export type ImageVariantCountAggregateOutputType = {
   kind: number
   url: number
   key: number
+  customId: number
   name: number
   size: number
   width: number
@@ -105,6 +108,7 @@ export type ImageVariantMinAggregateInputType = {
   kind?: true
   url?: true
   key?: true
+  customId?: true
   name?: true
   size?: true
   width?: true
@@ -118,6 +122,7 @@ export type ImageVariantMaxAggregateInputType = {
   kind?: true
   url?: true
   key?: true
+  customId?: true
   name?: true
   size?: true
   width?: true
@@ -131,6 +136,7 @@ export type ImageVariantCountAggregateInputType = {
   kind?: true
   url?: true
   key?: true
+  customId?: true
   name?: true
   size?: true
   width?: true
@@ -231,6 +237,7 @@ export type ImageVariantGroupByOutputType = {
   kind: $Enums.ImageVariantKind
   url: string
   key: string
+  customId: string | null
   name: string
   size: number
   width: number
@@ -267,6 +274,7 @@ export type ImageVariantWhereInput = {
   kind?: Prisma.EnumImageVariantKindFilter<"ImageVariant"> | $Enums.ImageVariantKind
   url?: Prisma.StringFilter<"ImageVariant"> | string
   key?: Prisma.StringFilter<"ImageVariant"> | string
+  customId?: Prisma.StringNullableFilter<"ImageVariant"> | string | null
   name?: Prisma.StringFilter<"ImageVariant"> | string
   size?: Prisma.IntFilter<"ImageVariant"> | number
   width?: Prisma.IntFilter<"ImageVariant"> | number
@@ -281,6 +289,7 @@ export type ImageVariantOrderByWithRelationInput = {
   kind?: Prisma.SortOrder
   url?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  customId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   size?: Prisma.SortOrder
   width?: Prisma.SortOrder
@@ -299,6 +308,7 @@ export type ImageVariantWhereUniqueInput = Prisma.AtLeast<{
   kind?: Prisma.EnumImageVariantKindFilter<"ImageVariant"> | $Enums.ImageVariantKind
   url?: Prisma.StringFilter<"ImageVariant"> | string
   key?: Prisma.StringFilter<"ImageVariant"> | string
+  customId?: Prisma.StringNullableFilter<"ImageVariant"> | string | null
   name?: Prisma.StringFilter<"ImageVariant"> | string
   size?: Prisma.IntFilter<"ImageVariant"> | number
   width?: Prisma.IntFilter<"ImageVariant"> | number
@@ -313,6 +323,7 @@ export type ImageVariantOrderByWithAggregationInput = {
   kind?: Prisma.SortOrder
   url?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  customId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   size?: Prisma.SortOrder
   width?: Prisma.SortOrder
@@ -334,6 +345,7 @@ export type ImageVariantScalarWhereWithAggregatesInput = {
   kind?: Prisma.EnumImageVariantKindWithAggregatesFilter<"ImageVariant"> | $Enums.ImageVariantKind
   url?: Prisma.StringWithAggregatesFilter<"ImageVariant"> | string
   key?: Prisma.StringWithAggregatesFilter<"ImageVariant"> | string
+  customId?: Prisma.StringNullableWithAggregatesFilter<"ImageVariant"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"ImageVariant"> | string
   size?: Prisma.IntWithAggregatesFilter<"ImageVariant"> | number
   width?: Prisma.IntWithAggregatesFilter<"ImageVariant"> | number
@@ -345,6 +357,7 @@ export type ImageVariantCreateInput = {
   kind: $Enums.ImageVariantKind
   url: string
   key: string
+  customId?: string | null
   name: string
   size: number
   width: number
@@ -359,6 +372,7 @@ export type ImageVariantUncheckedCreateInput = {
   kind: $Enums.ImageVariantKind
   url: string
   key: string
+  customId?: string | null
   name: string
   size: number
   width: number
@@ -370,6 +384,7 @@ export type ImageVariantUpdateInput = {
   kind?: Prisma.EnumImageVariantKindFieldUpdateOperationsInput | $Enums.ImageVariantKind
   url?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  customId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   width?: Prisma.IntFieldUpdateOperationsInput | number
@@ -384,6 +399,7 @@ export type ImageVariantUncheckedUpdateInput = {
   kind?: Prisma.EnumImageVariantKindFieldUpdateOperationsInput | $Enums.ImageVariantKind
   url?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  customId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   width?: Prisma.IntFieldUpdateOperationsInput | number
@@ -397,6 +413,7 @@ export type ImageVariantCreateManyInput = {
   kind: $Enums.ImageVariantKind
   url: string
   key: string
+  customId?: string | null
   name: string
   size: number
   width: number
@@ -408,6 +425,7 @@ export type ImageVariantUpdateManyMutationInput = {
   kind?: Prisma.EnumImageVariantKindFieldUpdateOperationsInput | $Enums.ImageVariantKind
   url?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  customId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   width?: Prisma.IntFieldUpdateOperationsInput | number
@@ -421,6 +439,7 @@ export type ImageVariantUncheckedUpdateManyInput = {
   kind?: Prisma.EnumImageVariantKindFieldUpdateOperationsInput | $Enums.ImageVariantKind
   url?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  customId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   width?: Prisma.IntFieldUpdateOperationsInput | number
@@ -449,6 +468,7 @@ export type ImageVariantCountOrderByAggregateInput = {
   kind?: Prisma.SortOrder
   url?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  customId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   size?: Prisma.SortOrder
   width?: Prisma.SortOrder
@@ -470,6 +490,7 @@ export type ImageVariantMaxOrderByAggregateInput = {
   kind?: Prisma.SortOrder
   url?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  customId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   size?: Prisma.SortOrder
   width?: Prisma.SortOrder
@@ -483,6 +504,7 @@ export type ImageVariantMinOrderByAggregateInput = {
   kind?: Prisma.SortOrder
   url?: Prisma.SortOrder
   key?: Prisma.SortOrder
+  customId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   size?: Prisma.SortOrder
   width?: Prisma.SortOrder
@@ -548,6 +570,7 @@ export type ImageVariantCreateWithoutImageInput = {
   kind: $Enums.ImageVariantKind
   url: string
   key: string
+  customId?: string | null
   name: string
   size: number
   width: number
@@ -560,6 +583,7 @@ export type ImageVariantUncheckedCreateWithoutImageInput = {
   kind: $Enums.ImageVariantKind
   url: string
   key: string
+  customId?: string | null
   name: string
   size: number
   width: number
@@ -602,6 +626,7 @@ export type ImageVariantScalarWhereInput = {
   kind?: Prisma.EnumImageVariantKindFilter<"ImageVariant"> | $Enums.ImageVariantKind
   url?: Prisma.StringFilter<"ImageVariant"> | string
   key?: Prisma.StringFilter<"ImageVariant"> | string
+  customId?: Prisma.StringNullableFilter<"ImageVariant"> | string | null
   name?: Prisma.StringFilter<"ImageVariant"> | string
   size?: Prisma.IntFilter<"ImageVariant"> | number
   width?: Prisma.IntFilter<"ImageVariant"> | number
@@ -614,6 +639,7 @@ export type ImageVariantCreateManyImageInput = {
   kind: $Enums.ImageVariantKind
   url: string
   key: string
+  customId?: string | null
   name: string
   size: number
   width: number
@@ -625,6 +651,7 @@ export type ImageVariantUpdateWithoutImageInput = {
   kind?: Prisma.EnumImageVariantKindFieldUpdateOperationsInput | $Enums.ImageVariantKind
   url?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  customId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   width?: Prisma.IntFieldUpdateOperationsInput | number
@@ -637,6 +664,7 @@ export type ImageVariantUncheckedUpdateWithoutImageInput = {
   kind?: Prisma.EnumImageVariantKindFieldUpdateOperationsInput | $Enums.ImageVariantKind
   url?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  customId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   width?: Prisma.IntFieldUpdateOperationsInput | number
@@ -649,6 +677,7 @@ export type ImageVariantUncheckedUpdateManyWithoutImageInput = {
   kind?: Prisma.EnumImageVariantKindFieldUpdateOperationsInput | $Enums.ImageVariantKind
   url?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
+  customId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   width?: Prisma.IntFieldUpdateOperationsInput | number
@@ -664,6 +693,7 @@ export type ImageVariantSelect<ExtArgs extends runtime.Types.Extensions.Internal
   kind?: boolean
   url?: boolean
   key?: boolean
+  customId?: boolean
   name?: boolean
   size?: boolean
   width?: boolean
@@ -678,6 +708,7 @@ export type ImageVariantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   kind?: boolean
   url?: boolean
   key?: boolean
+  customId?: boolean
   name?: boolean
   size?: boolean
   width?: boolean
@@ -692,6 +723,7 @@ export type ImageVariantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   kind?: boolean
   url?: boolean
   key?: boolean
+  customId?: boolean
   name?: boolean
   size?: boolean
   width?: boolean
@@ -706,6 +738,7 @@ export type ImageVariantSelectScalar = {
   kind?: boolean
   url?: boolean
   key?: boolean
+  customId?: boolean
   name?: boolean
   size?: boolean
   width?: boolean
@@ -713,7 +746,7 @@ export type ImageVariantSelectScalar = {
   createdAt?: boolean
 }
 
-export type ImageVariantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "imageId" | "kind" | "url" | "key" | "name" | "size" | "width" | "height" | "createdAt", ExtArgs["result"]["imageVariant"]>
+export type ImageVariantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "imageId" | "kind" | "url" | "key" | "customId" | "name" | "size" | "width" | "height" | "createdAt", ExtArgs["result"]["imageVariant"]>
 export type ImageVariantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   image?: boolean | Prisma.ImageDefaultArgs<ExtArgs>
 }
@@ -735,6 +768,7 @@ export type $ImageVariantPayload<ExtArgs extends runtime.Types.Extensions.Intern
     kind: $Enums.ImageVariantKind
     url: string
     key: string
+    customId: string | null
     name: string
     size: number
     width: number
@@ -1169,6 +1203,7 @@ export interface ImageVariantFieldRefs {
   readonly kind: Prisma.FieldRef<"ImageVariant", 'ImageVariantKind'>
   readonly url: Prisma.FieldRef<"ImageVariant", 'String'>
   readonly key: Prisma.FieldRef<"ImageVariant", 'String'>
+  readonly customId: Prisma.FieldRef<"ImageVariant", 'String'>
   readonly name: Prisma.FieldRef<"ImageVariant", 'String'>
   readonly size: Prisma.FieldRef<"ImageVariant", 'Int'>
   readonly width: Prisma.FieldRef<"ImageVariant", 'Int'>

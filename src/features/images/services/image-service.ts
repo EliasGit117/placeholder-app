@@ -79,17 +79,26 @@ export class ImageService {
   static async upload(input: UploadInput): Promise<TImageDto> {
     const prepared = await ImageService.prepareImage(input);
 
-    const uploadedOriginal = await s3Storage.upload(prepared.original.file, { acl: 'public-read' });
+    // Generate a GUID per file up front so it can travel as the UploadThing
+    // customId and then be persisted on the entity after a successful upload.
+    const uploadedOriginal = await s3Storage.upload(prepared.original.file, {
+      acl: 'public-read',
+      customId: crypto.randomUUID(),
+    });
     const uploadedVariants = await Promise.all(
       prepared.variants.map(async (variant) => ({
         variant,
-        uploaded: await s3Storage.upload(variant.file, { acl: 'public-read' }),
+        uploaded: await s3Storage.upload(variant.file, {
+          acl: 'public-read',
+          customId: crypto.randomUUID(),
+        }),
       }))
     );
 
     return ImageService.create({
       url: uploadedOriginal.url,
       key: uploadedOriginal.key,
+      customId: uploadedOriginal.customId ?? undefined,
       name: uploadedOriginal.name,
       size: uploadedOriginal.size,
       mimeType: 'image/webp',
@@ -103,6 +112,7 @@ export class ImageService {
         kind: variant.kind,
         url: uploaded.url,
         key: uploaded.key,
+        customId: uploaded.customId ?? undefined,
         name: uploaded.name,
         size: uploaded.size,
         width: variant.width,
@@ -145,6 +155,7 @@ export class ImageService {
         data: {
           url: input.url,
           key: input.key,
+          customId: input.customId ?? null,
           name: input.name,
           size: input.size,
           mimeType: input.mimeType,
@@ -155,7 +166,9 @@ export class ImageService {
           resourceId,
           purpose: input.purpose,
           order: last ? last.order + 1 : 1,
-          variants: input.variants?.length ? { create: input.variants } : undefined,
+          variants: input.variants?.length
+            ? { create: input.variants.map((v) => ({ ...v, customId: v.customId ?? null })) }
+            : undefined,
         },
         include: { variants: true },
       });

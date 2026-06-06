@@ -25,6 +25,7 @@ model Image {
   id           Int               @id @default(autoincrement())
   url          String
   key          String
+  customId     String?           @map("custom_id")
   name         String
   size         Int
   mimeType     String            @map("mime_type")
@@ -52,6 +53,7 @@ model ImageVariant {
   kind    ImageVariantKind
   url     String
   key     String
+  customId String?         @map("custom_id")
   name    String
   size    Int
   width   Int
