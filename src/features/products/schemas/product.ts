@@ -4,6 +4,17 @@ import { optionsSchema } from '@/features/products/schemas/option-schema.ts';
 import { productVariantSchema } from '@/features/products/schemas/product-variant.ts';
 
 
+// Lightweight variant summary for list views: identity + first thumbnail.
+export const productVariantBriefSchema = z.object({
+  id: z.number(),
+  nameRo: z.string(),
+  nameRu: z.string(),
+  imageUrl: z.string().nullable(),
+  thumbhash: z.string().nullable(),
+});
+
+export type TProductVariantBrief = z.infer<typeof productVariantBriefSchema>;
+
 export const productSchema = z.object({
   id: z.number(),
   nameRo: z.string(),
@@ -14,6 +25,7 @@ export const productSchema = z.object({
   slug: z.string(),
   options: optionsSchema,
   categoryId: z.number().nullable(),
+  variants: z.array(productVariantBriefSchema).default([]),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

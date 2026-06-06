@@ -2,6 +2,7 @@ import { type ComponentProps, type CSSProperties, type FC, type ReactNode, useSt
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from '@/components/ui/input-group.tsx';
+import { Skeleton } from '@/components/ui/skeleton.tsx';
 import { IconCheck, IconChevronDown, IconFilter } from '@tabler/icons-react';
 import { cn } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
@@ -20,6 +21,7 @@ interface IProps extends Omit<ComponentProps<typeof Button>, 'value' | 'onChange
   /** Exclude this id and all its descendants from the list (used to prevent self-parenting). */
   excludeId?: number;
   placeholder?: string;
+  loading?: boolean;
 }
 
 export const CategorySelectDropdown: FC<IProps> = ({
@@ -30,6 +32,7 @@ export const CategorySelectDropdown: FC<IProps> = ({
   placeholder,
   className,
   disabled,
+  loading,
   ...btnProps
 }) => {
   const [open, setOpen] = useState(false);
@@ -60,7 +63,7 @@ export const CategorySelectDropdown: FC<IProps> = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          disabled={disabled}
+          disabled={disabled || loading}
           className={cn(
             'w-full justify-between font-normal',
             !selectedNode && 'text-muted-foreground',
@@ -68,9 +71,13 @@ export const CategorySelectDropdown: FC<IProps> = ({
           )}
           {...btnProps}
         >
-          <span className="truncate">
-            {selectedNode ? getLocaleName(selectedNode) : (placeholder ?? m['pages.categories.index.sheet.no_parent']())}
-          </span>
+          {loading ? (
+            <Skeleton className="h-4 w-32"/>
+          ) : (
+            <span className="truncate">
+              {selectedNode ? getLocaleName(selectedNode) : (placeholder ?? m['pages.categories.index.sheet.no_parent']())}
+            </span>
+          )}
           <IconChevronDown className="ml-2 size-4 shrink-0 text-muted-foreground" />
         </Button>
       </PopoverTrigger>

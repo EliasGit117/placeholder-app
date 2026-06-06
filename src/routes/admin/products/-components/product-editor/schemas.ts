@@ -43,8 +43,8 @@ export const variantFormSchema = z.object({
 export const productFormSchema = z.object({
   nameRo: z.string().trim().min(1).max(128),
   nameRu: z.string().trim().min(1).max(128),
-  shortDescriptionRo: z.string().trim().max(512).optional(),
-  shortDescriptionRu: z.string().trim().max(512).optional(),
+  shortDescriptionRo: z.string().trim().max(4096).optional(),
+  shortDescriptionRu: z.string().trim().max(4096).optional(),
   slug: slugSchema,
   state: z.enum(ProductState),
   categoryId: z.number().int().positive().nullable(),

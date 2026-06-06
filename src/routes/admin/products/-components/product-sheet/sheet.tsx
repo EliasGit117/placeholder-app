@@ -27,7 +27,7 @@ import { useProductSheet } from './provider.tsx';
 import { createProductFormSchema, type TCreateProductForm } from './schemas.ts';
 
 
-const FORM_ID = 'product-create-form';
+const formId = 'product-create-form';
 
 function getDefaults(): TCreateProductForm {
   return {
@@ -92,9 +92,9 @@ export const ProductSheet: FC = () => {
 
         <ScrollArea className="flex-1 overflow-y-auto mr-2 my-2" type="always">
           <FormProvider {...form}>
-            <form id={FORM_ID} onSubmit={form.handleSubmit((values) => create(values))} className="px-4 py-1">
+            <form id={formId} onSubmit={form.handleSubmit((values) => create(values))} className="px-4 py-1">
               <fieldset disabled={isPending}>
-                <ProductFormFields/>
+                <ProductFormFields disabled={isPending}/>
               </fieldset>
             </form>
           </FormProvider>
@@ -122,7 +122,7 @@ export const ProductSheet: FC = () => {
               </Button>
             </SheetClose>
 
-            <LoadingButton form={FORM_ID} className="grow sm:min-w-32 sm:grow-0" loading={isPending}>
+            <LoadingButton form={formId} className="grow sm:min-w-32 sm:grow-0" loading={isPending}>
               <IconFilePlus/>
               <span>{m['common.create']()}</span>
             </LoadingButton>

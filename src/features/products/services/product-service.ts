@@ -1,13 +1,13 @@
 import { ORPCError } from '@orpc/server';
 import { type Prisma, type Product, type ProductVariant } from '~/prisma/generated/prisma/client.ts';
-import { ImageResourceType, ProductState } from '~/prisma/generated/prisma/enums.ts';
+import { ImageResourceType, ImageVariantKind, ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { prisma } from '@/lib/db';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { ProductVariantImageDtoFactory, type TProductVariantImageDto } from '@/features/products/dtos/product-variant-image.ts';
 import type { TxClient } from '@/lib/db/prisma.ts';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
 import type { TOptions, TOptionValues } from '@/features/products/schemas/option-schema.ts';
-import type { TProduct, TProductWithVariants } from '@/features/products/schemas/product.ts';
+import type { TProduct, TProductVariantBrief, TProductWithVariants } from '@/features/products/schemas/product.ts';
 import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
 import type { TCreateProductInput, TUpdateProductInput } from '@/features/products/schemas/product-mutations.ts';
 import type { TAddVariantInput, TUpdateVariantInput } from '@/features/products/schemas/product-variant-mutations.ts';
@@ -15,7 +15,7 @@ import type { TSearchProductsRequestDto } from '@/features/products/schemas/sear
 
 export class ProductService {
 
-  static fromEntity(entity: Product): TProduct {
+  static fromEntity(entity: Product, variants: TProductVariantBrief[] = []): TProduct {
     return {
       id: entity.id,
       nameRo: entity.nameRo,
@@ -26,6 +26,7 @@ export class ProductService {
       slug: entity.slug,
       options: entity.options as TOptions,
       categoryId: entity.categoryId,
+      variants,
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
     };
@@ -88,7 +89,7 @@ export class ProductService {
 
   static async list(): Promise<TProduct[]> {
     const entities = await prisma.product.findMany({ orderBy: { nameRo: 'asc' } });
-    return entities.map(ProductService.fromEntity);
+    return entities.map((e) => ProductService.fromEntity(e));
   }
 
   static async listActive(): Promise<TProduct[]> {
@@ -96,7 +97,7 @@ export class ProductService {
       where: { state: ProductState.active },
       orderBy: { nameRo: 'asc' },
     });
-    return entities.map(ProductService.fromEntity);
+    return entities.map((e) => ProductService.fromEntity(e));
   }
 
   static async findById(id: number): Promise<TProductWithVariants | null> {
@@ -118,6 +119,12 @@ export class ProductService {
       .paginate({
         where: getWhere(input),
         orderBy: { [input.sort ?? 'createdAt']: input.dir ?? 'desc' },
+        include: {
+          variants: {
+            select: { id: true, nameRo: true, nameRu: true },
+            orderBy: { id: 'asc' },
+          },
+        },
       })
       .withPages({
         page: input.page ?? 1,
@@ -125,7 +132,38 @@ export class ProductService {
         includePageCount: true,
       });
 
-    return PaginationResultDtoFactory.getWithCount(items.map(ProductService.fromEntity), meta);
+    // Batch-load the first image (display order) for every variant on the page.
+    const variantIds = items.flatMap((p) => p.variants.map((v) => v.id));
+    const images = await ImageService.findByResources(
+      ImageResourceType.PRODUCT_VARIANT,
+      variantIds.map(String)
+    );
+    // findByResources is ordered by [resourceId, order], so the first hit per
+    // variant is its lead image.
+    const firstImageByVariant = new Map<number, { imageUrl: string | null; thumbhash: string | null }>();
+    for (const img of images) {
+      const variantId = Number(img.resourceId);
+      if (firstImageByVariant.has(variantId))
+        continue;
+      const thumb = img.variants.find((v) => v.kind === ImageVariantKind.THUMB_256x256);
+      firstImageByVariant.set(variantId, {
+        imageUrl: thumb?.url ?? img.url,
+        thumbhash: img.thumbhash,
+      });
+    }
+
+    const result = items.map((item) => {
+      const variants: TProductVariantBrief[] = item.variants.map((v) => ({
+        id: v.id,
+        nameRo: v.nameRo,
+        nameRu: v.nameRu,
+        imageUrl: firstImageByVariant.get(v.id)?.imageUrl ?? null,
+        thumbhash: firstImageByVariant.get(v.id)?.thumbhash ?? null,
+      }));
+      return ProductService.fromEntity(item, variants);
+    });
+
+    return PaginationResultDtoFactory.getWithCount(result, meta);
   }
 
   static async create(input: TCreateProductInput): Promise<TProductWithVariants> {

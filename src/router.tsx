@@ -7,17 +7,16 @@ import { QueryClient } from '@tanstack/react-query';
 import { deLocalizeUrl, localizeUrl } from '@/paraglide/runtime';
 
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      staleTime: 10_000,
-      gcTime: 10_000
-    }
-  }
-});
-
 export function getRouter() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        staleTime: 10_000,
+        gcTime: 10_000
+      }
+    }
+  });
 
   const router = createTanStackRouter({
     routeTree: routeTree,

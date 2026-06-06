@@ -19,14 +19,18 @@ import {
   IconExternalLink,
   IconHash,
   IconLink,
+  IconPhotoOff,
+  IconStack2,
   IconTextSize,
   IconTrash,
 } from '@tabler/icons-react';
 import { Link } from '@tanstack/react-router';
 import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
+import { thumbhashToDataUrl } from '@/lib/utils';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { getProductStateOption, productStateOptions } from '../product-editor';
-import type { TProduct } from '@/features/products/schemas/product.ts';
+import type { TProduct, TProductVariantBrief } from '@/features/products/schemas/product.ts';
 
 
 interface IOptions {
@@ -160,6 +164,18 @@ export const productColumns = (options?: IOptions) => {
       },
     }),
 
+    columnHelper.accessor('variants', {
+      size: 240,
+      enableSorting: false,
+      header: ({ column }) => <DataTableColumnHeader column={column}/>,
+      cell: ({ getValue }) => <VariantsCell variants={getValue()}/>,
+      meta: {
+        label: m['pages.products.index.table.variants'](),
+        icon: IconStack2,
+        skeletonClassName: 'h-6 w-40',
+      },
+    }),
+
     columnHelper.accessor('createdAt', {
       header: ({ column }) => <DataTableColumnHeader column={column}/>,
       cell: ({ getValue }) => (
@@ -229,3 +245,42 @@ export const productColumns = (options?: IOptions) => {
     }),
   ]);
 };
+
+
+const MAX_VARIANTS = 3;
+
+function VariantsCell({ variants }: { variants: TProductVariantBrief[] }) {
+  const isRu = getLocale() === 'ru';
+
+  if (variants.length === 0)
+    return <span className="text-xs text-muted-foreground">—</span>;
+
+  const shown = variants.slice(0, MAX_VARIANTS);
+  const extra = variants.length - shown.length;
+
+  return (
+    <div className="flex flex-wrap items-center gap-1">
+      {shown.map((variant) => {
+        const placeholder = thumbhashToDataUrl(variant.thumbhash);
+        return (
+          <Badge key={variant.id} variant="outline" className="rounded-sm max-w-36 px-1 min-h-6">
+            {variant.imageUrl ? (
+              <span
+                className="size-4 shrink-0 overflow-hidden rounded-xs bg-muted bg-cover bg-center"
+                style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
+              >
+                <img src={variant.imageUrl} alt="" loading="lazy" decoding="async" className="size-full object-cover"/>
+              </span>
+            ) : (
+              <span className="flex size-4 shrink-0 items-center justify-center rounded-xs bg-muted text-muted-foreground">
+                <IconPhotoOff className="size-2.5"/>
+              </span>
+            )}
+            <span className="truncate">{isRu ? variant.nameRu : variant.nameRo}</span>
+          </Badge>
+        );
+      })}
+      {extra > 0 && <span className="text-xs text-muted-foreground">+{extra}</span>}
+    </div>
+  );
+}

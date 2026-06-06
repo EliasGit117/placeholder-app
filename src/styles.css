@@ -141,3 +141,85 @@
   align-items: center;
   justify-content: center;
 }
+
+@layer components {
+  .tiptap-editor {
+    @apply text-base;
+  }
+
+  .tiptap-editor h1 {
+    @apply scroll-m-20 text-4xl font-extrabold tracking-tight text-balance;
+  }
+
+  .tiptap-editor h2 {
+    @apply scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0;
+  }
+
+  .tiptap-editor h3 {
+    @apply scroll-m-20 text-2xl font-semibold tracking-tight;
+  }
+
+  .tiptap-editor h4 {
+    @apply scroll-m-20 text-xl font-semibold tracking-tight;
+  }
+
+  .tiptap-editor p {
+    @apply leading-7;
+  }
+
+  .tiptap-editor p:not(:first-child) {
+    @apply mt-6;
+  }
+
+  .tiptap-editor blockquote {
+    @apply mt-6 border-l-2 pl-6 italic;
+  }
+
+  .tiptap-editor ul {
+    @apply my-6 ml-6 list-disc;
+  }
+
+  .tiptap-editor ol {
+    @apply my-6 ml-6 list-decimal;
+  }
+
+  .tiptap-editor li {
+    @apply mt-2;
+  }
+
+  .tiptap-editor a {
+    @apply font-medium text-primary underline underline-offset-4;
+  }
+
+  .tiptap-editor code {
+    @apply relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
+  }
+
+  .tiptap-editor pre {
+    @apply my-6 overflow-x-auto rounded-xl bg-muted px-4 py-3;
+  }
+
+  .tiptap-editor pre code {
+    @apply bg-transparent p-0 font-mono text-sm font-normal;
+  }
+
+  .tiptap-editor hr {
+    @apply my-6 border-border;
+  }
+
+  .tiptap-editor h1:first-child,
+  .tiptap-editor h2:first-child,
+  .tiptap-editor h3:first-child,
+  .tiptap-editor h4:first-child,
+  .tiptap-editor p:first-child,
+  .tiptap-editor ul:first-child,
+  .tiptap-editor ol:first-child,
+  .tiptap-editor blockquote:first-child {
+    @apply mt-0;
+  }
+
+  .tiptap-editor p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    @apply pointer-events-none float-left h-0 text-muted-foreground;
+  }
+}

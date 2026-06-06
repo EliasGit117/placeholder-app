@@ -3,7 +3,8 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { RichEditor } from '@/components/rich-editor';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,10 +20,16 @@ import { CategorySelectDropdown } from '@/routes/admin/categories/-components/ca
 import { getProductStateOption, productStateOptions } from './product-state.ts';
 
 
-export const ProductFormFields: FC = () => {
+interface IProps {
+  // Native inputs are disabled via the wrapping <fieldset>, but the TipTap
+  // editor is contenteditable (not a form control) so it needs this explicitly.
+  disabled?: boolean;
+}
+
+export const ProductFormFields: FC<IProps> = ({ disabled }) => {
   const { control } = useFormContext();
 
-  const { data: forest } = useQuery(orpc.admin.categories.getForest.queryOptions());
+  const { data: forest, isPending: isForestPending } = useQuery(orpc.admin.categories.getForest.queryOptions());
 
   return (
     <FieldGroup className="@container grid grid-cols-2 gap-2 @sm:gap-4">
@@ -37,6 +44,7 @@ export const ProductFormFields: FC = () => {
               value={field.value ?? null}
               onValueChange={(value) => field.onChange(value)}
               placeholder={m['pages.products.form.category_none']()}
+              loading={isForestPending}
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
           </Field>
@@ -112,29 +120,41 @@ export const ProductFormFields: FC = () => {
         )}
       />
 
-      <Controller
-        name="shortDescriptionRo"
-        control={control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="col-span-full @md:col-span-1">
-            <FieldLabel>{m['pages.products.form.short_description_ro']()}</FieldLabel>
-            <Textarea {...field} value={field.value ?? ''} rows={3}/>
-            {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
-          </Field>
-        )}
-      />
+      <Field className="col-span-full">
+        <FieldLabel>{m['pages.products.form.short_description']()}</FieldLabel>
+        <Tabs defaultValue="ro">
+          <TabsList>
+            <TabsTrigger value="ro">RO</TabsTrigger>
+            <TabsTrigger value="ru">RU</TabsTrigger>
+          </TabsList>
 
-      <Controller
-        name="shortDescriptionRu"
-        control={control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="col-span-full @md:col-span-1">
-            <FieldLabel>{m['pages.products.form.short_description_ru']()}</FieldLabel>
-            <Textarea {...field} value={field.value ?? ''} rows={3}/>
-            {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
-          </Field>
-        )}
-      />
+          <TabsContent value="ro">
+            <Controller
+              name="shortDescriptionRo"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <RichEditor value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} disabled={disabled}/>
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
+                </Field>
+              )}
+            />
+          </TabsContent>
+
+          <TabsContent value="ru">
+            <Controller
+              name="shortDescriptionRu"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <RichEditor value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} disabled={disabled}/>
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
+                </Field>
+              )}
+            />
+          </TabsContent>
+        </Tabs>
+      </Field>
     </FieldGroup>
   );
 };

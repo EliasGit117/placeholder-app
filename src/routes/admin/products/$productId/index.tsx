@@ -131,9 +131,10 @@ function RouteComponent() {
         state: values.state,
         categoryId: values.categoryId
       }),
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success(m['pages.products.form.save_success']());
       void queryClient.invalidateQueries({ queryKey: orpc.admin.products.get.key() });
+      form.reset(detailsDefaultsFromProduct(data));
     },
     onError: (error: unknown) => {
       const message = error instanceof Error ? error.message : m['common.error']();
@@ -166,8 +167,8 @@ function RouteComponent() {
                 )}
               </CardHeader>
               <CardContent>
-                <fieldset disabled={!canUpdate}>
-                  <ProductFormFields/>
+                <fieldset disabled={!canUpdate || isPending}>
+                  <ProductFormFields disabled={!canUpdate || isPending}/>
                 </fieldset>
               </CardContent>
             </Card>
