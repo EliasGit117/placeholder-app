@@ -9,8 +9,8 @@ const slugSchema = z.string().trim().min(1).max(128).regex(/^[a-z0-9]+(?:-[a-z0-
 export const productBaseSchema = z.object({
   nameRo: z.string().trim().min(1).max(128),
   nameRu: z.string().trim().min(1).max(128),
-  shortDescriptionRo: z.string().trim().max(512).optional(),
-  shortDescriptionRu: z.string().trim().max(512).optional(),
+  shortDescriptionRo: z.string().trim().max(4096).optional(),
+  shortDescriptionRu: z.string().trim().max(4096).optional(),
   state: z.enum(ProductState).default(ProductState.active),
   slug: slugSchema,
   options: optionsSchema,
