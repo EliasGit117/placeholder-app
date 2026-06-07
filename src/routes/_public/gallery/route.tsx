@@ -19,9 +19,8 @@ function RouteComponent() {
     <>
       <nav className="container mx-auto px-4 py-2 flex items-center gap-4">
         {sections.map((s) => (
-          <Button variant="link" className='p-0' asChild>
+          <Button key={s.slug} variant="link" className='p-0' asChild>
             <Link
-              key={s.slug}
               to="/gallery/$slug"
               params={{ slug: s.slug }}
               activeProps={{ className: 'underline' }}

@@ -130,6 +130,9 @@
         "upload_failed": "Încărcare eșuată",
         "cancelled": "Anulat"
       }
+    },
+    "footer": {
+      "copyright": "© {year} {app}. Toate drepturile rezervate."
     }
   },
   "pages": {
@@ -340,6 +343,7 @@
       "detail": {
         "title": "Secțiune",
         "no_images": "Nu există imagini",
+        "no_images_description": "Din păcate, momentan nu există conținut de afișat. Vă rugăm să reveniți mai târziu.",
         "image_count": "imagini",
         "purpose": {
           "label": "Scop",
