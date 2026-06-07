@@ -9,10 +9,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { IconDots, IconPencil, IconPlus, IconStack2, IconTrash } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
@@ -47,7 +47,7 @@ export const OptionsManager: FC<IProps> = ({ productId, options, canUpdate }) =>
     onError: (error: unknown) => {
       const message = error instanceof Error ? error.message : m['common.error']();
       toast.error(m['common.error'](), { description: message });
-    },
+    }
   });
 
   const persist = (next: TProductOptionForm[]) =>
@@ -69,7 +69,7 @@ export const OptionsManager: FC<IProps> = ({ productId, options, canUpdate }) =>
       description: m['pages.products.options.delete_description'](),
       confirmText: m['common.delete'](),
       cancelText: m['common.cancel'](),
-      confirmButton: { variant: 'destructive' },
+      confirmButton: { variant: 'destructive' }
     });
     if (!confirmed) return;
     persist(list.filter(o => o.key !== key));
@@ -98,60 +98,69 @@ export const OptionsManager: FC<IProps> = ({ productId, options, canUpdate }) =>
         <CardDescription>{m['pages.products.form.section_options_edit_description']()}</CardDescription>
         {canUpdate && (
           <CardAction>
-            <Button variant="ghost" size="icon-sm" onClick={onAddClick}>
+            <Button variant="secondary" size="sm" onClick={onAddClick}>
               <IconPlus className="size-4"/>
+              <span>{m['common.create']()}</span>
             </Button>
           </CardAction>
         )}
       </CardHeader>
 
-      <CardContent className="space-y-3">
-      {list.length === 0 ? (
-        <Empty className="border border-dashed rounded-md py-8">
-          <EmptyHeader>
-            <EmptyMedia variant="icon"><IconStack2/></EmptyMedia>
-            <EmptyTitle>{m['pages.products.form.options.empty_title']()}</EmptyTitle>
-            <EmptyDescription>{m['pages.products.form.options.empty_description']()}</EmptyDescription>
-          </EmptyHeader>
-        </Empty>
-      ) : (
-        <ul className="divide-y rounded-md border">
-          {list.map((option) => (
-            <li key={option.key} className="flex items-center gap-3 p-3">
-              <div className="min-w-0 flex-1 space-y-1">
-                <div className="text-sm font-medium truncate">{isRu ? option.nameRu : option.nameRo}</div>
-                <div className="flex flex-wrap items-center gap-1">
-                  {option.values.map((v) => (
-                    <Badge key={v.value} variant="secondary" className="rounded-sm">
-                      {isRu ? v.nameRu : v.nameRo}
-                    </Badge>
-                  ))}
+      <CardContent className="space-y-3 flex-1">
+        {list.length === 0 ? (
+          <Empty className="border border-dashed rounded-md py-12 h-full">
+            <EmptyHeader>
+              <EmptyMedia variant="icon"><IconStack2/></EmptyMedia>
+              <EmptyTitle>{m['pages.products.form.options.empty_title']()}</EmptyTitle>
+              <EmptyDescription>{m['pages.products.form.options.empty_description']()}</EmptyDescription>
+            </EmptyHeader>
+            {canUpdate && (
+              <EmptyContent>
+                <Button variant="outline" size="sm" onClick={onAddClick}>
+                  <IconPlus className="size-4"/>
+                  <span>{m['common.create']()}</span>
+                </Button>
+              </EmptyContent>
+            )}
+          </Empty>
+        ) : (
+          <ul className="divide-y rounded-md border">
+            {list.map((option) => (
+              <li key={option.key} className="flex items-center gap-3 p-3">
+                <div className="min-w-0 flex-1 space-y-1">
+                  <div className="text-sm font-medium truncate">{isRu ? option.nameRu : option.nameRo}</div>
+                  <div className="flex flex-wrap items-center gap-1">
+                    {option.values.map((v) => (
+                      <Badge key={v.value} variant="secondary" className="rounded-sm">
+                        {isRu ? v.nameRu : v.nameRo}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {canUpdate && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button size="icon-xs" variant="ghost" className="self-start">
-                      <IconDots/>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-fit min-w-36" align="end">
-                    <DropdownMenuItem onClick={() => onEditClick(option.key)}>
-                      <IconPencil className="mr-2 size-4"/>
-                      <span>{m['common.edit']()}</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem variant="destructive" onClick={() => onDeleteClick(option.key)}>
-                      <IconTrash className="mr-2 size-4"/>
-                      <span>{m['common.delete']()}</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
+                {canUpdate && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button size="icon-xs" variant="ghost" className="self-start">
+                        <IconDots/>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-fit min-w-36" align="end">
+                      <DropdownMenuItem onClick={() => onEditClick(option.key)}>
+                        <IconPencil className="mr-2 size-4"/>
+                        <span>{m['common.edit']()}</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem variant="destructive" onClick={() => onDeleteClick(option.key)}>
+                        <IconTrash className="mr-2 size-4"/>
+                        <span>{m['common.delete']()}</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
 
         <OptionSheet
           open={sheetOpen}

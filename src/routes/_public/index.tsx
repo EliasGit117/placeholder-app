@@ -1,12 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { SkineryLanding } from './-components/landing.tsx';
 
 
 export const Route = createFileRoute('/_public/')({ component: App });
 
 function App() {
-  return (
-    <main className="container mx-auto p-4">
-
-    </main>
-  );
+  return <SkineryLanding />;
 }

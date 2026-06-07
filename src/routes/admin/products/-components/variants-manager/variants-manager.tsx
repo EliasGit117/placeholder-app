@@ -20,7 +20,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { IconDots, IconPackage, IconPencil, IconPhoto, IconPhotoOff, IconPlus, IconTrash } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
@@ -149,8 +149,9 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
         <CardDescription>{m['pages.products.variants.manage_description']()}</CardDescription>
         {canUpdate && (
           <CardAction>
-            <Button variant="ghost" size="icon-sm" onClick={onAddClick}>
+            <Button variant="secondary" size="sm" onClick={onAddClick}>
               <IconPlus className="size-4"/>
+              <span>{m['common.create']()}</span>
             </Button>
           </CardAction>
         )}
@@ -158,12 +159,20 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
 
       <CardContent className="space-y-3">
       {variants.length === 0 ? (
-        <Empty className="border border-dashed rounded-md py-8">
+        <Empty className="border border-dashed rounded-md py-12">
           <EmptyHeader>
             <EmptyMedia variant="icon"><IconPackage/></EmptyMedia>
             <EmptyTitle>{m['pages.products.variants.empty_title']()}</EmptyTitle>
             <EmptyDescription>{m['pages.products.variants.empty_description']()}</EmptyDescription>
           </EmptyHeader>
+          {canUpdate && (
+            <EmptyContent>
+              <Button variant="outline" size="sm" onClick={onAddClick}>
+                <IconPlus className="size-4"/>
+                <span>{m['common.create']()}</span>
+              </Button>
+            </EmptyContent>
+          )}
         </Empty>
       ) : (
         <div className="rounded-md border">

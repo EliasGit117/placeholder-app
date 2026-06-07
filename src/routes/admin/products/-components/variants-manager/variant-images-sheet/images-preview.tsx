@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Empty, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { Skeleton } from '@/components/ui/skeleton';
 import { IconPhotoOff } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
@@ -27,12 +27,15 @@ export const ImagesPreview: FC<IProps> = ({ images, isPending, disabled, onDelet
 
   if (images.length === 0)
     return (
-      <Empty className="mt-24">
+      <Empty className="py-12">
         <EmptyHeader>
           <EmptyMedia variant="icon"><IconPhotoOff/></EmptyMedia>
-          <EmptyTitle className="text-muted-foreground">
+          <EmptyTitle>
             {m['pages.products.variants.images.empty']()}
           </EmptyTitle>
+          <EmptyDescription>
+            {m['pages.products.variants.images.empty_description']()}
+          </EmptyDescription>
         </EmptyHeader>
       </Empty>
     );

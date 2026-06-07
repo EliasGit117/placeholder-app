@@ -240,7 +240,8 @@
           "delete_description": "Sigur doriți să ștergeți această imagine?",
           "reorder": "Reordonează",
           "reorder_hint": "Trageți imaginile pentru a le reordona.",
-          "reorder_error": "Salvarea ordinii a eșuat"
+          "reorder_error": "Salvarea ordinii a eșuat",
+          "empty_description": "Adăugați imagini pentru această variantă."
         }
       }
     },

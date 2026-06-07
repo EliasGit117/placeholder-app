@@ -1,9 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { orpc } from '@/lib/orpc';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Empty, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
-import { IconPhoto } from '@tabler/icons-react';
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
+import { IconPhoto, IconUpload } from '@tabler/icons-react';
+import { AdaptiveButton } from '@/components/ui/adaptive-button';
 import { m } from '@/paraglide/messages';
+import { UploadImagesSheetTrigger } from '../upload-images';
 import { SelectionToolbar, useImageSelection } from '../image-selection';
 import { ReorderToolbar, useImageReorder } from '../image-reorder';
 import { SectionImagesToolbar } from './toolbar';
@@ -52,15 +54,30 @@ export function SectionImages(props: IProps) {
           ))}
         </div>
       ) : images.length === 0 ? (
-        <Empty className='mt-16'>
+        <Empty className='py-12'>
           <EmptyHeader>
             <EmptyMedia variant="icon">
               <IconPhoto/>
             </EmptyMedia>
-            <EmptyTitle className='text-muted-foreground'>
+            <EmptyTitle>
               {m['pages.gallery_sections.detail.no_images']()}
             </EmptyTitle>
+            <EmptyDescription>
+              {m['pages.gallery_sections.detail.no_images_description']()}
+            </EmptyDescription>
           </EmptyHeader>
+          {canUpdate && (
+            <EmptyContent>
+              <UploadImagesSheetTrigger options={{ sectionId }}>
+                <AdaptiveButton
+                  variant="outline"
+                  size="sm"
+                  icon={IconUpload}
+                  text={m['pages.gallery_sections.detail.upload_sheet.trigger']()}
+                />
+              </UploadImagesSheetTrigger>
+            </EmptyContent>
+          )}
         </Empty>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">

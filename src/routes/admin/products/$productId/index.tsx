@@ -70,7 +70,7 @@ function NotFound() {
 
   return (
     <main className="container mx-auto pb-4 px-4">
-      <Empty className="mt-16">
+      <Empty className="py-12">
         <EmptyHeader>
           <EmptyMedia variant="icon"><IconPackageOff/></EmptyMedia>
           <EmptyTitle>{m['pages.products.not_found']()}</EmptyTitle>
