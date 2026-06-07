@@ -70,8 +70,8 @@ const heroStats = [
 ];
 
 const Hero: FC = () => (
-  <section className="bg-background">
-    <div className="container mx-auto grid items-center gap-12 px-4 pb-20 pt-6 md:pb-28 md:pt-10 lg:grid-cols-[1.05fr_1fr] lg:gap-20">
+  <section className="flex min-h-svh w-full items-center bg-background">
+    <div className="container mx-auto grid items-center gap-12 px-4 pb-20 pt-28 md:pb-28 md:pt-32 lg:grid-cols-[1.05fr_1fr] lg:gap-20">
       <div>
         <Badge className="gap-2 bg-primary px-3.5 py-1.5 text-[11px] uppercase tracking-[0.3em] text-primary-foreground hover:bg-primary/90 before:content-['★']">
           Акции — 25% reducere
@@ -105,13 +105,13 @@ const Hero: FC = () => (
         <Botanical className="pointer-events-none absolute -left-14 top-6 z-10 w-56 -rotate-12 text-primary opacity-20" />
         <div className="relative border border-primary p-3.5">
           <CornerBrackets />
-          <div className="ph-stripes grid aspect-[4/5] place-items-center bg-muted font-mono text-[11px] uppercase tracking-[0.15em] text-muted-foreground">
+          <div className="ph-stripes grid aspect-4/5 place-items-center bg-muted font-mono text-[11px] uppercase tracking-[0.15em] text-muted-foreground">
             Hero product · 720 × 900
           </div>
         </div>
-        <div className="absolute -right-3 top-8 max-w-[180px] border border-primary bg-card p-4 font-heading text-sm leading-snug text-card-foreground shadow-sm">
-          <span className="font-sans text-[11px] uppercase tracking-[0.2em] text-primary">Ediție limitată</span>
-          <b className="block text-xl text-primary">Ser Restorativ</b>
+        <div className="absolute -right-3 top-8 max-w-45 border border-primary-foreground bg-primary p-4 font-heading text-sm leading-snug text-primary-foreground shadow-sm">
+          <span className="font-sans text-[11px] uppercase tracking-[0.2em] text-primary-foreground">Ediție limitată</span>
+          <b className="block text-xl text-primary-foreground">Ser Restorativ</b>
           Vitamina C 15% + Niacinamidă
         </div>
       </div>

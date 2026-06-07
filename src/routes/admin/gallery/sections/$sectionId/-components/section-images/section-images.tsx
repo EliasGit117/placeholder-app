@@ -3,7 +3,7 @@ import { orpc } from '@/lib/orpc';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { IconPhoto, IconUpload } from '@tabler/icons-react';
-import { AdaptiveButton } from '@/components/ui/adaptive-button';
+import { Button } from '@/components/ui/button';
 import { m } from '@/paraglide/messages';
 import { UploadImagesSheetTrigger } from '../upload-images';
 import { SelectionToolbar, useImageSelection } from '../image-selection';
@@ -69,12 +69,10 @@ export function SectionImages(props: IProps) {
           {canUpdate && (
             <EmptyContent>
               <UploadImagesSheetTrigger options={{ sectionId }}>
-                <AdaptiveButton
-                  variant="outline"
-                  size="sm"
-                  icon={IconUpload}
-                  text={m['pages.gallery_sections.detail.upload_sheet.trigger']()}
-                />
+                <Button variant="outline" size="sm">
+                  <IconUpload/>
+                  <span>{m['pages.gallery_sections.detail.upload_sheet.trigger']()}</span>
+                </Button>
               </UploadImagesSheetTrigger>
             </EmptyContent>
           )}

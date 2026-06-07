@@ -22,6 +22,9 @@ export const ImageCard: FC<IProps> = ({ image, disabled }) => {
     <div
       className={cn(
         'relative aspect-square overflow-hidden rounded-lg border bg-muted bg-cover bg-center',
+        // Block the native long-press save/selection callout on touch devices so
+        // a press-and-hold starts a drag instead.
+        'select-none [-webkit-touch-callout:none]',
         selecting && selected && 'ring ring-foreground ring-offset-4 ring-offset-background',
         selecting && !disabled && 'cursor-pointer',
         disabled && 'pointer-events-none opacity-75',
@@ -37,7 +40,8 @@ export const ImageCard: FC<IProps> = ({ image, disabled }) => {
           alt=""
           loading="lazy"
           decoding="async"
-          className="h-full w-full object-cover"
+          draggable={false}
+          className="h-full w-full object-cover select-none [-webkit-touch-callout:none] [-webkit-user-drag:none]"
         />
       </picture>
 
