@@ -9,7 +9,7 @@ import {
   DataTablePagination,
   DataTableProvider,
   DataTableToolbar,
-  useDataTable,
+  useDataTable
 } from '~/src/components/data-table';
 import { exportToCsv } from '@/lib/utils/csv.ts';
 import { cn } from '@/lib/utils';
@@ -39,7 +39,7 @@ export const ProductsTable: FC<IProps> = (props) => {
     ...orpc.admin.products.search.queryOptions({ input: search ?? {} }),
     placeholderData: keepPreviousData,
     staleTime: 60 * 1000,
-    gcTime: 0,
+    gcTime: 0
   });
 
   const { mutate: deleteProduct, isPending: isDeleting } = useMutation({
@@ -50,7 +50,7 @@ export const ProductsTable: FC<IProps> = (props) => {
     },
     onError: () => {
       toast.error(m['pages.products.index.table.delete_error']());
-    },
+    }
   });
 
   const columns = useMemo(() => productColumns({
@@ -62,13 +62,13 @@ export const ProductsTable: FC<IProps> = (props) => {
         description: m['pages.products.index.table.delete_description'](),
         confirmText: m['common.delete'](),
         cancelText: m['common.cancel'](),
-        confirmButton: { variant: 'destructive' },
+        confirmButton: { variant: 'destructive' }
       });
 
       if (!confirmed) return;
 
       deleteProduct({ id });
-    },
+    }
   }), [isFetchingData, isDeleting, canDelete, deleteProduct, confirm]);
 
   const { table, selectedItems, setRowSelection } = useDataTable({
@@ -80,8 +80,8 @@ export const ProductsTable: FC<IProps> = (props) => {
     columns,
     initialState: {
       columnVisibility: { id: false, updatedAt: false },
-      columnPinning: { left: ['select'], right: ['actions'] },
-    },
+      columnPinning: { left: ['select'], right: ['actions'] }
+    }
   });
 
   const onExportToCsvClick = () => {
@@ -102,17 +102,23 @@ export const ProductsTable: FC<IProps> = (props) => {
       <div className={cn('space-y-2 relative', className)} {...divProps}>
         <DataTableProvider table={table} loading={isPendingData}>
           <DataTableToolbar>
-            <div className="flex-1"/>
+            <div className="ml-auto flex items-center gap-1">
+              {canCreate && (
+                <ProductSheetTrigger
+                  variant="ghost"
+                  size="sm"
+                />
+              )}
 
-            {canCreate && <ProductSheetTrigger/>}
-            <AdaptiveButton
-              variant="ghost"
-              size="sm"
-              icon={IconRefresh}
-              text={m['common.refresh']()}
-              onClick={() => refetch()}
-              disabled={isFetchingData}
-            />
+              <AdaptiveButton
+                variant="ghost"
+                size="sm"
+                icon={IconRefresh}
+                text={m['common.refresh']()}
+                onClick={() => refetch()}
+                disabled={isFetchingData}
+              />
+            </div>
           </DataTableToolbar>
 
           <DataTable skeletonTableCellClassName="h-[49px]"/>

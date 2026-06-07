@@ -61,7 +61,7 @@ function RootDocument({ children }: { children: ReactNode }) {
     </head>
 
     <body className="font-sans antialiased wrap-anywhere min-h-screen flex flex-col">
-    <ThemeProvider attribute="class" disableTransitionOnChange>
+    <ThemeProvider defaultTheme='dark' attribute="class" disableTransitionOnChange>
       <RouteProgressProvider>
         <ConfirmDialogProvider>
           {children}

@@ -91,14 +91,15 @@ export const UsersTable: FC<IProps> = (props) => {
       <div className={cn('space-y-2 relative', className)} {...divProps}>
         <DataTableProvider table={table} loading={isPendingData}>
           <DataTableToolbar>
-            <div className="flex-1"/>
+            <div className="ml-auto flex items-center gap-1">
+              {canCreate && (
+                <UserSheetTrigger variant="ghost" size="sm" options={{ mode: UserSheetMode.Create }}/>
+              )}
 
-            {canCreate && (
-              <UserSheetTrigger variant="ghost" size="sm" options={{ mode: UserSheetMode.Create }}/>
-            )}
-            <Button variant="ghost" size="icon-sm" onClick={() => refetch()} disabled={isFetchingData}>
-              <IconRefresh/>
-            </Button>
+              <Button variant="ghost" size="icon-sm" onClick={() => refetch()} disabled={isFetchingData}>
+                <IconRefresh/>
+              </Button>
+            </div>
           </DataTableToolbar>
 
           <DataTable skeletonTableCellClassName="h-[49px]"/>

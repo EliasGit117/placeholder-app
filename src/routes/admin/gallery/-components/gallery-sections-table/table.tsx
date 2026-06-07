@@ -111,23 +111,24 @@ export const GallerySectionsTable: FC<IProps> = (props) => {
       <div className={cn('space-y-2 relative', className)} {...divProps}>
         <DataTableProvider table={table} loading={isPendingData}>
           <DataTableToolbar>
-            <div className="flex-1"/>
+            <div className="ml-auto flex items-center gap-1">
+              {canCreate && (
+                <GallerySectionSheetTrigger
+                  variant="ghost"
+                  size="sm"
+                  options={{ mode: GallerySectionSheetMode.Create }}
+                />
+              )}
 
-            {canCreate && (
-              <GallerySectionSheetTrigger
+              <AdaptiveButton
                 variant="ghost"
                 size="sm"
-                options={{ mode: GallerySectionSheetMode.Create }}
+                icon={IconRefresh}
+                text={m['common.refresh']()}
+                onClick={() => refetch()}
+                disabled={isFetchingData}
               />
-            )}
-            <AdaptiveButton
-              variant="ghost"
-              size="sm"
-              icon={IconRefresh}
-              text={m['common.refresh']()}
-              onClick={() => refetch()}
-              disabled={isFetchingData}
-            />
+            </div>
           </DataTableToolbar>
 
           <DataTable skeletonTableCellClassName="h-[49px]"/>

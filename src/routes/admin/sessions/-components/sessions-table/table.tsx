@@ -97,9 +97,11 @@ export const SessionsTable: FC<IProps> = (props) => {
     <div className={cn('space-y-2 relative', className)} {...divProps}>
       <DataTableProvider table={table} loading={isPendingData}>
         <DataTableToolbar>
-          <Button variant='ghost' size='icon-sm' onClick={() => refetch()} disabled={isFetchingData} className='ml-auto'>
-            <IconRefresh/>
-          </Button>
+          <div className="ml-auto flex items-center gap-1">
+            <Button variant='ghost' size='icon-sm' onClick={() => refetch()} disabled={isFetchingData}>
+              <IconRefresh/>
+            </Button>
+          </div>
         </DataTableToolbar>
 
         <DataTable skeletonTableCellClassName="h-[49px]"/>

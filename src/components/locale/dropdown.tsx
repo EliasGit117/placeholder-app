@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu.tsx';
 import { getLocale, isLocale, setLocale, type Locale } from '@/paraglide/runtime';
-import { IconWorld } from '@tabler/icons-react';
 import { type ComponentProps, type FC } from 'react';
 import type { VariantProps } from 'class-variance-authority';
 import { m } from '@/paraglide/messages';
@@ -23,7 +22,7 @@ const localeOptions: { label: string, shortLabel: string, value: Locale }[] = [
 
 
 interface IProps extends Omit<ComponentProps<typeof Button>, 'onClick' | 'size'> {
-  size?: Extract<VariantProps<typeof buttonVariants>["size"],"icon-sm" | "icon" | "icon-lg">;
+  size?: Extract<VariantProps<typeof buttonVariants>['size'], 'icon-sm' | 'icon' | 'icon-lg'>;
   align?: 'start' | 'center' | 'end';
 }
 
@@ -37,11 +36,13 @@ export const LocaleDropdown: FC<IProps> = ({ variant = 'outline', size = 'icon',
     setLocale(value);
   }
 
+  const selectedOption = localeOptions.find((option) => option.value === locale);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant={variant} size={size} {...props}>
-          <IconWorld/>
+          {selectedOption?.shortLabel}
         </Button>
       </DropdownMenuTrigger>
 

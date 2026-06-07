@@ -31,7 +31,7 @@ export function SectionImages(props: IProps) {
   );
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col flex-1 gap-4">
       {selecting ? (
         <SelectionToolbar/>
       ) : reordering ? (
@@ -54,7 +54,7 @@ export function SectionImages(props: IProps) {
           ))}
         </div>
       ) : images.length === 0 ? (
-        <Empty className='py-12'>
+        <Empty className='-mt-20'>
           <EmptyHeader>
             <EmptyMedia variant="icon">
               <IconPhoto/>

@@ -1,5 +1,4 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
-import { ThemeDropdown } from '@/components/theme';
 import { LocaleDropdown } from '@/components/locale';
 import authBg from '/images/auth/bg.webp';
 import { LogoButton } from '@/components/layout/common';
@@ -25,7 +24,6 @@ function RouteComponent() {
 
             <div className='flex items-center gap-1.5 ml-auto'>
               <LocaleDropdown variant="ghost" size="icon"/>
-              <ThemeDropdown variant="ghost" size="icon"/>
             </div>
           </div>
 

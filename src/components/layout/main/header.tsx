@@ -3,7 +3,6 @@ import { Link } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button.tsx';
 import { cn } from '@/lib/utils';
 import { LocaleDropdown } from '@/components/locale';
-import { ThemeDropdown } from '@/components/theme';
 import { LogoButton } from '../common/logo-button.tsx';
 import { useAuth } from '@/hooks/use-auth.ts';
 import { getLinksPerRole } from '@/components/layout/main/links.ts';
@@ -40,7 +39,6 @@ export const Header = ({ children, className, ...props }: IProps) => {
         )}
 
         <div className="flex items-center gap-1 ml-auto">
-          <ThemeDropdown variant="ghost" size="icon" align="end"/>
           <LocaleDropdown variant="ghost" size="icon" align="end"/>
 
           {!!user && <UserDropdown size='md' align="end" className='ml-2'/>}
