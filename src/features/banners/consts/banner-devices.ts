@@ -8,9 +8,9 @@ export const bannerDevices = ['mobile', 'tablet', 'desktop'] as const;
 export type BannerDevice = (typeof bannerDevices)[number];
 
 export const bannerDevicePurpose: Record<BannerDevice, ImagePurpose> = {
-  mobile: ImagePurpose.BANNER_MOBILE_IMAGE,
-  tablet: ImagePurpose.BANNER_TABLET_IMAGE,
   desktop: ImagePurpose.BANNER_DESKTOP_IMAGE,
+  tablet: ImagePurpose.BANNER_TABLET_IMAGE,
+  mobile: ImagePurpose.BANNER_MOBILE_IMAGE,
 };
 
 export function isBannerDevice(value: string): value is BannerDevice {

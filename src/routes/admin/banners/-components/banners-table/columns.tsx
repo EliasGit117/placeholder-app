@@ -2,14 +2,15 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { Link } from '@tanstack/react-router';
 import {
-  IconArrowDown,
-  IconArrowUp,
   IconCalendar,
   IconCircleCheck,
+  IconCircleDot,
+  IconDeviceDesktop,
+  IconDeviceMobile,
+  IconDeviceTablet,
   IconDots,
   IconExternalLink,
   IconEyeOff,
-  IconHash,
   IconPhoto,
   IconTextSize,
   IconTrash,
@@ -35,11 +36,7 @@ import type { TBannerRowDto } from '@/features/banners/dtos/banner-row.ts';
 
 
 interface IOptions {
-  disabled?: boolean;
-  canUpdate?: boolean;
   canDelete?: boolean;
-  total: number;
-  onMove?: (index: number, dir: -1 | 1) => void;
   onDelete?: (id: number) => void;
 }
 
@@ -56,8 +53,14 @@ const deviceLabel: Record<BannerDevice, () => string> = {
   desktop: () => m['pages.banners.detail.device_desktop']()
 };
 
+const deviceIcon: Record<BannerDevice, TablerIcon> = {
+  mobile: IconDeviceMobile,
+  tablet: IconDeviceTablet,
+  desktop: IconDeviceDesktop
+};
+
 export const bannerColumns = (options: IOptions) => {
-  const { disabled, canUpdate, canDelete, total, onMove, onDelete } = options;
+  const { canDelete, onDelete } = options;
 
   const stateFilterOptions = Object.entries(stateMeta).map(([value, meta]) => ({
     title: meta.label(),
@@ -66,54 +69,17 @@ export const bannerColumns = (options: IOptions) => {
   }));
 
   return [
-    columnHelper.accessor('order', {
-      size: 100,
-      enableSorting: false,
-      header: ({ column }) => <DataTableColumnHeader column={column}/>,
-      cell: ({ row, getValue }) => (
-        <div className="flex items-center gap-1.5">
-          <div className="flex flex-col">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-6"
-              disabled={!canUpdate || disabled || row.index === 0}
-              aria-label={m['pages.banners.index.move_up']()}
-              onClick={() => onMove?.(row.index, -1)}
-            >
-              <IconArrowUp className="size-3.5"/>
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-6"
-              disabled={!canUpdate || disabled || row.index === total - 1}
-              aria-label={m['pages.banners.index.move_down']()}
-              onClick={() => onMove?.(row.index, 1)}
-            >
-              <IconArrowDown className="size-3.5"/>
-            </Button>
-          </div>
-          <span className="text-xs tabular-nums text-muted-foreground">{getValue()}</span>
-        </div>
-      ),
-      meta: {
-        label: m['pages.banners.index.col_order'](),
-        icon: IconHash,
-        skeletonClassName: 'h-8 w-14'
-      }
-    }),
-
-    ...bannerDevices.map((device) =>
+    // Columns ordered largest → smallest (desktop, tablet, mobile).
+    ...[...bannerDevices].reverse().map((device) =>
       columnHelper.display({
         id: device,
         size: 96,
-        header: ({ column }) => <DataTableColumnHeader column={column}/>,
+        header: ({ column }) => <DataTableColumnHeader column={column} title="" className="justify-center"/>,
         cell: ({ row }) => <DeviceImageCell image={row.original.images[device]} device={device}/>,
         meta: {
           label: deviceLabel[device](),
-          icon: IconPhoto,
-          skeletonClassName: 'h-10 w-24 rounded-md'
+          icon: deviceIcon[device],
+          skeletonClassName: cn(deviceThumbClass[device], 'w-auto rounded-md')
         }
       })
     ),
@@ -179,6 +145,7 @@ export const bannerColumns = (options: IOptions) => {
       },
       meta: {
         label: m['pages.banners.index.col_status'](),
+        icon: IconCircleDot,
         skeletonClassName: 'h-5.5 w-20 rounded-sm',
         filter: {
           type: ColumnFilterType.MultiSelect,
@@ -262,7 +229,7 @@ export const bannerColumns = (options: IOptions) => {
 // Thumbnail aspect per breakpoint: mobile portrait, tablet 4:3, desktop 16:9.
 // Fixed height; width follows the aspect ratio.
 const deviceThumbClass: Record<BannerDevice, string> = {
-  mobile: 'aspect-[9/16] h-12',
+  mobile: 'aspect-[10/16] h-12',
   tablet: 'aspect-[4/3] h-12',
   desktop: 'aspect-video h-12'
 };
@@ -274,8 +241,11 @@ function DeviceImageCell({ image, device }: { image?: TBannerImageDto | null; de
 
   return (
     <div
-      className={`flex ${deviceThumbClass[device]} items-center justify-center overflow-hidden rounded-md border bg-muted bg-cover bg-center`}
       style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
+      className={cn(
+        'flex items-center justify-center overflow-hidden rounded-md border bg-muted bg-cover bg-center mx-auto',
+        deviceThumbClass[device]
+      )}
     >
       {image ?
         <img

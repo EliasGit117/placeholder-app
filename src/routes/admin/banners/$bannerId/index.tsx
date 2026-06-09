@@ -12,7 +12,7 @@ export const Route = createFileRoute('/admin/banners/$bannerId/')({
   component: RouteComponent,
   params: {
     parse: (raw) => paramsSchema.parse(raw),
-    stringify: ({ bannerId }) => ({ bannerId: String(bannerId) }),
+    stringify: ({ bannerId }) => ({ bannerId: String(bannerId) })
   },
   beforeLoad: async ({ context: { user } }) => {
     const canGet = await roleHasPermission(user?.role, { banners: ['get'] });
@@ -22,12 +22,17 @@ export const Route = createFileRoute('/admin/banners/$bannerId/')({
   loader: async ({ params: { bannerId } }) => {
     const banner = await orpc.admin.banners.getById.call({ id: bannerId });
     return { banner };
-  },
+  }
 });
 
 
 function RouteComponent() {
   const { bannerId } = Route.useParams();
   const { banner } = Route.useLoaderData();
-  return <BannerForm id={bannerId} initialData={banner}/>;
+
+  return (
+    <div className='space-y-4'>
+      <BannerForm id={bannerId} initialData={banner}/>
+    </div>
+  );
 }

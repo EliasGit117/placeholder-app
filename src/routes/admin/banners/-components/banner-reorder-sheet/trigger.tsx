@@ -1,8 +1,8 @@
 import { type ComponentProps, type FC } from 'react';
 import { Button } from '@/components/ui/button';
-import { IconPlus, type Icon } from '@tabler/icons-react';
+import { IconArrowsSort, type Icon } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
-import { useBannerSheet } from './provider.tsx';
+import { useBannerReorderSheet } from './provider.tsx';
 import { Slot } from '@radix-ui/react-slot';
 import { AdaptiveButton } from '@/components/ui/adaptive-button.tsx';
 import type { TTailwindBreakpoint } from '@/hooks/use-media-breakpoint.ts';
@@ -15,20 +15,20 @@ interface IProps extends Omit<ComponentProps<typeof Button>, 'onClick'> {
   breakpoint?: TTailwindBreakpoint;
 }
 
-export const BannerSheetTrigger: FC<IProps> = ({ ...props }) => {
+export const BannerReorderSheetTrigger: FC<IProps> = ({ ...props }) => {
   const {
     children,
-    text = m['pages.banners.index.create'](),
+    text = m['pages.banners.index.reorder'](),
     asChild = false,
     size,
     breakpoint,
     tooltipSide,
     tooltipAlign,
-    icon: Icon = IconPlus,
+    icon: Icon = IconArrowsSort,
     ...btnProps
   } = props;
 
-  const { open } = useBannerSheet();
+  const { open } = useBannerReorderSheet();
 
   if (children && asChild)
     return (

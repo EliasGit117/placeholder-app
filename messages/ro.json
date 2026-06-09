@@ -428,16 +428,14 @@
       "index": {
         "description": "Gestionează bannerele afișate pe site, ordinea și imaginile lor.",
         "create": "Banner nou",
+        "reorder": "Reordonează",
         "empty_title": "Niciun banner",
         "empty_description": "Creează primul banner pentru a începe.",
-        "col_order": "Ordine",
         "col_preview": "Previzualizare",
         "col_title": "Titlu",
         "col_title_ro": "Titlu (RO)",
         "col_title_ru": "Titlu (RU)",
         "col_status": "Stare",
-        "move_up": "Mută mai sus",
-        "move_down": "Mută mai jos",
         "delete_confirm_title": "Ștergi bannerul?",
         "delete_confirm_description": "Această acțiune este ireversibilă și șterge și imaginile bannerului.",
         "deleting": "Se șterge bannerul...",
@@ -479,7 +477,13 @@
       "sheet": {
         "create_title": "Banner nou",
         "create_description": "Completează detaliile de bază; imaginile și alinierea se setează după creare.",
-        "open_after_creation": "Deschide bannerul după creare"
+        "open_after_creation": "Deschide bannerul după creare",
+        "reorder_title": "Reordonează bannerele",
+        "reorder_description": "Trage bannerele pentru a schimba ordinea de afișare.",
+        "reorder_handle": "Trage pentru a reordona",
+        "reorder_saving": "Se salvează ordinea...",
+        "reorder_success": "Ordinea a fost salvată",
+        "reorder_error": "Ordinea nu a putut fi salvată"
       }
     }
   }

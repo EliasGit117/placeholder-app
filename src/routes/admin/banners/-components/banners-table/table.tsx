@@ -8,10 +8,15 @@ import { bannerColumns } from './columns.tsx';
 import type { TBannerRowDto } from '@/features/banners/dtos/banner-row.ts';
 import { BannerSheet, BannerSheetProvider, BannerSheetTrigger } from '../banner-sheet';
 import {
+  BannerReorderSheet,
+  BannerReorderSheetProvider,
+  BannerReorderSheetTrigger
+} from '../banner-reorder-sheet';
+import {
   DataTable,
   DataTableProvider,
   DataTableToolbar,
-  useDataTable,
+  useDataTable
 } from '@/components/data-table';
 import { AdaptiveButton } from '@/components/ui/adaptive-button';
 import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
@@ -40,66 +45,39 @@ export const BannersTable: FC<IProps> = (props) => {
   );
 
   // All banners load once; filters are applied client-side off the URL search.
-  // Reorder is disabled while any filter is active, since reordering a filtered
-  // subset can't produce the full ordered id set the API requires.
   const search = useSearch({ strict: false }) as Record<string, unknown>;
-  const { filtered, hasActiveFilters } = useMemo(() => applyFilters(banners, search), [banners, search]);
+  const { filtered } = useMemo(() => applyFilters(banners, search), [banners, search]);
 
   const invalidate = () =>
     queryClient.invalidateQueries({ queryKey: orpc.admin.banners.getAll.key() });
 
-  const onError = (e: unknown) => {
-    const message = e instanceof Error ? e.message : m['common.error']();
-    toast.error(m['common.error'](), { description: message });
-  };
-
-  const { mutate: reorder, isPending: isReordering } = useMutation({
-    mutationFn: (ids: number[]) => orpc.admin.banners.reorder.call({ ids }),
-    onSuccess: invalidate,
-    onError,
-  });
-
-  const { mutateAsync: deleteBanner, isPending: isDeleting } = useMutation({
+  const { mutateAsync: deleteBanner } = useMutation({
     mutationFn: (id: number) => orpc.admin.banners.delete.call({ id }),
-    onSuccess: invalidate,
+    onSuccess: invalidate
   });
-
-  const onMove = (index: number, dir: -1 | 1) => {
-    const target = index + dir;
-    if (target < 0 || target >= banners.length)
-      return;
-
-    const ids = banners.map((b) => b.id);
-    [ids[index], ids[target]] = [ids[target], ids[index]];
-    reorder(ids);
-  };
 
   const columns = useMemo(
     () =>
       bannerColumns({
-        disabled: isFetching || isReordering || isDeleting,
-        canUpdate: canUpdate && !hasActiveFilters,
         canDelete,
-        total: filtered.length,
-        onMove,
         onDelete: async (id: number) => {
           const confirmed = await confirm({
             title: m['pages.banners.index.delete_confirm_title'](),
             description: m['pages.banners.index.delete_confirm_description'](),
             confirmText: m['common.delete'](),
             cancelText: m['common.cancel'](),
-            confirmButton: { variant: 'destructive' },
+            confirmButton: { variant: 'destructive' }
           });
 
           if (confirmed)
             toast.promise(deleteBanner(id), {
               loading: m['pages.banners.index.deleting'](),
               success: () => m['pages.banners.index.delete_success'](),
-              error: (err: Error) => err?.message ?? m['pages.banners.index.delete_error'](),
+              error: (err: Error) => err?.message ?? m['pages.banners.index.delete_error']()
             });
-        },
+        }
       }),
-    [isFetching, isReordering, isDeleting, canUpdate, canDelete, hasActiveFilters, filtered.length, banners, confirm, deleteBanner]
+    [canDelete, confirm, deleteBanner]
   );
 
   // All matching banners load at once — no server pagination. One page holds the lot.
@@ -112,8 +90,8 @@ export const BannersTable: FC<IProps> = (props) => {
     limit: Math.max(filtered.length, 1),
     initialState: {
       columnVisibility: { updatedAt: false },
-      columnPinning: { right: ['actions'] },
-    },
+      columnPinning: { right: ['actions'] }
+    }
   });
 
   useEffect(() => {
@@ -125,28 +103,41 @@ export const BannersTable: FC<IProps> = (props) => {
 
   return (
     <BannerSheetProvider>
-      <div className={cn('space-y-2 relative', className)} {...divProps}>
-        <DataTableProvider table={table} loading={isPending}>
-          <DataTableToolbar>
-            <div className="ml-auto flex items-center gap-1">
-              {canCreate && <BannerSheetTrigger variant="ghost" size="sm"/>}
+      <BannerReorderSheetProvider>
+        <div className={cn('space-y-2 relative', className)} {...divProps}>
+          <DataTableProvider table={table} loading={isPending}>
+            <DataTableToolbar>
+              <div className="ml-auto flex items-center gap-1">
+                {canUpdate && (
+                  <BannerReorderSheetTrigger
+                    size="sm"
+                    variant="ghost"
+                    disabled={isFetching}
+                    breakpoint='lg'
+                  />
+                )}
 
-              <AdaptiveButton
-                variant="ghost"
-                size="sm"
-                icon={IconRefresh}
-                text={m['common.refresh']()}
-                onClick={() => refetch()}
-                disabled={isFetching}
-              />
-            </div>
-          </DataTableToolbar>
+                {canCreate && (<BannerSheetTrigger variant="ghost" size="sm" breakpoint='lg'/>)}
 
-          <DataTable skeletonTableCellClassName="h-[49px]"/>
-        </DataTableProvider>
-      </div>
+                <AdaptiveButton
+                  variant="ghost"
+                  size="sm"
+                  breakpoint='lg'
+                  icon={IconRefresh}
+                  text={m['common.refresh']()}
+                  onClick={() => refetch()}
+                  disabled={isFetching}
+                />
+              </div>
+            </DataTableToolbar>
 
-      <BannerSheet/>
+            <DataTable skeletonTableCellClassName="h-[49px]"/>
+          </DataTableProvider>
+        </div>
+
+        <BannerSheet/>
+        <BannerReorderSheet/>
+      </BannerReorderSheetProvider>
     </BannerSheetProvider>
   );
 };
