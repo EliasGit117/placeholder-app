@@ -47,6 +47,11 @@ export { Prisma }
  */
 export type Account = Prisma.AccountModel
 /**
+ * Model Banner
+ * 
+ */
+export type Banner = Prisma.BannerModel
+/**
  * Model Category
  * 
  */

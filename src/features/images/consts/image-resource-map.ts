@@ -63,6 +63,34 @@ export const imagePolicy: Record<ImageResourceType, Partial<Record<ImagePurpose,
       ],
     },
   },
+  // A banner carries one art-directed image per breakpoint (mobile / tablet /
+  // desktop). Each is single-cardinality (one per banner) and width-capped to
+  // its breakpoint — no forced height, banners are wide with a variable aspect.
+  // No thumbnail variants: the width-capped original is small enough to preview
+  // directly, with the thumbhash as a blur-up placeholder.
+  BANNER: {
+    BANNER_MOBILE_IMAGE: {
+      multiple: false,
+      maxSize: mbToBytes(10),
+      mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+      width: 768,
+      fit: 'inside',
+    },
+    BANNER_TABLET_IMAGE: {
+      multiple: false,
+      maxSize: mbToBytes(10),
+      mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+      width: 1280,
+      fit: 'inside',
+    },
+    BANNER_DESKTOP_IMAGE: {
+      multiple: false,
+      maxSize: mbToBytes(10),
+      mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+      width: 1920,
+      fit: 'inside',
+    },
+  },
 };
 
 export function getImagePolicy(

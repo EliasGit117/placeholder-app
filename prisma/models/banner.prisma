@@ -1,0 +1,46 @@
+enum BannerState {
+  active
+  hidden
+
+  @@map("banner_state")
+}
+
+enum BannerXAlign {
+  LEFT
+  CENTER
+  RIGHT
+
+  @@map("banner_x_align")
+}
+
+enum BannerYAlign {
+  TOP
+  CENTER
+  BOTTOM
+
+  @@map("banner_y_align")
+}
+
+model Banner {
+  id            Int          @id @default(autoincrement())
+  order         Int          @unique
+  state         BannerState  @default(active)
+
+  titleRo       String?      @map("title_ro")
+  titleRu       String?      @map("title_ru")
+  descriptionRo String?      @map("description_ro")
+  descriptionRu String?      @map("description_ru")
+  href          String?
+
+  mobileXAlign  BannerXAlign @default(LEFT)   @map("mobile_x_align")
+  mobileYAlign  BannerYAlign @default(CENTER) @map("mobile_y_align")
+  tabletXAlign  BannerXAlign @default(LEFT)   @map("tablet_x_align")
+  tabletYAlign  BannerYAlign @default(CENTER) @map("tablet_y_align")
+  desktopXAlign BannerXAlign @default(LEFT)   @map("desktop_x_align")
+  desktopYAlign BannerYAlign @default(CENTER) @map("desktop_y_align")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("banners")
+}

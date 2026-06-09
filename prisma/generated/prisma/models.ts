@@ -9,6 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Account.ts'
+export type * from './models/Banner.ts'
 export type * from './models/Category.ts'
 export type * from './models/GallerySection.ts'
 export type * from './models/Image.ts'

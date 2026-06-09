@@ -9,6 +9,32 @@
 * 🟢 You can import this file directly.
 */
 
+export const BannerState = {
+  active: 'active',
+  hidden: 'hidden'
+} as const
+
+export type BannerState = (typeof BannerState)[keyof typeof BannerState]
+
+
+export const BannerXAlign = {
+  LEFT: 'LEFT',
+  CENTER: 'CENTER',
+  RIGHT: 'RIGHT'
+} as const
+
+export type BannerXAlign = (typeof BannerXAlign)[keyof typeof BannerXAlign]
+
+
+export const BannerYAlign = {
+  TOP: 'TOP',
+  CENTER: 'CENTER',
+  BOTTOM: 'BOTTOM'
+} as const
+
+export type BannerYAlign = (typeof BannerYAlign)[keyof typeof BannerYAlign]
+
+
 export const CategoryState = {
   active: 'active',
   hidden: 'hidden'
@@ -28,7 +54,8 @@ export type GallerySectionState = (typeof GallerySectionState)[keyof typeof Gall
 export const ImageResourceType = {
   GALLERY_SECTION: 'GALLERY_SECTION',
   AVATAR: 'AVATAR',
-  PRODUCT_VARIANT: 'PRODUCT_VARIANT'
+  PRODUCT_VARIANT: 'PRODUCT_VARIANT',
+  BANNER: 'BANNER'
 } as const
 
 export type ImageResourceType = (typeof ImageResourceType)[keyof typeof ImageResourceType]
@@ -37,7 +64,10 @@ export type ImageResourceType = (typeof ImageResourceType)[keyof typeof ImageRes
 export const ImagePurpose = {
   GALLERY_SECTION_IMAGE: 'GALLERY_SECTION_IMAGE',
   AVATAR_IMAGE: 'AVATAR_IMAGE',
-  PRODUCT_VARIANT_IMAGE: 'PRODUCT_VARIANT_IMAGE'
+  PRODUCT_VARIANT_IMAGE: 'PRODUCT_VARIANT_IMAGE',
+  BANNER_MOBILE_IMAGE: 'BANNER_MOBILE_IMAGE',
+  BANNER_TABLET_IMAGE: 'BANNER_TABLET_IMAGE',
+  BANNER_DESKTOP_IMAGE: 'BANNER_DESKTOP_IMAGE'
 } as const
 
 export type ImagePurpose = (typeof ImagePurpose)[keyof typeof ImagePurpose]

@@ -422,6 +422,65 @@
           "expired": "Expirată"
         }
       }
+    },
+    "banners": {
+      "title": "Bannere",
+      "index": {
+        "description": "Gestionează bannerele afișate pe site, ordinea și imaginile lor.",
+        "create": "Banner nou",
+        "empty_title": "Niciun banner",
+        "empty_description": "Creează primul banner pentru a începe.",
+        "col_order": "Ordine",
+        "col_preview": "Previzualizare",
+        "col_title": "Titlu",
+        "col_title_ro": "Titlu (RO)",
+        "col_title_ru": "Titlu (RU)",
+        "col_status": "Stare",
+        "move_up": "Mută mai sus",
+        "move_down": "Mută mai jos",
+        "delete_confirm_title": "Ștergi bannerul?",
+        "delete_confirm_description": "Această acțiune este ireversibilă și șterge și imaginile bannerului.",
+        "deleting": "Se șterge bannerul...",
+        "delete_success": "Bannerul a fost șters",
+        "delete_error": "Bannerul nu a putut fi șters",
+        "untitled": "Fără titlu"
+      },
+      "detail": {
+        "title": "Editare banner",
+        "description": "Modifică textul, linkul, imaginile per dispozitiv și alinierea.",
+        "section_content": "Conținut",
+        "section_images": "Imagini",
+        "section_alignment": "Aliniere",
+        "field_title_ro": "Titlu (RO)",
+        "field_title_ru": "Titlu (RU)",
+        "field_description_ro": "Descriere (RO)",
+        "field_description_ru": "Descriere (RU)",
+        "field_href": "Link (URL)",
+        "state_active": "Activ",
+        "state_hidden": "Ascuns",
+        "device_mobile": "Mobil",
+        "device_tablet": "Tabletă",
+        "device_desktop": "Desktop",
+        "upload": "Încarcă imagine",
+        "replace": "Înlocuiește",
+        "remove": "Elimină",
+        "no_image": "Nicio imagine",
+        "x_align": "Aliniere orizontală",
+        "y_align": "Aliniere verticală",
+        "align_left": "Stânga",
+        "align_center": "Centru",
+        "align_right": "Dreapta",
+        "align_top": "Sus",
+        "align_bottom": "Jos",
+        "image_uploaded": "Imagine încărcată",
+        "image_removed": "Imagine eliminată",
+        "saved": "Banner salvat"
+      },
+      "sheet": {
+        "create_title": "Banner nou",
+        "create_description": "Completează detaliile de bază; imaginile și alinierea se setează după creare.",
+        "open_after_creation": "Deschide bannerul după creare"
+      }
     }
   }
 }

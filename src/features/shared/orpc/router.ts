@@ -10,6 +10,8 @@ import { galleryPublicRoutes } from '@/features/gallery-sections/routes/public';
 import { profileRoutes } from '@/features/profile/routes';
 import { productsRoutes } from '@/features/products/routes/public';
 import { productsAdminRoutes } from '@/features/products/routes/admin';
+import { bannersPublicRoutes } from '@/features/banners/routes/public';
+import { bannersAdminRoutes } from '@/features/banners/routes/admin';
 
 
 export const orpcRouter = base.router({
@@ -18,12 +20,14 @@ export const orpcRouter = base.router({
   gallery: galleryPublicRoutes,
   profile: profileRoutes,
   products: productsRoutes,
+  banners: bannersPublicRoutes,
   admin: {
     sessions: sessionsAdminRoutes,
     users: usersAdminRoutes,
     categories: categoriesAdminRoutes,
     gallery: galleryAdminRoutes,
-    products: productsAdminRoutes
+    products: productsAdminRoutes,
+    banners: bannersAdminRoutes
   }
 });
 

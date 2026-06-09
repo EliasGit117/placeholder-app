@@ -385,6 +385,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   Account: 'Account',
+  Banner: 'Banner',
   Category: 'Category',
   GallerySection: 'GallerySection',
   Image: 'Image',
@@ -409,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "category" | "gallerySection" | "image" | "imageVariant" | "product" | "productVariant" | "session" | "user" | "verification"
+    modelProps: "account" | "banner" | "category" | "gallerySection" | "image" | "imageVariant" | "product" | "productVariant" | "session" | "user" | "verification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -484,6 +485,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AccountCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AccountCountAggregateOutputType> | number
+        }
+      }
+    }
+    Banner: {
+      payload: Prisma.$BannerPayload<ExtArgs>
+      fields: Prisma.BannerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BannerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BannerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannerPayload>
+        }
+        findFirst: {
+          args: Prisma.BannerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BannerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannerPayload>
+        }
+        findMany: {
+          args: Prisma.BannerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannerPayload>[]
+        }
+        create: {
+          args: Prisma.BannerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannerPayload>
+        }
+        createMany: {
+          args: Prisma.BannerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BannerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannerPayload>[]
+        }
+        delete: {
+          args: Prisma.BannerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannerPayload>
+        }
+        update: {
+          args: Prisma.BannerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannerPayload>
+        }
+        deleteMany: {
+          args: Prisma.BannerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BannerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BannerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannerPayload>[]
+        }
+        upsert: {
+          args: Prisma.BannerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BannerPayload>
+        }
+        aggregate: {
+          args: Prisma.BannerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBanner>
+        }
+        groupBy: {
+          args: Prisma.BannerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BannerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BannerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BannerCountAggregateOutputType> | number
         }
       }
     }
@@ -1211,6 +1286,28 @@ export const AccountScalarFieldEnum = {
 export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
 
 
+export const BannerScalarFieldEnum = {
+  id: 'id',
+  order: 'order',
+  state: 'state',
+  titleRo: 'titleRo',
+  titleRu: 'titleRu',
+  descriptionRo: 'descriptionRo',
+  descriptionRu: 'descriptionRu',
+  href: 'href',
+  mobileXAlign: 'mobileXAlign',
+  mobileYAlign: 'mobileYAlign',
+  tabletXAlign: 'tabletXAlign',
+  tabletYAlign: 'tabletYAlign',
+  desktopXAlign: 'desktopXAlign',
+  desktopYAlign: 'desktopYAlign',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BannerScalarFieldEnum = (typeof BannerScalarFieldEnum)[keyof typeof BannerScalarFieldEnum]
+
+
 export const CategoryScalarFieldEnum = {
   id: 'id',
   nameRo: 'nameRo',
@@ -1450,6 +1547,48 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'BannerState'
+ */
+export type EnumBannerStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BannerState'>
+    
+
+
+/**
+ * Reference to a field of type 'BannerState[]'
+ */
+export type ListEnumBannerStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BannerState[]'>
+    
+
+
+/**
+ * Reference to a field of type 'BannerXAlign'
+ */
+export type EnumBannerXAlignFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BannerXAlign'>
+    
+
+
+/**
+ * Reference to a field of type 'BannerXAlign[]'
+ */
+export type ListEnumBannerXAlignFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BannerXAlign[]'>
+    
+
+
+/**
+ * Reference to a field of type 'BannerYAlign'
+ */
+export type EnumBannerYAlignFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BannerYAlign'>
+    
+
+
+/**
+ * Reference to a field of type 'BannerYAlign[]'
+ */
+export type ListEnumBannerYAlignFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BannerYAlign[]'>
+    
+
+
+/**
  * Reference to a field of type 'CategoryState'
  */
 export type EnumCategoryStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CategoryState'>
@@ -1663,6 +1802,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
+  banner?: Prisma.BannerOmit
   category?: Prisma.CategoryOmit
   gallerySection?: Prisma.GallerySectionOmit
   image?: Prisma.ImageOmit

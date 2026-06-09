@@ -9,6 +9,7 @@ import {
   IconMoon,
   IconPackage,
   IconPalette,
+  IconPhoto,
   IconSettings,
   IconShieldLock, IconShoppingCart,
   IconSun,
@@ -91,6 +92,11 @@ const navMain: ISidebarMenuItem[] = [
     title: () => m['pages.gallery.title'](),
     icon: IconLibraryPhoto,
     linkOptions: { to: '/admin/gallery', activeOptions: { includeSearch: false } }
+  },
+  {
+    title: () => m['pages.banners.title'](),
+    icon: IconPhoto,
+    linkOptions: { to: '/admin/banners', activeOptions: { includeSearch: false } }
   },
   {
     title: () => m['components.sidebar.nav.security'](),

@@ -421,6 +421,60 @@
           "state_hidden": "Скрыт"
         }
       }
+    },
+    "banners": {
+      "title": "Баннеры",
+      "index": {
+        "description": "Управляйте баннерами на сайте, их порядком и изображениями.",
+        "create": "Новый баннер",
+        "empty_title": "Нет баннеров",
+        "empty_description": "Создайте первый баннер, чтобы начать.",
+        "col_order": "Порядок",
+        "col_preview": "Превью",
+        "col_title": "Заголовок",
+        "col_status": "Статус",
+        "move_up": "Переместить вверх",
+        "move_down": "Переместить вниз",
+        "delete_confirm_title": "Удалить баннер?",
+        "delete_confirm_description": "Это действие необратимо и также удалит изображения баннера.",
+        "untitled": "Без названия"
+      },
+      "detail": {
+        "title": "Редактирование баннера",
+        "description": "Измените текст, ссылку, изображения по устройствам и выравнивание.",
+        "section_content": "Содержимое",
+        "section_images": "Изображения",
+        "section_alignment": "Выравнивание",
+        "field_title_ro": "Заголовок (RO)",
+        "field_title_ru": "Заголовок (RU)",
+        "field_description_ro": "Описание (RO)",
+        "field_description_ru": "Описание (RU)",
+        "field_href": "Ссылка (URL)",
+        "state_active": "Активный",
+        "state_hidden": "Скрытый",
+        "device_mobile": "Мобильный",
+        "device_tablet": "Планшет",
+        "device_desktop": "Десктоп",
+        "upload": "Загрузить изображение",
+        "replace": "Заменить",
+        "remove": "Удалить",
+        "no_image": "Нет изображения",
+        "x_align": "Горизонтальное выравнивание",
+        "y_align": "Вертикальное выравнивание",
+        "align_left": "Слева",
+        "align_center": "По центру",
+        "align_right": "Справа",
+        "align_top": "Сверху",
+        "align_bottom": "Снизу",
+        "image_uploaded": "Изображение загружено",
+        "image_removed": "Изображение удалено",
+        "saved": "Баннер сохранён"
+      },
+      "sheet": {
+        "create_title": "Новый баннер",
+        "create_description": "Заполните основные данные; изображения и выравнивание настраиваются после создания.",
+        "open_after_creation": "Открыть баннер после создания"
+      }
     }
   }
 }
