@@ -353,7 +353,7 @@ export const sessionColumns = (options?: IOptions) => {
 
         return (
           <Badge
-            variant={isExpired ? 'destructive' : 'outline'}
+            variant={isExpired ? 'outline-destructive' : 'outline'}
             className={cn('rounded-sm min-h-6', !isExpired && 'border border-border')}
           >
             {isExpired ? <IconClock size={16}/> : <IconCheck size={16}/>}

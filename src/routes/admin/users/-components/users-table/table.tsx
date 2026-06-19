@@ -17,7 +17,8 @@ import { cn } from '@/lib/utils';
 import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
 import { IconFileDownload, IconRefresh } from '@tabler/icons-react';
 import type { TUserBriefDto } from '@/features/users/schemas/user-brief.ts';
-import { Button } from '@/components/ui/button.tsx';
+import { AdaptiveButton } from '@/components/ui/adaptive-button';
+import { m } from '@/paraglide/messages';
 import {
   UserSheet,
   UserSheetMode,
@@ -96,9 +97,15 @@ export const UsersTable: FC<IProps> = (props) => {
                 <UserSheetTrigger variant="ghost" size="sm" options={{ mode: UserSheetMode.Create }}/>
               )}
 
-              <Button variant="ghost" size="icon-sm" onClick={() => refetch()} disabled={isFetchingData}>
-                <IconRefresh/>
-              </Button>
+              <AdaptiveButton
+                variant="ghost"
+                size="sm"
+                breakpoint="lg"
+                icon={IconRefresh}
+                text={m['common.refresh']()}
+                onClick={() => refetch()}
+                disabled={isFetchingData}
+              />
             </div>
           </DataTableToolbar>
 

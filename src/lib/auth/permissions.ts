@@ -32,3 +32,5 @@ export const roles = {
   user,
   admin
 }
+
+export type TRole = keyof typeof roles;

@@ -37,6 +37,7 @@ import { m } from '@/paraglide/messages';
 import type { TUserBriefDto } from '@/features/users/schemas/user-brief.ts';
 import { Link } from '@tanstack/react-router';
 import { useUserSheet, UserSheetMode } from '@/routes/admin/users/-components/user-sheet/provider.tsx';
+import { UserRoleIcon } from '@/components/icons/user-role-icon.tsx';
 
 
 interface IOptions {
@@ -80,6 +81,7 @@ export const userColumns = (options?: IOptions) => {
     }),
 
     columnHelper.accessor('id', {
+      size: 20,
       header: ({ column }) => <DataTableColumnHeader column={column}/>,
       cell: ({ getValue }) => {
         const { isCopied, copyToClipboard } = useCopyToClipboard();
@@ -154,7 +156,8 @@ export const userColumns = (options?: IOptions) => {
 
         return (
           <Badge variant="secondary" className="rounded-sm text-xs capitalize">
-            {roleName}
+            <UserRoleIcon role={role}/>
+            <span>{roleName}</span>
           </Badge>
         );
       },
@@ -181,7 +184,7 @@ export const userColumns = (options?: IOptions) => {
 
         return (
           <Badge
-            variant={verified ? 'outline' : 'secondary'}
+            variant={verified ? 'outline' : 'outline-destructive'}
             className={cn('rounded-sm min-h-6', verified && 'border border-border')}
           >
             {verified ? <IconMailCheck/> : <IconMailX/>}
@@ -205,7 +208,7 @@ export const userColumns = (options?: IOptions) => {
 
         return (
           <Badge
-            variant={banned ? 'destructive' : 'outline'}
+            variant={banned ? 'outline-destructive' : 'outline'}
             className={cn('rounded-sm min-h-6', !banned && 'border border-border')}
           >
             {banned ? <IconUserX/> : <IconUserCheck/>}

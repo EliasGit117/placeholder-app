@@ -31,9 +31,6 @@ interface IProps extends ComponentProps<'div'> {
 }
 
 export const BannersTable: FC<IProps> = (props) => {
-  // The data-table stack relies on tanstack-table's mutable instance; opt this
-  // component out of the React Compiler so the manual useMemo below is honored
-  // (same convention as the products table).
   'use no memo';
 
   const { className, canCreate, canUpdate, canDelete, ...divProps } = props;
@@ -89,7 +86,7 @@ export const BannersTable: FC<IProps> = (props) => {
     page: 1,
     limit: Math.max(filtered.length, 1),
     initialState: {
-      columnVisibility: { updatedAt: false },
+      columnVisibility: { id: false, updatedAt: false, },
       columnPinning: { right: ['actions'] }
     }
   });

@@ -6,7 +6,6 @@ import {
 import appCss from '../styles.css?url';
 import { type QueryClient, useQuery } from '@tanstack/react-query';
 import { envConfig } from '@/lib/config';
-import { ThemeProvider } from 'better-themes';
 import type { TSession, TUser } from '@/lib/auth/server.ts';
 import { type FC, type ReactNode, useEffect, useRef } from 'react';
 import { orpc } from '@/lib/orpc';
@@ -39,7 +38,7 @@ export const Route = createRootRouteWithContext<IRouterContext>()({
     ],
     links: [
       { rel: 'stylesheet', href: appCss },
-      { rel: 'stylesheet', href: photoViewCss, type: 'text/css' },
+      { rel: 'stylesheet', href: photoViewCss, type: 'text/css' }
     ]
   }),
   shellComponent: RootDocument
@@ -60,16 +59,14 @@ function RootDocument({ children }: { children: ReactNode }) {
       <HeadContent/>
     </head>
 
-    <body className="font-sans antialiased wrap-anywhere min-h-screen flex flex-col">
-    <ThemeProvider defaultTheme='dark' attribute="class" disableTransitionOnChange>
-      <RouteProgressProvider>
-        <ConfirmDialogProvider>
-          {children}
-          <Toaster/>
-          <RouteProgressController/>
-        </ConfirmDialogProvider>
-      </RouteProgressProvider>
-    </ThemeProvider>
+    <body className="antialiased wrap-anywhere min-h-screen flex flex-col dark">
+    <RouteProgressProvider>
+      <ConfirmDialogProvider>
+        {children}
+        <Toaster/>
+        <RouteProgressController/>
+      </ConfirmDialogProvider>
+    </RouteProgressProvider>
 
     <Scripts/>
     <RouterInvalidation/>

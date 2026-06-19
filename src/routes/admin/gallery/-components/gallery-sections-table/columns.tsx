@@ -74,7 +74,7 @@ export const gallerySectionColumns = (options?: IOptions) => {
     }),
 
     columnHelper.accessor('id', {
-      size: 80,
+      size: 20,
       header: ({ column }) => <DataTableColumnHeader column={column}/>,
       cell: ({ getValue }) => (
         <span className="text-xs text-muted-foreground tabular-nums">{getValue()}</span>

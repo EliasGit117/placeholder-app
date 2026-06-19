@@ -122,17 +122,17 @@ export const CategoryTree: FC<{ className?: string }> = ({ className }) => {
               <ContextMenuSeparator/>
 
               <ContextMenuGroup>
-                {canCreate && (
-                  <ContextMenuItem onClick={() => setTimeout(() => openSheet({ mode: CategorySheetMode.Create, parentId: Number(item.getId()) }), 0)}>
-                    <IconPlus className="text-muted-foreground size-4"/>
-                    <span>{m['pages.categories.index.tree.add_child']()}</span>
-                  </ContextMenuItem>
-                )}
-
                 {canUpdate && (
                   <ContextMenuItem onClick={() => setTimeout(() => openSheet({ mode: CategorySheetMode.Update, categoryId: Number(item.getId()) }), 0)}>
                     <IconPencil className="text-muted-foreground size-4"/>
                     <span>{m['common.edit']()}</span>
+                  </ContextMenuItem>
+                )}
+
+                {canCreate && (
+                  <ContextMenuItem onClick={() => setTimeout(() => openSheet({ mode: CategorySheetMode.Create, parentId: Number(item.getId()) }), 0)}>
+                    <IconPlus className="text-muted-foreground size-4"/>
+                    <span>{m['pages.categories.index.tree.add_child']()}</span>
                   </ContextMenuItem>
                 )}
 

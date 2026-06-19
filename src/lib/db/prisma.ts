@@ -8,10 +8,8 @@ declare global {
   var __prisma: TPrismaExtendedClient | undefined;
 }
 
-export const prisma =
-  globalThis.__prisma ?? createPrismaClient();
+export const prisma = globalThis.__prisma ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== 'production') {
   globalThis.__prisma = prisma;
 }
-

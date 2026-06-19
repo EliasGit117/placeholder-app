@@ -6,18 +6,13 @@ import {
   IconKey,
   IconLanguage,
   IconLibraryPhoto,
-  IconMoon,
   IconPackage,
-  IconPalette,
   IconPhoto,
-  IconSettings,
   IconShieldLock, IconShoppingCart,
-  IconSun,
   IconUsers,
   type TablerIcon
 } from '@tabler/icons-react';
 import { Link, type LinkOptions, useLocation } from '@tanstack/react-router';
-import { useTheme } from 'better-themes';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible.tsx';
 import {
   DropdownMenu,
@@ -89,14 +84,14 @@ const navMain: ISidebarMenuItem[] = [
     ]
   },
   {
-    title: () => m['pages.gallery.title'](),
-    icon: IconLibraryPhoto,
-    linkOptions: { to: '/admin/gallery', activeOptions: { includeSearch: false } }
-  },
-  {
     title: () => m['pages.banners.title'](),
     icon: IconPhoto,
     linkOptions: { to: '/admin/banners', activeOptions: { includeSearch: false } }
+  },
+  {
+    title: () => m['pages.gallery.title'](),
+    icon: IconLibraryPhoto,
+    linkOptions: { to: '/admin/gallery', activeOptions: { includeSearch: false } }
   },
   {
     title: () => m['components.sidebar.nav.security'](),
@@ -269,12 +264,6 @@ interface INavPreferencesProps extends ComponentPropsWithoutRef<typeof SidebarGr
   itemsSize?: ComponentPropsWithoutRef<typeof SidebarMenuButton>['size'];
 }
 
-const themeOptions = [
-  { title: () => m['components.sidebar.system'](), value: 'system', icon: IconPalette },
-  { title: () => m['components.sidebar.light'](), value: 'light', icon: IconSun },
-  { title: () => m['components.sidebar.dark'](), value: 'dark', icon: IconMoon }
-] satisfies { title: () => string; value: string; icon: TablerIcon }[];
-
 const localeOptions = [
   { label: 'Romana', shortLabel: 'RO', value: 'ro' },
   { label: 'Русский', shortLabel: 'RU', value: 'ru' }
@@ -282,7 +271,6 @@ const localeOptions = [
 
 const NavPreferences: FC<INavPreferencesProps> = ({ itemsSize, ...props }) => {
   const { isMobile } = useSidebar();
-  const { theme, setTheme } = useTheme();
   const locale = getLocale();
 
   function handleLocaleChange(value: string) {
@@ -296,38 +284,6 @@ const NavPreferences: FC<INavPreferencesProps> = ({ itemsSize, ...props }) => {
     <SidebarGroup {...props}>
       <SidebarGroupContent>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton size={itemsSize}>
-                  <IconSettings className="text-muted-foreground"/>
-                  <span>{m['components.sidebar.theme']()}</span>
-                  <IconSun className="ml-auto dark:hidden"/>
-                  <IconMoon className="ml-auto hidden dark:block"/>
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className={cn('w-(--radix-dropdown-menu-trigger-width) rounded-lg', !isMobile && 'max-w-44')}
-                side={isMobile ? 'bottom' : 'right'}
-                align="end"
-                sideOffset={4}
-              >
-                <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
-                  <DropdownMenuLabel className="flex items-center gap-2">
-                    <span>{m['components.sidebar.theme']()}</span>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator/>
-                  {themeOptions.map(({ icon: Icon, title, value }) => (
-                    <DropdownMenuRadioItem value={value} key={value}>
-                      <Icon/>
-                      <span>{title()}</span>
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

@@ -5,12 +5,10 @@ import {
   IconCalendar,
   IconCircleCheck,
   IconCircleDot,
-  IconDeviceDesktop,
-  IconDeviceMobile,
-  IconDeviceTablet,
   IconDots,
   IconExternalLink,
   IconEyeOff,
+  IconHash,
   IconPhoto,
   IconTextSize,
   IconTrash,
@@ -28,6 +26,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
 import { BannerState } from '~/prisma/generated/prisma/enums.ts';
@@ -47,18 +46,6 @@ const stateMeta: Record<BannerState, { label: () => string; icon: TablerIcon }> 
   [BannerState.hidden]: { label: () => m['pages.banners.detail.state_hidden'](), icon: IconEyeOff }
 };
 
-const deviceLabel: Record<BannerDevice, () => string> = {
-  mobile: () => m['pages.banners.detail.device_mobile'](),
-  tablet: () => m['pages.banners.detail.device_tablet'](),
-  desktop: () => m['pages.banners.detail.device_desktop']()
-};
-
-const deviceIcon: Record<BannerDevice, TablerIcon> = {
-  mobile: IconDeviceMobile,
-  tablet: IconDeviceTablet,
-  desktop: IconDeviceDesktop
-};
-
 export const bannerColumns = (options: IOptions) => {
   const { canDelete, onDelete } = options;
 
@@ -69,20 +56,44 @@ export const bannerColumns = (options: IOptions) => {
   }));
 
   return [
-    // Columns ordered largest → smallest (desktop, tablet, mobile).
-    ...[...bannerDevices].reverse().map((device) =>
-      columnHelper.display({
-        id: device,
-        size: 96,
-        header: ({ column }) => <DataTableColumnHeader column={column} title="" className="justify-center"/>,
-        cell: ({ row }) => <DeviceImageCell image={row.original.images[device]} device={device}/>,
-        meta: {
-          label: deviceLabel[device](),
-          icon: deviceIcon[device],
-          skeletonClassName: cn(deviceThumbClass[device], 'w-auto rounded-md')
-        }
-      })
-    ),
+    columnHelper.accessor('id', {
+      size: 20,
+      enableSorting: false,
+      header: ({ column }) => <DataTableColumnHeader column={column}/>,
+      cell: ({ getValue }) => (
+        <span className="text-xs text-muted-foreground tabular-nums">{getValue()}</span>
+      ),
+      meta: {
+        label: m['common.id'](),
+        icon: IconHash,
+        skeletonClassName: 'h-4 w-10'
+      }
+    }),
+
+    // All three breakpoint thumbnails in one column (desktop → mobile).
+    columnHelper.display({
+      id: 'images',
+      size: 220,
+      header: ({ column }) => <DataTableColumnHeader column={column}/>,
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          {[...bannerDevices].reverse().map((device) => (
+            <DeviceImageCell key={device} image={row.original.images[device]} device={device}/>
+          ))}
+        </div>
+      ),
+      meta: {
+        label: m['pages.banners.index.col_preview'](),
+        icon: IconPhoto,
+        skeletonItem: (
+          <div className="flex items-center gap-2">
+            {[...bannerDevices].reverse().map((device) => (
+              <Skeleton key={device} className={cn(deviceThumbClass[device], 'rounded-md')}/>
+            ))}
+          </div>
+        )
+      }
+    }),
 
     columnHelper.accessor('titleRo', {
       size: 220,
@@ -243,7 +254,7 @@ function DeviceImageCell({ image, device }: { image?: TBannerImageDto | null; de
     <div
       style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
       className={cn(
-        'flex items-center justify-center overflow-hidden rounded-md border bg-muted bg-cover bg-center mx-auto',
+        'flex items-center justify-center overflow-hidden rounded-md border bg-muted bg-cover bg-center shrink-0',
         deviceThumbClass[device]
       )}
     >

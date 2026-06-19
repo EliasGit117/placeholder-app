@@ -16,7 +16,8 @@ import { cn } from '@/lib/utils';
 import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
 import { IconFileDownload, IconRefresh } from '@tabler/icons-react';
 import type { TSessionBriefDto } from '@/features/sessions/schemas/session-brief.ts';
-import { Button } from '@/components/ui/button.tsx';
+import { AdaptiveButton } from '@/components/ui/adaptive-button';
+import { m } from '@/paraglide/messages';
 import { authClient } from '@/lib/auth';
 
 
@@ -98,9 +99,15 @@ export const SessionsTable: FC<IProps> = (props) => {
       <DataTableProvider table={table} loading={isPendingData}>
         <DataTableToolbar>
           <div className="ml-auto flex items-center gap-1">
-            <Button variant='ghost' size='icon-sm' onClick={() => refetch()} disabled={isFetchingData}>
-              <IconRefresh/>
-            </Button>
+            <AdaptiveButton
+              variant="ghost"
+              size="sm"
+              breakpoint="lg"
+              icon={IconRefresh}
+              text={m['common.refresh']()}
+              onClick={() => refetch()}
+              disabled={isFetchingData}
+            />
           </div>
         </DataTableToolbar>
 
