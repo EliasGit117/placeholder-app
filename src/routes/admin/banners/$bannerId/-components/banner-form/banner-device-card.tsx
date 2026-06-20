@@ -2,7 +2,7 @@ import { type FC, useState } from 'react';
 import { Controller, type UseFormReturn } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { IconX } from '@tabler/icons-react';
+import { IconDeviceDesktop, IconDeviceMobile, IconDeviceTablet, IconX, type TablerIcon } from '@tabler/icons-react';
 import { orpc } from '@/lib/orpc';
 import { xhrUpload } from '@/lib/utils/xhr-upload.ts';
 import { cn, thumbhashToDataUrl } from '@/lib/utils';
@@ -25,6 +25,12 @@ const deviceLabel: Record<BannerDevice, () => string> = {
   mobile: () => m['pages.banners.detail.device_mobile'](),
   tablet: () => m['pages.banners.detail.device_tablet'](),
   desktop: () => m['pages.banners.detail.device_desktop'](),
+};
+
+const deviceIcon: Record<BannerDevice, TablerIcon> = {
+  mobile: IconDeviceMobile,
+  tablet: IconDeviceTablet,
+  desktop: IconDeviceDesktop,
 };
 
 // All device previews share one fixed height so the three columns stay aligned
@@ -88,10 +94,14 @@ export const BannerDeviceCard: FC<IProps> = ({ bannerId, device, form, disabled 
   });
 
   const busy = disabled || isUploading || isRemoving;
+  const DeviceIcon = deviceIcon[device];
 
   return (
     <div className="flex flex-col gap-3">
-      <span className="text-sm font-medium">{deviceLabel[device]()}</span>
+      <span className="flex items-center gap-1.5 text-sm font-medium">
+        <DeviceIcon className="size-4 text-muted-foreground"/>
+        {deviceLabel[device]()}
+      </span>
 
       {imagesPending ? (
         <Skeleton className={`${PREVIEW_BOX} rounded-md`}/>

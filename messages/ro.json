@@ -227,6 +227,7 @@
         "empty_title": "Nicio variantă",
         "empty_description": "Acest produs nu are încă variante.",
         "col_name": "Denumire",
+        "col_price": "Preț",
         "col_state": "Stare",
         "col_options": "Opțiuni",
         "col_images": "Imagini",

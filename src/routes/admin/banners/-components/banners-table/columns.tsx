@@ -77,7 +77,7 @@ export const bannerColumns = (options: IOptions) => {
       header: ({ column }) => <DataTableColumnHeader column={column}/>,
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          {[...bannerDevices].reverse().map((device) => (
+          {bannerDevices.map((device) => (
             <DeviceImageCell key={device} image={row.original.images[device]} device={device}/>
           ))}
         </div>
@@ -87,7 +87,7 @@ export const bannerColumns = (options: IOptions) => {
         icon: IconPhoto,
         skeletonItem: (
           <div className="flex items-center gap-2">
-            {[...bannerDevices].reverse().map((device) => (
+            {bannerDevices.map((device) => (
               <Skeleton key={device} className={cn(deviceThumbClass[device], 'rounded-md')}/>
             ))}
           </div>

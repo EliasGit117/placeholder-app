@@ -226,6 +226,7 @@
         "empty_title": "Нет вариантов",
         "empty_description": "У этого товара пока нет вариантов.",
         "col_name": "Название",
+        "col_price": "Цена",
         "col_state": "Состояние",
         "col_options": "Опции",
         "col_images": "Изображения",

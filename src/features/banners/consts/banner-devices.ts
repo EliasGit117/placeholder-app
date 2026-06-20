@@ -3,7 +3,7 @@ import { ImagePurpose } from '~/prisma/generated/prisma/enums.ts';
 // A banner has one art-directed image per breakpoint. `device` is the public,
 // URL/UI-facing name; each maps to a single-cardinality ImagePurpose on the
 // shared Image table (resourceType BANNER, resourceId = banner id).
-export const bannerDevices = ['mobile', 'tablet', 'desktop'] as const;
+export const bannerDevices = ['desktop', 'tablet', 'mobile'] as const;
 
 export type BannerDevice = (typeof bannerDevices)[number];
 
