@@ -10,7 +10,7 @@ import {
   SheetDescription,
   SheetFooter,
   SheetHeader,
-  SheetTitle,
+  SheetTitle
 } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -21,7 +21,7 @@ import {
   SortableContent,
   SortableItem,
   SortableItemHandle,
-  SortableOverlay,
+  SortableOverlay
 } from '@/components/ui/sortable';
 import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
@@ -36,11 +36,10 @@ import { useBannerReorderSheet } from './provider.tsx';
 const deviceThumbClass: Record<BannerDevice, string> = {
   mobile: 'aspect-[9/16] h-14',
   tablet: 'aspect-[4/3] h-14',
-  desktop: 'aspect-video h-14',
+  desktop: 'aspect-video h-14'
 };
 
-// Largest → smallest, to match the table column order.
-const reorderDevices = [...bannerDevices].reverse();
+const reorderDevices = bannerDevices;
 
 const sameOrder = (a: TBannerRowDto[], b: TBannerRowDto[]) =>
   a.length === b.length && a.every((banner, i) => banner.id === b[i].id);
@@ -56,7 +55,7 @@ export const BannerReorderSheet: FC = () => {
   const { data, isPending } = useQuery(
     orpc.admin.banners.getAll.queryOptions({
       enabled: isOpen,
-      staleTime: 0,
+      staleTime: 0
     })
   );
 
@@ -75,7 +74,7 @@ export const BannerReorderSheet: FC = () => {
 
   const { mutateAsync: reorder, isPending: isSaving } = useMutation({
     mutationFn: (ids: number[]) => orpc.admin.banners.reorder.call({ ids }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: orpc.admin.banners.getAll.key() }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: orpc.admin.banners.getAll.key() })
   });
 
   const isDirty = !sameOrder(items, banners);
@@ -87,7 +86,7 @@ export const BannerReorderSheet: FC = () => {
         close();
         return m['pages.banners.sheet.reorder_success']();
       },
-      error: (err: Error) => err?.message ?? m['pages.banners.sheet.reorder_error'](),
+      error: (err: Error) => err?.message ?? m['pages.banners.sheet.reorder_error']()
     });
   };
 
@@ -166,23 +165,7 @@ function BannerReorderRow({ banner, overlay }: { banner: TBannerRowDto; overlay?
 
   return (
     <SortableItem value={banner.id} asChild>
-      <div
-        className={cn(
-          'flex items-center gap-3 rounded-md border bg-card p-2',
-          overlay && 'shadow-lg',
-        )}
-      >
-        <SortableItemHandle asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-7 shrink-0 cursor-grab text-muted-foreground active:cursor-grabbing"
-            aria-label={m['pages.banners.sheet.reorder_handle']()}
-          >
-            <IconGripVertical className="size-4"/>
-          </Button>
-        </SortableItemHandle>
-
+      <div className={cn('flex items-center gap-3 rounded-md border bg-card p-2 relative', overlay && 'shadow-lg')}>
         <div className="flex min-w-0 flex-1 flex-col gap-2">
           <span className={cn('truncate text-sm', !title && 'text-muted-foreground')}>
             {title || m['pages.banners.index.untitled']()}
@@ -194,6 +177,17 @@ function BannerReorderRow({ banner, overlay }: { banner: TBannerRowDto; overlay?
             ))}
           </div>
         </div>
+
+        <SortableItemHandle asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-7 shrink-0 cursor-grab text-muted-foreground active:cursor-grabbing absolute top-1 right-1"
+            aria-label={m['pages.banners.sheet.reorder_handle']()}
+          >
+            <IconGripVertical className="size-4"/>
+          </Button>
+        </SortableItemHandle>
       </div>
     </SortableItem>
   );
@@ -201,16 +195,16 @@ function BannerReorderRow({ banner, overlay }: { banner: TBannerRowDto; overlay?
 
 function ReorderRowSkeleton() {
   return (
-    <div className="flex items-center gap-3 rounded-md border bg-card p-2">
-      <Skeleton className="size-7 shrink-0 rounded-md"/>
+    <div className="flex items-center gap-3 rounded-md border bg-card p-2 relative">
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <Skeleton className="h-4 w-32"/>
         <div className="flex items-end gap-2">
           {reorderDevices.map((device) => (
-            <Skeleton key={device} className={cn('shrink-0 rounded', deviceThumbClass[device])}/>
+            <Skeleton key={device} className={cn('shrink-0 rounded-sm', deviceThumbClass[device])}/>
           ))}
         </div>
       </div>
+      <Skeleton className="size-7 shrink-0 rounded-md absolute top-1 right-1"/>
     </div>
   );
 }
@@ -221,8 +215,8 @@ function DeviceThumb({ image, device }: { image?: TBannerImageDto | null; device
   return (
     <div
       className={cn(
-        'flex shrink-0 items-center justify-center overflow-hidden rounded border bg-muted bg-cover bg-center',
-        deviceThumbClass[device],
+        'flex shrink-0 items-center justify-center overflow-hidden rounded-sm border bg-muted bg-cover bg-center',
+        deviceThumbClass[device]
       )}
       style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
     >

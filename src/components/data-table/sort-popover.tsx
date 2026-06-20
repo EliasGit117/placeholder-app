@@ -55,7 +55,7 @@ export function DataTableSortPopover<TData>({ ...props }: IDataTableSortPopoverP
             <CommandEmpty>
               {m['components.data_table.no_columns_found']()}
             </CommandEmpty>
-            <CommandGroup className="p-0" heading={m['components.data_table.sort_by']()}>
+            {sortableColumns.length > 0 && <CommandGroup className="p-0" heading={m['components.data_table.sort_by']()}>
               {sortableColumns.map((column) => {
                 const Icon = column.columnDef.meta?.icon;
 
@@ -72,7 +72,7 @@ export function DataTableSortPopover<TData>({ ...props }: IDataTableSortPopoverP
                   </CommandItem>
                 );
               })}
-            </CommandGroup>
+            </CommandGroup>}
           </CommandList>
         </Command>
 
