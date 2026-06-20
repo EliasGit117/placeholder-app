@@ -43,6 +43,7 @@ import { cn, pickFirstLetters } from '@/lib/utils';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard.ts';
 import { m } from '@/paraglide/messages';
 import type { TSessionBriefDto } from '@/features/sessions/schemas/session-brief.ts';
+import { SessionState } from '@/features/sessions/schemas/search-sessions.ts';
 import { Link } from '@tanstack/react-router';
 
 
@@ -342,14 +343,12 @@ export const sessionColumns = (options?: IOptions) => {
       }
     }),
 
-    columnHelper.accessor('isExpired', {
+    columnHelper.accessor('status', {
       size: 100,
       enableSorting: false,
       header: ({ column }) => <DataTableColumnHeader column={column}/>,
       cell: ({ getValue }) => {
-        const isExpired = getValue();
-        if (isExpired == null)
-          return null;
+        const isExpired = getValue() === SessionState.Expired;
 
         return (
           <Badge
@@ -362,15 +361,15 @@ export const sessionColumns = (options?: IOptions) => {
         );
       },
       meta: {
-        key: 'state',
+        key: 'status',
         icon: IconClock,
-        label: m['pages.sessions.index.table.validity'](),
+        label: m['pages.sessions.index.table.status'](),
         skeletonClassName: 'h-5.5 w-20 rounded-sm',
         filter: {
-          type: ColumnFilterType.Select,
+          type: ColumnFilterType.MultiSelect,
           options: [
-            { title: m['pages.sessions.index.table.active'](), value: 'active', icon: IconCheck },
-            { title: m['pages.sessions.index.table.expired'](), value: 'expired', icon: IconClock },
+            { title: m['pages.sessions.index.table.active'](), value: SessionState.Active, icon: IconCheck },
+            { title: m['pages.sessions.index.table.expired'](), value: SessionState.Expired, icon: IconClock },
           ]
         }
       }

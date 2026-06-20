@@ -15,15 +15,15 @@ const sortableFields: (keyof Session)[] = [
   'expiresAt',
 ];
 
-export const sessionStateSchema = z.enum(['active', 'expired']);
-export type TSessionState = z.infer<typeof sessionStateSchema>;
+import { sessionStateSchema } from '@/features/sessions/schemas/session-state.ts';
+export { SessionState, sessionStateSchema, type TSessionState } from '@/features/sessions/schemas/session-state.ts';
 
 export const searchSessionsRequestDtoSchema = paginatedRequestDtoSchema.extend({
   id: z.string().optional().catch(undefined),
   sort: z.enum(sortableFields).optional().catch(undefined),
   userId: z.string().optional().catch(undefined),
   ipAddress: z.string().optional().catch(undefined),
-  state: sessionStateSchema.optional().catch(undefined),
+  status: z.array(sessionStateSchema).optional().catch(undefined),
   createdAt: dateRangeSchema.optional().catch(undefined),
   updatedAt: dateRangeSchema.optional().catch(undefined),
   expiresAt: dateRangeSchema.optional().catch(undefined)

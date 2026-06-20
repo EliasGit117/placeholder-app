@@ -46,6 +46,7 @@ import { envConfig } from '@/lib/config';
 import { getLocale, isLocale, setLocale, type Locale } from '@/paraglide/runtime';
 import { m } from '@/paraglide/messages';
 import logo from '/images/common/logo_sm.png';
+import { SessionState } from '@/features/sessions/schemas/search-sessions.ts';
 
 
 interface INavItem {
@@ -108,7 +109,7 @@ const navMain: ISidebarMenuItem[] = [
         linkOptions: {
           to: '/admin/sessions',
           search: {
-            state: 'active'
+            status: [SessionState.Active]
           },
           activeOptions: {
             includeSearch: false,

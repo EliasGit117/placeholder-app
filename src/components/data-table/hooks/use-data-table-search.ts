@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Updater, ColumnDef, ColumnFiltersState, SortingState } from '@tanstack/react-table';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useDebouncedCallback } from 'use-debounce';
@@ -35,6 +35,15 @@ export function useDataTableSearch<TData>({ columns, pageOnSearchChange = 1, rep
     });
   }, 300);
 
+  // Sync external URL changes (e.g. sidebar links) back into local filter state.
+  // Skip while a local edit is mid-debounce so we don't clobber the user's input.
+  useEffect(() => {
+    if (debouncedSetFilter.isPending())
+      return;
+
+    _setColumnFiltersState(prev => (isSameFilterState(prev, initialFilters) ? prev : initialFilters));
+  }, [initialFilters, debouncedSetFilter]);
+
   const setColumnFiltersState = useCallback((updater: Updater<ColumnFiltersState>) => {
     _setColumnFiltersState(prev => {
       const next = typeof updater === 'function' ? updater(prev) : updater;
@@ -69,6 +78,15 @@ const toFilterState = (obj: Record<string, unknown>, keysMap: Record<string, str
   return Object.entries(obj)
     .map(([id, value]) => ({ id: reversedMap[id] ?? id, value: value }))
     .filter(item => keys.includes(item.id));
+};
+
+
+const isSameFilterState = (a: ColumnFiltersState, b: ColumnFiltersState): boolean => {
+  if (a.length !== b.length)
+    return false;
+
+  const bMap = new Map(b.map((f) => [f.id, f.value]));
+  return a.every((f) => bMap.has(f.id) && JSON.stringify(bMap.get(f.id)) === JSON.stringify(f.value));
 };
 
 

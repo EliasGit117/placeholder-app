@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { Prisma } from '~/prisma/generated/prisma/client.ts';
+import { sessionStateSchema, SessionState } from '@/features/sessions/schemas/session-state.ts';
 
 type TSessionWithUser = Prisma.SessionGetPayload<{ include: { user: true } }>
 
@@ -18,7 +19,7 @@ export const sessionBriefDtoSchema = z.object({
   ipAddress: z.string().optional(),
   isCurrent: z.boolean().optional(),
   isOwned: z.boolean().optional(),
-  isExpired: z.boolean().optional(),
+  status: sessionStateSchema,
 
   createdAt: z.string(),
   updatedAt: z.string(),
@@ -51,7 +52,7 @@ export class SessionBriefDtoFactory {
       expiresAt: entity.expiresAt.toISOString(),
       isCurrent: options?.currentSessionId != null ? entity.id === options.currentSessionId : undefined,
       isOwned: options?.currentUserId != null ? entity.userId === options.currentUserId : undefined,
-      isExpired: entity.expiresAt < new Date(),
+      status: entity.expiresAt < new Date() ? SessionState.Expired : SessionState.Active,
     };
   }
 

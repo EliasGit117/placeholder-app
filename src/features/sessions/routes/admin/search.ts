@@ -3,7 +3,7 @@ import { auth } from '@/lib/auth/better-auth.ts';
 import { sessionsAdminPath } from '@/features/sessions/routes/admin/base.ts';
 import {
   searchSessionsRequestDtoSchema,
-  searchSessionsResultDtoSchema, type TSearchSessionsRequestDto
+  searchSessionsResultDtoSchema, SessionState, type TSearchSessionsRequestDto
 } from '@/features/sessions/schemas/search-sessions.ts';
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { prisma } from '@/lib/db';
@@ -99,9 +99,9 @@ function getWhere(input: TSearchSessionsRequestDto): Prisma.SessionWhereInput {
       where.expiresAt.lte = input.expiresAt.to;
   }
 
-  if (input.state != null) {
+  if (input.status != null && input.status.length > 0 && input.status.length < 2) {
     const now = new Date();
-    where.expiresAt = input.state === 'active' ? { gt: now } : { lte: now };
+    where.expiresAt = input.status[0] === SessionState.Active ? { gt: now } : { lte: now };
   }
 
   return where;

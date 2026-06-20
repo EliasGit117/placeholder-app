@@ -418,7 +418,7 @@
           "active": "Activă",
           "revoked": "Revocată",
           "owner": "Proprietar",
-          "validity": "Valabilitate",
+          "status": "Stare",
           "valid": "Validă",
           "expired": "Expirată"
         }
