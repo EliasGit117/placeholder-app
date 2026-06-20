@@ -77,7 +77,8 @@ export function DataTableSelectFilter<TData, TValue>({ column }: IDataTableSelec
             {hasFilter && selectedOption && (
               <>
                 <Separator orientation="vertical" className="mx-1 my-auto h-3.5"/>
-                <Badge variant="secondary" className="border border-border rounded-sm px-1 font-normal [&>svg]:size-2.5!">
+                <Badge variant="secondary"
+                       className="border border-border rounded-sm px-1 font-normal [&>svg]:size-2.5!">
                   {selectedOption.icon && <selectedOption.icon className="text-muted-foreground"/>}
                   <span>{selectedOption.title}</span>
                 </Badge>
@@ -125,15 +126,10 @@ export function DataTableSelectFilter<TData, TValue>({ column }: IDataTableSelec
               {hasFilter && (
                 <>
                   <CommandSeparator/>
-                  <CommandGroup>
-                    <CommandItem
-                      onSelect={onReset}
-                      className="flex justify-center"
-                    >
-                      <IconCircleX/>
-                      <span>{m['components.data_table.clear_filters']()}</span>
-                    </CommandItem>
-                  </CommandGroup>
+                  <CommandItem onSelect={onReset} className="flex justify-center mt-1">
+                    <IconCircleX/>
+                    <span>{m['components.data_table.clear_filters']()}</span>
+                  </CommandItem>
                 </>
               )}
             </CommandList>

@@ -362,9 +362,17 @@ export const sessionColumns = (options?: IOptions) => {
         );
       },
       meta: {
+        key: 'state',
         icon: IconClock,
         label: m['pages.sessions.index.table.validity'](),
-        skeletonClassName: 'h-5.5 w-20 rounded-sm'
+        skeletonClassName: 'h-5.5 w-20 rounded-sm',
+        filter: {
+          type: ColumnFilterType.Select,
+          options: [
+            { title: m['pages.sessions.index.table.active'](), value: 'active', icon: IconCheck },
+            { title: m['pages.sessions.index.table.expired'](), value: 'expired', icon: IconClock },
+          ]
+        }
       }
     }),
 

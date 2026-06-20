@@ -105,7 +105,15 @@ const navMain: ISidebarMenuItem[] = [
       {
         title: () => m['pages.sessions.title'](),
         icon: IconKey,
-        linkOptions: { to: '/admin/sessions', activeOptions: { includeSearch: false } }
+        linkOptions: {
+          to: '/admin/sessions',
+          search: {
+            state: 'active'
+          },
+          activeOptions: {
+            includeSearch: false,
+          }
+        }
       }
     ]
   }

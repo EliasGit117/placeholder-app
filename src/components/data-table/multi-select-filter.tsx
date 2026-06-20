@@ -126,7 +126,7 @@ export function DataTableMultiSelectFilter<TData, TValue>({ column }: IDataTable
                         className="border border-border rounded-sm px-1 font-normal [&>svg]:size-2.5!"
                         key={`${option.value}`}
                       >
-                        {option.icon && <option.icon className='text-muted-foreground'/>}
+                        {option.icon && <option.icon className="text-muted-foreground"/>}
                         <span>{option.title}</span>
                       </Badge>
                     ))
@@ -137,8 +137,8 @@ export function DataTableMultiSelectFilter<TData, TValue>({ column }: IDataTable
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent className="min-w-52 w-fit p-0 gap-1" align='start'>
-          <Command className='space-y-1'>
+        <PopoverContent className="min-w-52 w-fit p-0 gap-1" align="start">
+          <Command className="space-y-1">
             {options.length > 5 && (
               <CommandInput placeholder={title} wrapperClassName="p-0" groupClassName="rounded-sm!"/>
             )}
@@ -148,7 +148,7 @@ export function DataTableMultiSelectFilter<TData, TValue>({ column }: IDataTable
                 {m['components.data_table.no_results_found']()}
               </CommandEmpty>
 
-              <CommandGroup  className="p-0" heading={title}>
+              <CommandGroup className="p-0" heading={title}>
                 {options.map((option) => {
                   const isSelected = selectedSet.has(option.value);
 
@@ -159,7 +159,7 @@ export function DataTableMultiSelectFilter<TData, TValue>({ column }: IDataTable
                       onSelect={() => onItemSelect(option.value, isSelected)}
                       className="group"
                     >
-                      {option.icon && <option.icon className='text-muted-foreground'/>}
+                      {option.icon && <option.icon className="text-muted-foreground"/>}
                       <span className="truncate">
                         {option.title}
                       </span>
@@ -177,15 +177,10 @@ export function DataTableMultiSelectFilter<TData, TValue>({ column }: IDataTable
               {hasFilter && (
                 <>
                   <CommandSeparator/>
-                  <CommandGroup>
-                    <CommandItem
-                      onSelect={onReset}
-                      className="flex justify-center"
-                    >
-                      <IconCircleX/>
-                      <span>{m['components.data_table.clear_filters']()}</span>
-                    </CommandItem>
-                  </CommandGroup>
+                  <CommandItem onSelect={onReset} className="flex justify-center mt-1">
+                    <IconCircleX/>
+                    <span>{m['components.data_table.clear_filters']()}</span>
+                  </CommandItem>
                 </>
               )}
             </CommandList>

@@ -99,5 +99,10 @@ function getWhere(input: TSearchSessionsRequestDto): Prisma.SessionWhereInput {
       where.expiresAt.lte = input.expiresAt.to;
   }
 
+  if (input.state != null) {
+    const now = new Date();
+    where.expiresAt = input.state === 'active' ? { gt: now } : { lte: now };
+  }
+
   return where;
 }
