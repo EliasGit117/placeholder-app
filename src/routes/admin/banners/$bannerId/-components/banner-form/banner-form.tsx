@@ -106,7 +106,7 @@ export const BannerForm: FC<IProps> = ({ id, initialData }) => {
       <Card>
         <CardContent className="@container space-y-6">
           <fieldset disabled={disabled} className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 @3xl:grid-cols-3">
+            <div className="flex flex-wrap gap-6">
               {bannerDevices.map((device) => (
                 <BannerDeviceCard
                   key={device}
