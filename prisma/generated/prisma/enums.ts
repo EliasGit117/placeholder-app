@@ -10,8 +10,8 @@
 */
 
 export const BannerState = {
-  active: 'active',
-  hidden: 'hidden'
+  ACTIVE: 'ACTIVE',
+  HIDDEN: 'HIDDEN'
 } as const
 
 export type BannerState = (typeof BannerState)[keyof typeof BannerState]
@@ -33,6 +33,14 @@ export const BannerYAlign = {
 } as const
 
 export type BannerYAlign = (typeof BannerYAlign)[keyof typeof BannerYAlign]
+
+
+export const BannerStyle = {
+  LIGHT: 'LIGHT',
+  DARK: 'DARK'
+} as const
+
+export type BannerStyle = (typeof BannerStyle)[keyof typeof BannerStyle]
 
 
 export const CategoryState = {

@@ -11,15 +11,17 @@ import { Field } from '@/components/ui/field.tsx';
 import { Skeleton } from '@/components/ui/skeleton.tsx';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
 import { m } from '@/paraglide/messages';
-import { BannerXAlign, BannerYAlign, ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
+import { BannerStyle, BannerXAlign, BannerYAlign, ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import { bannerDevicePurpose, type BannerDevice } from '@/features/banners/consts/banner-devices.ts';
 import { getImageUploadConstraints } from '@/features/images/consts/image-resource-map.ts';
 import type { TUpdateBannerDto } from '@/features/banners/dtos/update-banner.ts';
 import { BannerAlignSelect } from './banner-align-select.tsx';
+import { BannerStyleSelect } from './banner-style-select.tsx';
 
 
 const alignXKey = (device: BannerDevice) => `${device}XAlign` as const;
 const alignYKey = (device: BannerDevice) => `${device}YAlign` as const;
+const styleKey = (device: BannerDevice) => `${device}Style` as const;
 
 const deviceLabel: Record<BannerDevice, () => string> = {
   mobile: () => m['pages.banners.detail.device_mobile'](),
@@ -166,6 +168,19 @@ export const BannerDeviceCard: FC<IProps> = ({ bannerId, device, form, disabled 
                 axis="y"
                 disabled={disabled}
                 value={field.value ?? BannerYAlign.CENTER}
+                onChange={field.onChange}
+              />
+            </Field>
+          )}
+        />
+        <Controller
+          name={styleKey(device)}
+          control={form.control}
+          render={({ field }) => (
+            <Field className="flex-1">
+              <BannerStyleSelect
+                disabled={disabled}
+                value={field.value ?? BannerStyle.light}
                 onChange={field.onChange}
               />
             </Field>

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { Banner } from '~/prisma/generated/prisma/client.ts';
-import { BannerXAlign, BannerYAlign } from '~/prisma/generated/prisma/enums.ts';
+import { BannerStyle, BannerXAlign, BannerYAlign } from '~/prisma/generated/prisma/enums.ts';
 import { capitalizeFirst } from '@/lib/utils';
 import type { Locale } from '~/src/paraglide/runtime';
 
@@ -20,6 +20,9 @@ export const bannerPublicDtoSchema = z.object({
   tabletYAlign: z.enum(BannerYAlign),
   desktopXAlign: z.enum(BannerXAlign),
   desktopYAlign: z.enum(BannerYAlign),
+  mobileStyle: z.enum(BannerStyle),
+  tabletStyle: z.enum(BannerStyle),
+  desktopStyle: z.enum(BannerStyle),
 });
 
 export type TBannerPublicDto = z.infer<typeof bannerPublicDtoSchema>;
@@ -40,6 +43,9 @@ export class BannerPublicDtoFactory {
       tabletYAlign: entity.tabletYAlign,
       desktopXAlign: entity.desktopXAlign,
       desktopYAlign: entity.desktopYAlign,
+      mobileStyle: entity.mobileStyle,
+      tabletStyle: entity.tabletStyle,
+      desktopStyle: entity.desktopStyle,
     };
   }
 

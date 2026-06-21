@@ -471,6 +471,8 @@
         "align_right": "Dreapta",
         "align_top": "Sus",
         "align_bottom": "Jos",
+        "style_light": "Luminos",
+        "style_dark": "Întunecat",
         "image_uploaded": "Imagine încărcată",
         "image_removed": "Imagine eliminată",
         "saved": "Banner salvat"

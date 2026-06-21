@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { BannerState, BannerXAlign, BannerYAlign } from '~/prisma/generated/prisma/enums.ts';
+import { BannerState, BannerStyle, BannerXAlign, BannerYAlign } from '~/prisma/generated/prisma/enums.ts';
 
 
 // An optional click-through target. Internal path only (must start with a
@@ -17,7 +17,7 @@ export const bannerHrefSchema = z
 // `order` is server-assigned (appended) on create, never client-supplied; the
 // three device images are uploaded separately via the multipart endpoint.
 export const createBannerDtoSchema = z.object({
-  state: z.enum(BannerState).default(BannerState.active),
+  state: z.enum(BannerState).default(BannerState.ACTIVE),
   titleRo: z.string().trim().max(256).nullish(),
   titleRu: z.string().trim().max(256).nullish(),
   descriptionRo: z.string().trim().max(2048).nullish(),
@@ -29,6 +29,9 @@ export const createBannerDtoSchema = z.object({
   tabletYAlign: z.enum(BannerYAlign).default(BannerYAlign.CENTER),
   desktopXAlign: z.enum(BannerXAlign).default(BannerXAlign.LEFT),
   desktopYAlign: z.enum(BannerYAlign).default(BannerYAlign.CENTER),
+  mobileStyle: z.enum(BannerStyle).default(BannerStyle.LIGHT),
+  tabletStyle: z.enum(BannerStyle).default(BannerStyle.LIGHT),
+  desktopStyle: z.enum(BannerStyle).default(BannerStyle.LIGHT),
 });
 
 export type TCreateBannerDto = z.infer<typeof createBannerDtoSchema>;

@@ -470,6 +470,8 @@
         "align_right": "Справа",
         "align_top": "Сверху",
         "align_bottom": "Снизу",
+        "style_light": "Светлое",
+        "style_dark": "Темное",
         "image_uploaded": "Изображение загружено",
         "image_removed": "Изображение удалено",
         "saved": "Баннер сохранён"

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { Banner } from '~/prisma/generated/prisma/client.ts';
-import { BannerState, BannerXAlign, BannerYAlign } from '~/prisma/generated/prisma/enums.ts';
+import { BannerState, BannerStyle, BannerXAlign, BannerYAlign } from '~/prisma/generated/prisma/enums.ts';
 
 
 export const bannerDtoSchema = z.object({
@@ -18,6 +18,9 @@ export const bannerDtoSchema = z.object({
   tabletYAlign: z.enum(BannerYAlign),
   desktopXAlign: z.enum(BannerXAlign),
   desktopYAlign: z.enum(BannerYAlign),
+  mobileStyle: z.enum(BannerStyle),
+  tabletStyle: z.enum(BannerStyle),
+  desktopStyle: z.enum(BannerStyle),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
@@ -42,6 +45,9 @@ export class BannerDtoFactory {
       tabletYAlign: entity.tabletYAlign,
       desktopXAlign: entity.desktopXAlign,
       desktopYAlign: entity.desktopYAlign,
+      mobileStyle: entity.mobileStyle,
+      tabletStyle: entity.tabletStyle,
+      desktopStyle: entity.desktopStyle,
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
     };

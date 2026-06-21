@@ -42,8 +42,8 @@ interface IOptions {
 const columnHelper = createColumnHelper<TBannerRowDto>();
 
 const stateMeta: Record<BannerState, { label: () => string; icon: TablerIcon }> = {
-  [BannerState.active]: { label: () => m['pages.banners.detail.state_active'](), icon: IconCircleCheck },
-  [BannerState.hidden]: { label: () => m['pages.banners.detail.state_hidden'](), icon: IconEyeOff }
+  [BannerState.ACTIVE]: { label: () => m['pages.banners.detail.state_active'](), icon: IconCircleCheck },
+  [BannerState.HIDDEN]: { label: () => m['pages.banners.detail.state_hidden'](), icon: IconEyeOff }
 };
 
 export const bannerColumns = (options: IOptions) => {
@@ -145,10 +145,7 @@ export const bannerColumns = (options: IOptions) => {
         const meta = stateMeta[getValue()];
         const Icon = meta.icon;
         return (
-          <Badge
-            variant={getValue() === BannerState.active ? 'outline' : 'secondary'}
-            className="rounded-sm min-h-6"
-          >
+          <Badge variant={getValue() === BannerState.ACTIVE ? 'outline' : 'secondary'} className="rounded-sm min-h-6">
             <Icon size={12}/>
             <span>{meta.label()}</span>
           </Badge>

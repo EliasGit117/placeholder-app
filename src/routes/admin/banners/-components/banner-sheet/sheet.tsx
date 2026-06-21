@@ -23,7 +23,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { m } from '@/paraglide/messages';
-import { BannerState } from '~/prisma/generated/prisma/enums.ts';
+import { BannerState, BannerXAlign, BannerYAlign } from '~/prisma/generated/prisma/enums.ts';
 import { createBannerDtoSchema, type TCreateBannerInput } from '@/features/banners/dtos/create-banner.ts';
 import { BannerStateSelect } from '../../$bannerId/-components/banner-form/banner-state-select.tsx';
 import { useBannerSheet } from './provider.tsx';
@@ -33,18 +33,18 @@ const formId = 'banner-create-form';
 
 function getDefaults(): TCreateBannerInput {
   return {
-    state: BannerState.active,
+    state: BannerState.ACTIVE,
     titleRo: '',
     titleRu: '',
     descriptionRo: '',
     descriptionRu: '',
     href: '',
-    mobileXAlign: 'LEFT',
-    mobileYAlign: 'CENTER',
-    tabletXAlign: 'LEFT',
-    tabletYAlign: 'CENTER',
-    desktopXAlign: 'LEFT',
-    desktopYAlign: 'CENTER',
+    mobileXAlign: BannerXAlign.LEFT,
+    mobileYAlign: BannerYAlign.CENTER,
+    tabletXAlign: BannerXAlign.LEFT,
+    tabletYAlign: BannerYAlign.CENTER,
+    desktopXAlign: BannerXAlign.LEFT,
+    desktopYAlign: BannerYAlign.CENTER,
   };
 }
 
@@ -168,7 +168,7 @@ export const BannerSheet: FC = () => {
                     <Field className="col-span-full sm:col-span-1">
                       <FieldLabel>{m['common.status']()}</FieldLabel>
                       <BannerStateSelect
-                        value={field.value ?? BannerState.active}
+                        value={field.value ?? BannerState.ACTIVE}
                         onChange={field.onChange}
                       />
                     </Field>

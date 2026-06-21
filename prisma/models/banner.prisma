@@ -1,6 +1,6 @@
 enum BannerState {
-  active
-  hidden
+  ACTIVE
+  HIDDEN
 
   @@map("banner_state")
 }
@@ -21,10 +21,17 @@ enum BannerYAlign {
   @@map("banner_y_align")
 }
 
+enum BannerStyle {
+  LIGHT
+  DARK
+
+  @@map("banner_style")
+}
+
 model Banner {
   id            Int          @id @default(autoincrement())
   order         Int          @unique
-  state         BannerState  @default(active)
+  state         BannerState  @default(ACTIVE)
 
   titleRo       String?      @map("title_ro")
   titleRu       String?      @map("title_ru")
@@ -38,6 +45,10 @@ model Banner {
   tabletYAlign  BannerYAlign @default(CENTER) @map("tablet_y_align")
   desktopXAlign BannerXAlign @default(LEFT)   @map("desktop_x_align")
   desktopYAlign BannerYAlign @default(CENTER) @map("desktop_y_align")
+
+  mobileStyle  BannerStyle @default(LIGHT) @map("mobile_style")
+  tabletStyle  BannerStyle @default(LIGHT) @map("tablet_style")
+  desktopStyle BannerStyle @default(LIGHT) @map("desktop_style")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

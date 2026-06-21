@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { IconChevronDown, IconCircleCheck, IconEyeOff, type TablerIcon } from '@tabler/icons-react';
+import { IconChevronDown, IconSun, IconMoon } from '@tabler/icons-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,35 +9,35 @@ import {
 } from '@/components/ui/dropdown-menu.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { m } from '@/paraglide/messages';
-import { BannerState } from '~/prisma/generated/prisma/enums.ts';
+import { BannerStyle } from '~/prisma/generated/prisma/enums.ts';
 
 
-const options: { value: BannerState; label: () => string; icon: TablerIcon }[] = [
-  { value: BannerState.ACTIVE, label: () => m['pages.banners.detail.state_active'](), icon: IconCircleCheck },
-  { value: BannerState.HIDDEN, label: () => m['pages.banners.detail.state_hidden'](), icon: IconEyeOff },
+const options = [
+  { value: BannerStyle.LIGHT, label: () => m['pages.banners.detail.style_light'](), icon: IconSun },
+  { value: BannerStyle.DARK, label: () => m['pages.banners.detail.style_dark'](), icon: IconMoon },
 ];
 
 interface IProps {
-  value: BannerState;
-  onChange: (value: BannerState) => void;
+  value: BannerStyle;
+  onChange: (value: BannerStyle) => void;
   disabled?: boolean;
 }
 
-export const BannerStateSelect: FC<IProps> = ({ value, onChange, disabled }) => {
+export const BannerStyleSelect: FC<IProps> = ({ value, onChange, disabled }) => {
   const current = options.find((o) => o.value === value) ?? options[0];
   const CurrentIcon = current.icon;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="w-full justify-start" disabled={disabled}>
+        <Button variant="outline" size="sm" className="w-full justify-start" disabled={disabled}>
           <CurrentIcon className="text-muted-foreground" size={16}/>
           <span>{current.label()}</span>
           <IconChevronDown className="ml-auto opacity-50" size={16}/>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
-        <DropdownMenuRadioGroup value={value} onValueChange={(v) => onChange(v as BannerState)}>
+      <DropdownMenuContent className="w-fit min-w-(--radix-dropdown-menu-trigger-width)">
+        <DropdownMenuRadioGroup value={value} onValueChange={(v) => onChange(v as BannerStyle)}>
           {options.map((option) => {
             const Icon = option.icon;
             return (

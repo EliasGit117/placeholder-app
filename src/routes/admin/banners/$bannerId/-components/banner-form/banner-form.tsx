@@ -11,7 +11,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { LoadingButton } from '@/components/ui/loading-button';
 import { Separator } from '@/components/ui/separator';
 import { m } from '@/paraglide/messages';
-import { BannerState, BannerXAlign, BannerYAlign } from '~/prisma/generated/prisma/enums.ts';
+import { BannerState, BannerStyle, BannerXAlign, BannerYAlign } from '~/prisma/generated/prisma/enums.ts';
 import { updateBannerDtoSchema, type TUpdateBannerDto } from '@/features/banners/dtos/update-banner.ts';
 import type { TBannerDto } from '@/features/banners/dtos/banner.ts';
 import { bannerDevices } from '@/features/banners/consts/banner-devices.ts';
@@ -31,7 +31,7 @@ interface IProps {
 // controlled inputs; alignment falls back to the schema defaults.
 function toFormValues(banner?: TBannerDto): TUpdateBannerDto {
   return {
-    state: banner?.state ?? BannerState.active,
+    state: banner?.state ?? BannerState.ACTIVE,
     titleRo: banner?.titleRo ?? '',
     titleRu: banner?.titleRu ?? '',
     descriptionRo: banner?.descriptionRo ?? '',
@@ -42,7 +42,10 @@ function toFormValues(banner?: TBannerDto): TUpdateBannerDto {
     tabletXAlign: banner?.tabletXAlign ?? BannerXAlign.LEFT,
     tabletYAlign: banner?.tabletYAlign ?? BannerYAlign.CENTER,
     desktopXAlign: banner?.desktopXAlign ?? BannerXAlign.LEFT,
-    desktopYAlign: banner?.desktopYAlign ?? BannerYAlign.CENTER
+    desktopYAlign: banner?.desktopYAlign ?? BannerYAlign.CENTER,
+    mobileStyle: banner?.mobileStyle ?? BannerStyle.LIGHT,
+    tabletStyle: banner?.tabletStyle ?? BannerStyle.LIGHT,
+    desktopStyle: banner?.desktopStyle ?? BannerStyle.LIGHT,
   };
 }
 
@@ -176,7 +179,7 @@ export const BannerForm: FC<IProps> = ({ id, initialData }) => {
                   <Field className="w-full">
                     <FieldLabel>{m['common.status']()}</FieldLabel>
                     <BannerStateSelect
-                      value={field.value ?? BannerState.active}
+                      value={field.value ?? BannerState.ACTIVE}
                       onChange={field.onChange}
                     />
                   </Field>

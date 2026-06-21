@@ -6,9 +6,8 @@ import {
   IconFilter,
   IconInfoCircle,
   IconPencil,
-  IconPlus,
   IconTrash,
-  IconX,
+  IconX, IconFilePlus
 } from '@tabler/icons-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -131,7 +130,7 @@ export const CategoryTree: FC<{ className?: string }> = ({ className }) => {
 
                 {canCreate && (
                   <ContextMenuItem onClick={() => setTimeout(() => openSheet({ mode: CategorySheetMode.Create, parentId: Number(item.getId()) }), 0)}>
-                    <IconPlus className="text-muted-foreground size-4"/>
+                    <IconFilePlus className="text-muted-foreground size-4"/>
                     <span>{m['pages.categories.index.tree.add_child']()}</span>
                   </ContextMenuItem>
                 )}

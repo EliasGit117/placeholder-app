@@ -114,6 +114,9 @@ export const BannerScalarFieldEnum = {
   tabletYAlign: 'tabletYAlign',
   desktopXAlign: 'desktopXAlign',
   desktopYAlign: 'desktopYAlign',
+  mobileStyle: 'mobileStyle',
+  tabletStyle: 'tabletStyle',
+  desktopStyle: 'desktopStyle',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
