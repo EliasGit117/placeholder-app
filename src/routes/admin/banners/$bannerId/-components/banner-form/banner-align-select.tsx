@@ -7,14 +7,14 @@ import {
   IconLayoutAlignMiddle,
   IconLayoutAlignRight,
   IconLayoutAlignTop,
-  type TablerIcon,
+  type TablerIcon
 } from '@tabler/icons-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { m } from '@/paraglide/messages';
@@ -30,13 +30,13 @@ interface IOption {
 const xOptions: IOption[] = [
   { value: BannerXAlign.LEFT, label: () => m['pages.banners.detail.align_left'](), icon: IconLayoutAlignLeft },
   { value: BannerXAlign.CENTER, label: () => m['pages.banners.detail.align_center'](), icon: IconLayoutAlignCenter },
-  { value: BannerXAlign.RIGHT, label: () => m['pages.banners.detail.align_right'](), icon: IconLayoutAlignRight },
+  { value: BannerXAlign.RIGHT, label: () => m['pages.banners.detail.align_right'](), icon: IconLayoutAlignRight }
 ];
 
 const yOptions: IOption[] = [
   { value: BannerYAlign.TOP, label: () => m['pages.banners.detail.align_top'](), icon: IconLayoutAlignTop },
   { value: BannerYAlign.CENTER, label: () => m['pages.banners.detail.align_center'](), icon: IconLayoutAlignMiddle },
-  { value: BannerYAlign.BOTTOM, label: () => m['pages.banners.detail.align_bottom'](), icon: IconLayoutAlignBottom },
+  { value: BannerYAlign.BOTTOM, label: () => m['pages.banners.detail.align_bottom'](), icon: IconLayoutAlignBottom }
 ];
 
 interface IProps {
@@ -60,7 +60,7 @@ export const BannerAlignSelect: FC<IProps> = ({ axis, value, onChange, disabled 
           <IconChevronDown className="ml-auto opacity-50" size={16}/>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
+      <DropdownMenuContent className="w-fit min-w-(--radix-dropdown-menu-trigger-width)">
         <DropdownMenuRadioGroup value={value} onValueChange={onChange}>
           {options.map((option) => {
             const Icon = option.icon;

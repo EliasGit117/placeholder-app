@@ -147,7 +147,7 @@ export const productColumns = (options?: IOptions) => {
         const option = getProductStateOption(getValue());
         const Icon = option.icon;
         return (
-          <Badge variant={getValue() === ProductState.active ? 'outline' : 'secondary'} className="rounded-sm min-h-6">
+          <Badge variant={getValue() === ProductState.ACTIVE ? 'outline' : 'secondary'} className="rounded-sm min-h-6">
             <Icon size={12}/>
             <span>{option.label()}</span>
           </Badge>

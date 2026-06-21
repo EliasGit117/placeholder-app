@@ -1,7 +1,7 @@
 import { ORPCError } from '@orpc/server';
 import { Prisma } from '~/prisma/generated/prisma/client.ts';
 import type { Banner } from '~/prisma/generated/prisma/client.ts';
-import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
+import { BannerState, ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import { prisma, type TxClient } from '@/lib/db';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
@@ -28,7 +28,7 @@ export class BannerService {
 
   static async findAllActive(): Promise<Banner[]> {
     return prisma.banner.findMany({
-      where: { state: 'active' },
+      where: { state: BannerState.ACTIVE },
       orderBy: { order: 'asc' },
     });
   }
@@ -55,10 +55,13 @@ export class BannerService {
           href: input.href ?? null,
           mobileXAlign: input.mobileXAlign,
           mobileYAlign: input.mobileYAlign,
+          mobileStyle: input.mobileStyle,
           tabletXAlign: input.tabletXAlign,
           tabletYAlign: input.tabletYAlign,
+          tabletStyle: input.tabletStyle,
           desktopXAlign: input.desktopXAlign,
           desktopYAlign: input.desktopYAlign,
+          desktopStyle: input.desktopStyle,
           order: last ? last.order + 1 : 1,
         },
       });
@@ -81,10 +84,13 @@ export class BannerService {
         ...(input.href !== undefined && { href: input.href ?? null }),
         ...(input.mobileXAlign !== undefined && { mobileXAlign: input.mobileXAlign }),
         ...(input.mobileYAlign !== undefined && { mobileYAlign: input.mobileYAlign }),
+        ...(input.mobileStyle !== undefined && { mobileStyle: input.mobileStyle }),
         ...(input.tabletXAlign !== undefined && { tabletXAlign: input.tabletXAlign }),
         ...(input.tabletYAlign !== undefined && { tabletYAlign: input.tabletYAlign }),
+        ...(input.tabletStyle !== undefined && { tabletStyle: input.tabletStyle }),
         ...(input.desktopXAlign !== undefined && { desktopXAlign: input.desktopXAlign }),
         ...(input.desktopYAlign !== undefined && { desktopYAlign: input.desktopYAlign }),
+        ...(input.desktopStyle !== undefined && { desktopStyle: input.desktopStyle }),
       },
     });
   }

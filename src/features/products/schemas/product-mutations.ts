@@ -11,7 +11,7 @@ export const productBaseSchema = z.object({
   nameRu: z.string().trim().min(1).max(128),
   shortDescriptionRo: z.string().trim().max(4096).optional(),
   shortDescriptionRu: z.string().trim().max(4096).optional(),
-  state: z.enum(ProductState).default(ProductState.active),
+  state: z.enum(ProductState).default(ProductState.ACTIVE),
   slug: slugSchema,
   options: optionsSchema,
   categoryId: z.number().int().positive().nullable().optional(),

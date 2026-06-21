@@ -36,8 +36,8 @@ export const BannerStateSelect: FC<IProps> = ({ value, onChange, disabled }) => 
           <IconChevronDown className="ml-auto opacity-50" size={16}/>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
-        <DropdownMenuRadioGroup value={value} onValueChange={(v) => onChange(v as BannerState)}>
+      <DropdownMenuContent className="w-fit min-w-(--radix-dropdown-menu-trigger-width)">
+      <DropdownMenuRadioGroup value={value} onValueChange={(v) => onChange(v as BannerState)}>
           {options.map((option) => {
             const Icon = option.icon;
             return (

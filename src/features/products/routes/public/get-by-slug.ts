@@ -17,7 +17,7 @@ export const getProductBySlug = productsBase
   .output(productWithVariantsSchema)
   .handler(async ({ input: { slug }, errors }) => {
     const product = await ProductService.findBySlug(slug);
-    if (product == null || product.state !== ProductState.active)
+    if (product == null || product.state !== ProductState.ACTIVE)
       throw errors.NOT_FOUND();
 
     return product;

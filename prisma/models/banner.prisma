@@ -40,11 +40,11 @@ model Banner {
   href          String?
 
   mobileXAlign  BannerXAlign @default(LEFT)   @map("mobile_x_align")
-  mobileYAlign  BannerYAlign @default(CENTER) @map("mobile_y_align")
+  mobileYAlign  BannerYAlign @default(BOTTOM) @map("mobile_y_align")
   tabletXAlign  BannerXAlign @default(LEFT)   @map("tablet_x_align")
-  tabletYAlign  BannerYAlign @default(CENTER) @map("tablet_y_align")
+  tabletYAlign  BannerYAlign @default(BOTTOM) @map("tablet_y_align")
   desktopXAlign BannerXAlign @default(LEFT)   @map("desktop_x_align")
-  desktopYAlign BannerYAlign @default(CENTER) @map("desktop_y_align")
+  desktopYAlign BannerYAlign @default(BOTTOM) @map("desktop_y_align")
 
   mobileStyle  BannerStyle @default(LIGHT) @map("mobile_style")
   tabletStyle  BannerStyle @default(LIGHT) @map("tablet_style")

@@ -9,7 +9,7 @@ export const createCategorySchema = z.object({
   nameRu: z.string().trim().min(1).max(128),
   descriptionRo: z.string().trim().max(512).optional(),
   descriptionRu: z.string().trim().max(512).optional(),
-  state: z.enum(CategoryState).default(CategoryState.active),
+  state: z.enum(CategoryState).default(CategoryState.ACTIVE),
   slug: slugSchema,
   parentId: z.number().optional(),
 });

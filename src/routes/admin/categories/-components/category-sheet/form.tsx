@@ -4,7 +4,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field
 import { Input } from '@/components/ui/input.tsx';
 import { Skeleton } from '@/components/ui/skeleton.tsx';
 import { m } from '@/paraglide/messages';
-import { cn, objectKeys } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import type { TCreateCategoryForm, TUpdateCategoryForm } from './schemas.ts';
 import type { TCategoryTreeNode } from '@/features/categories/schemas/category.ts';
 import { CategoryState } from '~/prisma/generated/prisma/enums.ts';
@@ -126,8 +126,8 @@ export const CategoryForm: FC<IProps> = ({
                   <DropdownMenuTrigger asChild>
                     <Button type="button" variant="outline" className="w-full justify-start gap-2">
                       <CategoryStateIcon status={field.value} className="text-muted-foreground"/>
-                      {field.value === CategoryState.active && m['pages.categories.index.sheet.state_active']()}
-                      {field.value === CategoryState.hidden && m['pages.categories.index.sheet.state_hidden']()}
+                      {field.value === CategoryState.ACTIVE && m['pages.categories.index.sheet.state_active']()}
+                      {field.value === CategoryState.HIDDEN && m['pages.categories.index.sheet.state_hidden']()}
                       {!field.value && <span>{m['common.selected_none']()}</span>}
                       <IconSelector className="ml-auto text-muted-foreground"/>
                     </Button>
@@ -136,12 +136,14 @@ export const CategoryForm: FC<IProps> = ({
                   <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
                     <DropdownMenuGroup>
                       <DropdownMenuRadioGroup value={field.value} onValueChange={v => field.onChange(v)}>
-                        {objectKeys(CategoryState).map(state => (
-                          <DropdownMenuRadioItem value={state}>
-                            <CategoryStateIcon status={state} className='text-muted-foreground'/>
-                            <span>{m[`pages.categories.index.sheet.state_${state}`]()}</span>
+                        <DropdownMenuRadioItem value={CategoryState.ACTIVE}>
+                            <CategoryStateIcon status={CategoryState.ACTIVE} className='text-muted-foreground'/>
+                            <span>{m['pages.categories.index.sheet.state_active']()}</span>
                           </DropdownMenuRadioItem>
-                        ))}
+                          <DropdownMenuRadioItem value={CategoryState.HIDDEN}>
+                            <CategoryStateIcon status={CategoryState.HIDDEN} className='text-muted-foreground'/>
+                            <span>{m['pages.categories.index.sheet.state_hidden']()}</span>
+                          </DropdownMenuRadioItem>
                       </DropdownMenuRadioGroup>
                     </DropdownMenuGroup>
                   </DropdownMenuContent>

@@ -65,7 +65,7 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
 
   const form = useForm<TVariantSheetValues>({
     resolver: zodResolver(variantSheetSchema),
-    defaultValues: { nameRo: '', nameRu: '', state: ProductState.active, sku: '', price: 0, optionValues: {} }
+    defaultValues: { nameRo: '', nameRu: '', state: ProductState.ACTIVE, sku: '', price: 0, optionValues: {} }
   });
 
   useEffect(() => {
@@ -79,7 +79,7 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
         price: variant.price,
         optionValues: { ...variant.optionValues }
       }
-      : { nameRo: '', nameRu: '', state: ProductState.active, sku: '', price: 0, optionValues: {} });
+      : { nameRo: '', nameRu: '', state: ProductState.ACTIVE, sku: '', price: 0, optionValues: {} });
   }, [open, variant]);
 
   const handleOpenChange = (v: boolean) => {

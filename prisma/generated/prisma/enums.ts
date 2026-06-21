@@ -44,16 +44,16 @@ export type BannerStyle = (typeof BannerStyle)[keyof typeof BannerStyle]
 
 
 export const CategoryState = {
-  active: 'active',
-  hidden: 'hidden'
+  ACTIVE: 'ACTIVE',
+  HIDDEN: 'HIDDEN'
 } as const
 
 export type CategoryState = (typeof CategoryState)[keyof typeof CategoryState]
 
 
 export const GallerySectionState = {
-  active: 'active',
-  hidden: 'hidden'
+  ACTIVE: 'ACTIVE',
+  HIDDEN: 'HIDDEN'
 } as const
 
 export type GallerySectionState = (typeof GallerySectionState)[keyof typeof GallerySectionState]
@@ -90,10 +90,10 @@ export type ImageVariantKind = (typeof ImageVariantKind)[keyof typeof ImageVaria
 
 
 export const ProductState = {
-  active: 'active',
-  not_available: 'not_available',
-  hidden: 'hidden',
-  archived: 'archived'
+  ACTIVE: 'ACTIVE',
+  NOT_AVAILABLE: 'NOT_AVAILABLE',
+  HIDDEN: 'HIDDEN',
+  ARCHIVED: 'ARCHIVED'
 } as const
 
 export type ProductState = (typeof ProductState)[keyof typeof ProductState]

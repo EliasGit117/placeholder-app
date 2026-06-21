@@ -92,11 +92,11 @@ export const GallerySectionForm: FC<IProps> = ({
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" className="w-full justify-start">
-                      {field.value === GallerySectionState.active
+                      {field.value === GallerySectionState.ACTIVE
                         ? <IconEye className="text-muted-foreground" size={16}/>
                         : <IconEyeOff className="text-muted-foreground" size={16}/>}
                       <span>
-                        {field.value === GallerySectionState.active
+                        {field.value === GallerySectionState.ACTIVE
                           ? m['pages.gallery_sections.index.sheet.state_active']()
                           : m['pages.gallery_sections.index.sheet.state_hidden']()}
                       </span>
@@ -105,11 +105,11 @@ export const GallerySectionForm: FC<IProps> = ({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuRadioGroup value={field.value ?? ''} onValueChange={field.onChange}>
-                      <DropdownMenuRadioItem value={GallerySectionState.active}>
+                      <DropdownMenuRadioItem value={GallerySectionState.ACTIVE}>
                         <IconEye className="text-muted-foreground" size={16}/>
                         <span>{m['pages.gallery_sections.index.sheet.state_active']()}</span>
                       </DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value={GallerySectionState.hidden}>
+                      <DropdownMenuRadioItem value={GallerySectionState.HIDDEN}>
                         <IconEyeOff className="text-muted-foreground" size={16}/>
                         <span>{m['pages.gallery_sections.index.sheet.state_hidden']()}</span>
                       </DropdownMenuRadioItem>

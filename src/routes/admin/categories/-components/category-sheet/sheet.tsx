@@ -178,7 +178,7 @@ function getFormValues(category?: TCategory, defaultParentId?: number): TCreateC
     nameRu: category?.nameRu ?? '',
     descriptionRo: category?.descriptionRo ?? undefined,
     descriptionRu: category?.descriptionRu ?? undefined,
-    state: category?.state ?? CategoryState.active,
+    state: category?.state ?? CategoryState.ACTIVE,
     slug: category?.slug ?? '',
     // Use null as the "no parent" sentinel so react-hook-form can detect
     // clearing (onChange(null)) as an explicit value change, unlike undefined.

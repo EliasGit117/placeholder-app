@@ -488,6 +488,13 @@
         "reorder_success": "Ordinea a fost salvată",
         "reorder_error": "Ordinea nu a putut fi salvată"
       }
+    },
+    "home": {
+      "hero_banners": {
+        "previous_slide": "Diapozitivul anterior",
+        "next_slide": "Diapozitivul următor",
+        "show_details": "Detalii"
+      }
     }
   }
 }

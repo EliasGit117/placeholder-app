@@ -27,7 +27,7 @@ const fallbackNode = (_id: string): TCategoryTreeNode => ({
   nameRu: '…',
   descriptionRo: null,
   descriptionRu: null,
-  state: 'active' as TCategoryTreeNode['state'],
+  state: 'ACTIVE' as TCategoryTreeNode['state'],
   slug: '',
   path: '/',
   parentId: null,

@@ -18,7 +18,7 @@ export const publicGallerySectionsGetBySlug = galleryPublicBase
   .output(gallerySectionPublicDtoSchema)
   .handler(async ({ input: { slug }, errors }) => {
     const result = await GallerySectionService.findBySlug(slug);
-    if (result == null || result.state !== GallerySectionState.active)
+    if (result == null || result.state !== GallerySectionState.ACTIVE)
       throw errors.NOT_FOUND();
 
     const locale = getLocale();

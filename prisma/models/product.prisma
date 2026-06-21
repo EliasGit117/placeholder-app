@@ -1,8 +1,8 @@
 enum ProductState {
-  active
-  not_available
-  hidden
-  archived
+  ACTIVE       @map("active")
+  NOT_AVAILABLE @map("not_available")
+  HIDDEN       @map("hidden")
+  ARCHIVED     @map("archived")
 
   @@map("product_state")
 }
@@ -13,7 +13,7 @@ model Product {
   nameRu             String           @map("name_ru")
   shortDescriptionRo String?          @map("short_description_ro")
   shortDescriptionRu String?          @map("short_description_ru")
-  state              ProductState     @default(active)
+  state              ProductState     @default(ACTIVE)
   slug          String           @unique
   options       Json             @default("{}") @map("option_schema")
   categoryId    Int?             @map("category_id")
@@ -32,7 +32,7 @@ model ProductVariant {
   product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   nameRo       String   @map("name_ro")
   nameRu       String   @map("name_ru")
-  state        ProductState @default(active)
+  state        ProductState @default(ACTIVE)
   slug         String
   fullSlug     String   @unique @map("full_slug")
   sku          String

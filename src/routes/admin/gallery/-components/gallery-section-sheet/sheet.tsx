@@ -181,6 +181,6 @@ function getFormValues(): TCreateGallerySectionDto | TUpdateGallerySectionDto {
     nameRu: '',
     descriptionRo: '',
     descriptionRu: '',
-    state: GallerySectionState.active
+    state: GallerySectionState.ACTIVE
   };
 }

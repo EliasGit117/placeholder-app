@@ -152,7 +152,7 @@ export const gallerySectionColumns = (options?: IOptions) => {
       header: ({ column }) => <DataTableColumnHeader column={column}/>,
       cell: ({ getValue }) => {
         const state = getValue();
-        const isActive = state === GallerySectionState.active;
+        const isActive = state === GallerySectionState.ACTIVE;
 
         return (
           <Badge
@@ -175,8 +175,8 @@ export const gallerySectionColumns = (options?: IOptions) => {
         filter: {
           type: ColumnFilterType.Select,
           options: [
-            { title: m['pages.gallery_sections.index.table.state_active'](), value: GallerySectionState.active, icon: IconEye },
-            { title: m['pages.gallery_sections.index.table.state_hidden'](), value: GallerySectionState.hidden, icon: IconEyeOff },
+            { title: m['pages.gallery_sections.index.table.state_active'](), value: GallerySectionState.ACTIVE, icon: IconEye },
+            { title: m['pages.gallery_sections.index.table.state_hidden'](), value: GallerySectionState.HIDDEN, icon: IconEyeOff },
           ],
         },
       },

@@ -17,10 +17,10 @@ export const CategoryStateIcon: FC<ICategoryStatusIconProps> = (props) => {
 
 export function getProductStatusIcon(status: CategoryState | string | undefined | null) {
   switch (status) {
-    case CategoryState.active:
+    case CategoryState.ACTIVE:
       return IconCircleCheck;
 
-    case CategoryState.hidden:
+    case CategoryState.HIDDEN:
       return IconEyeOff;
 
     default:

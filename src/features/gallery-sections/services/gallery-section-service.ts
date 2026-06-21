@@ -1,6 +1,6 @@
 import { ORPCError } from '@orpc/server';
 import { Prisma } from '~/prisma/generated/prisma/client.ts';
-import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
+import { GallerySectionState, ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import { prisma } from '@/lib/db';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
@@ -24,7 +24,7 @@ export class GallerySectionService {
 
   static async findAllActive(): Promise<GallerySection[]> {
     return prisma.gallerySection.findMany({
-      where: { state: 'active' },
+      where: { state: GallerySectionState.ACTIVE },
       orderBy: { createdAt: 'asc' },
     });
   }

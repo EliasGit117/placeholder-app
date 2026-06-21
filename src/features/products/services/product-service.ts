@@ -94,7 +94,7 @@ export class ProductService {
 
   static async listActive(): Promise<TProduct[]> {
     const entities = await prisma.product.findMany({
-      where: { state: ProductState.active },
+      where: { state: ProductState.ACTIVE },
       orderBy: { nameRo: 'asc' },
     });
     return entities.map((e) => ProductService.fromEntity(e));

@@ -1,6 +1,6 @@
 enum CategoryState {
-  active
-  hidden
+  ACTIVE @map("active")
+  HIDDEN @map("hidden")
 }
 
 model Category {
@@ -9,7 +9,7 @@ model Category {
   nameRu        String        @map("name_ru")
   descriptionRo String?       @map("description_ro")
   descriptionRu String?       @map("description_ru")
-  state         CategoryState @default(active)
+  state         CategoryState @default(ACTIVE)
   slug          String
   path          String        @unique @map("path")
   parentId      Int?          @map("parent_id")

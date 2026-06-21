@@ -84,7 +84,7 @@ export const BannersTable: FC<IProps> = (props) => {
     totalCount: filtered.length,
     pageCount: 1,
     page: 1,
-    limit: Math.max(filtered.length, 1),
+    limit: Math.max(filtered.length, 5),
     initialState: {
       columnVisibility: { id: false, updatedAt: false, },
       columnPinning: { right: ['actions'] }

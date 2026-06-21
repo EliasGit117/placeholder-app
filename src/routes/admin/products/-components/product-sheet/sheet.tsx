@@ -36,7 +36,7 @@ function getDefaults(): TCreateProductForm {
     shortDescriptionRo: '',
     shortDescriptionRu: '',
     slug: '',
-    state: ProductState.active,
+    state: ProductState.ACTIVE,
     categoryId: null,
   };
 }

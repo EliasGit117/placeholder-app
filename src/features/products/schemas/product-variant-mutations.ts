@@ -7,7 +7,7 @@ import { optionValuesSchema } from '@/features/products/schemas/option-schema.ts
 export const variantBaseSchema = z.object({
   nameRo: z.string().trim().min(1).max(128),
   nameRu: z.string().trim().min(1).max(128),
-  state: z.enum(ProductState).default(ProductState.active),
+  state: z.enum(ProductState).default(ProductState.ACTIVE),
   sku: z.string().trim().min(1).max(128),
   optionValues: optionValuesSchema,
   price: z.number().int().nonnegative(),

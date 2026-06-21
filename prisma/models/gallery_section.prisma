@@ -1,6 +1,6 @@
 enum GallerySectionState {
-  active
-  hidden
+  ACTIVE @map("active")
+  HIDDEN @map("hidden")
 
   @@map("gallery_section_state")
 }
@@ -12,7 +12,7 @@ model GallerySection {
   nameRu        String               @map("name_ru")
   descriptionRo String?              @map("description_ro")
   descriptionRu String?              @map("description_ru")
-  state         GallerySectionState  @default(active)
+  state         GallerySectionState  @default(ACTIVE)
   createdAt     DateTime             @default(now()) @map("created_at")
   updatedAt     DateTime             @updatedAt @map("updated_at")
 

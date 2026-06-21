@@ -9,10 +9,10 @@ export interface IProductStateOption {
 }
 
 export const productStateOptions: IProductStateOption[] = [
-  { value: ProductState.active, label: () => m['pages.products.form.state_active'](), icon: IconCircleCheck },
-  { value: ProductState.not_available, label: () => m['pages.products.form.state_not_available'](), icon: IconCircleX },
-  { value: ProductState.hidden, label: () => m['pages.products.form.state_hidden'](), icon: IconEyeOff },
-  { value: ProductState.archived, label: () => m['pages.products.form.state_archived'](), icon: IconArchive },
+  { value: ProductState.ACTIVE, label: () => m['pages.products.form.state_active'](), icon: IconCircleCheck },
+  { value: ProductState.NOT_AVAILABLE, label: () => m['pages.products.form.state_not_available'](), icon: IconCircleX },
+  { value: ProductState.HIDDEN, label: () => m['pages.products.form.state_hidden'](), icon: IconEyeOff },
+  { value: ProductState.ARCHIVED, label: () => m['pages.products.form.state_archived'](), icon: IconArchive },
 ];
 
 export function getProductStateOption(state: ProductState): IProductStateOption {

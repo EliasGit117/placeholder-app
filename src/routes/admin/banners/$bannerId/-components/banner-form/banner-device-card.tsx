@@ -180,7 +180,7 @@ export const BannerDeviceCard: FC<IProps> = ({ bannerId, device, form, disabled 
             <Field className="flex-1">
               <BannerStyleSelect
                 disabled={disabled}
-                value={field.value ?? BannerStyle.light}
+                value={field.value ?? BannerStyle.LIGHT}
                 onChange={field.onChange}
               />
             </Field>

@@ -1,6 +1,7 @@
 import type { FC, ReactNode, SVGProps } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { HeroBannerCarousel } from './hero-banner-carousel/index.tsx';
 
 /**
  * Skinery marketing landing — static content (no backend). Uses only the app's
@@ -10,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 
 export const SkineryLanding: FC = () => (
   <div className="flex-1">
-    <Hero />
+    <HeroBannerCarousel withVerticalShadow/>
     <Categories />
     <Arrivals />
     <About />
@@ -18,31 +19,10 @@ export const SkineryLanding: FC = () => (
 );
 
 
-// ─── Shared ──────────────────────────────────────────────────────────────────
-
 const Eyebrow: FC<{ children: ReactNode }> = ({ children }) => (
   <div className="text-xs font-medium uppercase tracking-[0.32em] text-primary">{children}</div>
 );
 
-/** Gold L-shaped brackets at the four corners of a bordered frame (mockup accent). */
-const CornerBrackets: FC = () => (
-  <>
-    <span className="absolute -left-px -top-px size-5 border-l border-t border-primary" />
-    <span className="absolute -right-px -top-px size-5 border-r border-t border-primary" />
-    <span className="absolute -bottom-px -left-px size-5 border-b border-l border-primary" />
-    <span className="absolute -bottom-px -right-px size-5 border-b border-r border-primary" />
-  </>
-);
-
-const Botanical: FC<{ className?: string }> = ({ className }) => (
-  <svg viewBox="0 0 200 300" fill="none" stroke="currentColor" strokeWidth={1.2} className={className} aria-hidden>
-    <path d="M100 290 C100 220 100 150 100 80" />
-    <path d="M100 110 C70 100 50 70 48 40 C80 46 98 78 100 110z" />
-    <path d="M100 150 C130 140 150 110 152 80 C120 86 102 118 100 150z" />
-    <path d="M100 190 C72 182 54 156 52 128 C82 134 98 162 100 190z" />
-    <path d="M100 70 C92 50 96 30 110 14 C118 36 114 56 100 70z" />
-  </svg>
-);
 
 const SectionHead: FC<{ eyebrow: string; title: ReactNode; right?: ReactNode }> = ({ eyebrow, title, right }) => (
   <div className="mb-14 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end md:gap-10">
@@ -60,64 +40,6 @@ const Section: FC<{ className?: string; children: ReactNode }> = ({ className, c
   </section>
 );
 
-
-// ─── Hero ────────────────────────────────────────────────────────────────────
-
-const heroStats = [
-  { num: '98%', lab: 'Ingrediente naturale' },
-  { num: '12K+', lab: 'Cliente fidele' },
-  { num: '2018', lab: 'Atelier Chișinău' },
-];
-
-const Hero: FC = () => (
-  <section className="flex min-h-svh w-full items-center bg-background">
-    <div className="container mx-auto grid items-center gap-12 px-4 pb-20 pt-28 md:pb-28 md:pt-32 lg:grid-cols-[1.05fr_1fr] lg:gap-20">
-      <div>
-        <Badge className="gap-2 bg-primary px-3.5 py-1.5 text-[11px] uppercase tracking-[0.3em] text-primary-foreground hover:bg-primary/90 before:content-['★']">
-          Акции — 25% reducere
-        </Badge>
-
-        <h1 className="my-6 font-heading text-6xl font-normal leading-[1.02] tracking-tight sm:text-7xl lg:text-[5rem]">
-          Frumusețe botanică, <span className="italic text-primary">fără compromisuri.</span>
-        </h1>
-
-        <p className="mb-9 max-w-md text-base text-muted-foreground">
-          O linie de îngrijire premium, formulată cu extracte botanice cultivate biologic și principii active de nouă
-          generație. Pentru o piele care respiră.
-        </p>
-
-        <div className="flex flex-wrap items-center gap-4">
-          <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">Descoperă colecția →</Button>
-          <Button size="lg" variant="link" className="text-foreground">Vezi povestea</Button>
-        </div>
-
-        <div className="mt-14 grid max-w-lg grid-cols-3 gap-8 border-t border-border pt-8">
-          {heroStats.map((s) => (
-            <div key={s.lab}>
-              <div className="font-heading text-4xl font-medium leading-none text-primary">{s.num}</div>
-              <div className="mt-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{s.lab}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="relative">
-        <Botanical className="pointer-events-none absolute -left-14 top-6 z-10 w-56 -rotate-12 text-primary opacity-20" />
-        <div className="relative border border-primary p-3.5">
-          <CornerBrackets />
-          <div className="ph-stripes grid aspect-4/5 place-items-center bg-muted font-mono text-[11px] uppercase tracking-[0.15em] text-muted-foreground">
-            Hero product · 720 × 900
-          </div>
-        </div>
-        <div className="absolute -right-3 top-8 max-w-45 border border-primary-foreground bg-primary p-4 font-heading text-sm leading-snug text-primary-foreground shadow-sm">
-          <span className="font-sans text-[11px] uppercase tracking-[0.2em] text-primary-foreground">Ediție limitată</span>
-          <b className="block text-xl text-primary-foreground">Ser Restorativ</b>
-          Vitamina C 15% + Niacinamidă
-        </div>
-      </div>
-    </div>
-  </section>
-);
 
 
 // ─── Categories ──────────────────────────────────────────────────────────────
@@ -209,7 +131,7 @@ const Arrivals: FC = () => (
           <div className="flex flex-1 flex-col p-5">
             <div className="text-[10px] uppercase tracking-[0.22em] text-primary">{p.cat}</div>
             <h4 className="my-1.5 font-heading text-2xl font-medium">{p.name}</h4>
-            <div className="min-h-[38px] text-[13px] text-muted-foreground">{p.desc}</div>
+            <div className="min-h-9.5 text-[13px] text-muted-foreground">{p.desc}</div>
             <div className="mt-1.5 text-[11px] tracking-[2px] text-primary">
               ★★★★★ <span className="text-muted-foreground">{p.reviews}</span>
             </div>
