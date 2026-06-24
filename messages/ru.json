@@ -459,6 +459,8 @@
         "device_mobile": "Мобильный",
         "device_tablet": "Планшет",
         "device_desktop": "Десктоп",
+        "device_compact": "Компактный",
+        "device_wide": "Широкий",
         "upload": "Загрузить изображение",
         "replace": "Заменить",
         "remove": "Удалить",

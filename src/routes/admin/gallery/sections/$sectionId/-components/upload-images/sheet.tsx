@@ -84,7 +84,7 @@ export const UploadImagesSheet: FC = () => {
 
         <ScrollArea className="flex-1 overflow-y-auto mr-2 my-2" type="always">
           <div className="space-y-4 px-4 py-1">
-            <DropZone multiple accept={accept} maxSize={maxSize} onFilesSelected={addFiles} />
+            <DropZone multiple accept={accept} maxFileSize={maxSize} onFilesSelected={addFiles} />
 
             {rejected.length > 0 && (
               <div className="space-y-2">

@@ -460,6 +460,8 @@
         "device_mobile": "Mobil",
         "device_tablet": "Tabletă",
         "device_desktop": "Desktop",
+        "device_compact": "Compact",
+        "device_wide": "Lat",
         "upload": "Încarcă imagine",
         "replace": "Înlocuiește",
         "remove": "Elimină",

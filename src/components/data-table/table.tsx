@@ -13,6 +13,7 @@ import type { ComponentProps, ReactNode } from 'react';
 import { getCommonPinningStyles } from '@/components/data-table/utils/pinning';
 import { Skeleton } from '@/components/ui/skeleton';
 import { m } from '@/paraglide/messages';
+import { IconListSearch } from '@tabler/icons-react';
 
 
 interface DataTableProps<_> extends ComponentProps<'div'> {
@@ -24,7 +25,6 @@ interface DataTableProps<_> extends ComponentProps<'div'> {
 }
 
 export function DataTable<TData>(props: DataTableProps<TData>) {
-  // noinspection BadExpressionStatementJS
   'use no memo';
 
   const { table, loading } = useDataTableContext();
@@ -75,7 +75,7 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                   {visibleColumns.map((column, colIndex) => (
                     <TableCell
                       key={`skeleton-cell-${rowIndex}-${colIndex}`}
-                      className={cn("h-10", skeletonTableCellClassName)}
+                      className={cn('h-10', skeletonTableCellClassName)}
                       style={{ ...getCommonPinningStyles({ column, withBorder: borderedPinnedColumns }) }}
                     >
                       {column.columnDef.meta?.skeletonItem ?? (
@@ -99,7 +99,13 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
                         key={cell.id}
-                        style={{ ...getCommonPinningStyles({ column: cell.column, row: row, withBorder: borderedPinnedColumns }) }}
+                        style={{
+                          ...getCommonPinningStyles({
+                            column: cell.column,
+                            row: row,
+                            withBorder: borderedPinnedColumns
+                          })
+                        }}
                         className={cn(
                           !isSelected && 'group-hover:bg-(--muted-generated-25)!'
                         )}
@@ -115,7 +121,10 @@ export function DataTable<TData>(props: DataTableProps<TData>) {
                   colSpan={visibleColumns.length}
                   className="h-24 text-center"
                 >
-                  {m['components.data_table.no_results_found']()}
+                  <div className="w-full flex gap-1.5 items-center justify-center">
+                    <IconListSearch className="size-4 text-muted-foreground"/>
+                    <span>{m['components.data_table.no_results_found']()}</span>
+                  </div>
                 </TableCell>
               </TableRow>
             )}

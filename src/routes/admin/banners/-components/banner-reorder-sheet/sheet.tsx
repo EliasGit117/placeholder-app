@@ -1,7 +1,7 @@
 import { type FC, useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { IconGripVertical, IconPhoto } from '@tabler/icons-react';
+import { IconPhoto } from '@tabler/icons-react';
 import { orpc } from '@/lib/orpc';
 import {
   Sheet,
@@ -20,7 +20,6 @@ import {
   Sortable,
   SortableContent,
   SortableItem,
-  SortableItemHandle,
   SortableOverlay
 } from '@/components/ui/sortable';
 import { cn, thumbhashToDataUrl } from '@/lib/utils';
@@ -32,11 +31,10 @@ import type { TBannerRowDto } from '@/features/banners/dtos/banner-row.ts';
 import { useBannerReorderSheet } from './provider.tsx';
 
 
-// Thumbnail aspect per device (height fixed, width follows the ratio).
+// Thumbnail aspect per device (width fills the grid cell, height follows ratio).
 const deviceThumbClass: Record<BannerDevice, string> = {
-  mobile: 'aspect-[9/16] h-14',
-  tablet: 'aspect-[4/3] h-14',
-  desktop: 'aspect-video h-14'
+  compact: 'aspect-[9/16]',
+  wide: 'aspect-video'
 };
 
 const reorderDevices = bannerDevices;
@@ -100,7 +98,7 @@ export const BannerReorderSheet: FC = () => {
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent
-        className="w-full! max-w-full! sm:max-w-md! gap-0"
+        className="w-full! max-w-full! sm:max-w-full! md:max-w-2xl! gap-0 border-l-0! md:border-l!"
         showCloseButton={false}
       >
         <SheetHeader className="text-left">
@@ -108,10 +106,10 @@ export const BannerReorderSheet: FC = () => {
           <SheetDescription>{m['pages.banners.sheet.reorder_description']()}</SheetDescription>
         </SheetHeader>
 
-        <ScrollArea className="flex-1 overflow-y-auto mr-2 my-2" type="always">
+        <ScrollArea className="@container flex-1 overflow-y-auto mr-2 my-2" type="always">
           {loading ? (
-            <div className="flex flex-col gap-2 px-4 py-1">
-              {Array.from({ length: 5 }).map((_, i) => (
+            <div className="grid grid-cols-2 @lg:grid-cols-3 gap-2 px-4 py-1">
+              {Array.from({ length: 9 }).map((_, i) => (
                 <ReorderRowSkeleton key={i}/>
               ))}
             </div>
@@ -120,9 +118,9 @@ export const BannerReorderSheet: FC = () => {
               value={items}
               onValueChange={setItems}
               getItemValue={(banner) => banner.id}
-              orientation="vertical"
+              orientation="mixed"
             >
-              <SortableContent className="flex flex-col gap-2 px-4 py-1">
+              <SortableContent className="grid grid-cols-2 @lg:grid-cols-3 gap-2 px-4 py-1">
                 {items.map((banner) => (
                   <BannerReorderRow key={banner.id} banner={banner}/>
                 ))}
@@ -164,30 +162,22 @@ function BannerReorderRow({ banner, overlay }: { banner: TBannerRowDto; overlay?
   const title = getLocale() === 'ru' ? banner.titleRu : banner.titleRo;
 
   return (
-    <SortableItem value={banner.id} asChild>
-      <div className={cn('flex items-center gap-3 rounded-md border bg-card p-2 relative', overlay && 'shadow-lg')}>
-        <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <span className={cn('truncate text-sm', !title && 'text-muted-foreground')}>
-            {title || m['pages.banners.index.untitled']()}
-          </span>
+    <SortableItem value={banner.id} asHandle asChild>
+      <div
+        className={cn(
+          'flex flex-col gap-2 rounded-md border bg-card p-2 select-none touch-none cursor-grab active:cursor-grabbing',
+          overlay && 'shadow-lg'
+        )}
+      >
+        <span className={cn('truncate text-sm', !title && 'text-muted-foreground')}>
+          {title || m['pages.banners.index.untitled']()}
+        </span>
 
-          <div className="flex items-end gap-2">
-            {reorderDevices.map((device) => (
-              <DeviceThumb key={device} image={banner.images[device]} device={device}/>
-            ))}
-          </div>
+        <div className="flex h-24 items-end gap-2">
+          {reorderDevices.map((device) => (
+            <DeviceThumb key={device} image={banner.images[device]} device={device}/>
+          ))}
         </div>
-
-        <SortableItemHandle asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-7 shrink-0 cursor-grab text-muted-foreground active:cursor-grabbing absolute top-1 right-1"
-            aria-label={m['pages.banners.sheet.reorder_handle']()}
-          >
-            <IconGripVertical className="size-4"/>
-          </Button>
-        </SortableItemHandle>
       </div>
     </SortableItem>
   );
@@ -195,16 +185,13 @@ function BannerReorderRow({ banner, overlay }: { banner: TBannerRowDto; overlay?
 
 function ReorderRowSkeleton() {
   return (
-    <div className="flex items-center gap-3 rounded-md border bg-card p-2 relative">
-      <div className="flex min-w-0 flex-1 flex-col gap-2">
-        <Skeleton className="h-4 w-32"/>
-        <div className="flex items-end gap-2">
-          {reorderDevices.map((device) => (
-            <Skeleton key={device} className={cn('shrink-0 rounded-sm', deviceThumbClass[device])}/>
-          ))}
-        </div>
+    <div className="flex flex-col gap-2 rounded-md border bg-card p-2">
+      <Skeleton className="h-4 w-full"/>
+      <div className="flex h-24 items-end gap-2">
+        {reorderDevices.map((device) => (
+          <Skeleton key={device} className={cn('h-full rounded-sm', deviceThumbClass[device])}/>
+        ))}
       </div>
-      <Skeleton className="size-7 shrink-0 rounded-md absolute top-1 right-1"/>
     </div>
   );
 }
@@ -215,13 +202,20 @@ function DeviceThumb({ image, device }: { image?: TBannerImageDto | null; device
   return (
     <div
       className={cn(
-        'flex shrink-0 items-center justify-center overflow-hidden rounded-sm border bg-muted bg-cover bg-center',
+        'flex h-full items-center justify-center overflow-hidden rounded-sm border bg-muted bg-cover bg-center',
         deviceThumbClass[device]
       )}
       style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
     >
       {image ? (
-        <img src={image.url} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover"/>
+        <img
+          src={image.url}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+          className="h-full w-full object-cover select-none pointer-events-none [-webkit-touch-callout:none]"
+        />
       ) : (
         <IconPhoto className="size-3.5 text-muted-foreground"/>
       )}

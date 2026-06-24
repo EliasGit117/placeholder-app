@@ -17,32 +17,6 @@ export const BannerState = {
 export type BannerState = (typeof BannerState)[keyof typeof BannerState]
 
 
-export const BannerXAlign = {
-  LEFT: 'LEFT',
-  CENTER: 'CENTER',
-  RIGHT: 'RIGHT'
-} as const
-
-export type BannerXAlign = (typeof BannerXAlign)[keyof typeof BannerXAlign]
-
-
-export const BannerYAlign = {
-  TOP: 'TOP',
-  CENTER: 'CENTER',
-  BOTTOM: 'BOTTOM'
-} as const
-
-export type BannerYAlign = (typeof BannerYAlign)[keyof typeof BannerYAlign]
-
-
-export const BannerStyle = {
-  LIGHT: 'LIGHT',
-  DARK: 'DARK'
-} as const
-
-export type BannerStyle = (typeof BannerStyle)[keyof typeof BannerStyle]
-
-
 export const CategoryState = {
   ACTIVE: 'ACTIVE',
   HIDDEN: 'HIDDEN'
@@ -73,9 +47,8 @@ export const ImagePurpose = {
   GALLERY_SECTION_IMAGE: 'GALLERY_SECTION_IMAGE',
   AVATAR_IMAGE: 'AVATAR_IMAGE',
   PRODUCT_VARIANT_IMAGE: 'PRODUCT_VARIANT_IMAGE',
-  BANNER_MOBILE_IMAGE: 'BANNER_MOBILE_IMAGE',
-  BANNER_TABLET_IMAGE: 'BANNER_TABLET_IMAGE',
-  BANNER_DESKTOP_IMAGE: 'BANNER_DESKTOP_IMAGE'
+  BANNER_COMPACT_IMAGE: 'BANNER_COMPACT_IMAGE',
+  BANNER_WIDE_IMAGE: 'BANNER_WIDE_IMAGE'
 } as const
 
 export type ImagePurpose = (typeof ImagePurpose)[keyof typeof ImagePurpose]

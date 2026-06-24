@@ -6,12 +6,11 @@ import { toast } from 'sonner';
 import { orpc } from '@/lib/orpc';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { LoadingButton } from '@/components/ui/loading-button';
 import { Separator } from '@/components/ui/separator';
 import { m } from '@/paraglide/messages';
-import { BannerState, BannerStyle, BannerXAlign, BannerYAlign } from '~/prisma/generated/prisma/enums.ts';
+import { BannerState } from '~/prisma/generated/prisma/enums.ts';
 import { updateBannerDtoSchema, type TUpdateBannerDto } from '@/features/banners/dtos/update-banner.ts';
 import type { TBannerDto } from '@/features/banners/dtos/banner.ts';
 import { bannerDevices } from '@/features/banners/consts/banner-devices.ts';
@@ -22,30 +21,15 @@ import { BannerFormSkeleton } from './banner-form-skeleton.tsx';
 
 interface IProps {
   id: number;
-  // Optional pre-fetched banner (e.g. SSR) to seed the query so the form renders
-  // immediately without a client round-trip.
   initialData?: TBannerDto;
 }
 
-// Maps a banner (or nothing) to form values. Nullable text becomes '' for
-// controlled inputs; alignment falls back to the schema defaults.
 function toFormValues(banner?: TBannerDto): TUpdateBannerDto {
   return {
     state: banner?.state ?? BannerState.ACTIVE,
     titleRo: banner?.titleRo ?? '',
     titleRu: banner?.titleRu ?? '',
-    descriptionRo: banner?.descriptionRo ?? '',
-    descriptionRu: banner?.descriptionRu ?? '',
     href: banner?.href ?? '',
-    mobileXAlign: banner?.mobileXAlign ?? BannerXAlign.LEFT,
-    mobileYAlign: banner?.mobileYAlign ?? BannerYAlign.CENTER,
-    tabletXAlign: banner?.tabletXAlign ?? BannerXAlign.LEFT,
-    tabletYAlign: banner?.tabletYAlign ?? BannerYAlign.CENTER,
-    desktopXAlign: banner?.desktopXAlign ?? BannerXAlign.LEFT,
-    desktopYAlign: banner?.desktopYAlign ?? BannerYAlign.CENTER,
-    mobileStyle: banner?.mobileStyle ?? BannerStyle.LIGHT,
-    tabletStyle: banner?.tabletStyle ?? BannerStyle.LIGHT,
-    desktopStyle: banner?.desktopStyle ?? BannerStyle.LIGHT,
   };
 }
 
@@ -86,18 +70,14 @@ export const BannerForm: FC<IProps> = ({ id, initialData }) => {
   const onSubmit = (values: TUpdateBannerDto) => {
     save({
       ...values,
-      // Empty optional text means "unset" — store null, not ''.
       titleRo: values.titleRo?.trim() || null,
       titleRu: values.titleRu?.trim() || null,
-      descriptionRo: values.descriptionRo?.trim() || null,
-      descriptionRu: values.descriptionRu?.trim() || null,
       href: values.href?.trim() || null
     });
   };
 
   const disabled = isSaving || isLoading;
 
-  // No SSR seed and the query is still in flight — show the skeleton.
   if (isLoading && !banner)
     return <BannerFormSkeleton/>;
 
@@ -106,13 +86,12 @@ export const BannerForm: FC<IProps> = ({ id, initialData }) => {
       <Card>
         <CardContent className="@container space-y-6">
           <fieldset disabled={disabled} className="space-y-6">
-            <div className="flex flex-wrap gap-6">
+            <div className="grid grid-cols-[1fr_2fr] gap-6">
               {bannerDevices.map((device) => (
                 <BannerDeviceCard
                   key={device}
                   bannerId={id}
                   device={device}
-                  form={form}
                   disabled={disabled}
                 />
               ))}
@@ -138,26 +117,6 @@ export const BannerForm: FC<IProps> = ({ id, initialData }) => {
                   <Field className="w-full">
                     <FieldLabel>{m['pages.banners.detail.field_title_ru']()}</FieldLabel>
                     <Input {...field} value={field.value ?? ''} autoComplete="off"/>
-                  </Field>
-                )}
-              />
-              <Controller
-                name="descriptionRo"
-                control={form.control}
-                render={({ field }) => (
-                  <Field className="w-full">
-                    <FieldLabel>{m['pages.banners.detail.field_description_ro']()}</FieldLabel>
-                    <Textarea {...field} value={field.value ?? ''} rows={3}/>
-                  </Field>
-                )}
-              />
-              <Controller
-                name="descriptionRu"
-                control={form.control}
-                render={({ field }) => (
-                  <Field className="w-full">
-                    <FieldLabel>{m['pages.banners.detail.field_description_ru']()}</FieldLabel>
-                    <Textarea {...field} value={field.value ?? ''} rows={3}/>
                   </Field>
                 )}
               />

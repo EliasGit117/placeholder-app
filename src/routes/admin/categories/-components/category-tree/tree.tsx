@@ -7,7 +7,8 @@ import {
   IconInfoCircle,
   IconPencil,
   IconTrash,
-  IconX, IconFilePlus
+  IconX, IconFilePlus,
+  IconCategory
 } from '@tabler/icons-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -29,6 +30,7 @@ import {
 import { useCategorySheetActions, CategorySheetMode } from '../category-sheet/index.ts';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText } from '@/components/ui/input-group.tsx';
 import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree.tsx';
+import { Empty, EmptyContent, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty.tsx';
 import type { ItemInstance } from '@headless-tree/core';
 import type { TCategoryTreeNode } from '@/features/categories/schemas/category.ts';
 import { ButtonGroup } from '@/components/ui/button-group.tsx';
@@ -78,9 +80,22 @@ export const CategoryTree: FC<{ className?: string }> = ({ className }) => {
 
   if (isEmpty)
     return (
-      <p className="text-sm text-muted-foreground py-8 text-center">
-        {m['pages.categories.index.tree.no_categories']()}
-      </p>
+      <Empty className={cn('-mt-12', className)}>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <IconCategory/>
+          </EmptyMedia>
+          <EmptyTitle>{m['pages.categories.index.tree.no_categories']()}</EmptyTitle>
+        </EmptyHeader>
+        {canCreate && (
+          <EmptyContent>
+            <Button variant="outline" onClick={() => openSheet({ mode: CategorySheetMode.Create })}>
+              <IconFilePlus/>
+              {m['common.create']()}
+            </Button>
+          </EmptyContent>
+        )}
+      </Empty>
     );
 
   return (

@@ -18,7 +18,6 @@ interface IProps extends Omit<ComponentProps<typeof Button>, 'value' | 'onChange
   value?: number | null;
   onValueChange?: (value: number | null) => void;
   forest?: TCategoryTreeNode[];
-  /** Exclude this id and all its descendants from the list (used to prevent self-parenting). */
   excludeId?: number;
   placeholder?: string;
   loading?: boolean;
@@ -41,11 +40,15 @@ export const CategorySelectDropdown: FC<IProps> = ({
   // Flatten the forest into { node, level } pairs, excluding excludeId subtree.
   const flatItems = flattenForest(forest, excludeId);
 
-  const filtered = search.trim()
+  const query = search.trim().toLowerCase();
+  const filtered = query
     ? flatItems.filter(({ node }) =>
-        getLocaleName(node).toLowerCase().includes(search.toLowerCase())
+        getLocaleName(node).toLowerCase().includes(query)
       )
     : flatItems;
+
+  const noParentLabel = m['pages.categories.index.sheet.no_parent']();
+  const showNone = !query || noParentLabel.toLowerCase().includes(query);
 
   const selectedNode = value ? flatItems.find(({ node }) => node.id === value)?.node : undefined;
 
@@ -105,17 +108,15 @@ export const CategorySelectDropdown: FC<IProps> = ({
         </div>
 
         {/* List */}
-        <div className="max-h-64 overflow-y-auto p-1 pt-0">
+        <div className="max-h-64 overflow-y-auto p-1">
           {/* None option */}
-          <DropdownItem
-            selected={!value}
-            onClick={() => select(null)}
-            style={{ paddingLeft: 8 }}
-          >
-            {m['pages.categories.index.sheet.no_parent']()}
-          </DropdownItem>
+          {showNone && (
+            <DropdownItem style={{ paddingLeft: 8 }} selected={!value} onClick={() => select(null)}>
+              {noParentLabel}
+            </DropdownItem>
+          )}
 
-          {filtered.length === 0 ? (
+          {!showNone && filtered.length === 0 ? (
             <p className="py-4 text-center text-sm text-muted-foreground">
               {m['common.no_results']()}
             </p>

@@ -5,5 +5,5 @@ import { useUploadProductVariantImages } from './provider.tsx';
 export const UploadDropZone: FC = () => {
   const { accept, maxSize, addFiles } = useUploadProductVariantImages();
 
-  return <DropZone multiple accept={accept} maxSize={maxSize} onFilesSelected={addFiles}/>;
+  return <DropZone multiple accept={accept} maxFileSize={maxSize} onFilesSelected={addFiles}/>;
 };

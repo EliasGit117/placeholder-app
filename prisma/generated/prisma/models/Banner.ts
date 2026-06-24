@@ -42,18 +42,7 @@ export type BannerMinAggregateOutputType = {
   state: $Enums.BannerState | null
   titleRo: string | null
   titleRu: string | null
-  descriptionRo: string | null
-  descriptionRu: string | null
   href: string | null
-  mobileXAlign: $Enums.BannerXAlign | null
-  mobileYAlign: $Enums.BannerYAlign | null
-  tabletXAlign: $Enums.BannerXAlign | null
-  tabletYAlign: $Enums.BannerYAlign | null
-  desktopXAlign: $Enums.BannerXAlign | null
-  desktopYAlign: $Enums.BannerYAlign | null
-  mobileStyle: $Enums.BannerStyle | null
-  tabletStyle: $Enums.BannerStyle | null
-  desktopStyle: $Enums.BannerStyle | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -64,18 +53,7 @@ export type BannerMaxAggregateOutputType = {
   state: $Enums.BannerState | null
   titleRo: string | null
   titleRu: string | null
-  descriptionRo: string | null
-  descriptionRu: string | null
   href: string | null
-  mobileXAlign: $Enums.BannerXAlign | null
-  mobileYAlign: $Enums.BannerYAlign | null
-  tabletXAlign: $Enums.BannerXAlign | null
-  tabletYAlign: $Enums.BannerYAlign | null
-  desktopXAlign: $Enums.BannerXAlign | null
-  desktopYAlign: $Enums.BannerYAlign | null
-  mobileStyle: $Enums.BannerStyle | null
-  tabletStyle: $Enums.BannerStyle | null
-  desktopStyle: $Enums.BannerStyle | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -86,18 +64,7 @@ export type BannerCountAggregateOutputType = {
   state: number
   titleRo: number
   titleRu: number
-  descriptionRo: number
-  descriptionRu: number
   href: number
-  mobileXAlign: number
-  mobileYAlign: number
-  tabletXAlign: number
-  tabletYAlign: number
-  desktopXAlign: number
-  desktopYAlign: number
-  mobileStyle: number
-  tabletStyle: number
-  desktopStyle: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -120,18 +87,7 @@ export type BannerMinAggregateInputType = {
   state?: true
   titleRo?: true
   titleRu?: true
-  descriptionRo?: true
-  descriptionRu?: true
   href?: true
-  mobileXAlign?: true
-  mobileYAlign?: true
-  tabletXAlign?: true
-  tabletYAlign?: true
-  desktopXAlign?: true
-  desktopYAlign?: true
-  mobileStyle?: true
-  tabletStyle?: true
-  desktopStyle?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -142,18 +98,7 @@ export type BannerMaxAggregateInputType = {
   state?: true
   titleRo?: true
   titleRu?: true
-  descriptionRo?: true
-  descriptionRu?: true
   href?: true
-  mobileXAlign?: true
-  mobileYAlign?: true
-  tabletXAlign?: true
-  tabletYAlign?: true
-  desktopXAlign?: true
-  desktopYAlign?: true
-  mobileStyle?: true
-  tabletStyle?: true
-  desktopStyle?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -164,18 +109,7 @@ export type BannerCountAggregateInputType = {
   state?: true
   titleRo?: true
   titleRu?: true
-  descriptionRo?: true
-  descriptionRu?: true
   href?: true
-  mobileXAlign?: true
-  mobileYAlign?: true
-  tabletXAlign?: true
-  tabletYAlign?: true
-  desktopXAlign?: true
-  desktopYAlign?: true
-  mobileStyle?: true
-  tabletStyle?: true
-  desktopStyle?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -273,18 +207,7 @@ export type BannerGroupByOutputType = {
   state: $Enums.BannerState
   titleRo: string | null
   titleRu: string | null
-  descriptionRo: string | null
-  descriptionRu: string | null
   href: string | null
-  mobileXAlign: $Enums.BannerXAlign
-  mobileYAlign: $Enums.BannerYAlign
-  tabletXAlign: $Enums.BannerXAlign
-  tabletYAlign: $Enums.BannerYAlign
-  desktopXAlign: $Enums.BannerXAlign
-  desktopYAlign: $Enums.BannerYAlign
-  mobileStyle: $Enums.BannerStyle
-  tabletStyle: $Enums.BannerStyle
-  desktopStyle: $Enums.BannerStyle
   createdAt: Date
   updatedAt: Date
   _count: BannerCountAggregateOutputType | null
@@ -318,18 +241,7 @@ export type BannerWhereInput = {
   state?: Prisma.EnumBannerStateFilter<"Banner"> | $Enums.BannerState
   titleRo?: Prisma.StringNullableFilter<"Banner"> | string | null
   titleRu?: Prisma.StringNullableFilter<"Banner"> | string | null
-  descriptionRo?: Prisma.StringNullableFilter<"Banner"> | string | null
-  descriptionRu?: Prisma.StringNullableFilter<"Banner"> | string | null
   href?: Prisma.StringNullableFilter<"Banner"> | string | null
-  mobileXAlign?: Prisma.EnumBannerXAlignFilter<"Banner"> | $Enums.BannerXAlign
-  mobileYAlign?: Prisma.EnumBannerYAlignFilter<"Banner"> | $Enums.BannerYAlign
-  tabletXAlign?: Prisma.EnumBannerXAlignFilter<"Banner"> | $Enums.BannerXAlign
-  tabletYAlign?: Prisma.EnumBannerYAlignFilter<"Banner"> | $Enums.BannerYAlign
-  desktopXAlign?: Prisma.EnumBannerXAlignFilter<"Banner"> | $Enums.BannerXAlign
-  desktopYAlign?: Prisma.EnumBannerYAlignFilter<"Banner"> | $Enums.BannerYAlign
-  mobileStyle?: Prisma.EnumBannerStyleFilter<"Banner"> | $Enums.BannerStyle
-  tabletStyle?: Prisma.EnumBannerStyleFilter<"Banner"> | $Enums.BannerStyle
-  desktopStyle?: Prisma.EnumBannerStyleFilter<"Banner"> | $Enums.BannerStyle
   createdAt?: Prisma.DateTimeFilter<"Banner"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Banner"> | Date | string
 }
@@ -340,18 +252,7 @@ export type BannerOrderByWithRelationInput = {
   state?: Prisma.SortOrder
   titleRo?: Prisma.SortOrderInput | Prisma.SortOrder
   titleRu?: Prisma.SortOrderInput | Prisma.SortOrder
-  descriptionRo?: Prisma.SortOrderInput | Prisma.SortOrder
-  descriptionRu?: Prisma.SortOrderInput | Prisma.SortOrder
   href?: Prisma.SortOrderInput | Prisma.SortOrder
-  mobileXAlign?: Prisma.SortOrder
-  mobileYAlign?: Prisma.SortOrder
-  tabletXAlign?: Prisma.SortOrder
-  tabletYAlign?: Prisma.SortOrder
-  desktopXAlign?: Prisma.SortOrder
-  desktopYAlign?: Prisma.SortOrder
-  mobileStyle?: Prisma.SortOrder
-  tabletStyle?: Prisma.SortOrder
-  desktopStyle?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -365,18 +266,7 @@ export type BannerWhereUniqueInput = Prisma.AtLeast<{
   state?: Prisma.EnumBannerStateFilter<"Banner"> | $Enums.BannerState
   titleRo?: Prisma.StringNullableFilter<"Banner"> | string | null
   titleRu?: Prisma.StringNullableFilter<"Banner"> | string | null
-  descriptionRo?: Prisma.StringNullableFilter<"Banner"> | string | null
-  descriptionRu?: Prisma.StringNullableFilter<"Banner"> | string | null
   href?: Prisma.StringNullableFilter<"Banner"> | string | null
-  mobileXAlign?: Prisma.EnumBannerXAlignFilter<"Banner"> | $Enums.BannerXAlign
-  mobileYAlign?: Prisma.EnumBannerYAlignFilter<"Banner"> | $Enums.BannerYAlign
-  tabletXAlign?: Prisma.EnumBannerXAlignFilter<"Banner"> | $Enums.BannerXAlign
-  tabletYAlign?: Prisma.EnumBannerYAlignFilter<"Banner"> | $Enums.BannerYAlign
-  desktopXAlign?: Prisma.EnumBannerXAlignFilter<"Banner"> | $Enums.BannerXAlign
-  desktopYAlign?: Prisma.EnumBannerYAlignFilter<"Banner"> | $Enums.BannerYAlign
-  mobileStyle?: Prisma.EnumBannerStyleFilter<"Banner"> | $Enums.BannerStyle
-  tabletStyle?: Prisma.EnumBannerStyleFilter<"Banner"> | $Enums.BannerStyle
-  desktopStyle?: Prisma.EnumBannerStyleFilter<"Banner"> | $Enums.BannerStyle
   createdAt?: Prisma.DateTimeFilter<"Banner"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Banner"> | Date | string
 }, "id" | "order">
@@ -387,18 +277,7 @@ export type BannerOrderByWithAggregationInput = {
   state?: Prisma.SortOrder
   titleRo?: Prisma.SortOrderInput | Prisma.SortOrder
   titleRu?: Prisma.SortOrderInput | Prisma.SortOrder
-  descriptionRo?: Prisma.SortOrderInput | Prisma.SortOrder
-  descriptionRu?: Prisma.SortOrderInput | Prisma.SortOrder
   href?: Prisma.SortOrderInput | Prisma.SortOrder
-  mobileXAlign?: Prisma.SortOrder
-  mobileYAlign?: Prisma.SortOrder
-  tabletXAlign?: Prisma.SortOrder
-  tabletYAlign?: Prisma.SortOrder
-  desktopXAlign?: Prisma.SortOrder
-  desktopYAlign?: Prisma.SortOrder
-  mobileStyle?: Prisma.SortOrder
-  tabletStyle?: Prisma.SortOrder
-  desktopStyle?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.BannerCountOrderByAggregateInput
@@ -417,18 +296,7 @@ export type BannerScalarWhereWithAggregatesInput = {
   state?: Prisma.EnumBannerStateWithAggregatesFilter<"Banner"> | $Enums.BannerState
   titleRo?: Prisma.StringNullableWithAggregatesFilter<"Banner"> | string | null
   titleRu?: Prisma.StringNullableWithAggregatesFilter<"Banner"> | string | null
-  descriptionRo?: Prisma.StringNullableWithAggregatesFilter<"Banner"> | string | null
-  descriptionRu?: Prisma.StringNullableWithAggregatesFilter<"Banner"> | string | null
   href?: Prisma.StringNullableWithAggregatesFilter<"Banner"> | string | null
-  mobileXAlign?: Prisma.EnumBannerXAlignWithAggregatesFilter<"Banner"> | $Enums.BannerXAlign
-  mobileYAlign?: Prisma.EnumBannerYAlignWithAggregatesFilter<"Banner"> | $Enums.BannerYAlign
-  tabletXAlign?: Prisma.EnumBannerXAlignWithAggregatesFilter<"Banner"> | $Enums.BannerXAlign
-  tabletYAlign?: Prisma.EnumBannerYAlignWithAggregatesFilter<"Banner"> | $Enums.BannerYAlign
-  desktopXAlign?: Prisma.EnumBannerXAlignWithAggregatesFilter<"Banner"> | $Enums.BannerXAlign
-  desktopYAlign?: Prisma.EnumBannerYAlignWithAggregatesFilter<"Banner"> | $Enums.BannerYAlign
-  mobileStyle?: Prisma.EnumBannerStyleWithAggregatesFilter<"Banner"> | $Enums.BannerStyle
-  tabletStyle?: Prisma.EnumBannerStyleWithAggregatesFilter<"Banner"> | $Enums.BannerStyle
-  desktopStyle?: Prisma.EnumBannerStyleWithAggregatesFilter<"Banner"> | $Enums.BannerStyle
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Banner"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Banner"> | Date | string
 }
@@ -438,18 +306,7 @@ export type BannerCreateInput = {
   state?: $Enums.BannerState
   titleRo?: string | null
   titleRu?: string | null
-  descriptionRo?: string | null
-  descriptionRu?: string | null
   href?: string | null
-  mobileXAlign?: $Enums.BannerXAlign
-  mobileYAlign?: $Enums.BannerYAlign
-  tabletXAlign?: $Enums.BannerXAlign
-  tabletYAlign?: $Enums.BannerYAlign
-  desktopXAlign?: $Enums.BannerXAlign
-  desktopYAlign?: $Enums.BannerYAlign
-  mobileStyle?: $Enums.BannerStyle
-  tabletStyle?: $Enums.BannerStyle
-  desktopStyle?: $Enums.BannerStyle
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -460,18 +317,7 @@ export type BannerUncheckedCreateInput = {
   state?: $Enums.BannerState
   titleRo?: string | null
   titleRu?: string | null
-  descriptionRo?: string | null
-  descriptionRu?: string | null
   href?: string | null
-  mobileXAlign?: $Enums.BannerXAlign
-  mobileYAlign?: $Enums.BannerYAlign
-  tabletXAlign?: $Enums.BannerXAlign
-  tabletYAlign?: $Enums.BannerYAlign
-  desktopXAlign?: $Enums.BannerXAlign
-  desktopYAlign?: $Enums.BannerYAlign
-  mobileStyle?: $Enums.BannerStyle
-  tabletStyle?: $Enums.BannerStyle
-  desktopStyle?: $Enums.BannerStyle
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -481,18 +327,7 @@ export type BannerUpdateInput = {
   state?: Prisma.EnumBannerStateFieldUpdateOperationsInput | $Enums.BannerState
   titleRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   titleRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   href?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mobileXAlign?: Prisma.EnumBannerXAlignFieldUpdateOperationsInput | $Enums.BannerXAlign
-  mobileYAlign?: Prisma.EnumBannerYAlignFieldUpdateOperationsInput | $Enums.BannerYAlign
-  tabletXAlign?: Prisma.EnumBannerXAlignFieldUpdateOperationsInput | $Enums.BannerXAlign
-  tabletYAlign?: Prisma.EnumBannerYAlignFieldUpdateOperationsInput | $Enums.BannerYAlign
-  desktopXAlign?: Prisma.EnumBannerXAlignFieldUpdateOperationsInput | $Enums.BannerXAlign
-  desktopYAlign?: Prisma.EnumBannerYAlignFieldUpdateOperationsInput | $Enums.BannerYAlign
-  mobileStyle?: Prisma.EnumBannerStyleFieldUpdateOperationsInput | $Enums.BannerStyle
-  tabletStyle?: Prisma.EnumBannerStyleFieldUpdateOperationsInput | $Enums.BannerStyle
-  desktopStyle?: Prisma.EnumBannerStyleFieldUpdateOperationsInput | $Enums.BannerStyle
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -503,18 +338,7 @@ export type BannerUncheckedUpdateInput = {
   state?: Prisma.EnumBannerStateFieldUpdateOperationsInput | $Enums.BannerState
   titleRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   titleRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   href?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mobileXAlign?: Prisma.EnumBannerXAlignFieldUpdateOperationsInput | $Enums.BannerXAlign
-  mobileYAlign?: Prisma.EnumBannerYAlignFieldUpdateOperationsInput | $Enums.BannerYAlign
-  tabletXAlign?: Prisma.EnumBannerXAlignFieldUpdateOperationsInput | $Enums.BannerXAlign
-  tabletYAlign?: Prisma.EnumBannerYAlignFieldUpdateOperationsInput | $Enums.BannerYAlign
-  desktopXAlign?: Prisma.EnumBannerXAlignFieldUpdateOperationsInput | $Enums.BannerXAlign
-  desktopYAlign?: Prisma.EnumBannerYAlignFieldUpdateOperationsInput | $Enums.BannerYAlign
-  mobileStyle?: Prisma.EnumBannerStyleFieldUpdateOperationsInput | $Enums.BannerStyle
-  tabletStyle?: Prisma.EnumBannerStyleFieldUpdateOperationsInput | $Enums.BannerStyle
-  desktopStyle?: Prisma.EnumBannerStyleFieldUpdateOperationsInput | $Enums.BannerStyle
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -525,18 +349,7 @@ export type BannerCreateManyInput = {
   state?: $Enums.BannerState
   titleRo?: string | null
   titleRu?: string | null
-  descriptionRo?: string | null
-  descriptionRu?: string | null
   href?: string | null
-  mobileXAlign?: $Enums.BannerXAlign
-  mobileYAlign?: $Enums.BannerYAlign
-  tabletXAlign?: $Enums.BannerXAlign
-  tabletYAlign?: $Enums.BannerYAlign
-  desktopXAlign?: $Enums.BannerXAlign
-  desktopYAlign?: $Enums.BannerYAlign
-  mobileStyle?: $Enums.BannerStyle
-  tabletStyle?: $Enums.BannerStyle
-  desktopStyle?: $Enums.BannerStyle
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -546,18 +359,7 @@ export type BannerUpdateManyMutationInput = {
   state?: Prisma.EnumBannerStateFieldUpdateOperationsInput | $Enums.BannerState
   titleRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   titleRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   href?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mobileXAlign?: Prisma.EnumBannerXAlignFieldUpdateOperationsInput | $Enums.BannerXAlign
-  mobileYAlign?: Prisma.EnumBannerYAlignFieldUpdateOperationsInput | $Enums.BannerYAlign
-  tabletXAlign?: Prisma.EnumBannerXAlignFieldUpdateOperationsInput | $Enums.BannerXAlign
-  tabletYAlign?: Prisma.EnumBannerYAlignFieldUpdateOperationsInput | $Enums.BannerYAlign
-  desktopXAlign?: Prisma.EnumBannerXAlignFieldUpdateOperationsInput | $Enums.BannerXAlign
-  desktopYAlign?: Prisma.EnumBannerYAlignFieldUpdateOperationsInput | $Enums.BannerYAlign
-  mobileStyle?: Prisma.EnumBannerStyleFieldUpdateOperationsInput | $Enums.BannerStyle
-  tabletStyle?: Prisma.EnumBannerStyleFieldUpdateOperationsInput | $Enums.BannerStyle
-  desktopStyle?: Prisma.EnumBannerStyleFieldUpdateOperationsInput | $Enums.BannerStyle
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -568,18 +370,7 @@ export type BannerUncheckedUpdateManyInput = {
   state?: Prisma.EnumBannerStateFieldUpdateOperationsInput | $Enums.BannerState
   titleRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   titleRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   href?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  mobileXAlign?: Prisma.EnumBannerXAlignFieldUpdateOperationsInput | $Enums.BannerXAlign
-  mobileYAlign?: Prisma.EnumBannerYAlignFieldUpdateOperationsInput | $Enums.BannerYAlign
-  tabletXAlign?: Prisma.EnumBannerXAlignFieldUpdateOperationsInput | $Enums.BannerXAlign
-  tabletYAlign?: Prisma.EnumBannerYAlignFieldUpdateOperationsInput | $Enums.BannerYAlign
-  desktopXAlign?: Prisma.EnumBannerXAlignFieldUpdateOperationsInput | $Enums.BannerXAlign
-  desktopYAlign?: Prisma.EnumBannerYAlignFieldUpdateOperationsInput | $Enums.BannerYAlign
-  mobileStyle?: Prisma.EnumBannerStyleFieldUpdateOperationsInput | $Enums.BannerStyle
-  tabletStyle?: Prisma.EnumBannerStyleFieldUpdateOperationsInput | $Enums.BannerStyle
-  desktopStyle?: Prisma.EnumBannerStyleFieldUpdateOperationsInput | $Enums.BannerStyle
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -590,18 +381,7 @@ export type BannerCountOrderByAggregateInput = {
   state?: Prisma.SortOrder
   titleRo?: Prisma.SortOrder
   titleRu?: Prisma.SortOrder
-  descriptionRo?: Prisma.SortOrder
-  descriptionRu?: Prisma.SortOrder
   href?: Prisma.SortOrder
-  mobileXAlign?: Prisma.SortOrder
-  mobileYAlign?: Prisma.SortOrder
-  tabletXAlign?: Prisma.SortOrder
-  tabletYAlign?: Prisma.SortOrder
-  desktopXAlign?: Prisma.SortOrder
-  desktopYAlign?: Prisma.SortOrder
-  mobileStyle?: Prisma.SortOrder
-  tabletStyle?: Prisma.SortOrder
-  desktopStyle?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -617,18 +397,7 @@ export type BannerMaxOrderByAggregateInput = {
   state?: Prisma.SortOrder
   titleRo?: Prisma.SortOrder
   titleRu?: Prisma.SortOrder
-  descriptionRo?: Prisma.SortOrder
-  descriptionRu?: Prisma.SortOrder
   href?: Prisma.SortOrder
-  mobileXAlign?: Prisma.SortOrder
-  mobileYAlign?: Prisma.SortOrder
-  tabletXAlign?: Prisma.SortOrder
-  tabletYAlign?: Prisma.SortOrder
-  desktopXAlign?: Prisma.SortOrder
-  desktopYAlign?: Prisma.SortOrder
-  mobileStyle?: Prisma.SortOrder
-  tabletStyle?: Prisma.SortOrder
-  desktopStyle?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -639,18 +408,7 @@ export type BannerMinOrderByAggregateInput = {
   state?: Prisma.SortOrder
   titleRo?: Prisma.SortOrder
   titleRu?: Prisma.SortOrder
-  descriptionRo?: Prisma.SortOrder
-  descriptionRu?: Prisma.SortOrder
   href?: Prisma.SortOrder
-  mobileXAlign?: Prisma.SortOrder
-  mobileYAlign?: Prisma.SortOrder
-  tabletXAlign?: Prisma.SortOrder
-  tabletYAlign?: Prisma.SortOrder
-  desktopXAlign?: Prisma.SortOrder
-  desktopYAlign?: Prisma.SortOrder
-  mobileStyle?: Prisma.SortOrder
-  tabletStyle?: Prisma.SortOrder
-  desktopStyle?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -672,18 +430,6 @@ export type EnumBannerStateFieldUpdateOperationsInput = {
   set?: $Enums.BannerState
 }
 
-export type EnumBannerXAlignFieldUpdateOperationsInput = {
-  set?: $Enums.BannerXAlign
-}
-
-export type EnumBannerYAlignFieldUpdateOperationsInput = {
-  set?: $Enums.BannerYAlign
-}
-
-export type EnumBannerStyleFieldUpdateOperationsInput = {
-  set?: $Enums.BannerStyle
-}
-
 
 
 export type BannerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -692,18 +438,7 @@ export type BannerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   state?: boolean
   titleRo?: boolean
   titleRu?: boolean
-  descriptionRo?: boolean
-  descriptionRu?: boolean
   href?: boolean
-  mobileXAlign?: boolean
-  mobileYAlign?: boolean
-  tabletXAlign?: boolean
-  tabletYAlign?: boolean
-  desktopXAlign?: boolean
-  desktopYAlign?: boolean
-  mobileStyle?: boolean
-  tabletStyle?: boolean
-  desktopStyle?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["banner"]>
@@ -714,18 +449,7 @@ export type BannerSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   state?: boolean
   titleRo?: boolean
   titleRu?: boolean
-  descriptionRo?: boolean
-  descriptionRu?: boolean
   href?: boolean
-  mobileXAlign?: boolean
-  mobileYAlign?: boolean
-  tabletXAlign?: boolean
-  tabletYAlign?: boolean
-  desktopXAlign?: boolean
-  desktopYAlign?: boolean
-  mobileStyle?: boolean
-  tabletStyle?: boolean
-  desktopStyle?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["banner"]>
@@ -736,18 +460,7 @@ export type BannerSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   state?: boolean
   titleRo?: boolean
   titleRu?: boolean
-  descriptionRo?: boolean
-  descriptionRu?: boolean
   href?: boolean
-  mobileXAlign?: boolean
-  mobileYAlign?: boolean
-  tabletXAlign?: boolean
-  tabletYAlign?: boolean
-  desktopXAlign?: boolean
-  desktopYAlign?: boolean
-  mobileStyle?: boolean
-  tabletStyle?: boolean
-  desktopStyle?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["banner"]>
@@ -758,23 +471,12 @@ export type BannerSelectScalar = {
   state?: boolean
   titleRo?: boolean
   titleRu?: boolean
-  descriptionRo?: boolean
-  descriptionRu?: boolean
   href?: boolean
-  mobileXAlign?: boolean
-  mobileYAlign?: boolean
-  tabletXAlign?: boolean
-  tabletYAlign?: boolean
-  desktopXAlign?: boolean
-  desktopYAlign?: boolean
-  mobileStyle?: boolean
-  tabletStyle?: boolean
-  desktopStyle?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BannerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "order" | "state" | "titleRo" | "titleRu" | "descriptionRo" | "descriptionRu" | "href" | "mobileXAlign" | "mobileYAlign" | "tabletXAlign" | "tabletYAlign" | "desktopXAlign" | "desktopYAlign" | "mobileStyle" | "tabletStyle" | "desktopStyle" | "createdAt" | "updatedAt", ExtArgs["result"]["banner"]>
+export type BannerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "order" | "state" | "titleRo" | "titleRu" | "href" | "createdAt" | "updatedAt", ExtArgs["result"]["banner"]>
 
 export type $BannerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Banner"
@@ -785,18 +487,7 @@ export type $BannerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     state: $Enums.BannerState
     titleRo: string | null
     titleRu: string | null
-    descriptionRo: string | null
-    descriptionRu: string | null
     href: string | null
-    mobileXAlign: $Enums.BannerXAlign
-    mobileYAlign: $Enums.BannerYAlign
-    tabletXAlign: $Enums.BannerXAlign
-    tabletYAlign: $Enums.BannerYAlign
-    desktopXAlign: $Enums.BannerXAlign
-    desktopYAlign: $Enums.BannerYAlign
-    mobileStyle: $Enums.BannerStyle
-    tabletStyle: $Enums.BannerStyle
-    desktopStyle: $Enums.BannerStyle
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["banner"]>
@@ -1227,18 +918,7 @@ export interface BannerFieldRefs {
   readonly state: Prisma.FieldRef<"Banner", 'BannerState'>
   readonly titleRo: Prisma.FieldRef<"Banner", 'String'>
   readonly titleRu: Prisma.FieldRef<"Banner", 'String'>
-  readonly descriptionRo: Prisma.FieldRef<"Banner", 'String'>
-  readonly descriptionRu: Prisma.FieldRef<"Banner", 'String'>
   readonly href: Prisma.FieldRef<"Banner", 'String'>
-  readonly mobileXAlign: Prisma.FieldRef<"Banner", 'BannerXAlign'>
-  readonly mobileYAlign: Prisma.FieldRef<"Banner", 'BannerYAlign'>
-  readonly tabletXAlign: Prisma.FieldRef<"Banner", 'BannerXAlign'>
-  readonly tabletYAlign: Prisma.FieldRef<"Banner", 'BannerYAlign'>
-  readonly desktopXAlign: Prisma.FieldRef<"Banner", 'BannerXAlign'>
-  readonly desktopYAlign: Prisma.FieldRef<"Banner", 'BannerYAlign'>
-  readonly mobileStyle: Prisma.FieldRef<"Banner", 'BannerStyle'>
-  readonly tabletStyle: Prisma.FieldRef<"Banner", 'BannerStyle'>
-  readonly desktopStyle: Prisma.FieldRef<"Banner", 'BannerStyle'>
   readonly createdAt: Prisma.FieldRef<"Banner", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Banner", 'DateTime'>
 }

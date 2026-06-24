@@ -50,8 +50,5 @@ declare module '@tanstack/react-router' {
   interface StaticDataRouteOption {
     crumbs?: IBreadcrumb | IBreadcrumb[];
     hideCrumbs?: boolean;
-    headerOptions?: {
-      type?: 'fixed' | 'sticky';
-    };
   }
 }

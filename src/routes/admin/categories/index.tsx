@@ -49,7 +49,7 @@ function RouteComponent() {
   return (
     <CategorySheetProvider>
       <CategoryTreeProvider>
-        <main className="space-y-4">
+        <main className="flex flex-1 flex-col gap-4">
           <CategoryTreeToolbar>
             <ToolbarActions onSuccess={invalidate}/>
           </CategoryTreeToolbar>

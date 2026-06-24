@@ -5,53 +5,17 @@ enum BannerState {
   @@map("banner_state")
 }
 
-enum BannerXAlign {
-  LEFT
-  CENTER
-  RIGHT
-
-  @@map("banner_x_align")
-}
-
-enum BannerYAlign {
-  TOP
-  CENTER
-  BOTTOM
-
-  @@map("banner_y_align")
-}
-
-enum BannerStyle {
-  LIGHT
-  DARK
-
-  @@map("banner_style")
-}
-
 model Banner {
-  id            Int          @id @default(autoincrement())
-  order         Int          @unique
-  state         BannerState  @default(ACTIVE)
+  id        Int         @id @default(autoincrement())
+  order     Int         @unique
+  state     BannerState @default(ACTIVE)
 
-  titleRo       String?      @map("title_ro")
-  titleRu       String?      @map("title_ru")
-  descriptionRo String?      @map("description_ro")
-  descriptionRu String?      @map("description_ru")
-  href          String?
+  titleRo   String?     @map("title_ro")
+  titleRu   String?     @map("title_ru")
+  href      String?
 
-  mobileXAlign  BannerXAlign @default(LEFT)   @map("mobile_x_align")
-  mobileYAlign  BannerYAlign @default(BOTTOM) @map("mobile_y_align")
-  tabletXAlign  BannerXAlign @default(LEFT)   @map("tablet_x_align")
-  tabletYAlign  BannerYAlign @default(BOTTOM) @map("tablet_y_align")
-  desktopXAlign BannerXAlign @default(LEFT)   @map("desktop_x_align")
-  desktopYAlign BannerYAlign @default(BOTTOM) @map("desktop_y_align")
-
-  mobileStyle  BannerStyle @default(LIGHT) @map("mobile_style")
-  tabletStyle  BannerStyle @default(LIGHT) @map("tablet_style")
-  desktopStyle BannerStyle @default(LIGHT) @map("desktop_style")
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
 
   @@map("banners")
 }

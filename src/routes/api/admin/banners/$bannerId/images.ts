@@ -37,7 +37,7 @@ async function handle({ request, params }: { request: Request; params: Record<st
   // Which breakpoint slot this upload targets.
   const device = formData.get('device');
   if (typeof device !== 'string' || !isBannerDevice(device))
-    return Response.json({ error: 'Missing or invalid device (mobile | tablet | desktop)' }, { status: 400 });
+    return Response.json({ error: 'Missing or invalid device (compact | wide)' }, { status: 400 });
 
   const file = formData.get('file');
   if (!(file instanceof File))

@@ -1,7 +1,6 @@
 import type { FC, ReactNode, SVGProps } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { HeroBannerCarousel } from './hero-banner-carousel/index.tsx';
 
 /**
  * Skinery marketing landing — static content (no backend). Uses only the app's
@@ -11,7 +10,6 @@ import { HeroBannerCarousel } from './hero-banner-carousel/index.tsx';
 
 export const SkineryLanding: FC = () => (
   <div className="flex-1">
-    <HeroBannerCarousel withVerticalShadow/>
     <Categories />
     <Arrivals />
     <About />

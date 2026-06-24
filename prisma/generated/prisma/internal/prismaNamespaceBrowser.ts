@@ -105,18 +105,7 @@ export const BannerScalarFieldEnum = {
   state: 'state',
   titleRo: 'titleRo',
   titleRu: 'titleRu',
-  descriptionRo: 'descriptionRo',
-  descriptionRu: 'descriptionRu',
   href: 'href',
-  mobileXAlign: 'mobileXAlign',
-  mobileYAlign: 'mobileYAlign',
-  tabletXAlign: 'tabletXAlign',
-  tabletYAlign: 'tabletYAlign',
-  desktopXAlign: 'desktopXAlign',
-  desktopYAlign: 'desktopYAlign',
-  mobileStyle: 'mobileStyle',
-  tabletStyle: 'tabletStyle',
-  desktopStyle: 'desktopStyle',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

@@ -1,5 +1,5 @@
 import { type ComponentProps, useEffect, useRef } from 'react';
-import { Link, useMatches } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button.tsx';
 import { cn } from '@/lib/utils';
 import { LocaleDropdown } from '@/components/locale';
@@ -17,11 +17,6 @@ interface IProps extends ComponentProps<'header'> {
 export const Header = ({ className, ...props }: IProps) => {
   const { user } = useAuth();
   const availableLinks = getLinksPerRole(user?.role);
-
-  const matches = useMatches();
-  const hasError = matches.some((match) => match.status === 'error');
-  const headerOptions = matches.find((match) => match.staticData.headerOptions)?.staticData.headerOptions;
-  const headerType = hasError ? 'sticky' : (headerOptions?.type ?? 'sticky');
 
   const headerRef = useRef<HTMLElement>(null);
 
@@ -51,7 +46,7 @@ export const Header = ({ className, ...props }: IProps) => {
     <header
       ref={headerRef}
       data-scrolled="false"
-      className={cn(getHeaderClassName(headerType), className)}
+      className={cn(getHeaderClassName(), className)}
       {...props}
     >
       <nav className="container mx-auto p-4 flex gap-4 items-center">
@@ -82,19 +77,9 @@ export const Header = ({ className, ...props }: IProps) => {
   );
 };
 
-function getHeaderClassName(type: 'sticky' | 'fixed' = 'sticky') {
-  const baseClassName = 'top-0 left-0 right-0 z-30 border-b border-transparent';
-
-  if (type !== 'sticky')
-    return cn(
-      baseClassName,
-      'fixed data-[scrolled=true]:border-border data-[scrolled=true]:bg-background/95',
-      'data-[scrolled=true]:supports-[backdrop-filter]:bg-background/75',
-      'data-[scrolled=true]:backdrop-blur'
-    );
-
+function getHeaderClassName() {
   return cn(
-    baseClassName,
+    'top-0 left-0 right-0 z-30 border-b border-transparent',
     'sticky data-[scrolled=true]:border-border data-[scrolled=true]:bg-background/95',
     'data-[scrolled=true]:supports-[backdrop-filter]:bg-background/75',
     'data-[scrolled=true]:backdrop-blur'

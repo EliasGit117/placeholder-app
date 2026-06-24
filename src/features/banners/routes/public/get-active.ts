@@ -1,11 +1,10 @@
 import { z } from 'zod';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
-import { getLocale } from '@/paraglide/runtime';
 import { bannersPublicBase, bannersPublicPath } from './base.ts';
 import { BannerService } from '../../services/banner-service.ts';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { BannerPublicDtoFactory } from '@/features/banners/dtos/banner-public.ts';
-import { BannerImagesDtoFactory } from '@/features/banners/dtos/banner-image.ts';
+import { BannerImagesPublicDtoFactory } from '@/features/banners/dtos/banner-image.ts';
 import {
   bannerPublicWithImagesDtoSchema,
   type TBannerPublicWithImagesDto,
@@ -21,7 +20,6 @@ export const publicBannersGetActive = bannersPublicBase
   .meta({ anonymous: true })
   .output(z.array(bannerPublicWithImagesDtoSchema))
   .handler(async () => {
-    const locale = getLocale();
     const banners = await BannerService.findAllActive();
     if (banners.length === 0)
       return [];
@@ -34,8 +32,8 @@ export const publicBannersGetActive = bannersPublicBase
     );
 
     return banners.map((banner): TBannerPublicWithImagesDto => ({
-      banner: BannerPublicDtoFactory.fromEntity(banner, locale),
-      images: BannerImagesDtoFactory.fromImageDtos(
+      banner: BannerPublicDtoFactory.fromEntity(banner),
+      images: BannerImagesPublicDtoFactory.fromImageDtos(
         images.filter((img) => img.resourceId === String(banner.id))
       ),
     }));

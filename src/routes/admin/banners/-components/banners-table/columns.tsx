@@ -234,12 +234,9 @@ export const bannerColumns = (options: IOptions) => {
 };
 
 
-// Thumbnail aspect per breakpoint: mobile portrait, tablet 4:3, desktop 16:9.
-// Fixed height; width follows the aspect ratio.
 const deviceThumbClass: Record<BannerDevice, string> = {
-  mobile: 'aspect-[10/16] h-12',
-  tablet: 'aspect-[4/3] h-12',
-  desktop: 'aspect-video h-12'
+  compact: 'aspect-[9/16] h-12',
+  wide: 'aspect-video h-12',
 };
 
 // Image comes straight from the row (getAll embeds it), so the thumbhash

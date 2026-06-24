@@ -127,8 +127,15 @@ function Sortable<T>(props: SortableProps<T>) {
   const [activeId, setActiveId] = React.useState<UniqueIdentifier | null>(null);
 
   const sensors = useSensors(
-    useSensor(MouseSensor),
-    useSensor(TouchSensor),
+    // Small distance gate so a plain click/tap isn't treated as a drag.
+    useSensor(MouseSensor, {
+      activationConstraint: { distance: 5 },
+    }),
+    // Long-press to start dragging on touch; within the delay (and tolerance)
+    // the gesture stays a scroll, so touch devices can still scroll the list.
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 200, tolerance: 8 },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),

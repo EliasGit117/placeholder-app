@@ -1292,18 +1292,7 @@ export const BannerScalarFieldEnum = {
   state: 'state',
   titleRo: 'titleRo',
   titleRu: 'titleRu',
-  descriptionRo: 'descriptionRo',
-  descriptionRu: 'descriptionRu',
   href: 'href',
-  mobileXAlign: 'mobileXAlign',
-  mobileYAlign: 'mobileYAlign',
-  tabletXAlign: 'tabletXAlign',
-  tabletYAlign: 'tabletYAlign',
-  desktopXAlign: 'desktopXAlign',
-  desktopYAlign: 'desktopYAlign',
-  mobileStyle: 'mobileStyle',
-  tabletStyle: 'tabletStyle',
-  desktopStyle: 'desktopStyle',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1560,48 +1549,6 @@ export type EnumBannerStateFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'BannerState[]'
  */
 export type ListEnumBannerStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BannerState[]'>
-    
-
-
-/**
- * Reference to a field of type 'BannerXAlign'
- */
-export type EnumBannerXAlignFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BannerXAlign'>
-    
-
-
-/**
- * Reference to a field of type 'BannerXAlign[]'
- */
-export type ListEnumBannerXAlignFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BannerXAlign[]'>
-    
-
-
-/**
- * Reference to a field of type 'BannerYAlign'
- */
-export type EnumBannerYAlignFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BannerYAlign'>
-    
-
-
-/**
- * Reference to a field of type 'BannerYAlign[]'
- */
-export type ListEnumBannerYAlignFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BannerYAlign[]'>
-    
-
-
-/**
- * Reference to a field of type 'BannerStyle'
- */
-export type EnumBannerStyleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BannerStyle'>
-    
-
-
-/**
- * Reference to a field of type 'BannerStyle[]'
- */
-export type ListEnumBannerStyleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BannerStyle[]'>
     
 
 

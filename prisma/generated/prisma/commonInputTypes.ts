@@ -153,27 +153,6 @@ export type EnumBannerStateFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumBannerStateFilter<$PrismaModel> | $Enums.BannerState
 }
 
-export type EnumBannerXAlignFilter<$PrismaModel = never> = {
-  equals?: $Enums.BannerXAlign | Prisma.EnumBannerXAlignFieldRefInput<$PrismaModel>
-  in?: $Enums.BannerXAlign[] | Prisma.ListEnumBannerXAlignFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BannerXAlign[] | Prisma.ListEnumBannerXAlignFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBannerXAlignFilter<$PrismaModel> | $Enums.BannerXAlign
-}
-
-export type EnumBannerYAlignFilter<$PrismaModel = never> = {
-  equals?: $Enums.BannerYAlign | Prisma.EnumBannerYAlignFieldRefInput<$PrismaModel>
-  in?: $Enums.BannerYAlign[] | Prisma.ListEnumBannerYAlignFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BannerYAlign[] | Prisma.ListEnumBannerYAlignFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBannerYAlignFilter<$PrismaModel> | $Enums.BannerYAlign
-}
-
-export type EnumBannerStyleFilter<$PrismaModel = never> = {
-  equals?: $Enums.BannerStyle | Prisma.EnumBannerStyleFieldRefInput<$PrismaModel>
-  in?: $Enums.BannerStyle[] | Prisma.ListEnumBannerStyleFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BannerStyle[] | Prisma.ListEnumBannerStyleFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBannerStyleFilter<$PrismaModel> | $Enums.BannerStyle
-}
-
 export type IntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -198,36 +177,6 @@ export type EnumBannerStateWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumBannerStateFilter<$PrismaModel>
   _max?: Prisma.NestedEnumBannerStateFilter<$PrismaModel>
-}
-
-export type EnumBannerXAlignWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.BannerXAlign | Prisma.EnumBannerXAlignFieldRefInput<$PrismaModel>
-  in?: $Enums.BannerXAlign[] | Prisma.ListEnumBannerXAlignFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BannerXAlign[] | Prisma.ListEnumBannerXAlignFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBannerXAlignWithAggregatesFilter<$PrismaModel> | $Enums.BannerXAlign
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumBannerXAlignFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumBannerXAlignFilter<$PrismaModel>
-}
-
-export type EnumBannerYAlignWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.BannerYAlign | Prisma.EnumBannerYAlignFieldRefInput<$PrismaModel>
-  in?: $Enums.BannerYAlign[] | Prisma.ListEnumBannerYAlignFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BannerYAlign[] | Prisma.ListEnumBannerYAlignFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBannerYAlignWithAggregatesFilter<$PrismaModel> | $Enums.BannerYAlign
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumBannerYAlignFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumBannerYAlignFilter<$PrismaModel>
-}
-
-export type EnumBannerStyleWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.BannerStyle | Prisma.EnumBannerStyleFieldRefInput<$PrismaModel>
-  in?: $Enums.BannerStyle[] | Prisma.ListEnumBannerStyleFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BannerStyle[] | Prisma.ListEnumBannerStyleFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBannerStyleWithAggregatesFilter<$PrismaModel> | $Enums.BannerStyle
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumBannerStyleFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumBannerStyleFilter<$PrismaModel>
 }
 
 export type EnumCategoryStateFilter<$PrismaModel = never> = {
@@ -577,27 +526,6 @@ export type NestedEnumBannerStateFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumBannerStateFilter<$PrismaModel> | $Enums.BannerState
 }
 
-export type NestedEnumBannerXAlignFilter<$PrismaModel = never> = {
-  equals?: $Enums.BannerXAlign | Prisma.EnumBannerXAlignFieldRefInput<$PrismaModel>
-  in?: $Enums.BannerXAlign[] | Prisma.ListEnumBannerXAlignFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BannerXAlign[] | Prisma.ListEnumBannerXAlignFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBannerXAlignFilter<$PrismaModel> | $Enums.BannerXAlign
-}
-
-export type NestedEnumBannerYAlignFilter<$PrismaModel = never> = {
-  equals?: $Enums.BannerYAlign | Prisma.EnumBannerYAlignFieldRefInput<$PrismaModel>
-  in?: $Enums.BannerYAlign[] | Prisma.ListEnumBannerYAlignFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BannerYAlign[] | Prisma.ListEnumBannerYAlignFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBannerYAlignFilter<$PrismaModel> | $Enums.BannerYAlign
-}
-
-export type NestedEnumBannerStyleFilter<$PrismaModel = never> = {
-  equals?: $Enums.BannerStyle | Prisma.EnumBannerStyleFieldRefInput<$PrismaModel>
-  in?: $Enums.BannerStyle[] | Prisma.ListEnumBannerStyleFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BannerStyle[] | Prisma.ListEnumBannerStyleFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBannerStyleFilter<$PrismaModel> | $Enums.BannerStyle
-}
-
 export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -633,36 +561,6 @@ export type NestedEnumBannerStateWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumBannerStateFilter<$PrismaModel>
   _max?: Prisma.NestedEnumBannerStateFilter<$PrismaModel>
-}
-
-export type NestedEnumBannerXAlignWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.BannerXAlign | Prisma.EnumBannerXAlignFieldRefInput<$PrismaModel>
-  in?: $Enums.BannerXAlign[] | Prisma.ListEnumBannerXAlignFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BannerXAlign[] | Prisma.ListEnumBannerXAlignFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBannerXAlignWithAggregatesFilter<$PrismaModel> | $Enums.BannerXAlign
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumBannerXAlignFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumBannerXAlignFilter<$PrismaModel>
-}
-
-export type NestedEnumBannerYAlignWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.BannerYAlign | Prisma.EnumBannerYAlignFieldRefInput<$PrismaModel>
-  in?: $Enums.BannerYAlign[] | Prisma.ListEnumBannerYAlignFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BannerYAlign[] | Prisma.ListEnumBannerYAlignFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBannerYAlignWithAggregatesFilter<$PrismaModel> | $Enums.BannerYAlign
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumBannerYAlignFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumBannerYAlignFilter<$PrismaModel>
-}
-
-export type NestedEnumBannerStyleWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.BannerStyle | Prisma.EnumBannerStyleFieldRefInput<$PrismaModel>
-  in?: $Enums.BannerStyle[] | Prisma.ListEnumBannerStyleFieldRefInput<$PrismaModel>
-  notIn?: $Enums.BannerStyle[] | Prisma.ListEnumBannerStyleFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumBannerStyleWithAggregatesFilter<$PrismaModel> | $Enums.BannerStyle
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumBannerStyleFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumBannerStyleFilter<$PrismaModel>
 }
 
 export type NestedEnumCategoryStateFilter<$PrismaModel = never> = {

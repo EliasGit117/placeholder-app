@@ -6,11 +6,11 @@ import { useFileDropzone, type IFileDropzoneOptions } from 'src/hooks/use-file-d
 import { m } from '@/paraglide/messages';
 
 interface IProps extends IFileDropzoneOptions {
-  maxSize?: number;
+  maxFileSize?: number;
   className?: string;
 }
 
-export function DropZone({ maxSize, className, ...dropzoneOptions }: IProps) {
+export function DropZone({ maxFileSize, className, ...dropzoneOptions }: IProps) {
   const [{ isDragging }, {
     getInputProps,
     openFileDialog,
@@ -37,7 +37,7 @@ export function DropZone({ maxSize, className, ...dropzoneOptions }: IProps) {
 
       <div className="flex flex-col items-center gap-2 @sm:gap-4">
         <div className={cn(
-          'flex items-center justify-center rounded-full bg-muted h-10 w-10 @sm:h-16 @sm:w-16',
+          'flex items-center justify-center rounded-full bg-muted size-12',
           isDragging && 'bg-primary/10'
         )}>
           <IconCloud className={cn('h-5 @sm:h-6 text-muted-foreground', isDragging && 'text-primary')}/>
@@ -50,15 +50,15 @@ export function DropZone({ maxSize, className, ...dropzoneOptions }: IProps) {
           <p className="hidden @[120px]:block text-muted-foreground text-xs">
             {m['components.file_upload.drop_zone.description']()}
           </p>
-          {maxSize && (
+          {maxFileSize && (
             <p className="hidden @[240px]:block text-muted-foreground text-xs">
-              {m['components.file_upload.drop_zone.size_limit']({ size: formatBytes(maxSize) })}
+              {m['components.file_upload.drop_zone.size_limit']({ size: formatBytes(maxFileSize) })}
             </p>
           )}
         </div>
 
-        <Button type="button" size="sm" className="mt-2 @[120px]:mt-0 @sm:h-10 @sm:text-sm" onClick={openFileDialog}>
-          <IconUpload className="h-4 w-4 shrink-0"/>
+        <Button type="button" className="mt-2 @[120px]:mt-0 @sm:text-sm" onClick={openFileDialog}>
+          <IconUpload/>
           <span className="hidden @[120px]:inline">
             {m['components.file_upload.drop_zone.select_files']()}
           </span>
