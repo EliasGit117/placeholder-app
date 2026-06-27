@@ -219,6 +219,24 @@ export class ImageService {
     return ImageDtoFactory.fromEntities(entities);
   }
 
+  // Distinct resource ids that own at least one image of the given purpose.
+  // Lets callers filter their own rows down to those with an image without an
+  // N+1 or loading the image payloads.
+  static async findResourceIdsWithImage(
+    resourceType: ImageResourceType,
+    purpose: ImagePurpose
+  ): Promise<string[]> {
+    const rows = await prisma.image.findMany({
+      where: { resourceType, purpose, resourceId: { not: null } },
+      distinct: ['resourceId'],
+      select: { resourceId: true },
+    });
+
+    return rows
+      .map((r) => r.resourceId)
+      .filter((id): id is string => id !== null);
+  }
+
   static async delete(id: number): Promise<void> {
     const entity = await prisma.image.findUnique({ where: { id }, include: { variants: true } });
     if (!entity)
@@ -382,15 +400,24 @@ async function transformToWebp(
   transform: ImageTransform,
   fileName: string
 ): Promise<PreparedFile> {
+  const fit = transform.fit ?? 'inside';
+
+  // `withoutEnlargement` keeps small images from being upscaled — but for the
+  // cropping fits (`cover`/`fill`) it would also suppress the crop when the
+  // source is smaller than the target, leaving the original aspect intact. Those
+  // fits must always produce the exact requested dimensions (e.g. 16:9 banners),
+  // so only guard against enlargement for the non-cropping fits.
+  const withoutEnlargement = fit === 'inside' || fit === 'contain';
+
   const { data, info } = await sharp(inputBuffer)
     .ensureAlpha()
     .resize({
       width: transform.width,
       height: transform.height,
-      fit: transform.fit ?? 'inside',
+      fit,
       position: transform.position ?? 'center',
       background: { r: 0, g: 0, b: 0, alpha: 0 },
-      withoutEnlargement: true
+      withoutEnlargement
     })
     .webp({ alphaQuality: 100 })
     .toBuffer({ resolveWithObject: true });

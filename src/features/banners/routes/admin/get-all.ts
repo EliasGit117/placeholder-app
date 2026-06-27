@@ -6,7 +6,7 @@ import { bannersAdminBase, bannersAdminPath } from './base.ts';
 import { BannerService } from '../../services/banner-service.ts';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { BannerDtoFactory } from '@/features/banners/dtos/banner.ts';
-import { BannerImagesDtoFactory } from '@/features/banners/dtos/banner-image.ts';
+import { BannerImageDtoFactory } from '@/features/banners/dtos/banner-image.ts';
 import { bannerRowDtoSchema } from '@/features/banners/dtos/banner-row.ts';
 
 export const adminBannersGetAll = bannersAdminBase
@@ -40,8 +40,8 @@ export const adminBannersGetAll = bannersAdminBase
 
     return banners.map((banner) => ({
       ...BannerDtoFactory.fromEntity(banner),
-      images: BannerImagesDtoFactory.fromImageDtos(
-        images.filter((img) => img.resourceId === String(banner.id))
+      image: BannerImageDtoFactory.fromImageDto(
+        images.find((img) => img.resourceId === String(banner.id)) ?? null
       ),
     }));
   });

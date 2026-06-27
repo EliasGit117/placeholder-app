@@ -25,19 +25,10 @@ import {
 import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
-import { bannerDevices, type BannerDevice } from '@/features/banners/consts/banner-devices.ts';
 import type { TBannerImageDto } from '@/features/banners/dtos/banner-image.ts';
 import type { TBannerRowDto } from '@/features/banners/dtos/banner-row.ts';
 import { useBannerReorderSheet } from './provider.tsx';
 
-
-// Thumbnail aspect per device (width fills the grid cell, height follows ratio).
-const deviceThumbClass: Record<BannerDevice, string> = {
-  compact: 'aspect-[9/16]',
-  wide: 'aspect-video'
-};
-
-const reorderDevices = bannerDevices;
 
 const sameOrder = (a: TBannerRowDto[], b: TBannerRowDto[]) =>
   a.length === b.length && a.every((banner, i) => banner.id === b[i].id);
@@ -174,9 +165,7 @@ function BannerReorderRow({ banner, overlay }: { banner: TBannerRowDto; overlay?
         </span>
 
         <div className="flex h-24 items-end gap-2">
-          {reorderDevices.map((device) => (
-            <DeviceThumb key={device} image={banner.images[device]} device={device}/>
-          ))}
+          <BannerThumb image={banner.image}/>
         </div>
       </div>
     </SortableItem>
@@ -188,22 +177,19 @@ function ReorderRowSkeleton() {
     <div className="flex flex-col gap-2 rounded-md border bg-card p-2">
       <Skeleton className="h-4 w-full"/>
       <div className="flex h-24 items-end gap-2">
-        {reorderDevices.map((device) => (
-          <Skeleton key={device} className={cn('h-full rounded-sm', deviceThumbClass[device])}/>
-        ))}
+        <Skeleton className="h-full aspect-video rounded-sm"/>
       </div>
     </div>
   );
 }
 
-function DeviceThumb({ image, device }: { image?: TBannerImageDto | null; device: BannerDevice }) {
+function BannerThumb({ image }: { image?: TBannerImageDto | null }) {
   const placeholder = thumbhashToDataUrl(image?.thumbhash);
 
   return (
     <div
       className={cn(
-        'flex h-full items-center justify-center overflow-hidden rounded-sm border bg-muted bg-cover bg-center',
-        deviceThumbClass[device]
+        'flex h-full items-center justify-center overflow-hidden rounded-sm border bg-muted bg-cover bg-center aspect-video'
       )}
       style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
     >

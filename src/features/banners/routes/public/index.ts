@@ -1,6 +1,6 @@
-import { publicBannersGetActive } from './get-active.ts';
+import { publicBannersGetValid } from './get-valid.ts';
 
 
 export const bannersPublicRoutes = {
-  getActive: publicBannersGetActive,
+  getValid: publicBannersGetValid,
 };

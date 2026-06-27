@@ -1,4 +1,4 @@
-import { Header } from './header';
+import { Header } from './header.tsx';
 import type { FC, PropsWithChildren } from 'react';
 import { Footer } from '../common/footer.tsx';
 import { AppSidebar, AppSidebarProvider } from '@/components/layout/main/sidebar.tsx';

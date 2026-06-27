@@ -1,6 +1,7 @@
 import type { FC, ReactNode, SVGProps } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { HeroBannerCarousel } from '@/routes/_public/-components/hero-banner-carousel';
 
 /**
  * Skinery marketing landing — static content (no backend). Uses only the app's
@@ -9,7 +10,8 @@ import { Badge } from '@/components/ui/badge';
  */
 
 export const SkineryLanding: FC = () => (
-  <div className="flex-1">
+  <div className="flex-1 py-4">
+    <HeroBannerCarousel className='pt-0'/>
     <Categories />
     <Arrivals />
     <About />

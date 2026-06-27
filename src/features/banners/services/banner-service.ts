@@ -6,15 +6,13 @@ import { prisma, type TxClient } from '@/lib/db';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
 import { BannerDtoFactory } from '@/features/banners/dtos/banner.ts';
+import { bannerImagePurpose } from '@/features/banners/consts/banner-devices.ts';
 import type { TCreateBannerDto } from '@/features/banners/dtos/create-banner.ts';
 import type { TUpdateBannerDto } from '@/features/banners/dtos/update-banner.ts';
 import type { TSearchBannersRequestDto } from '@/features/banners/dtos/search-banner.ts';
 
-// Single global lock key for the banner order sequence — banners are one flat
-// ordered list (no per-resource scoping), so every order mutation serializes on
-// the same advisory lock.
-const BANNER_LOCK = 'banners';
 
+const BANNER_LOCK = 'banners';
 
 export class BannerService {
 
@@ -26,10 +24,19 @@ export class BannerService {
     return prisma.banner.findMany({ orderBy: { order: 'asc' } });
   }
 
-  static async findAllActive(): Promise<Banner[]> {
+  static async findAllValid(): Promise<Banner[]> {
+    const resourceIds = await ImageService.findResourceIdsWithImage(ImageResourceType.BANNER, bannerImagePurpose);
+
+    const ids = resourceIds
+      .map((id) => Number(id))
+      .filter((id) => Number.isInteger(id));
+
+    if (ids.length === 0)
+      return [];
+
     return prisma.banner.findMany({
-      where: { state: BannerState.ACTIVE },
-      orderBy: { order: 'asc' },
+      where: { state: BannerState.ACTIVE, id: { in: ids } },
+      orderBy: { order: 'asc' }
     });
   }
 
@@ -42,7 +49,7 @@ export class BannerService {
 
       const last = await tx.banner.findFirst({
         orderBy: { order: 'desc' },
-        select: { order: true },
+        select: { order: true }
       });
 
       return tx.banner.create({
@@ -51,8 +58,8 @@ export class BannerService {
           titleRo: input.titleRo ?? null,
           titleRu: input.titleRu ?? null,
           href: input.href ?? null,
-          order: last ? last.order + 1 : 1,
-        },
+          order: last ? last.order + 1 : 1
+        }
       });
     });
   }
@@ -68,8 +75,8 @@ export class BannerService {
         ...(input.state !== undefined && { state: input.state }),
         ...(input.titleRo !== undefined && { titleRo: input.titleRo ?? null }),
         ...(input.titleRu !== undefined && { titleRu: input.titleRu ?? null }),
-        ...(input.href !== undefined && { href: input.href ?? null }),
-      },
+        ...(input.href !== undefined && { href: input.href ?? null })
+      }
     });
   }
 
@@ -77,12 +84,12 @@ export class BannerService {
     const [items, meta] = await prisma.banner
       .paginate({
         where: getWhere(input),
-        orderBy: { [input.sort ?? 'order']: input.dir ?? 'asc' },
+        orderBy: { [input.sort ?? 'order']: input.dir ?? 'asc' }
       })
       .withPages({
         page: input.page ?? 1,
         limit: input.limit ?? 10,
-        includePageCount: true,
+        includePageCount: true
       });
 
     return PaginationResultDtoFactory.getWithCount(BannerDtoFactory.fromEntities(items), meta);
@@ -121,7 +128,7 @@ export class BannerService {
         orderedIds.some((id) => !existingIds.has(id))
       )
         throw new ORPCError('BAD_REQUEST', {
-          message: 'Provided ids must match all banners exactly.',
+          message: 'Provided ids must match all banners exactly.'
         });
 
       // A permutation can't be applied in place under the `order` unique index,
@@ -145,7 +152,7 @@ export class BannerService {
   private static async resequence(tx: TxClient): Promise<void> {
     const remaining = await tx.banner.findMany({
       orderBy: { order: 'asc' },
-      select: { id: true },
+      select: { id: true }
     });
     await BannerService.applyOrders(tx, remaining.map((row, i) => ({ id: row.id, order: i + 1 })));
   }
@@ -162,10 +169,9 @@ export class BannerService {
     const rows = Prisma.join(pairs.map((p) => Prisma.sql`(${p.id}::int, ${p.order}::int)`));
 
     await tx.$executeRaw`
-      UPDATE "banners" AS b
-      SET "order" = v.ord
-      FROM (VALUES ${rows}) AS v(id, ord)
-      WHERE b.id = v.id
+        UPDATE "banners" AS b
+        SET "order" = v.ord FROM (VALUES ${rows}) AS v(id, ord)
+        WHERE b.id = v.id
     `;
   }
 }

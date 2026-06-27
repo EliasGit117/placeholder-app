@@ -10,11 +10,11 @@ import {
   IconEyeOff,
   IconHash,
   IconPhoto,
+  IconPhotoOff,
   IconTextSize,
   IconTrash,
   type TablerIcon
 } from '@tabler/icons-react';
-import { bannerDevices, type BannerDevice } from '@/features/banners/consts/banner-devices.ts';
 import { ColumnFilterType, DataTableColumnHeader } from '@/components/data-table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -70,16 +70,13 @@ export const bannerColumns = (options: IOptions) => {
       }
     }),
 
-    // All three breakpoint thumbnails in one column (desktop → mobile).
     columnHelper.display({
-      id: 'images',
-      size: 220,
+      id: 'image',
+      size: 84,
       header: ({ column }) => <DataTableColumnHeader column={column}/>,
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          {bannerDevices.map((device) => (
-            <DeviceImageCell key={device} image={row.original.images[device]} device={device}/>
-          ))}
+          <BannerImageCell image={row.original.image}/>
         </div>
       ),
       meta: {
@@ -87,9 +84,7 @@ export const bannerColumns = (options: IOptions) => {
         icon: IconPhoto,
         skeletonItem: (
           <div className="flex items-center gap-2">
-            {bannerDevices.map((device) => (
-              <Skeleton key={device} className={cn(deviceThumbClass[device], 'rounded-md')}/>
-            ))}
+            <Skeleton className={cn(bannerThumbClass, 'rounded-md')}/>
           </div>
         )
       }
@@ -234,14 +229,11 @@ export const bannerColumns = (options: IOptions) => {
 };
 
 
-const deviceThumbClass: Record<BannerDevice, string> = {
-  compact: 'aspect-[9/16] h-12',
-  wide: 'aspect-video h-12',
-};
+const bannerThumbClass = 'aspect-video h-12';
 
 // Image comes straight from the row (getAll embeds it), so the thumbhash
 // placeholder shows immediately — no per-cell request, no icon flash.
-function DeviceImageCell({ image, device }: { image?: TBannerImageDto | null; device: BannerDevice }) {
+function BannerImageCell({ image }: { image?: TBannerImageDto | null }) {
   const placeholder = thumbhashToDataUrl(image?.thumbhash);
 
   return (
@@ -249,7 +241,7 @@ function DeviceImageCell({ image, device }: { image?: TBannerImageDto | null; de
       style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
       className={cn(
         'flex items-center justify-center overflow-hidden rounded-md border bg-muted bg-cover bg-center shrink-0',
-        deviceThumbClass[device]
+        bannerThumbClass
       )}
     >
       {image ?
@@ -260,7 +252,7 @@ function DeviceImageCell({ image, device }: { image?: TBannerImageDto | null; de
           decoding="async"
           className="h-full w-full object-cover"
         /> :
-        <IconPhoto className="size-3.5 text-muted-foreground"/>}
+        <IconPhotoOff className="size-3.5 text-muted-foreground"/>}
     </div>
   );
 }

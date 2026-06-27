@@ -13,9 +13,8 @@ import { m } from '@/paraglide/messages';
 import { BannerState } from '~/prisma/generated/prisma/enums.ts';
 import { updateBannerDtoSchema, type TUpdateBannerDto } from '@/features/banners/dtos/update-banner.ts';
 import type { TBannerDto } from '@/features/banners/dtos/banner.ts';
-import { bannerDevices } from '@/features/banners/consts/banner-devices.ts';
 import { BannerStateSelect } from './banner-state-select.tsx';
-import { BannerDeviceCard } from './banner-device-card.tsx';
+import { BannerImageCard } from './banner-image-card.tsx';
 import { BannerFormSkeleton } from './banner-form-skeleton.tsx';
 
 
@@ -86,16 +85,7 @@ export const BannerForm: FC<IProps> = ({ id, initialData }) => {
       <Card>
         <CardContent className="@container space-y-6">
           <fieldset disabled={disabled} className="space-y-6">
-            <div className="grid grid-cols-[1fr_2fr] gap-6">
-              {bannerDevices.map((device) => (
-                <BannerDeviceCard
-                  key={device}
-                  bannerId={id}
-                  device={device}
-                  disabled={disabled}
-                />
-              ))}
-            </div>
+            <BannerImageCard bannerId={id} disabled={disabled}/>
 
             <Separator/>
 

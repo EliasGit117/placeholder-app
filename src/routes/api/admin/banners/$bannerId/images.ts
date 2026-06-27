@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { BannerService } from '@/features/banners/services/banner-service.ts';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
-import { bannerDevicePurpose, isBannerDevice } from '@/features/banners/consts/banner-devices.ts';
+import { bannerImagePurpose } from '@/features/banners/consts/banner-devices.ts';
 
 async function handle({ request, params }: { request: Request; params: Record<string, string> }): Promise<Response> {
   const session = await auth.api.getSession({ headers: request.headers });
@@ -34,23 +34,16 @@ async function handle({ request, params }: { request: Request; params: Record<st
     return Response.json({ error: 'Invalid multipart form data' }, { status: 400 });
   }
 
-  // Which breakpoint slot this upload targets.
-  const device = formData.get('device');
-  if (typeof device !== 'string' || !isBannerDevice(device))
-    return Response.json({ error: 'Missing or invalid device (compact | wide)' }, { status: 400 });
-
   const file = formData.get('file');
   if (!(file instanceof File))
     return Response.json({ error: 'Missing file' }, { status: 400 });
 
-  const purpose = bannerDevicePurpose[device];
-
   try {
-    // Each device slot is single-cardinality, so the new upload would be
+    // The banner image is single-cardinality, so the new upload would be
     // rejected while the old image still exists. Replace by deleting the
-    // previous image for this device first, then uploading the new one.
+    // previous image first, then uploading the new one.
     const existing = await prisma.image.findFirst({
-      where: { resourceType: ImageResourceType.BANNER, resourceId: String(bannerId), purpose },
+      where: { resourceType: ImageResourceType.BANNER, resourceId: String(bannerId), purpose: bannerImagePurpose },
     });
     if (existing)
       await ImageService.delete(existing.id).catch(() => undefined);
@@ -58,9 +51,9 @@ async function handle({ request, params }: { request: Request; params: Record<st
     const image = await ImageService.upload({
       file,
       resourceType: ImageResourceType.BANNER,
-      purpose,
+      purpose: bannerImagePurpose,
       resourceId: String(bannerId),
-      fileName: `banner-${bannerId}-${device}`,
+      fileName: `banner-${bannerId}`,
     });
 
     return Response.json(image, { status: 201 });

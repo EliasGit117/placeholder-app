@@ -4,3 +4,4 @@ export * from './obj';
 export * from './xhr-upload';
 export * from './bytes';
 export * from './thumbhash';
+export * from './image-dimensions';
