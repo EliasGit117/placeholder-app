@@ -91,8 +91,8 @@ export const bannerColumns = (options: IOptions) => {
       header: ({ column }) => <DataTableColumnHeader column={column}/>,
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <BannerImageCell image={row.original.image} aspectClass="aspect-[3/1]"/>
           <BannerImageCell image={row.original.mobileImage} aspectClass="aspect-[6/5]"/>
+          <BannerImageCell image={row.original.image} aspectClass="aspect-[3/1]"/>
         </div>
       ),
       meta: {
