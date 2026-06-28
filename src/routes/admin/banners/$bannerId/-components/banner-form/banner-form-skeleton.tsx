@@ -7,9 +7,15 @@ import { Skeleton } from '@/components/ui/skeleton';
 export const BannerFormSkeleton: FC = () => (
   <Card>
     <CardContent className="@container space-y-6">
-      <div className="flex flex-col gap-3">
-        <Skeleton className="h-4 w-20"/>
-        <Skeleton className="aspect-[3/1] w-full rounded-md"/>
+      <div className="flex flex-col gap-6 @2xl:flex-row @2xl:items-start">
+        <div className="flex w-full max-w-sm flex-col gap-3">
+          <Skeleton className="h-4 w-20"/>
+          <Skeleton className="aspect-[6/5] w-full rounded-md"/>
+        </div>
+        <div className="flex w-full max-w-3xl flex-col gap-3">
+          <Skeleton className="h-4 w-20"/>
+          <Skeleton className="aspect-[3/1] w-full rounded-md"/>
+        </div>
       </div>
 
       <Separator/>

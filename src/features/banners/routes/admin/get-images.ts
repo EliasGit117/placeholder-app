@@ -4,20 +4,21 @@ import { auth } from '@/lib/auth/better-auth.ts';
 import { bannersAdminBase, bannersAdminPath } from './base.ts';
 import { BannerService } from '../../services/banner-service.ts';
 import { ImageService } from '@/features/images/services/image-service.ts';
-import { bannerImageDtoSchema, BannerImageDtoFactory } from '@/features/banners/dtos/banner-image.ts';
+import { bannerImagesDtoSchema, BannerImageDtoFactory } from '@/features/banners/dtos/banner-image.ts';
+import { bannerImagePurposeByDevice } from '@/features/banners/consts/banner-devices.ts';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 
 export const adminBannersGetImages = bannersAdminBase
   .route({
     method: 'GET',
     path: `${bannersAdminPath}/{bannerId}/images`,
-    summary: 'Get banner image',
-    description: 'Returns the single 3:1 image for a banner',
+    summary: 'Get banner images',
+    description: 'Returns the desktop (3:1) and mobile (6:5) images for a banner',
   })
   .errors({ FORBIDDEN: {}, NOT_FOUND: {} })
   .use(authMiddleware)
   .input(z.object({ bannerId: z.coerce.number().int().positive() }))
-  .output(bannerImageDtoSchema.nullish())
+  .output(bannerImagesDtoSchema)
   .handler(async ({ input, context: { user }, errors }) => {
     const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { banners: ['get'] } },
@@ -35,5 +36,11 @@ export const adminBannersGetImages = bannersAdminBase
       String(input.bannerId)
     );
 
-    return BannerImageDtoFactory.fromImageDto(images[0] ?? null);
+    const desktop = images.find((img) => img.purpose === bannerImagePurposeByDevice.desktop) ?? null;
+    const mobile = images.find((img) => img.purpose === bannerImagePurposeByDevice.mobile) ?? null;
+
+    return {
+      desktop: BannerImageDtoFactory.fromImageDto(desktop),
+      mobile: BannerImageDtoFactory.fromImageDto(mobile),
+    };
   });

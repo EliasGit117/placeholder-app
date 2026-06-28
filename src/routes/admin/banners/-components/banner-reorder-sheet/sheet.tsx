@@ -26,11 +26,11 @@ import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
 import type { TBannerImageDto } from '@/features/banners/dtos/banner-image.ts';
-import type { TBannerRowDto } from '@/features/banners/dtos/banner-row.ts';
+import type { TBannerBriefDto } from '@/features/banners/dtos/banner-brief.ts';
 import { useBannerReorderSheet } from './provider.tsx';
 
 
-const sameOrder = (a: TBannerRowDto[], b: TBannerRowDto[]) =>
+const sameOrder = (a: TBannerBriefDto[], b: TBannerBriefDto[]) =>
   a.length === b.length && a.every((banner, i) => banner.id === b[i].id);
 
 export const BannerReorderSheet: FC = () => {
@@ -51,7 +51,7 @@ export const BannerReorderSheet: FC = () => {
   // Working copy edited while dragging; reseed whenever the server data changes.
   // Depend on `data` (a stable ref from react-query) rather than a defaulted
   // array — `data ?? []` would be a fresh ref every render and loop the effect.
-  const [items, setItems] = useState<TBannerRowDto[]>([]);
+  const [items, setItems] = useState<TBannerBriefDto[]>([]);
 
   useEffect(() => {
     if (data)
@@ -149,7 +149,7 @@ export const BannerReorderSheet: FC = () => {
 };
 
 
-function BannerReorderRow({ banner, overlay }: { banner: TBannerRowDto; overlay?: boolean }) {
+function BannerReorderRow({ banner, overlay }: { banner: TBannerBriefDto; overlay?: boolean }) {
   const title = getLocale() === 'ru' ? banner.titleRu : banner.titleRo;
 
   return (

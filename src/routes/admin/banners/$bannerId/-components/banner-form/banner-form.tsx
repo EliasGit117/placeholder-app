@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { LoadingButton } from '@/components/ui/loading-button';
 import { Separator } from '@/components/ui/separator';
+import { IconDeviceFloppy } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { BannerState } from '~/prisma/generated/prisma/enums.ts';
 import { updateBannerDtoSchema, type TUpdateBannerDto } from '@/features/banners/dtos/update-banner.ts';
@@ -85,7 +86,10 @@ export const BannerForm: FC<IProps> = ({ id, initialData }) => {
       <Card>
         <CardContent className="@container space-y-6">
           <fieldset disabled={disabled} className="space-y-6">
-            <BannerImageCard bannerId={id} disabled={disabled}/>
+            <div className="flex flex-col gap-6 @2xl:flex-row @2xl:items-start">
+              <BannerImageCard bannerId={id} device="mobile" disabled={disabled}/>
+              <BannerImageCard bannerId={id} device="desktop" disabled={disabled}/>
+            </div>
 
             <Separator/>
 
@@ -140,6 +144,7 @@ export const BannerForm: FC<IProps> = ({ id, initialData }) => {
 
         <CardFooter className="justify-end">
           <LoadingButton type="submit" loading={isSaving} disabled={disabled}>
+            <IconDeviceFloppy/>
             {m['common.save']()}
           </LoadingButton>
         </CardFooter>

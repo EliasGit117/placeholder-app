@@ -5,23 +5,21 @@ import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import { bannersAdminBase, bannersAdminPath } from './base.ts';
 import { BannerService } from '../../services/banner-service.ts';
 import { ImageService } from '@/features/images/services/image-service.ts';
-import { BannerDtoFactory } from '@/features/banners/dtos/banner.ts';
-import { BannerImageDtoFactory } from '@/features/banners/dtos/banner-image.ts';
-import { bannerRowDtoSchema } from '@/features/banners/dtos/banner-row.ts';
+import { bannerBriefDtoSchema, BannerBriefDtoFactory } from '@/features/banners/dtos/banner-brief.ts';
 
 export const adminBannersGetAll = bannersAdminBase
   .route({
     method: 'GET',
     path: bannersAdminPath,
     summary: 'Get all banners',
-    description: 'Returns all banners (with their device images) ordered by display order',
+    description: 'Returns all banners (with their device images) ordered by display order'
   })
   .errors({ FORBIDDEN: {} })
   .use(authMiddleware)
-  .output(z.array(bannerRowDtoSchema))
+  .output(z.array(bannerBriefDtoSchema))
   .handler(async ({ context: { user }, errors }) => {
     const { success } = await auth.api.userHasPermission({
-      body: { userId: user.id, permissions: { banners: ['list'] } },
+      body: { userId: user.id, permissions: { banners: ['list'] } }
     });
 
     if (!success)
@@ -38,10 +36,5 @@ export const adminBannersGetAll = bannersAdminBase
       banners.map((b) => String(b.id))
     );
 
-    return banners.map((banner) => ({
-      ...BannerDtoFactory.fromEntity(banner),
-      image: BannerImageDtoFactory.fromImageDto(
-        images.find((img) => img.resourceId === String(banner.id)) ?? null
-      ),
-    }));
+    return BannerBriefDtoFactory.fromEntities(banners, images);
   });

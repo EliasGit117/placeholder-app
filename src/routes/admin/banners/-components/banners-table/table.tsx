@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { IconRefresh } from '@tabler/icons-react';
 import { orpc } from '@/lib/orpc';
 import { bannerColumns } from './columns.tsx';
-import type { TBannerRowDto } from '@/features/banners/dtos/banner-row.ts';
+import type { TBannerBriefDto } from '@/features/banners/dtos/banner-brief.ts';
 import { BannerSheet, BannerSheetProvider, BannerSheetTrigger } from '../banner-sheet';
 import {
   BannerReorderSheet,
@@ -148,10 +148,11 @@ function toStringArray(value: unknown): string[] {
 }
 
 // Filters the loaded banners against the data-table's URL search state. Keys
-// match the column accessors: `state` (multi-select), `titleRo` (text),
-// `createdAt` (date range).
-function applyFilters(banners: TBannerRowDto[], search: Record<string, unknown>) {
+// match the column accessors: `state` (multi-select), `imageStatus`
+// (multi-select), `titleRo` (text), `createdAt` (date range).
+function applyFilters(banners: TBannerBriefDto[], search: Record<string, unknown>) {
   const states = toStringArray(search.state).filter(Boolean);
+  const imageStatuses = toStringArray(search.imageStatus).filter(Boolean);
   const title = typeof search.titleRo === 'string' ? search.titleRo.trim().toLowerCase() : '';
   const range = search.createdAt && typeof search.createdAt === 'object'
     ? (search.createdAt as { from?: string; to?: string })
@@ -159,10 +160,14 @@ function applyFilters(banners: TBannerRowDto[], search: Record<string, unknown>)
   const fromTime = range?.from ? new Date(range.from).getTime() : undefined;
   const toTime = range?.to ? new Date(range.to).getTime() : undefined;
 
-  const hasActiveFilters = states.length > 0 || title.length > 0 || fromTime != null || toTime != null;
+  const hasActiveFilters =
+    states.length > 0 || imageStatuses.length > 0 || title.length > 0 || fromTime != null || toTime != null;
 
   const filtered = banners.filter((banner) => {
     if (states.length > 0 && !states.includes(banner.state))
+      return false;
+
+    if (imageStatuses.length > 0 && !imageStatuses.includes(banner.imageStatus))
       return false;
 
     if (title && !(banner.titleRo ?? '').toLowerCase().includes(title))

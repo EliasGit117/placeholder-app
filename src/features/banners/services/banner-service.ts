@@ -6,7 +6,7 @@ import { prisma, type TxClient } from '@/lib/db';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
 import { BannerDtoFactory } from '@/features/banners/dtos/banner.ts';
-import { bannerImagePurpose } from '@/features/banners/consts/banner-devices.ts';
+import { bannerImagePurposeByDevice } from '@/features/banners/consts/banner-devices.ts';
 import type { TCreateBannerDto } from '@/features/banners/dtos/create-banner.ts';
 import type { TUpdateBannerDto } from '@/features/banners/dtos/update-banner.ts';
 import type { TSearchBannersRequestDto } from '@/features/banners/dtos/search-banner.ts';
@@ -25,9 +25,16 @@ export class BannerService {
   }
 
   static async findAllValid(): Promise<Banner[]> {
-    const resourceIds = await ImageService.findResourceIdsWithImage(ImageResourceType.BANNER, bannerImagePurpose);
+    // A banner is only public-valid once it has both device images: the desktop
+    // (3:1) and the mobile (6:5). Intersect the resource ids that own each.
+    const [desktopIds, mobileIds] = await Promise.all([
+      ImageService.findResourceIdsWithImage(ImageResourceType.BANNER, bannerImagePurposeByDevice.desktop),
+      ImageService.findResourceIdsWithImage(ImageResourceType.BANNER, bannerImagePurposeByDevice.mobile),
+    ]);
 
-    const ids = resourceIds
+    const mobileSet = new Set(mobileIds);
+    const ids = desktopIds
+      .filter((id) => mobileSet.has(id))
       .map((id) => Number(id))
       .filter((id) => Number.isInteger(id));
 

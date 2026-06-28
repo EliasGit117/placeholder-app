@@ -19,17 +19,12 @@ export const publicBannersGetValid = bannersPublicBase
     if (banners.length === 0)
       return [];
 
-    // One query for every banner's images, then bucket by resource id — avoids
-    // an N+1 across the valid banners.
+    // One query for every banner's images (both devices); the factory buckets
+    // them by resource id + purpose — avoids an N+1 across the valid banners.
     const images = await ImageService.findByResources(
       ImageResourceType.BANNER,
       banners.map((b) => String(b.id))
     );
 
-    return banners.map((banner) =>
-      BannerPublicDtoFactory.fromEntity(
-        banner,
-        images.find((img) => img.resourceId === String(banner.id)) ?? null
-      )
-    );
+    return BannerPublicDtoFactory.fromEntities(banners, images);
   });

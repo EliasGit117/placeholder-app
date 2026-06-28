@@ -2,6 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { Link } from '@tanstack/react-router';
 import {
+  IconAlertTriangle,
   IconCalendar,
   IconCircleCheck,
   IconCircleDot,
@@ -31,7 +32,8 @@ import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
 import { BannerState } from '~/prisma/generated/prisma/enums.ts';
 import type { TBannerImageDto } from '@/features/banners/dtos/banner-image.ts';
-import type { TBannerRowDto } from '@/features/banners/dtos/banner-row.ts';
+import type { TBannerBriefDto } from '@/features/banners/dtos/banner-brief.ts';
+import type { BannerImageStatus } from '@/features/banners/consts/banner-image-status.ts';
 
 
 interface IOptions {
@@ -39,17 +41,30 @@ interface IOptions {
   onDelete?: (id: number) => void;
 }
 
-const columnHelper = createColumnHelper<TBannerRowDto>();
+const columnHelper = createColumnHelper<TBannerBriefDto>();
 
 const stateMeta: Record<BannerState, { label: () => string; icon: TablerIcon }> = {
   [BannerState.ACTIVE]: { label: () => m['pages.banners.detail.state_active'](), icon: IconCircleCheck },
   [BannerState.HIDDEN]: { label: () => m['pages.banners.detail.state_hidden'](), icon: IconEyeOff }
 };
 
+const imageStatusMeta: Record<BannerImageStatus, { label: () => string; icon: TablerIcon; problem: boolean }> = {
+  none: { label: () => m['pages.banners.index.status_none'](), icon: IconCircleCheck, problem: false },
+  missing_desktop: { label: () => m['pages.banners.index.status_missing_desktop'](), icon: IconAlertTriangle, problem: true },
+  missing_mobile: { label: () => m['pages.banners.index.status_missing_mobile'](), icon: IconAlertTriangle, problem: true },
+  missing_all: { label: () => m['pages.banners.index.status_missing_all'](), icon: IconAlertTriangle, problem: true }
+};
+
 export const bannerColumns = (options: IOptions) => {
   const { canDelete, onDelete } = options;
 
   const stateFilterOptions = Object.entries(stateMeta).map(([value, meta]) => ({
+    title: meta.label(),
+    value,
+    icon: meta.icon
+  }));
+
+  const imageStatusFilterOptions = Object.entries(imageStatusMeta).map(([value, meta]) => ({
     title: meta.label(),
     value,
     icon: meta.icon
@@ -76,7 +91,8 @@ export const bannerColumns = (options: IOptions) => {
       header: ({ column }) => <DataTableColumnHeader column={column}/>,
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <BannerImageCell image={row.original.image}/>
+          <BannerImageCell image={row.original.image} aspectClass="aspect-[3/1]"/>
+          <BannerImageCell image={row.original.mobileImage} aspectClass="aspect-[6/5]"/>
         </div>
       ),
       meta: {
@@ -84,7 +100,8 @@ export const bannerColumns = (options: IOptions) => {
         icon: IconPhoto,
         skeletonItem: (
           <div className="flex items-center gap-2">
-            <Skeleton className={cn(bannerThumbClass, 'rounded-md')}/>
+            <Skeleton className={cn('aspect-[3/1] h-12 rounded-md')}/>
+            <Skeleton className={cn('aspect-[6/5] h-12 rounded-md')}/>
           </div>
         )
       }
@@ -153,6 +170,34 @@ export const bannerColumns = (options: IOptions) => {
         filter: {
           type: ColumnFilterType.MultiSelect,
           options: stateFilterOptions
+        }
+      }
+    }),
+
+    columnHelper.accessor('imageStatus', {
+      size: 150,
+      enableSorting: false,
+      header: ({ column }) => <DataTableColumnHeader column={column}/>,
+      cell: ({ getValue }) => {
+        const meta = imageStatusMeta[getValue()];
+        const Icon = meta.icon;
+        return (
+          <Badge
+            variant={meta.problem ? 'outline' : 'secondary'}
+            className={cn('rounded-sm min-h-6', meta.problem && 'border-amber-500/50 text-amber-500')}
+          >
+            <Icon size={12}/>
+            <span>{meta.label()}</span>
+          </Badge>
+        );
+      },
+      meta: {
+        label: m['pages.banners.index.col_problem'](),
+        icon: IconAlertTriangle,
+        skeletonClassName: 'h-5.5 w-24 rounded-sm',
+        filter: {
+          type: ColumnFilterType.MultiSelect,
+          options: imageStatusFilterOptions
         }
       }
     }),
@@ -229,19 +274,17 @@ export const bannerColumns = (options: IOptions) => {
 };
 
 
-const bannerThumbClass = 'aspect-[3/1] h-12';
-
-// Image comes straight from the row (getAll embeds it), so the thumbhash
+// Images come straight from the row (getAll embeds them), so the thumbhash
 // placeholder shows immediately — no per-cell request, no icon flash.
-function BannerImageCell({ image }: { image?: TBannerImageDto | null }) {
+function BannerImageCell({ image, aspectClass }: { image?: TBannerImageDto | null; aspectClass: string }) {
   const placeholder = thumbhashToDataUrl(image?.thumbhash);
 
   return (
     <div
       style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
       className={cn(
-        'flex items-center justify-center overflow-hidden rounded-md border bg-muted bg-cover bg-center shrink-0',
-        bannerThumbClass
+        'flex h-12 items-center justify-center overflow-hidden rounded-md border bg-muted bg-cover bg-center shrink-0',
+        aspectClass
       )}
     >
       {image ?

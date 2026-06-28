@@ -48,4 +48,13 @@ export class BannerImagePublicDtoFactory {
   }
 }
 
+// Both device images for a banner. `desktop` is the required 3:1 image;
+// `mobile` is the optional 6:5 override.
+export const bannerImagesDtoSchema = z.object({
+  desktop: bannerImageDtoSchema.nullish(),
+  mobile: bannerImageDtoSchema.nullish(),
+});
+
+export type TBannerImagesDto = z.infer<typeof bannerImagesDtoSchema>;
+
 export { bannerImagePurpose };

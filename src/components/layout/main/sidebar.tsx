@@ -8,7 +8,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { type ComponentProps, type FC, type ReactNode, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { IconLayoutSidebar } from '@tabler/icons-react';
+import { IconLayoutSidebar, IconMenu2Filled } from '@tabler/icons-react';
 import { contextFactory } from '@/lib/utils/context-factory.ts';
 import { LogoButton } from '@/components/layout/common';
 import { getLinksPerRole } from '@/components/layout/main/links.ts';
@@ -98,7 +98,7 @@ export const AppSidebarTrigger: FC<IAppSidebarTrigger> = ({ className, onClick, 
       }}
       {...props}
     >
-      <IconLayoutSidebar {...iconProps}/>
+      <IconMenu2Filled {...iconProps}/>
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

@@ -104,6 +104,81 @@ export const VariantImagesSheet: FC<IProps> = ({ open, onOpenChange, variant }) 
     onOpenChange(false);
   };
 
+  const showEmpty = variantId != null && mode === Mode.Preview && !isPending && images.length === 0;
+
+  const body =
+    variantId == null ? null : mode === Mode.Reorder ? (
+      <ReorderProductVariantImagesProvider
+        variantId={variantId}
+        initialData={images}
+        onSuccess={() => setMode(Mode.Preview)}
+        onPendingChange={setIsLoading}
+      >
+        <div className="space-y-4">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-sm text-muted-foreground">
+              {m['pages.products.variants.images.reorder_hint']()}
+            </span>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={isLoading}
+                onClick={() => setMode(Mode.Preview)}
+              >
+                <IconX className="size-4"/>
+                <span>{m['common.cancel']()}</span>
+              </Button>
+              <ReorderSaveButton/>
+            </div>
+          </div>
+          <ReorderGrid/>
+        </div>
+      </ReorderProductVariantImagesProvider>
+    ) : mode === Mode.Upload ? (
+      <UploadProductVariantImagesProvider
+        variantId={variantId}
+        onUploaded={invalidate}
+        onPendingChange={setIsLoading}
+      >
+        <div className="space-y-4">
+          <UploadDropZone/>
+          <UploadFileList/>
+        </div>
+      </UploadProductVariantImagesProvider>
+    ) : (
+      <>
+        <div className="flex justify-end gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={isPending || isDeleting || images.length <= 1}
+            onClick={() => setMode(Mode.Reorder)}
+          >
+            <IconArrowsSort className="size-4"/>
+            <span>{m['pages.products.variants.images.reorder']()}</span>
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={isPending || isDeleting}
+            onClick={() => setMode(Mode.Upload)}
+          >
+            <IconUpload className="size-4"/>
+            <span>{m['pages.products.variants.images.upload']()}</span>
+          </Button>
+        </div>
+
+        <ImagesPreview
+          images={images}
+          isPending={isPending}
+          disabled={isDeleting}
+          onDelete={onDelete}
+        />
+      </>
+    );
+
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent
@@ -115,80 +190,17 @@ export const VariantImagesSheet: FC<IProps> = ({ open, onOpenChange, variant }) 
           <SheetDescription>{m['pages.products.variants.images.description']()}</SheetDescription>
         </SheetHeader>
 
-        <ScrollArea className="flex-1 overflow-y-auto mr-2 my-2" type="always">
-          <div className="space-y-4 px-4 py-1">
-            {variantId == null ? null : mode === Mode.Reorder ? (
-              <ReorderProductVariantImagesProvider
-                variantId={variantId}
-                initialData={images}
-                onSuccess={() => setMode(Mode.Preview)}
-                onPendingChange={setIsLoading}
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm text-muted-foreground">
-                      {m['pages.products.variants.images.reorder_hint']()}
-                    </span>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        disabled={isLoading}
-                        onClick={() => setMode(Mode.Preview)}
-                      >
-                        <IconX className="size-4"/>
-                        <span>{m['common.cancel']()}</span>
-                      </Button>
-                      <ReorderSaveButton/>
-                    </div>
-                  </div>
-                  <ReorderGrid/>
-                </div>
-              </ReorderProductVariantImagesProvider>
-            ) : mode === Mode.Upload ? (
-              <UploadProductVariantImagesProvider
-                variantId={variantId}
-                onUploaded={invalidate}
-                onPendingChange={setIsLoading}
-              >
-                <div className="space-y-4">
-                  <UploadDropZone/>
-                  <UploadFileList/>
-                </div>
-              </UploadProductVariantImagesProvider>
-            ) : (
-              <>
-                <div className="flex justify-end gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={isPending || isDeleting}
-                    onClick={() => setMode(Mode.Upload)}
-                  >
-                    <IconUpload className="size-4"/>
-                    <span>{m['pages.products.variants.images.upload']()}</span>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={isPending || isDeleting || images.length <= 1}
-                    onClick={() => setMode(Mode.Reorder)}
-                  >
-                    <IconArrowsSort className="size-4"/>
-                    <span>{m['pages.products.variants.images.reorder']()}</span>
-                  </Button>
-                </div>
-
-                <ImagesPreview
-                  images={images}
-                  isPending={isPending}
-                  disabled={isDeleting}
-                  onDelete={onDelete}
-                />
-              </>
-            )}
+        {showEmpty ? (
+          <div className="flex flex-1 flex-col gap-4 px-4 py-2 overflow-hidden">
+            {body}
           </div>
-        </ScrollArea>
+        ) : (
+          <ScrollArea className="flex-1 overflow-y-auto mr-2 my-2" type="always">
+            <div className="space-y-4 px-4 py-1">
+              {body}
+            </div>
+          </ScrollArea>
+        )}
 
         <SheetFooter className="flex flex-col sm:flex-row gap-4 justify-between items-end pt-0">
           <div className="flex flex-row sm:justify-end gap-2 w-full">

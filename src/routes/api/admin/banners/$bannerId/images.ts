@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { BannerService } from '@/features/banners/services/banner-service.ts';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
-import { bannerImagePurpose } from '@/features/banners/consts/banner-devices.ts';
+import { bannerDeviceFromString, bannerImagePurposeByDevice } from '@/features/banners/consts/banner-devices.ts';
 
 async function handle({ request, params }: { request: Request; params: Record<string, string> }): Promise<Response> {
   const session = await auth.api.getSession({ headers: request.headers });
@@ -23,6 +23,10 @@ async function handle({ request, params }: { request: Request; params: Record<st
   if (isNaN(bannerId))
     return Response.json({ error: 'Invalid banner ID' }, { status: 400 });
 
+  // Which device slot this upload targets (?device=mobile); defaults to desktop.
+  const device = bannerDeviceFromString(new URL(request.url).searchParams.get('device'));
+  const purpose = bannerImagePurposeByDevice[device];
+
   const banner = await BannerService.findById(bannerId);
   if (!banner)
     return Response.json({ error: 'Banner not found' }, { status: 404 });
@@ -39,11 +43,11 @@ async function handle({ request, params }: { request: Request; params: Record<st
     return Response.json({ error: 'Missing file' }, { status: 400 });
 
   try {
-    // The banner image is single-cardinality, so the new upload would be
-    // rejected while the old image still exists. Replace by deleting the
-    // previous image first, then uploading the new one.
+    // The banner image is single-cardinality per device, so the new upload would
+    // be rejected while the old image still exists. Replace by deleting the
+    // previous image for this device first, then uploading the new one.
     const existing = await prisma.image.findFirst({
-      where: { resourceType: ImageResourceType.BANNER, resourceId: String(bannerId), purpose: bannerImagePurpose },
+      where: { resourceType: ImageResourceType.BANNER, resourceId: String(bannerId), purpose },
     });
     if (existing)
       await ImageService.delete(existing.id).catch(() => undefined);
@@ -51,9 +55,9 @@ async function handle({ request, params }: { request: Request; params: Record<st
     const image = await ImageService.upload({
       file,
       resourceType: ImageResourceType.BANNER,
-      purpose: bannerImagePurpose,
+      purpose,
       resourceId: String(bannerId),
-      fileName: `banner-${bannerId}`,
+      fileName: `banner-${bannerId}-${device}`,
     });
 
     return Response.json(image, { status: 201 });

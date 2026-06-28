@@ -4,32 +4,65 @@ import { toast } from 'sonner';
 import { IconPhoto, IconX } from '@tabler/icons-react';
 import { orpc } from '@/lib/orpc';
 import { xhrUpload } from '@/lib/utils/xhr-upload.ts';
-import { cn, getImageDimensions, isAspect3by1, thumbhashToDataUrl } from '@/lib/utils';
+import { cn, getImageDimensions, isAspectRatio, thumbhashToDataUrl } from '@/lib/utils';
 import { DropZone } from '@/components/file-upload/drop-zone.tsx';
 import { Skeleton } from '@/components/ui/skeleton.tsx';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
 import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
 import { m } from '@/paraglide/messages';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
-import { bannerImagePurpose } from '@/features/banners/consts/banner-devices.ts';
+import {
+  type BannerDevice,
+  bannerAspectByDevice,
+  bannerImagePurposeByDevice
+} from '@/features/banners/consts/banner-devices.ts';
 import { getImageUploadConstraints } from '@/features/images/consts/image-resource-map.ts';
 
 
 interface IProps {
   bannerId: number;
+  device: BannerDevice;
   disabled?: boolean;
 }
 
-export const BannerImageCard: FC<IProps> = ({ bannerId, disabled }) => {
+// Per-device copy, the box aspect ratio, and the grid span of the card.
+const deviceConfig: Record<BannerDevice, {
+  label: () => string;
+  aspectClass: string;
+  maxWidthClass: string;
+  dialogTitle: () => string;
+  dialogDescription: () => string;
+}> = {
+  desktop: {
+    label: () => m['pages.banners.detail.image_label_desktop'](),
+    aspectClass: 'aspect-3/1',
+    maxWidthClass: 'max-w-3xl',
+    dialogTitle: () => m['pages.banners.detail.aspect_dialog_title'](),
+    dialogDescription: () => m['pages.banners.detail.aspect_dialog_description'](),
+  },
+  mobile: {
+    label: () => m['pages.banners.detail.image_label_mobile'](),
+    aspectClass: 'aspect-[6/5]',
+    maxWidthClass: 'max-w-sm',
+    dialogTitle: () => m['pages.banners.detail.aspect_dialog_mobile_title'](),
+    dialogDescription: () => m['pages.banners.detail.aspect_dialog_mobile_description'](),
+  },
+};
+
+export const BannerImageCard: FC<IProps> = ({ bannerId, device, disabled }) => {
   const queryClient = useQueryClient();
   const confirm = useConfirm();
   const [isUploading, setIsUploading] = useState(false);
 
-  const constraints = getImageUploadConstraints(ImageResourceType.BANNER, bannerImagePurpose);
+  const config = deviceConfig[device];
+  const purpose = bannerImagePurposeByDevice[device];
+  const targetAspect = bannerAspectByDevice[device];
+  const constraints = getImageUploadConstraints(ImageResourceType.BANNER, purpose);
 
-  const { data: image, isPending: imagePending } = useQuery(
+  const { data: images, isPending: imagePending } = useQuery(
     orpc.admin.banners.getImages.queryOptions({ input: { bannerId } })
   );
+  const image = images?.[device] ?? null;
   const placeholder = thumbhashToDataUrl(image?.thumbhash);
 
   const refresh = async () => {
@@ -50,7 +83,7 @@ export const BannerImageCard: FC<IProps> = ({ bannerId, disabled }) => {
     try {
       const body = new FormData();
       body.append('file', file);
-      await xhrUpload(`/api/admin/banners/${bannerId}/images`, body, {
+      await xhrUpload(`/api/admin/banners/${bannerId}/images?device=${device}`, body, {
         onProgress: (progress) => {
           const message = progress >= 100 ?
             m['pages.banners.detail.image_processing']() :
@@ -70,14 +103,14 @@ export const BannerImageCard: FC<IProps> = ({ bannerId, disabled }) => {
   };
 
   const onFileSelected = async (file: File) => {
-    // Banner images are stored 3:1; warn before uploading anything that will be
-    // cropped, and let the admin confirm or cancel.
+    // Banner images are stored at this device's ratio; warn before uploading
+    // anything that will be cropped, and let the admin confirm or cancel.
     try {
       const { width, height } = await getImageDimensions(file);
-      if (!isAspect3by1(width, height)) {
+      if (!isAspectRatio(width, height, targetAspect)) {
         const confirmed = await confirm({
-          title: m['pages.banners.detail.aspect_dialog_title'](),
-          description: m['pages.banners.detail.aspect_dialog_description'](),
+          title: config.dialogTitle(),
+          description: config.dialogDescription(),
           confirmText: m['pages.banners.detail.aspect_dialog_confirm'](),
           cancelText: m['pages.banners.detail.aspect_dialog_cancel']()
         });
@@ -92,7 +125,7 @@ export const BannerImageCard: FC<IProps> = ({ bannerId, disabled }) => {
   };
 
   const { mutate: removeImage, isPending: isRemoving } = useMutation({
-    mutationFn: () => orpc.admin.banners.deleteImage.call({ bannerId }),
+    mutationFn: () => orpc.admin.banners.deleteImage.call({ bannerId, device }),
     onSuccess: async () => {
       await refresh();
       toast.success(m['pages.banners.detail.image_removed']());
@@ -103,18 +136,21 @@ export const BannerImageCard: FC<IProps> = ({ bannerId, disabled }) => {
   const busy = disabled || isUploading || isRemoving;
 
   return (
-    <div className="flex flex-col gap-3 min-w-0">
+    <div className={cn('flex w-full flex-col gap-3 min-w-0', config.maxWidthClass)}>
       <div className="flex items-center gap-1.5">
         <IconPhoto className="size-4 text-muted-foreground"/>
-        <span className="text-sm font-medium">{m['pages.banners.detail.image_label']()}</span>
+        <span className="text-sm font-medium">{config.label()}</span>
       </div>
 
       {imagePending ? (
-        <Skeleton className="aspect-3/1 w-full rounded-md max-w-lg"/>
+        <Skeleton className={cn(config.aspectClass, 'w-full rounded-md')}/>
       ) : image ? (
-        <div className="flex flex-col gap-1 max-w-lg">
+        <div className="flex flex-col gap-1">
           <div
-            className="group relative flex aspect-3/1 w-full items-center justify-center overflow-hidden rounded-md border border-muted bg-muted bg-cover bg-center"
+            className={cn(
+              'group relative flex w-full items-center justify-center overflow-hidden rounded-md border border-muted bg-muted bg-cover bg-center',
+              config.aspectClass
+            )}
             style={{ backgroundImage: placeholder ? `url(${placeholder})` : undefined }}
           >
             <img
@@ -139,20 +175,22 @@ export const BannerImageCard: FC<IProps> = ({ bannerId, disabled }) => {
           </div>
         </div>
       ) : (
-        <DropZone
-          accept={constraints.accept}
-          maxFileSize={constraints.maxSize}
-          multiple={false}
-          onFilesSelected={(files) => {
-            const file = files[0];
-            if (file) void onFileSelected(file);
-          }}
-          className={cn(
-            'flex aspect-3/1 flex-col items-center justify-center p-4 max-w-lg',
-            busy && 'pointer-events-none opacity-60'
-          )}
-          hideIcon
-        />
+        <div className={cn('relative w-full', config.aspectClass)}>
+          <DropZone
+            accept={constraints.accept}
+            maxFileSize={constraints.maxSize}
+            multiple={false}
+            onFilesSelected={(files) => {
+              const file = files[0];
+              if (file) void onFileSelected(file);
+            }}
+            className={cn(
+              'absolute inset-0 flex flex-col items-center justify-center',
+              busy && 'pointer-events-none opacity-60'
+            )}
+            hideIcon
+          />
+        </div>
       )}
     </div>
   );

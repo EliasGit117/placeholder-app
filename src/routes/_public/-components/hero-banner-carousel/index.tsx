@@ -1,5 +1,5 @@
 import { type FC, type ComponentProps, useEffect, useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
+import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { orpc } from '@/lib/orpc';
@@ -10,21 +10,41 @@ import {
   CarouselItem,
   type CarouselApi
 } from '@/components/ui/carousel';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import type { TBannerPublicDto } from '@/features/banners/dtos/banner-public.ts';
 
 
 interface IProps extends ComponentProps<'section'> {
 }
 
-const bannerBaseClassName = 'aspect-[3/1] w-full max-h-svh object-cover';
+// Desktop banners are 3:1; the optional mobile image is 6:5 and only shown
+// below the md breakpoint, where the container also switches aspect ratio.
+const bannerBaseClassName = 'w-full max-h-svh object-cover';
+const desktopAspect = 'aspect-[3/1]';
+const responsiveAspect = 'aspect-[6/5] md:aspect-[3/1]';
 const baseClassName = 'container mx-auto sm:p-4';
 
-const BannerImage: FC<{ banner: TBannerPublicDto }> = ({ banner }) => (
-  <a href={banner.href ?? '#'} className="block">
-    <img src={banner.image?.url} alt="" className={cn(bannerBaseClassName)}/>
-  </a>
-);
+const BannerImage: FC<{ banner: TBannerPublicDto }> = ({ banner }) => {
+  const mobile = banner.mobileImage;
+  const placeholder = thumbhashToDataUrl(banner.image?.thumbhash);
+
+  return (
+    <a href={banner.href ?? '#'} className="block">
+      <picture>
+        {mobile?.url && (
+          <source media="(max-width: 767px)" srcSet={mobile.url}/>
+        )}
+        <img
+          src={banner.image?.url}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className={cn(bannerBaseClassName, mobile ? responsiveAspect : desktopAspect, 'bg-cover bg-center')}
+          style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
+        />
+      </picture>
+    </a>
+  );
+};
 
 export const HeroBannerCarousel: FC<IProps> = ({ className, ...props }) => {
   const { data: banners, isPending } = useQuery({
@@ -50,7 +70,7 @@ export const HeroBannerCarousel: FC<IProps> = ({ className, ...props }) => {
   if (isPending) {
     return (
       <section className={cn(baseClassName, className)} {...props}>
-        <Skeleton className={cn(bannerBaseClassName)}/>
+        <Skeleton className={cn(bannerBaseClassName, responsiveAspect)}/>
       </section>
     );
   }
@@ -73,7 +93,7 @@ export const HeroBannerCarousel: FC<IProps> = ({ className, ...props }) => {
         setApi={setApi}
         plugins={[autoplay.current]}
         opts={{ loop: true }}
-        className="group relative"
+        className="group"
       >
         <CarouselContent className="ml-0">
           {banners.map((banner) => (
@@ -82,31 +102,23 @@ export const HeroBannerCarousel: FC<IProps> = ({ className, ...props }) => {
             </CarouselItem>
           ))}
         </CarouselContent>
-
-        <div className="absolute bottom-2 right-2 flex items-center bg-black/10 text-white backdrop-blur-2xl">
-          <button
-            type="button"
-            aria-label="Previous slide"
-            onClick={() => api?.scrollPrev()}
-            className="grid size-8 place-items-center transition-colors hover:bg-white/20"
-          >
-            <IconChevronLeft className="size-4.5"/>
-          </button>
-
-          <span className="px-1.5 text-center text-sm font-medium tabular-nums">
-            {selected + 1}/{banners.length}
-          </span>
-
-          <button
-            type="button"
-            aria-label="Next slide"
-            onClick={() => api?.scrollNext()}
-            className="grid size-8 place-items-center transition-colors hover:bg-white/20"
-          >
-            <IconChevronRight className="size-4.5"/>
-          </button>
-        </div>
       </Carousel>
+
+      <div className="mt-3 flex items-center justify-center gap-2">
+        {banners.map((banner, index) => (
+          <button
+            key={banner.id}
+            type="button"
+            aria-label={`Go to slide ${index + 1}`}
+            aria-current={index === selected}
+            onClick={() => api?.scrollTo(index)}
+            className={cn(
+              'size-2 rounded-full transition-colors',
+              index === selected ? 'bg-primary' : 'bg-muted-foreground/30'
+            )}
+          />
+        ))}
+      </div>
     </section>
   );
 };

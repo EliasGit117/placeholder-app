@@ -22,7 +22,6 @@ import { m } from '@/paraglide/messages';
 import { Button } from '@/components/ui/button.tsx';
 
 
-
 interface IProps extends Omit<ComponentProps<typeof Button>, 'children' | 'onClick'> {
   align?: 'start' | 'center' | 'end';
 }
@@ -53,7 +52,7 @@ export const UserDropdown: FC<IProps> = ({ className, align, variant = 'outline'
                 </AvatarFallback>
               </>
             ) : (
-              <IconUser/>
+              <IconUser className="my-auto mx-auto"/>
             )}
           </Avatar>
         </Button>
@@ -104,14 +103,18 @@ export const UserDropdown: FC<IProps> = ({ className, align, variant = 'outline'
 
             <DropdownMenuSeparator/>
 
-            <DropdownMenuItem>
-              <IconLogin/>
-              <span>{m['components.user_dropdown.sign_in']()}</span>
+            <DropdownMenuItem asChild>
+              <Link to="/auth/sign-in">
+                <IconLogin/>
+                <span>{m['components.user_dropdown.sign_in']()}</span>
+              </Link>
             </DropdownMenuItem>
 
-            <DropdownMenuItem>
-              <IconUserPlus/>
-              <span>{m['components.user_dropdown.sign_up']()}</span>
+            <DropdownMenuItem asChild>
+              <Link to="/auth/sign-up">
+                <IconUserPlus/>
+                <span>{m['components.user_dropdown.sign_up']()}</span>
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>
         )}

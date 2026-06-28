@@ -27,7 +27,7 @@ export const ImagesPreview: FC<IProps> = ({ images, isPending, disabled, onDelet
 
   if (images.length === 0)
     return (
-      <Empty className="py-12">
+      <Empty className="my-auto">
         <EmptyHeader>
           <EmptyMedia variant="icon"><IconPhotoOff/></EmptyMedia>
           <EmptyTitle>

@@ -47,7 +47,8 @@ export const ImagePurpose = {
   GALLERY_SECTION_IMAGE: 'GALLERY_SECTION_IMAGE',
   AVATAR_IMAGE: 'AVATAR_IMAGE',
   PRODUCT_VARIANT_IMAGE: 'PRODUCT_VARIANT_IMAGE',
-  BANNER_IMAGE: 'BANNER_IMAGE'
+  BANNER_IMAGE: 'BANNER_IMAGE',
+  BANNER_IMAGE_MOBILE: 'BANNER_IMAGE_MOBILE'
 } as const
 
 export type ImagePurpose = (typeof ImagePurpose)[keyof typeof ImagePurpose]

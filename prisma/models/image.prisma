@@ -12,6 +12,7 @@ enum ImagePurpose {
   AVATAR_IMAGE
   PRODUCT_VARIANT_IMAGE
   BANNER_IMAGE
+  BANNER_IMAGE_MOBILE
 
   @@map("image_purpose")
 }
