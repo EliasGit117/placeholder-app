@@ -10,6 +10,7 @@ import { type Editor, useCurrentEditor, useEditorState } from '@tiptap/react';
 import { IconChevronDown } from '@tabler/icons-react';
 import { formatShortcut } from './format-shortcut.ts';
 import type { BlockType } from './types.ts';
+import { m } from '@/paraglide/messages';
 
 const HEADING_LEVELS = [1, 2, 3, 4] as const;
 
@@ -87,19 +88,19 @@ export function BlockTypeDropdown() {
       <DropdownMenuContent align="start" className="min-w-52">
         <DropdownMenuRadioGroup value={blockType} onValueChange={handleValueChange}>
           <DropdownMenuRadioItem value="p">
-            <BlockTypeOption label="Paragraph" shortcut="Mod+Alt+0"/>
+            <BlockTypeOption label={m['components.rich_editor.paragraph']()} shortcut="Mod+Alt+0"/>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="h1">
-            <BlockTypeOption label="Heading 1" shortcut="Mod+Alt+1"/>
+            <BlockTypeOption label={m['components.rich_editor.heading_1']()} shortcut="Mod+Alt+1"/>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="h2">
-            <BlockTypeOption label="Heading 2" shortcut="Mod+Alt+2"/>
+            <BlockTypeOption label={m['components.rich_editor.heading_2']()} shortcut="Mod+Alt+2"/>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="h3">
-            <BlockTypeOption label="Heading 3" shortcut="Mod+Alt+3"/>
+            <BlockTypeOption label={m['components.rich_editor.heading_3']()} shortcut="Mod+Alt+3"/>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="h4">
-            <BlockTypeOption label="Heading 4" shortcut="Mod+Alt+4"/>
+            <BlockTypeOption label={m['components.rich_editor.heading_4']()} shortcut="Mod+Alt+4"/>
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>

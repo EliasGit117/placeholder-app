@@ -69,15 +69,12 @@ export const imagePolicy: Record<ImageResourceType, Partial<Record<ImagePurpose,
       multiple: false,
       maxSize: mbToBytes(10),
       mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
-      // Banner images are always 16:9 ("video") — the original and both
-      // thumbnails are cropped to that ratio via fit: 'cover'.
-      width: 1920,
-      height: 1080,
+      // Banner images are always 3:1 — the original is cropped to that ratio
+      // via fit: 'cover'. No thumbnails: the full image is used everywhere.
+      width: 3840,
+      height: 1280,
       fit: 'cover',
-      variants: [
-        { kind: ImageVariantKind.THUMB_512x512, width: 512, height: 288, fit: 'cover' },
-        { kind: ImageVariantKind.THUMB_256x256, width: 256, height: 144, fit: 'cover' },
-      ],
+      variants: [],
     },
   },
 };

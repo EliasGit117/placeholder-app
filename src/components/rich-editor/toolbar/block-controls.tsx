@@ -1,6 +1,7 @@
 import { useCurrentEditor, useEditorState } from '@tiptap/react';
 import { IconBraces, IconList, IconListNumbers, IconQuote } from '@tabler/icons-react';
 import { ToolbarButton } from './toolbar-button.tsx';
+import { m } from '@/paraglide/messages';
 
 export function BlockControls() {
   const { editor } = useCurrentEditor();
@@ -20,7 +21,7 @@ export function BlockControls() {
   return (
     <>
       <ToolbarButton
-        label="Bullet list"
+        label={m['components.rich_editor.bullet_list']()}
         onClick={() => editor?.chain().focus().toggleBulletList().run()}
         active={bulletList}
         disabled={isDisabled}
@@ -28,7 +29,7 @@ export function BlockControls() {
         icon={IconList}
       />
       <ToolbarButton
-        label="Ordered list"
+        label={m['components.rich_editor.ordered_list']()}
         onClick={() => editor?.chain().focus().toggleOrderedList().run()}
         active={orderedList}
         disabled={isDisabled}
@@ -36,7 +37,7 @@ export function BlockControls() {
         icon={IconListNumbers}
       />
       <ToolbarButton
-        label="Blockquote"
+        label={m['components.rich_editor.blockquote']()}
         onClick={() => editor?.chain().focus().toggleBlockquote().run()}
         active={blockquote}
         disabled={isDisabled}
@@ -44,7 +45,7 @@ export function BlockControls() {
         icon={IconQuote}
       />
       <ToolbarButton
-        label="Code block"
+        label={m['components.rich_editor.code_block']()}
         onClick={() => editor?.chain().focus().toggleCodeBlock().run()}
         active={codeBlock}
         disabled={isDisabled}

@@ -7,7 +7,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
-  DropdownMenuRadioItem, DropdownMenuSeparator,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu.tsx';
 import { getLocale, isLocale, setLocale, type Locale } from '@/paraglide/runtime';
@@ -47,7 +48,7 @@ export const LocaleDropdown: FC<IProps> = ({ variant = 'outline', size = 'icon',
       </DropdownMenuTrigger>
 
 
-      <DropdownMenuContent align={align} className="min-w-36">
+      <DropdownMenuContent className="w-fit min-w-32" align={align}>
         <DropdownMenuGroup>
           <DropdownMenuLabel>{m['components.sidebar.language']()}</DropdownMenuLabel>
           <DropdownMenuSeparator/>

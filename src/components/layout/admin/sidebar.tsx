@@ -45,8 +45,9 @@ import { cn } from '@/lib/utils';
 import { envConfig } from '@/lib/config';
 import { getLocale, isLocale, setLocale, type Locale } from '@/paraglide/runtime';
 import { m } from '@/paraglide/messages';
-import logo from '/images/common/logo_sm.png';
 import { SessionState } from '@/features/sessions/schemas/search-sessions.ts';
+import Logo from '@/assets/icons/logo/icon.svg?react';
+
 
 
 interface INavItem {
@@ -132,12 +133,11 @@ export const AdminSidebar: FC<ComponentPropsWithoutRef<typeof Sidebar>> = ({ cla
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link to="/" onClick={() => setOpenMobile(false)}>
-                <figure
-                  className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center overflow-clip rounded-md">
-                  <img src={logo} alt="" className="size-full grayscale invert dark:invert-0"/>
+                <figure className='border border-primary aspect-square flex justify-center items-center size-9'>
+                  <Logo className="size-7! text-foreground"/>
                 </figure>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{envConfig.appName}</span>
+                  <span className="truncate font-medium uppercase">{envConfig.appName}</span>
                   <span className="truncate text-xs text-muted-foreground">Admin</span>
                 </div>
               </Link>

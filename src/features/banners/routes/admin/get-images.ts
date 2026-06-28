@@ -12,7 +12,7 @@ export const adminBannersGetImages = bannersAdminBase
     method: 'GET',
     path: `${bannersAdminPath}/{bannerId}/images`,
     summary: 'Get banner image',
-    description: 'Returns the single 16:9 image for a banner',
+    description: 'Returns the single 3:1 image for a banner',
   })
   .errors({ FORBIDDEN: {}, NOT_FOUND: {} })
   .use(authMiddleware)

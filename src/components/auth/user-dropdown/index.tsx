@@ -8,24 +8,26 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from 'src/components/ui/dropdown-menu.tsx';
+} from '@/components/ui/dropdown-menu.tsx';
 import { IconLogin, IconLogout, IconSettings, IconUser, IconUserPlus } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { authClient } from 'src/lib/auth/better-auth-client.ts';
-import { orpc } from 'src/lib/orpc';
-import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/avatar.tsx';
-import { Spinner } from 'src/components/ui/spinner.tsx';
-import { pickFirstLetters } from 'src/lib/utils';
+import { authClient } from '@/lib/auth/better-auth-client.ts';
+import { orpc } from '@/lib/orpc';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
+import { Spinner } from '@/components/ui/spinner.tsx';
+import { pickFirstLetters } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import { Link } from '@tanstack/react-router';
 import { m } from '@/paraglide/messages';
+import { Button } from '@/components/ui/button.tsx';
 
 
-interface IProps extends Omit<ComponentProps<typeof Avatar>, 'children' | 'onClick'> {
+
+interface IProps extends Omit<ComponentProps<typeof Button>, 'children' | 'onClick'> {
   align?: 'start' | 'center' | 'end';
 }
 
-export const UserDropdown: FC<IProps> = ({ className, align, size, ...props }) => {
+export const UserDropdown: FC<IProps> = ({ className, align, variant = 'outline', size = 'icon', ...props }) => {
   const queryClient = useQueryClient();
   const { user } = useAuth();
 
@@ -41,18 +43,20 @@ export const UserDropdown: FC<IProps> = ({ className, align, size, ...props }) =
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className={cn('rounded-full', className)} size={size} {...props}>
-          {!!user ? (
-            <>
-              <AvatarImage src={user?.image ?? ''}/>
-              <AvatarFallback>
-                {pickFirstLetters(user?.name, 2)}
-              </AvatarFallback>
-            </>
-          ) : (
-            <IconUser/>
-          )}
-        </Avatar>
+        <Button className={cn('rounded-full', className)} size={size} variant={variant} {...props}>
+          <Avatar>
+            {!!user ? (
+              <>
+                <AvatarImage src={user?.image ?? ''}/>
+                <AvatarFallback>
+                  {pickFirstLetters(user?.name, 2)}
+                </AvatarFallback>
+              </>
+            ) : (
+              <IconUser/>
+            )}
+          </Avatar>
+        </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="w-fit min-w-48" align={align}>

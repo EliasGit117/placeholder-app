@@ -6,7 +6,7 @@ import { LocaleDropdown } from '@/components/locale';
 import { LogoButton } from '../common/logo-button.tsx';
 import { useAuth } from '@/hooks/use-auth.ts';
 import { getLinksPerRole } from '@/components/layout/main/links.ts';
-import { UserDropdown } from '../common/user-dropdown.tsx';
+import { UserDropdown } from '../../auth/user-dropdown';
 import { AppSidebarTrigger } from '@/components/layout/main/sidebar.tsx';
 
 
@@ -70,7 +70,7 @@ export const Header = ({ className, ...props }: IProps) => {
         <div className="flex items-center gap-1 ml-auto">
           <LocaleDropdown variant="ghost" size="icon" align="end"/>
 
-          {!!user && <UserDropdown size="md" align="end" className="ml-2"/>}
+          {!!user && <UserDropdown align="end" className="ml-2"/>}
         </div>
       </nav>
     </header>

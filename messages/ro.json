@@ -133,6 +133,28 @@
     },
     "footer": {
       "copyright": "© {year} {app}. Toate drepturile rezervate."
+    },
+    "rich_editor": {
+      "undo": "Anulează",
+      "redo": "Refă",
+      "bullet_list": "Listă cu marcatori",
+      "ordered_list": "Listă numerotată",
+      "blockquote": "Citat",
+      "code_block": "Bloc de cod",
+      "align_left": "Aliniere la stânga",
+      "align_center": "Aliniere la centru",
+      "align_right": "Aliniere la dreapta",
+      "justify": "Aliniere pe ambele părți",
+      "paragraph": "Paragraf",
+      "heading_1": "Titlu 1",
+      "heading_2": "Titlu 2",
+      "heading_3": "Titlu 3",
+      "heading_4": "Titlu 4",
+      "bold": "Îngroșat",
+      "italic": "Cursiv",
+      "code": "Cod",
+      "strike": "Tăiat",
+      "link": "Link"
     }
   },
   "pages": {
@@ -460,9 +482,9 @@
         "device_mobile": "Mobil",
         "device_tablet": "Tabletă",
         "device_desktop": "Desktop",
-        "image_label": "Imagine (16:9)",
-        "aspect_dialog_title": "Imaginea nu este 16:9",
-        "aspect_dialog_description": "Imaginea aleasă nu are formatul 16:9 (video). Va fi decupată automat la 16:9 la încărcare. Continui?",
+        "image_label": "Imagine (3:1)",
+        "aspect_dialog_title": "Imaginea nu este 3:1",
+        "aspect_dialog_description": "Imaginea aleasă nu are formatul 3:1. Va fi decupată automat la 3:1 la încărcare. Continui?",
         "aspect_dialog_confirm": "Continuă",
         "aspect_dialog_cancel": "Anulează",
         "upload": "Încarcă imagine",

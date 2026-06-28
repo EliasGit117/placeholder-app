@@ -8,9 +8,10 @@ import { m } from '@/paraglide/messages';
 interface IProps extends IFileDropzoneOptions {
   maxFileSize?: number;
   className?: string;
+  hideIcon?: boolean;
 }
 
-export function DropZone({ maxFileSize, className, ...dropzoneOptions }: IProps) {
+export function DropZone({ maxFileSize, className, hideIcon, ...dropzoneOptions }: IProps) {
   const [{ isDragging }, {
     getInputProps,
     openFileDialog,
@@ -36,12 +37,16 @@ export function DropZone({ maxFileSize, className, ...dropzoneOptions }: IProps)
       <input {...getInputProps()} className="sr-only"/>
 
       <div className="flex flex-col items-center gap-2 @sm:gap-4">
-        <div className={cn(
-          'flex items-center justify-center rounded-full bg-muted size-12',
-          isDragging && 'bg-primary/10'
-        )}>
-          <IconCloud className={cn('h-5 @sm:h-6 text-muted-foreground', isDragging && 'text-primary')}/>
-        </div>
+        {!hideIcon && (
+          <div
+            className={cn(
+              'flex items-center justify-center rounded-full bg-muted size-12',
+              isDragging && 'bg-primary/10'
+            )}
+          >
+            <IconCloud className={cn('h-5 @sm:h-6 text-muted-foreground', isDragging && 'text-primary')}/>
+          </div>
+        )}
 
         <div className="w-full space-y-1 @sm:space-y-2 overflow-hidden">
           <h3 className="text-xs @[120px]:text-sm font-semibold @sm:text-lg">

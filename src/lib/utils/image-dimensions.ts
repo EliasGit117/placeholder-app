@@ -27,13 +27,13 @@ export async function getImageDimensions(file: File): Promise<{ width: number; h
   });
 }
 
-const ASPECT_16_9 = 16 / 9;
+const ASPECT_3_1 = 3 / 1;
 
-// True when width/height is within `tolerance` of 16:9. Tolerance is a relative
+// True when width/height is within `tolerance` of 3:1. Tolerance is a relative
 // fraction of the target ratio, so ~0.02 allows a couple percent of rounding.
-export function isAspect16by9(width: number, height: number, tolerance = 0.02): boolean {
+export function isAspect3by1(width: number, height: number, tolerance = 0.02): boolean {
   if (width <= 0 || height <= 0)
     return false;
 
-  return Math.abs(width / height - ASPECT_16_9) <= ASPECT_16_9 * tolerance;
+  return Math.abs(width / height - ASPECT_3_1) <= ASPECT_3_1 * tolerance;
 }

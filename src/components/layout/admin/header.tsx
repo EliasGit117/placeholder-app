@@ -2,7 +2,7 @@ import { useEffect, type FC, useRef, type ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
 import { SidebarTrigger } from '@/components/ui/sidebar.tsx';
 import { Separator } from '@/components/ui/separator.tsx';
-import { UserDropdown } from '@/components/layout/common/user-dropdown.tsx';
+import { UserDropdown } from '@/components/auth/user-dropdown';
 import { NavBreadcrumbs } from '@/components/layout/admin/nav-breadcrumbs';
 
 
@@ -55,7 +55,7 @@ export const Header: FC<IProps> = ({ className, ...props }) => {
         />
 
         <NavBreadcrumbs className='ml-2'/>
-        <UserDropdown size='md' className='ml-auto' align='end'/>
+        <UserDropdown size='icon-sm' className='ml-auto' align='end'/>
       </div>
     </header>
   );

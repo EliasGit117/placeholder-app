@@ -177,7 +177,7 @@ function ReorderRowSkeleton() {
     <div className="flex flex-col gap-2 rounded-md border bg-card p-2">
       <Skeleton className="h-4 w-full"/>
       <div className="flex h-24 items-end gap-2">
-        <Skeleton className="h-full aspect-video rounded-sm"/>
+        <Skeleton className="h-full aspect-3/1 rounded-sm"/>
       </div>
     </div>
   );
@@ -189,7 +189,7 @@ function BannerThumb({ image }: { image?: TBannerImageDto | null }) {
   return (
     <div
       className={cn(
-        'flex h-full items-center justify-center overflow-hidden rounded-sm border bg-muted bg-cover bg-center aspect-video'
+        'flex h-full items-center justify-center overflow-hidden rounded-sm border bg-muted bg-cover bg-center aspect-3/1'
       )}
       style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
     >

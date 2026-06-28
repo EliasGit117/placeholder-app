@@ -1,6 +1,7 @@
 import { useCurrentEditor, useEditorState } from '@tiptap/react';
 import { IconBold, IconCode, IconItalic, IconLink, IconStrikethrough } from '@tabler/icons-react';
 import { ToolbarButton } from './toolbar-button.tsx';
+import { m } from '@/paraglide/messages';
 
 function setOrUnsetLink(editor: NonNullable<ReturnType<typeof useCurrentEditor>['editor']>) {
   const previousUrl = editor.getAttributes('link').href as string | undefined;
@@ -35,7 +36,7 @@ export function MarkControls() {
   return (
     <>
       <ToolbarButton
-        label="Bold"
+        label={m['components.rich_editor.bold']()}
         onClick={() => editor?.chain().focus().toggleBold().run()}
         active={bold}
         disabled={isDisabled}
@@ -43,7 +44,7 @@ export function MarkControls() {
         icon={IconBold}
       />
       <ToolbarButton
-        label="Italic"
+        label={m['components.rich_editor.italic']()}
         onClick={() => editor?.chain().focus().toggleItalic().run()}
         active={italic}
         disabled={isDisabled}
@@ -51,7 +52,7 @@ export function MarkControls() {
         icon={IconItalic}
       />
       <ToolbarButton
-        label="Code"
+        label={m['components.rich_editor.code']()}
         onClick={() => editor?.chain().focus().toggleCode().run()}
         active={code}
         disabled={isDisabled}
@@ -59,7 +60,7 @@ export function MarkControls() {
         icon={IconCode}
       />
       <ToolbarButton
-        label="Strike"
+        label={m['components.rich_editor.strike']()}
         onClick={() => editor?.chain().focus().toggleStrike().run()}
         active={strike}
         disabled={isDisabled}
@@ -67,7 +68,7 @@ export function MarkControls() {
         icon={IconStrikethrough}
       />
       <ToolbarButton
-        label="Link"
+        label={m['components.rich_editor.link']()}
         onClick={() => editor && setOrUnsetLink(editor)}
         active={link}
         disabled={isDisabled}

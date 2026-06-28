@@ -405,7 +405,7 @@ async function transformToWebp(
   // `withoutEnlargement` keeps small images from being upscaled — but for the
   // cropping fits (`cover`/`fill`) it would also suppress the crop when the
   // source is smaller than the target, leaving the original aspect intact. Those
-  // fits must always produce the exact requested dimensions (e.g. 16:9 banners),
+  // fits must always produce the exact requested dimensions (e.g. 3:1 banners),
   // so only guard against enlargement for the non-cropping fits.
   const withoutEnlargement = fit === 'inside' || fit === 'contain';
 

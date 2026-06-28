@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { IconPhoto, IconX } from '@tabler/icons-react';
 import { orpc } from '@/lib/orpc';
 import { xhrUpload } from '@/lib/utils/xhr-upload.ts';
-import { cn, getImageDimensions, isAspect16by9, thumbhashToDataUrl } from '@/lib/utils';
+import { cn, getImageDimensions, isAspect3by1, thumbhashToDataUrl } from '@/lib/utils';
 import { DropZone } from '@/components/file-upload/drop-zone.tsx';
 import { Skeleton } from '@/components/ui/skeleton.tsx';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
@@ -70,11 +70,11 @@ export const BannerImageCard: FC<IProps> = ({ bannerId, disabled }) => {
   };
 
   const onFileSelected = async (file: File) => {
-    // Banner images are stored 16:9; warn before uploading anything that will be
+    // Banner images are stored 3:1; warn before uploading anything that will be
     // cropped, and let the admin confirm or cancel.
     try {
       const { width, height } = await getImageDimensions(file);
-      if (!isAspect16by9(width, height)) {
+      if (!isAspect3by1(width, height)) {
         const confirmed = await confirm({
           title: m['pages.banners.detail.aspect_dialog_title'](),
           description: m['pages.banners.detail.aspect_dialog_description'](),
@@ -110,11 +110,11 @@ export const BannerImageCard: FC<IProps> = ({ bannerId, disabled }) => {
       </div>
 
       {imagePending ? (
-        <Skeleton className="aspect-video w-full rounded-md max-w-lg"/>
+        <Skeleton className="aspect-3/1 w-full rounded-md max-w-lg"/>
       ) : image ? (
         <div className="flex flex-col gap-1 max-w-lg">
           <div
-            className="group relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-md border border-muted bg-muted bg-cover bg-center"
+            className="group relative flex aspect-3/1 w-full items-center justify-center overflow-hidden rounded-md border border-muted bg-muted bg-cover bg-center"
             style={{ backgroundImage: placeholder ? `url(${placeholder})` : undefined }}
           >
             <img
@@ -148,9 +148,10 @@ export const BannerImageCard: FC<IProps> = ({ bannerId, disabled }) => {
             if (file) void onFileSelected(file);
           }}
           className={cn(
-            'flex aspect-video flex-col items-center justify-center p-4 max-w-lg',
+            'flex aspect-3/1 flex-col items-center justify-center p-4 max-w-lg',
             busy && 'pointer-events-none opacity-60'
           )}
+          hideIcon
         />
       )}
     </div>

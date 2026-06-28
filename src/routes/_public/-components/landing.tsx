@@ -10,7 +10,7 @@ import { HeroBannerCarousel } from '@/routes/_public/-components/hero-banner-car
  */
 
 export const SkineryLanding: FC = () => (
-  <div className="flex-1 py-4">
+  <div className="flex-1">
     <HeroBannerCarousel className='pt-0'/>
     <Categories />
     <Arrivals />

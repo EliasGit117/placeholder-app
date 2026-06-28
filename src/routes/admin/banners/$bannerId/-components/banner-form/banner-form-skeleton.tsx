@@ -9,7 +9,7 @@ export const BannerFormSkeleton: FC = () => (
     <CardContent className="@container space-y-6">
       <div className="flex flex-col gap-3">
         <Skeleton className="h-4 w-20"/>
-        <Skeleton className="aspect-video w-full rounded-md"/>
+        <Skeleton className="aspect-[3/1] w-full rounded-md"/>
       </div>
 
       <Separator/>

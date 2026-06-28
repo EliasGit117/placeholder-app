@@ -1,25 +1,23 @@
 import type { FC } from 'react';
 import { Link } from '@tanstack/react-router';
-import { envConfig } from 'src/lib/config';
 import { cn } from 'src/lib/utils';
-import logo from '/images/common/logo_sm.png';
+import Logo from '@/assets/icons/logo/icon.svg?react';
+import LogoText from '@/assets/icons/logo/text.svg?react';
 
 
 interface IProps {
-  className?: string
+  className?: string;
 }
 
 export const LogoButton: FC<IProps> = ({ className }) => {
 
-  return (
-    <Link to="/" className={cn("flex items-center gap-2.5", className)}>
-      <figure className="size-7 sm:size-8 border border-primary brightness-200 dark:brightness-100 overflow-clip relative">
-        <img src={logo} alt="logo" className='absolute inset-0 grayscale invert dark:invert-0'/>
-      </figure>
 
-      <span className="text-lg sm:text-xl font-semibold">
-        {envConfig.appName}
-      </span>
+  return (
+    <Link to="/" className={cn('flex items-center gap-2.5', className)}>
+      <figure className='border border-primary aspect-square flex justify-center items-center size-9'>
+        <Logo className="h-7 text-foreground"/>
+      </figure>
+      <LogoText className="h-8 text-foreground"/>
     </Link>
-  )
-}
+  );
+};

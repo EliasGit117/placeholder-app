@@ -229,7 +229,7 @@ export const bannerColumns = (options: IOptions) => {
 };
 
 
-const bannerThumbClass = 'aspect-video h-12';
+const bannerThumbClass = 'aspect-[3/1] h-12';
 
 // Image comes straight from the row (getAll embeds it), so the thumbhash
 // placeholder shows immediately — no per-cell request, no icon flash.

@@ -5,6 +5,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import viteReact from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+import svgr from 'vite-plugin-svgr';
 
 
 const config = defineConfig({
@@ -14,6 +15,7 @@ const config = defineConfig({
     tailwindcss(),
     tanstackStart(),
     viteReact({ babel: { plugins: ['babel-plugin-react-compiler'] } }),
+    svgr(),
     paraglideVitePlugin({
       project: './project.inlang',
       outdir: './src/paraglide',
