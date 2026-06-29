@@ -3,7 +3,7 @@ import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { optionsSchema } from '@/features/products/schemas/option-schema.ts';
 
 
-const slugSchema = z.string().trim().min(1).max(128).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase letters, numbers and hyphens only');
+export const slugSchema = z.string().trim().min(1).max(128).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase letters, numbers and hyphens only');
 
 // Shared shape of an editable product. create/update are both derived from this.
 export const productBaseSchema = z.object({

@@ -183,6 +183,7 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
                 <TableRow>
                   <TableHead className="w-12">{m['common.id']()}</TableHead>
                   <TableHead>{m['pages.products.variants.col_name']()}</TableHead>
+                  <TableHead>{m['pages.products.variants.col_slug']()}</TableHead>
                   <TableHead>{m['pages.products.variants.sku']()}</TableHead>
                   <TableHead>{m['pages.products.variants.col_price']()}</TableHead>
                   <TableHead>{m['pages.products.variants.col_options']()}</TableHead>
@@ -205,6 +206,9 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
                         <span className="text-sm truncate">
                           {variant[`name${capitalizedLocale}`]}
                         </span>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-xs text-muted-foreground">{variant.slug}</span>
                       </TableCell>
                       <TableCell className='text-xs'>
                         {variant.sku}

@@ -14,6 +14,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui/input-group';
 import { Button } from '@/components/ui/button';
 import { LoadingButton } from '@/components/ui/loading-button';
 import { NumberInput } from '@/components/ui/number-input';
@@ -24,7 +25,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { IconChevronDown, IconDeviceFloppy, IconFilePlus, IconX } from '@tabler/icons-react';
+import { IconChevronDown, IconDeviceFloppy, IconFilePlus, IconWand, IconX } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
@@ -33,12 +34,15 @@ import type { TOptions } from '@/features/products/schemas/option-schema.ts';
 import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
 import { Separator } from '@/components/ui/separator.tsx';
 import { capitalizeFirst } from '@/lib/utils';
+import { slugifyValue } from '@/features/products/lib/slug.ts';
 
 
 const variantSheetSchema = z.object({
   nameRo: z.string().trim().min(1).max(128),
   nameRu: z.string().trim().min(1).max(128),
   state: z.enum(ProductState),
+  slug: z.string().trim().min(1).max(128)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase letters, numbers and hyphens only'),
   sku: z.string().trim().min(1).max(128),
   price: z.number().int().nonnegative(),
   optionValues: z.record(z.string(), z.string())
@@ -65,7 +69,7 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
 
   const form = useForm<TVariantSheetValues>({
     resolver: zodResolver(variantSheetSchema),
-    defaultValues: { nameRo: '', nameRu: '', state: ProductState.ACTIVE, sku: '', price: 0, optionValues: {} }
+    defaultValues: { nameRo: '', nameRu: '', state: ProductState.ACTIVE, slug: '', sku: '', price: 0, optionValues: {} }
   });
 
   useEffect(() => {
@@ -75,12 +79,16 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
         nameRo: variant.nameRo,
         nameRu: variant.nameRu,
         state: variant.state,
+        slug: variant.slug,
         sku: variant.sku,
         price: variant.price,
         optionValues: { ...variant.optionValues }
       }
-      : { nameRo: '', nameRu: '', state: ProductState.ACTIVE, sku: '', price: 0, optionValues: {} });
+      : { nameRo: '', nameRu: '', state: ProductState.ACTIVE, slug: '', sku: '', price: 0, optionValues: {} });
   }, [open, variant]);
+
+  const onGenerateSlug = () =>
+    form.setValue('slug', slugifyValue(form.getValues('nameRo')), { shouldValidate: true, shouldDirty: true });
 
   const handleOpenChange = (v: boolean) => {
     if (loading || v) return;
@@ -131,38 +139,43 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
                   />
                 </div>
 
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 <Controller
-                  name="state"
+                  name="slug"
                   control={form.control}
-                  render={({ field }) => {
-                    const current = getProductStateOption(field.value);
-                    const CurrentIcon = current.icon;
-                    return (
-                      <Field>
-                        <FieldLabel>{m['common.status']()}</FieldLabel>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="outline" className="w-full justify-start font-normal">
-                              <CurrentIcon className="text-muted-foreground" size={16}/>
-                              <span>{current.label()}</span>
-                              <IconChevronDown className="ml-auto opacity-50" size={16}/>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
-                            <DropdownMenuRadioGroup value={field.value ?? ''} onValueChange={field.onChange}>
-                              {productStateOptions.map(({ value, label, icon: Icon }) => (
-                                <DropdownMenuRadioItem key={value} value={value}>
-                                  <Icon className="text-muted-foreground" size={16}/>
-                                  <span>{label()}</span>
-                                </DropdownMenuRadioItem>
-                              ))}
-                            </DropdownMenuRadioGroup>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </Field>
-                    );
-                  }}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel>{m['pages.products.form.variants.slug']()}</FieldLabel>
+                      <InputGroup>
+                        <InputGroupInput {...field} value={field.value ?? ''} autoComplete="off" placeholder="some-variant-slug"/>
+                        <InputGroupAddon align="inline-end">
+                          <InputGroupButton
+                            size="icon-xs"
+                            onClick={onGenerateSlug}
+                            aria-label={m['pages.products.form.variants.generate']()}
+                            title={m['pages.products.form.variants.generate']()}
+                          >
+                            <IconWand/>
+                          </InputGroupButton>
+                        </InputGroupAddon>
+                      </InputGroup>
+                      {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
+                    </Field>
+                  )}
                 />
+
+                <Controller
+                  name="sku"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel>{m['pages.products.form.variants.sku']()}</FieldLabel>
+                      <Input {...field} value={field.value ?? ''} autoComplete="off"/>
+                      {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
+                    </Field>
+                  )}
+                />
+                </div>
 
                 <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   <Controller
@@ -177,15 +190,36 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
                     )}
                   />
                   <Controller
-                    name="sku"
+                    name="state"
                     control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel>{m['pages.products.form.variants.sku']()}</FieldLabel>
-                        <Input {...field} value={field.value ?? ''} autoComplete="off"/>
-                        {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
-                      </Field>
-                    )}
+                    render={({ field }) => {
+                      const current = getProductStateOption(field.value);
+                      const CurrentIcon = current.icon;
+                      return (
+                        <Field>
+                          <FieldLabel>{m['common.status']()}</FieldLabel>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="outline" className="w-full justify-start font-normal">
+                                <CurrentIcon className="text-muted-foreground" size={16}/>
+                                <span>{current.label()}</span>
+                                <IconChevronDown className="ml-auto opacity-50" size={16}/>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
+                              <DropdownMenuRadioGroup value={field.value ?? ''} onValueChange={field.onChange}>
+                                {productStateOptions.map(({ value, label, icon: Icon }) => (
+                                  <DropdownMenuRadioItem key={value} value={value}>
+                                    <Icon className="text-muted-foreground" size={16}/>
+                                    <span>{label()}</span>
+                                  </DropdownMenuRadioItem>
+                                ))}
+                              </DropdownMenuRadioGroup>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </Field>
+                      );
+                    }}
                   />
                 </div>
 

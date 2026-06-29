@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { optionValuesSchema } from '@/features/products/schemas/option-schema.ts';
+import { slugSchema } from '@/features/products/schemas/product-mutations.ts';
 
 
 // Shared shape of an editable variant. create/add/update are all derived from this.
@@ -8,6 +9,7 @@ export const variantBaseSchema = z.object({
   nameRo: z.string().trim().min(1).max(128),
   nameRu: z.string().trim().min(1).max(128),
   state: z.enum(ProductState).default(ProductState.ACTIVE),
+  slug: slugSchema,
   sku: z.string().trim().min(1).max(128),
   optionValues: optionValuesSchema,
   price: z.number().int().nonnegative(),

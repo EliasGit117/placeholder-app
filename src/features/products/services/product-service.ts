@@ -2,6 +2,7 @@ import { ORPCError } from '@orpc/server';
 import { type Prisma, type Product, type ProductVariant } from '~/prisma/generated/prisma/client.ts';
 import { ImageResourceType, ImageVariantKind, ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { prisma } from '@/lib/db';
+import { buildFullSlug } from '@/features/products/lib/slug.ts';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { ProductVariantImageDtoFactory, type TProductVariantImageDto } from '@/features/products/dtos/product-variant-image.ts';
 import type { TxClient } from '@/lib/db/prisma.ts';
@@ -193,7 +194,7 @@ export class ProductService {
     const options = product.options as TOptions;
     validatePartialOptionValues(options, input.optionValues);
 
-    const slug = generateVariantSlug(options, input.optionValues);
+    const slug = input.slug;
     const fullSlug = buildFullSlug(product.slug, slug);
 
     const existing = await prisma.productVariant.findFirst({ where: { productId: product.id, slug } });
@@ -227,22 +228,23 @@ export class ProductService {
 
     let slug = existing.slug;
     let fullSlug = existing.fullSlug;
-    let optionValues = existing.optionValues as TOptionValues;
+    const slugChanged = input.slug !== undefined && input.slug !== existing.slug;
 
     if (input.optionValues !== undefined) {
+      // Option values are user-supplied now too: validate them, but they no longer drive the slug.
       const options = existing.product.options as TOptions;
       validatePartialOptionValues(options, input.optionValues);
-      optionValues = input.optionValues;
-      slug = generateVariantSlug(options, optionValues);
+    }
+
+    if (slugChanged) {
+      slug = input.slug!;
       fullSlug = buildFullSlug(existing.product.slug, slug);
 
-      if (slug !== existing.slug) {
-        const clash = await prisma.productVariant.findFirst({
-          where: { productId: existing.productId, slug, id: { not: existing.id } },
-        });
-        if (clash)
-          throw new ORPCError('CONFLICT', { message: `A variant resolving to '${slug}' already exists` });
-      }
+      const clash = await prisma.productVariant.findFirst({
+        where: { productId: existing.productId, slug, id: { not: existing.id } },
+      });
+      if (clash)
+        throw new ORPCError('CONFLICT', { message: `A variant with slug '${slug}' already exists` });
     }
 
     const variant = await prisma.productVariant.update({
@@ -252,7 +254,8 @@ export class ProductService {
         ...(input.nameRu !== undefined && { nameRu: input.nameRu }),
         ...(input.state !== undefined && { state: input.state }),
         ...(input.sku !== undefined && { sku: input.sku }),
-        ...(input.optionValues !== undefined && { optionValues: optionValues as Prisma.InputJsonValue, slug, fullSlug }),
+        ...(input.optionValues !== undefined && { optionValues: input.optionValues as Prisma.InputJsonValue }),
+        ...(slugChanged && { slug, fullSlug }),
         ...(input.price !== undefined && { price: input.price }),
       },
     });
@@ -289,13 +292,12 @@ export class ProductService {
       input.options !== undefined &&
       JSON.stringify(input.options) !== JSON.stringify(existing.options);
 
-    // Resolve new optionValues/slugs for every existing variant before touching the DB.
+    // Variant slugs are user-controlled, so a product change never rewrites them. We only need to:
+    // - rebuild each variant's fullSlug when the product slug changes;
+    // - drop now-invalid optionValues when the options schema changes.
     const reconciled = (slugChanged || optionsChanged)
       ? existing.variants.map(variant => reconcileVariant(variant, newOptions, newSlug))
       : [];
-
-    if (optionsChanged)
-      assertNoDuplicateSlugs(reconciled.map(v => v.slug));
 
     return prisma.$transaction(async (tx) => {
       const product = await tx.product.update({
@@ -359,27 +361,6 @@ export class ProductService {
 }
 
 
-export function slugifyValue(value: string): string {
-  return value
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
-export function generateVariantSlug(options: TOptions, optionValues: TOptionValues): string {
-  // Deterministic: follow options key order, slugify each selected value. Values may be missing
-  // (variants only need full coverage at creation), so skip absent ones.
-  return Object.keys(options)
-    .filter(key => optionValues[key] != null && optionValues[key] !== '')
-    .map(key => slugifyValue(optionValues[key]))
-    .join('-');
-}
-
-export function buildFullSlug(productSlug: string, variantSlug: string): string {
-  return `${productSlug}-${variantSlug}`;
-}
-
 /** Strict validation used at product creation: every option must carry a valid value. */
 export function validateOptionValues(options: TOptions, optionValues: TOptionValues): void {
   for (const [key, option] of Object.entries(options)) {
@@ -418,10 +399,10 @@ interface IReconciledVariant {
 }
 
 /**
- * Brings an existing variant in line with a (possibly changed) `options` definition and product slug:
- * keeps each value that still references a known option and an allowed value, drops the rest (removed
- * options or values no longer allowed), and recomputes slug/fullSlug. Variants need not cover every
- * option, so nothing is required or back-filled here.
+ * Brings an existing variant in line with a (possibly changed) `options` definition and product slug.
+ * The variant's own `slug` is user-controlled and never rewritten here; we only keep each option value
+ * that still references a known option and an allowed value (dropping the rest) and rebuild `fullSlug`
+ * from the product slug + the variant's existing slug.
  */
 function reconcileVariant(
   variant: ProductVariant,
@@ -437,17 +418,12 @@ function reconcileVariant(
       next[key] = value;
   }
 
-  const slug = generateVariantSlug(options, next);
-  return { id: variant.id, optionValues: next, slug, fullSlug: buildFullSlug(productSlug, slug) };
-}
-
-function assertNoDuplicateSlugs(slugs: string[]): void {
-  const seen = new Set<string>();
-  for (const slug of slugs) {
-    if (seen.has(slug))
-      throw new ORPCError('CONFLICT', { message: `Multiple variants resolve to the same slug '${slug}'` });
-    seen.add(slug);
-  }
+  return {
+    id: variant.id,
+    optionValues: next,
+    slug: variant.slug,
+    fullSlug: buildFullSlug(productSlug, variant.slug),
+  };
 }
 
 function getWhere(input: TSearchProductsRequestDto): Prisma.ProductWhereInput {

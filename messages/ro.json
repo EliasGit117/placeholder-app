@@ -218,6 +218,8 @@
           "remove": "Elimină varianta",
           "name_ro": "Denumire (RO)",
           "name_ru": "Denumire (RU)",
+          "slug": "Slug",
+          "generate": "Generează",
           "price": "Preț (MDL)",
           "sku": "SKU",
           "values": "Valori"
@@ -249,6 +251,7 @@
         "empty_title": "Nicio variantă",
         "empty_description": "Acest produs nu are încă variante.",
         "col_name": "Denumire",
+        "col_slug": "Slug",
         "col_price": "Preț",
         "col_state": "Stare",
         "col_options": "Opțiuni",

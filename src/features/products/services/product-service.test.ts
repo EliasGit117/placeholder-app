@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import {
-  buildFullSlug,
-  generateVariantSlug,
-  slugifyValue,
-  validateOptionValues,
-} from './product-service.ts';
+import { validateOptionValues } from './product-service.ts';
+import { buildFullSlug, slugifyValue } from '@/features/products/lib/slug.ts';
 import type { TOptions } from '@/features/products/schemas/option-schema.ts';
 
 const options: TOptions = {
@@ -32,20 +28,6 @@ describe('slugifyValue', () => {
     expect(slugifyValue('Dark Red')).toBe('dark-red');
     expect(slugifyValue('XL / 42')).toBe('xl-42');
     expect(slugifyValue('  M  ')).toBe('m');
-  });
-});
-
-describe('generateVariantSlug', () => {
-  it('follows options key order regardless of optionValues order', () => {
-    expect(generateVariantSlug(options, { size: 'M', color: 'red' })).toBe('red-m');
-    expect(generateVariantSlug(options, { color: 'red', size: 'M' })).toBe('red-m');
-  });
-
-  it('is deterministic for the same input', () => {
-    const a = generateVariantSlug(options, { color: 'blue', size: 'L' });
-    const b = generateVariantSlug(options, { color: 'blue', size: 'L' });
-    expect(a).toBe(b);
-    expect(a).toBe('blue-l');
   });
 });
 

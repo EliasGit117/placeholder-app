@@ -100,8 +100,8 @@ export const bannerColumns = (options: IOptions) => {
         icon: IconPhoto,
         skeletonItem: (
           <div className="flex items-center gap-2">
-            <Skeleton className={cn('aspect-[3/1] h-12 rounded-md')}/>
             <Skeleton className={cn('aspect-[6/5] h-12 rounded-md')}/>
+            <Skeleton className={cn('aspect-[3/1] h-12 rounded-md')}/>
           </div>
         )
       }
