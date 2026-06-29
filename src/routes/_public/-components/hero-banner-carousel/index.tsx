@@ -21,9 +21,9 @@ interface IProps extends ComponentProps<'section'> {
 const bannerBaseClassName = 'w-full max-h-svh object-cover';
 const desktopAspect = 'aspect-[3/1]';
 const responsiveAspect = 'aspect-[6/5] md:aspect-[3/1]';
-const baseClassName = 'container mx-auto sm:p-4';
+const baseClassName = 'container mx-auto sm:px-4 sm:pt-8';
 
-const BannerImage: FC<{ banner: TBannerPublicDto }> = ({ banner }) => {
+const BannerImage: FC<{ banner: TBannerPublicDto; priority?: boolean }> = ({ banner, priority }) => {
   const mobile = banner.mobileImage;
   const placeholder = thumbhashToDataUrl(banner.image?.thumbhash);
 
@@ -36,7 +36,8 @@ const BannerImage: FC<{ banner: TBannerPublicDto }> = ({ banner }) => {
         <img
           src={banner.image?.url}
           alt=""
-          loading="lazy"
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : undefined}
           decoding="async"
           className={cn(bannerBaseClassName, mobile ? responsiveAspect : desktopAspect, 'bg-cover bg-center')}
           style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
@@ -71,6 +72,11 @@ export const HeroBannerCarousel: FC<IProps> = ({ className, ...props }) => {
     return (
       <section className={cn(baseClassName, className)} {...props}>
         <Skeleton className={cn(bannerBaseClassName, responsiveAspect)}/>
+        <div className='flex justify-center items-center gap-2 h-8'>
+          <Skeleton className='size-2 rounded-full'/>
+          <Skeleton className='size-2 rounded-full'/>
+          <Skeleton className='size-2 rounded-full'/>
+        </div>
       </section>
     );
   }
@@ -82,7 +88,7 @@ export const HeroBannerCarousel: FC<IProps> = ({ className, ...props }) => {
   if (banners.length === 1) {
     return (
       <section className={cn(baseClassName, className)} {...props}>
-        <BannerImage banner={banners[0]}/>
+        <BannerImage banner={banners[0]} priority/>
       </section>
     );
   }
@@ -96,15 +102,15 @@ export const HeroBannerCarousel: FC<IProps> = ({ className, ...props }) => {
         className="group"
       >
         <CarouselContent className="ml-0">
-          {banners.map((banner) => (
+          {banners.map((banner, index) => (
             <CarouselItem key={banner.id} className="pl-0">
-              <BannerImage banner={banner}/>
+              <BannerImage banner={banner} priority={index === 0}/>
             </CarouselItem>
           ))}
         </CarouselContent>
       </Carousel>
 
-      <div className="mt-3 flex items-center justify-center gap-2">
+      <div className="h-8 flex items-center justify-center gap-2">
         {banners.map((banner, index) => (
           <button
             key={banner.id}

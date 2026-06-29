@@ -18,7 +18,6 @@ import { z } from 'zod';
 import { ConfirmDialogProvider } from '@/components/ui/confirm-dialog.tsx';
 import { Toaster } from '@/components/ui/sonner.tsx';
 import { RouteProgressController, RouteProgressProvider } from '@/components/layout/common/route-progress.tsx';
-import photoViewCss from 'react-photo-view/dist/react-photo-view.css?url';
 
 
 interface IRouterContext {
@@ -40,8 +39,7 @@ export const Route = createRootRouteWithContext<IRouterContext>()({
       { title: envConfig.appName }
     ],
     links: [
-      { rel: 'stylesheet', href: appCss },
-      { rel: 'stylesheet', href: photoViewCss, type: 'text/css' }
+      { rel: 'stylesheet', href: appCss }
     ]
   }),
   shellComponent: RootDocument

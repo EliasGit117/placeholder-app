@@ -24,12 +24,18 @@ import type { TGallerySectionImageDto } from '@/features/gallery-sections/dtos/g
 import type { FC } from 'react';
 
 import { PhotoProvider, PhotoView } from 'react-photo-view';
+import photoViewCss from 'react-photo-view/dist/react-photo-view.css?url';
 import 'react-photo-view/dist/react-photo-view.css';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
 
 export const Route = createFileRoute('/_public/gallery/$slug')({
   component: RouteComponent,
   notFoundComponent: GallerySectionNotFound,
+  head: () => ({
+    links: [
+      { rel: 'stylesheet', href: photoViewCss, type: 'text/css' }
+    ]
+  }),
   loader: async ({ context: { queryClient }, params: { slug } }) => {
     await awaitIfServer(
       queryClient.prefetchQuery(
