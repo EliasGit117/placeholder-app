@@ -30,6 +30,13 @@ export class CategoryService {
     return buildForest(dtos, null);
   }
 
+  static async findAllActive(): Promise<Category[]> {
+    return prisma.category.findMany({
+      where: { state: 'ACTIVE' },
+      orderBy: { nameRo: 'asc' },
+    });
+  }
+
   static async list(opts?: { parentId?: number | null }): Promise<TCategory[]> {
     const where: Prisma.CategoryWhereInput = {};
     if (opts?.parentId !== undefined)
