@@ -14,7 +14,7 @@ interface IProps extends ComponentProps<'header'> {
 
 }
 
-const blurClassName = 'backdrop-blur-sm supports-backdrop-filter:bg-background/75';
+const blurClassName = 'backdrop-blur-xl supports-backdrop-filter:bg-background/75';
 
 export const Header = ({ className, ...props }: IProps) => {
 

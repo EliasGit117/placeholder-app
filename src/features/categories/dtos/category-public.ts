@@ -4,16 +4,16 @@ import { capitalizeFirst } from '@/lib/utils';
 import type { Locale } from '~/src/paraglide/runtime';
 
 
-export interface TCategoryPublicNode {
+export interface ICategoryPublicNode {
   id: number;
   slug: string;
   path: string;
   name: string;
   description?: string | null;
-  children: TCategoryPublicNode[];
+  children: ICategoryPublicNode[];
 }
 
-export const categoryPublicNodeSchema: z.ZodType<TCategoryPublicNode> = z.lazy(() =>
+export const categoryPublicNodeSchema: z.ZodType<ICategoryPublicNode> = z.lazy(() =>
   z.object({
     id: z.number(),
     slug: z.string(),
@@ -25,6 +25,7 @@ export const categoryPublicNodeSchema: z.ZodType<TCategoryPublicNode> = z.lazy((
 );
 
 export const categoryPublicForestSchema = z.array(categoryPublicNodeSchema);
+export type TCategoryPublicForest = z.infer<typeof categoryPublicForestSchema>;
 
 export class CategoryPublicDtoFactory {
 
@@ -33,7 +34,7 @@ export class CategoryPublicDtoFactory {
     locale: Locale,
     maxDepth: number,
     parentId: number | null = null,
-  ): TCategoryPublicNode[] {
+  ): ICategoryPublicNode[] {
     if (maxDepth < 1)
       return [];
 
