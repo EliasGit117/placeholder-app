@@ -149,13 +149,15 @@ const ShopFlyout: FC<IShopFlyoutProps> = ({ categories }) => {
         <ul className="flex w-60 flex-col gap-0.5 border-l bg-muted p-2">
           <li className="px-2 py-1.5 text-sm font-bold">{active.name}</li>
 
-          <li>
-            <NavigationMenuLink asChild>
-              <CategoryLink category={active} className="w-full">
-                Show all
-              </CategoryLink>
-            </NavigationMenuLink>
-          </li>
+          {lastPointerType.current !== 'mouse' && (
+            <li>
+              <NavigationMenuLink asChild>
+                <CategoryLink category={active} className="w-full">
+                  Show all
+                </CategoryLink>
+              </NavigationMenuLink>
+            </li>
+          )}
 
           {active.children.map((child) => (
             <li key={child.slug}>
