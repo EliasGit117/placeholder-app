@@ -24,19 +24,7 @@ export const Header = ({ className, ...props }: IProps) => {
         <AppSidebarTrigger className="md:hidden"/>
         <LogoButton/>
 
-        <HeaderNavigationMenu className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2"/>
-
-        {/*{links.length > 0 && (*/}
-        {/*  <div className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">*/}
-        {/*    {links.map(link => (*/}
-        {/*      <Button variant="link" className='uppercase underline-offset-8' key={link.to} asChild>*/}
-        {/*        <Link to={link.to} activeProps={{ className: 'underline text-primary' }}>*/}
-        {/*          <span>{link.name}</span>*/}
-        {/*        </Link>*/}
-        {/*      </Button>*/}
-        {/*    ))}*/}
-        {/*  </div>*/}
-        {/*)}*/}
+        <HeaderNavigationMenu className="hidden md:flex absolute left-1/2 -translate-x-1/2"/>
 
         <div className="flex items-center gap-3 ml-auto">
           <Button variant="outline" size="icon" className="rounded-full">

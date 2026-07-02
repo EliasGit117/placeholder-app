@@ -66,7 +66,7 @@ export const AppSidebar = () => {
               >
                 <Link to={link.to} activeProps={{ className: 'underline underline-offset-4' }}>
                   {link.icon && <link.icon className="size-5"/>}
-                  {link.name}
+                  {link.name()}
                 </Link>
               </Button>
             ))}

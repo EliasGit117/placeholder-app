@@ -6,7 +6,7 @@ interface IProps {
   children: ReactNode;
 }
 
-const delayMs = 120;
+const delayMs = 150;
 
 export const RouteProgressProvider: FC<IProps> = ({ children }) => {
   return (

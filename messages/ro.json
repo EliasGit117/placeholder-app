@@ -85,6 +85,12 @@
         "gallery_sections": "Secțiuni galerie"
       }
     },
+    "header": {
+      "categories": "Categorii",
+      "show_all": "Vezi toate",
+      "gallery": "Galerie",
+      "admin": "Admin"
+    },
     "user_dropdown": {
       "settings": "Setări",
       "sign_out": "Deconectare",

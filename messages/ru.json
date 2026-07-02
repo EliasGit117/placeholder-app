@@ -83,6 +83,12 @@
         "gallery_sections": "Разделы галереи"
       }
     },
+    "header": {
+      "categories": "Категории",
+      "show_all": "Показать все",
+      "gallery": "Галерея",
+      "admin": "Админ"
+    },
     "user_dropdown": {
       "settings": "Настройки",
       "sign_out": "Выйти",

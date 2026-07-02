@@ -1,6 +1,7 @@
 import { Header } from './header.tsx';
 import type { FC, PropsWithChildren } from 'react';
-import { Footer } from '../common/footer.tsx';
+import { SiteFooter } from './footer.tsx';
+import { AnnouncementBar } from './announcement-bar.tsx';
 import { AppSidebar, AppSidebarProvider } from '@/components/layout/main/sidebar.tsx';
 
 interface IProps extends PropsWithChildren {
@@ -12,9 +13,10 @@ export const MainLayout: FC<IProps> = ({ children }) => {
     <AppSidebarProvider>
       <AppSidebar/>
 
+      <AnnouncementBar/>
       <Header/>
       {children}
-      <Footer className='container mx-auto mt-auto'/>
+      <SiteFooter/>
     </AppSidebarProvider>
   );
 };

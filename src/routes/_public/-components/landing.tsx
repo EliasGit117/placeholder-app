@@ -1,4 +1,6 @@
 import type { FC, ReactNode, SVGProps } from 'react';
+import { Accordion as AccordionPrimitive } from 'radix-ui';
+import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { HeroBannerCarousel } from '@/routes/_public/-components/hero-banner-carousel';
@@ -11,10 +13,10 @@ import { HeroBannerCarousel } from '@/routes/_public/-components/hero-banner-car
 
 export const SkineryLanding: FC = () => (
   <div className="flex-1">
-    <HeroBannerCarousel className='pt-0'/>
-    <Categories />
-    <Arrivals />
-    <About />
+    <HeroBannerCarousel className="pt-0"/>
+    <About/>
+    <Arrivals/>
+    <Faq/>
   </div>
 );
 
@@ -41,47 +43,6 @@ const Section: FC<{ className?: string; children: ReactNode }> = ({ className, c
 );
 
 
-
-// ─── Categories ──────────────────────────────────────────────────────────────
-
-const categories = [
-  { num: '01', title: 'Уход за волосами', meta: 'Hair care · 28 produse', Icon: HairIcon },
-  { num: '02', title: 'Уход за кожей', meta: 'Skin care · 42 produse', Icon: SkinIcon },
-  { num: '03', title: 'Микроинъекции', meta: 'Microinjections · 14 produse', Icon: InjectIcon },
-];
-
-const Categories: FC = () => (
-  <Section className="bg-muted/40">
-    <SectionHead
-      eyebrow="Колекция"
-      title={<>Cele trei piloni ai ritualului zilnic.</>}
-      right="Fiecare categorie este formulată în laboratorul nostru din Chișinău, cu ingrediente trasabile și ambalaje reciclabile."
-    />
-
-    <div className="grid gap-6 md:grid-cols-3">
-      {categories.map((c) => (
-        <div
-          key={c.num}
-          className="group relative cursor-pointer rounded-xl border border-border bg-card p-9 text-card-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
-        >
-          <span className="absolute right-6 top-6 text-[11px] tracking-[0.2em] text-primary group-hover:text-primary-foreground">
-            {c.num}
-          </span>
-          <c.Icon className="mb-8 size-16 text-primary group-hover:text-primary-foreground" />
-          <h3 className="mb-2 font-heading text-3xl font-medium">{c.title}</h3>
-          <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground group-hover:text-primary-foreground/70">
-            {c.meta}
-          </div>
-          <div className="absolute bottom-8 right-8 grid size-10 place-items-center rounded-full border border-border text-base transition-colors group-hover:border-primary-foreground/40 group-hover:text-primary-foreground">
-            →
-          </div>
-        </div>
-      ))}
-    </div>
-  </Section>
-);
-
-
 // ─── New arrivals ────────────────────────────────────────────────────────────
 
 interface IProduct {
@@ -99,10 +60,38 @@ function Lei() {
 }
 
 const products: IProduct[] = [
-  { cat: 'Уход за кожей', name: 'Ser Botanic Renew', desc: 'Concentrat de vitamina C și extract de măslin verde.', reviews: '(124)', price: <>680 <Lei /></>, tag: { label: 'Nou' } },
-  { cat: 'Уход за волосами', name: 'Ulei Reparator Argan', desc: 'Pentru păr deteriorat, cu cheratină vegetală.', reviews: '(88)', price: <><s className="mr-1.5 text-sm font-normal text-muted-foreground">540</s>432 <Lei /></>, tag: { label: '-20%', variant: 'secondary' } },
-  { cat: 'Микроинъекции', name: 'Mezo Complex Acid', desc: 'Acid hialuronic stabilizat, fiole 5×2ml.', reviews: '(56)', price: <>1.240 <Lei /></>, solid: true },
-  { cat: 'Уход за кожей', name: 'Cremă Noapte Velvet', desc: 'Retinol botanic și unt de karité organic.', reviews: '(212)', price: <>820 <Lei /></>, tag: { label: 'Nou' } },
+  {
+    cat: 'Уход за кожей',
+    name: 'Ser Botanic Renew',
+    desc: 'Concentrat de vitamina C și extract de măslin verde.',
+    reviews: '(124)',
+    price: <>680 <Lei/></>,
+    tag: { label: 'Nou' }
+  },
+  {
+    cat: 'Уход за волосами',
+    name: 'Ulei Reparator Argan',
+    desc: 'Pentru păr deteriorat, cu cheratină vegetală.',
+    reviews: '(88)',
+    price: <><s className="mr-1.5 text-sm font-normal text-muted-foreground">540</s>432 <Lei/></>,
+    tag: { label: '-20%', variant: 'secondary' }
+  },
+  {
+    cat: 'Микроинъекции',
+    name: 'Mezo Complex Acid',
+    desc: 'Acid hialuronic stabilizat, fiole 5×2ml.',
+    reviews: '(56)',
+    price: <>1.240 <Lei/></>,
+    solid: true
+  },
+  {
+    cat: 'Уход за кожей',
+    name: 'Cremă Noapte Velvet',
+    desc: 'Retinol botanic și unt de karité organic.',
+    reviews: '(212)',
+    price: <>820 <Lei/></>,
+    tag: { label: 'Nou' }
+  }
 ];
 
 const Arrivals: FC = () => (
@@ -115,14 +104,18 @@ const Arrivals: FC = () => (
 
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
       {products.map((p) => (
-        <article key={p.name} className="flex flex-col overflow-hidden rounded-xl border border-border bg-card text-card-foreground">
-          <div className="ph-stripes relative grid aspect-[1/1.05] place-items-center border-b border-border bg-muted font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+        <article key={p.name}
+                 className="flex flex-col overflow-hidden rounded-xl border border-border bg-card text-card-foreground">
+          <div
+            className="ph-stripes relative grid aspect-[1/1.05] place-items-center border-b border-border bg-muted font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
             {p.tag && (
-              <Badge className="absolute left-3.5 top-3.5 rounded-none bg-primary text-[10px] uppercase tracking-[0.18em] text-primary-foreground hover:bg-primary/90">
+              <Badge
+                className="absolute left-3.5 top-3.5 rounded-none bg-primary text-[10px] uppercase tracking-[0.18em] text-primary-foreground hover:bg-primary/90">
                 {p.tag.label}
               </Badge>
             )}
-            <button className="absolute right-3.5 top-3.5 grid size-8 place-items-center rounded-full border border-border bg-background/70 text-[13px] text-primary">
+            <button
+              className="absolute right-3.5 top-3.5 grid size-8 place-items-center rounded-full border border-border bg-background/70 text-[13px] text-primary">
               ♡
             </button>
             Product · 320 × 340
@@ -153,23 +146,47 @@ const Arrivals: FC = () => (
 const credentials = [
   { num: '100%', lab: 'Cruelty-free' },
   { num: '0', lab: 'Parfumuri sintetice' },
-  { num: '42', lab: 'Ingrediente active' },
+  { num: '42', lab: 'Ingrediente active' }
 ];
 
 const benefits = [
-  { Icon: LeafIcon, title: 'Creștere capilară', text: 'Stimulează foliculii cu extract de rozmarin și peptide vegetale clinic testate.' },
-  { Icon: ClockIcon, title: 'Scalp echilibrat', text: 'Reglează producția de sebum și calmează scalpul sensibil în 14 zile.' },
-  { Icon: EyeIcon, title: 'Strălucire vizibilă', text: 'Activează luminozitatea naturală a tenului cu acizi blânzi și vitamina C botanică.' },
-  { Icon: StarIcon, title: 'Premiată internațional', text: 'Trei distincții la Clean Beauty Awards și Pure Beauty Global, 2023–2025.' },
-  { Icon: DocIcon, title: 'Formule trasabile', text: 'Fiecare ingredient activ are origine documentată și certificat de proveniență.' },
-  { Icon: DropIcon, title: 'Hidratare profundă', text: 'Acid hialuronic în trei greutăți moleculare pentru hidratare la toate nivelurile.' },
+  {
+    Icon: LeafIcon,
+    title: 'Creștere capilară',
+    text: 'Stimulează foliculii cu extract de rozmarin și peptide vegetale clinic testate.'
+  },
+  {
+    Icon: ClockIcon,
+    title: 'Scalp echilibrat',
+    text: 'Reglează producția de sebum și calmează scalpul sensibil în 14 zile.'
+  },
+  {
+    Icon: EyeIcon,
+    title: 'Strălucire vizibilă',
+    text: 'Activează luminozitatea naturală a tenului cu acizi blânzi și vitamina C botanică.'
+  },
+  {
+    Icon: StarIcon,
+    title: 'Premiată internațional',
+    text: 'Trei distincții la Clean Beauty Awards și Pure Beauty Global, 2023–2025.'
+  },
+  {
+    Icon: DocIcon,
+    title: 'Formule trasabile',
+    text: 'Fiecare ingredient activ are origine documentată și certificat de proveniență.'
+  },
+  {
+    Icon: DropIcon,
+    title: 'Hidratare profundă',
+    text: 'Acid hialuronic în trei greutăți moleculare pentru hidratare la toate nivelurile.'
+  }
 ];
 
 const About: FC = () => (
   <Section className="bg-muted/40">
     <div className="grid items-start gap-16 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
       <div>
-        <Eyebrow>О нас</Eyebrow>
+        <Eyebrow>Despre noi</Eyebrow>
         <h2 className="my-4 mb-7 font-heading text-4xl font-normal leading-[1.05] tracking-tight sm:text-5xl">
           Frumusețea cultivată cu <span className="italic text-primary">răbdare.</span>
         </h2>
@@ -193,17 +210,98 @@ const About: FC = () => (
         </div>
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         {benefits.map((b) => (
-          <div key={b.title} className="flex gap-4 rounded-lg border border-border bg-card p-6 text-card-foreground">
-            <b.Icon className="size-11 shrink-0 text-primary" />
-            <div>
-              <h4 className="mb-1.5 font-heading text-xl font-medium">{b.title}</h4>
-              <p className="text-[13px] leading-relaxed text-muted-foreground">{b.text}</p>
+          <div
+            key={b.title}
+            className="group relative flex flex-col gap-4 overflow-hidden rounded-xl border border-border bg-card p-6 text-card-foreground transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5"
+          >
+            <div
+              className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"/>
+            <div
+              className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-primary/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"/>
+
+            <div className="flex items-start justify-between gap-4">
+              <h4 className="font-heading text-xl font-medium transition-colors duration-300 group-hover:text-primary">
+                {b.title}
+              </h4>
+              <div className="size-10 bg-muted rounded-full flex items-center justify-center p-2 shrink-0">
+                <b.Icon className="text-primary"/>
+              </div>
             </div>
+            <p className="text-[13px] leading-relaxed text-muted-foreground">{b.text}</p>
           </div>
         ))}
       </div>
+    </div>
+  </Section>
+);
+
+
+// ─── FAQ ─────────────────────────────────────────────────────────────────────
+
+const faqs = [
+  {
+    q: 'În cât timp livrați comenzile în Chișinău?',
+    a: 'Comenzile plasate până la 14:00 se livrează în aceeași zi în Chișinău. Restul Moldovei: 24–48h prin curier Nova Poshta sau Posta Moldovei.'
+  },
+  {
+    q: 'Pot returna un produs deschis?',
+    a: 'Da, în termen de 14 zile, dacă produsul a fost folosit rezonabil pentru testare. Rambursăm integral valoarea comenzii.'
+  },
+  {
+    q: 'Cum funcționează consultația cu cosmetologul?',
+    a: 'Programezi o sesiune online gratuită de 20 de minute, în care analizăm tipul de piele și îți recomandăm un ritual personalizat.'
+  },
+  {
+    q: 'Faceți livrări în România?',
+    a: 'Da, livrăm în toată România prin curier, în 3–5 zile lucrătoare. Taxele vamale sunt incluse în prețul afișat.'
+  },
+  {
+    q: 'Produsele sunt testate pe animale?',
+    a: 'Niciodată. Toate formulele sunt 100% cruelty-free și certificate, testate exclusiv dermatologic pe voluntari.'
+  },
+  {
+    q: 'Aveți eșantioane gratuite?',
+    a: 'Adăugăm câte două eșantioane la fiecare comandă, alese în funcție de tipul tău de piele indicat la checkout.'
+  }
+];
+
+const Faq: FC = () => (
+  <Section className="bg-background">
+    <div className="grid items-start gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
+      <div className="lg:sticky lg:top-28">
+        <Eyebrow>FAQ</Eyebrow>
+        <h2 className="mt-2 font-heading text-4xl font-normal leading-[1.05] tracking-tight sm:text-5xl">
+          Întrebări <span className="italic text-primary">frecvente.</span>
+        </h2>
+        <p className="mt-6 max-w-xs text-sm leading-relaxed text-muted-foreground">
+          Nu ai găsit răspunsul? Scrie-ne pe formularul de mai sus și revenim în câteva ore.
+        </p>
+      </div>
+
+      <AccordionPrimitive.Root type="single" collapsible defaultValue="faq-0" className="border-t border-border">
+        {faqs.map((f, i) => (
+          <AccordionPrimitive.Item key={f.q} value={`faq-${i}`} className="border-b border-border">
+            <AccordionPrimitive.Header className="flex">
+              <AccordionPrimitive.Trigger className="group flex flex-1 items-center justify-between gap-6 py-6 text-left outline-none">
+                <span className="font-heading text-xl leading-snug transition-colors group-aria-expanded:text-primary sm:text-2xl">
+                  {f.q}
+                </span>
+                <span className="grid size-9 shrink-0 place-items-center rounded-full border border-border text-primary transition-colors group-aria-expanded:border-primary group-aria-expanded:bg-primary group-aria-expanded:text-primary-foreground">
+                  <IconPlus className="size-4 group-aria-expanded:hidden"/>
+                  <IconMinus className="hidden size-4 group-aria-expanded:block"/>
+                </span>
+              </AccordionPrimitive.Trigger>
+            </AccordionPrimitive.Header>
+            <AccordionPrimitive.Content className="overflow-hidden data-open:animate-accordion-down data-closed:animate-accordion-up">
+              <p className="max-w-2xl pb-6 text-[15px] leading-relaxed text-muted-foreground">
+                {f.a}
+              </p>
+            </AccordionPrimitive.Content>
+          </AccordionPrimitive.Item>
+        ))}
+      </AccordionPrimitive.Root>
     </div>
   </Section>
 );
@@ -218,30 +316,46 @@ const About: FC = () => (
 type IcProps = SVGProps<SVGSVGElement>;
 const stroke = (p: IcProps) => ({ fill: 'none', stroke: 'currentColor', strokeWidth: 1.4, ...p });
 
-function HairIcon(p: IcProps) {
-  return <svg viewBox="0 0 64 64" {...stroke(p)}><path d="M32 8 C 22 16, 18 28, 22 40 C 26 50, 38 50, 42 40 C 46 28, 42 16, 32 8z" /><path d="M32 14 V 50" /><path d="M32 22 C 28 24, 26 28, 26 32" /><path d="M32 30 C 36 32, 38 36, 38 40" /><path d="M22 52 H 42" /></svg>;
-}
-function SkinIcon(p: IcProps) {
-  return <svg viewBox="0 0 64 64" {...stroke(p)}><circle cx="32" cy="32" r="20" /><circle cx="32" cy="32" r="12" /><circle cx="26" cy="28" r="1.5" fill="currentColor" /><circle cx="38" cy="30" r="1.5" fill="currentColor" /><circle cx="30" cy="36" r="1.5" fill="currentColor" /><path d="M14 18 L 10 14 M 50 18 L 54 14 M 14 46 L 10 50 M 50 46 L 54 50" /></svg>;
-}
-function InjectIcon(p: IcProps) {
-  return <svg viewBox="0 0 64 64" {...stroke(p)}><path d="M28 10 H 36 V 18 H 28 z" /><path d="M30 18 V 28 L 26 32 V 52 H 38 V 32 L 34 28 V 18" /><path d="M26 38 H 38 M 26 44 H 38" /><circle cx="32" cy="35" r="1" fill="currentColor" /></svg>;
-}
 function LeafIcon(p: IcProps) {
-  return <svg viewBox="0 0 44 44" {...stroke(p)}><path d="M22 6 C 14 14, 12 22, 16 30 C 20 38, 28 36, 30 28 C 32 18, 28 10, 22 6 z" /><path d="M22 14 V 32" /></svg>;
+  return <svg viewBox="0 0 44 44" {...stroke(p)}>
+    <path d="M22 6 C 14 14, 12 22, 16 30 C 20 38, 28 36, 30 28 C 32 18, 28 10, 22 6 z"/>
+    <path d="M22 14 V 32"/>
+  </svg>;
 }
+
 function ClockIcon(p: IcProps) {
-  return <svg viewBox="0 0 44 44" {...stroke(p)}><circle cx="22" cy="22" r="14" /><path d="M22 8 V 22 L 30 30" /><circle cx="22" cy="22" r="2" fill="currentColor" /></svg>;
+  return <svg viewBox="0 0 44 44" {...stroke(p)}>
+    <circle cx="22" cy="22" r="14"/>
+    <path d="M22 8 V 22 L 30 30"/>
+    <circle cx="22" cy="22" r="2" fill="currentColor"/>
+  </svg>;
 }
+
 function EyeIcon(p: IcProps) {
-  return <svg viewBox="0 0 44 44" {...stroke(p)}><path d="M8 22 C 14 14, 30 14, 36 22 C 30 30, 14 30, 8 22 z" /><circle cx="22" cy="22" r="5" /><circle cx="22" cy="22" r="2" fill="currentColor" /></svg>;
+  return <svg viewBox="0 0 44 44" {...stroke(p)}>
+    <path d="M8 22 C 14 14, 30 14, 36 22 C 30 30, 14 30, 8 22 z"/>
+    <circle cx="22" cy="22" r="5"/>
+    <circle cx="22" cy="22" r="2" fill="currentColor"/>
+  </svg>;
 }
+
 function StarIcon(p: IcProps) {
-  return <svg viewBox="0 0 44 44" {...stroke(p)}><path d="M22 6 L 28 18 L 40 20 L 30 28 L 32 40 L 22 34 L 12 40 L 14 28 L 4 20 L 16 18 z" /></svg>;
+  return <svg viewBox="0 0 44 44" {...stroke(p)}>
+    <path d="M22 6 L 28 18 L 40 20 L 30 28 L 32 40 L 22 34 L 12 40 L 14 28 L 4 20 L 16 18 z"/>
+  </svg>;
 }
+
 function DocIcon(p: IcProps) {
-  return <svg viewBox="0 0 44 44" {...stroke(p)}><rect x="10" y="14" width="24" height="22" rx="1" /><path d="M14 14 V 10 H 30 V 14" /><path d="M16 22 H 28 M 16 28 H 28 M 16 34 H 24" /></svg>;
+  return <svg viewBox="0 0 44 44" {...stroke(p)}>
+    <rect x="10" y="14" width="24" height="22" rx="1"/>
+    <path d="M14 14 V 10 H 30 V 14"/>
+    <path d="M16 22 H 28 M 16 28 H 28 M 16 34 H 24"/>
+  </svg>;
 }
+
 function DropIcon(p: IcProps) {
-  return <svg viewBox="0 0 44 44" {...stroke(p)}><path d="M22 8 C 28 14, 30 22, 22 36 C 14 22, 16 14, 22 8 z" /><path d="M22 20 V 30" /></svg>;
+  return <svg viewBox="0 0 44 44" {...stroke(p)}>
+    <path d="M22 8 C 28 14, 30 22, 22 36 C 14 22, 16 14, 22 8 z"/>
+    <path d="M22 20 V 30"/>
+  </svg>;
 }
