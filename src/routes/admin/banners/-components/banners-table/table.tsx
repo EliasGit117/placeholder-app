@@ -102,7 +102,7 @@ export const BannersTable: FC<IProps> = (props) => {
     <BannerSheetProvider>
       <BannerReorderSheetProvider>
         <div className={cn('space-y-2 relative', className)} {...divProps}>
-          <DataTableProvider table={table} loading={false}>
+          <DataTableProvider table={table} loading={isPending}>
             <DataTableToolbar>
               <div className="ml-auto flex items-center gap-1">
                 {canUpdate && (
