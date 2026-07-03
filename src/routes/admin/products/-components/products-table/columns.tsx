@@ -51,7 +51,7 @@ export const productColumns = (options?: IOptions) => {
       enableSorting: false,
       meta: {
         label: m['common.select'](),
-        skeletonClassName: 'size-4.5 rounded-sm',
+        skeletonClassName: 'size-4 rounded-sm',
       },
       header: ({ table }) => (
         <div className="size-6 pr-2 flex items-center justify-center">
@@ -156,7 +156,7 @@ export const productColumns = (options?: IOptions) => {
       meta: {
         icon: IconActivityHeartbeat,
         label: m['pages.products.index.table.state'](),
-        skeletonClassName: 'h-5.5 w-20 rounded-sm',
+        skeletonClassName: 'h-5 w-20 rounded-sm',
         filter: {
           type: ColumnFilterType.MultiSelect,
           options: productStateOptions.map(({ value, label, icon }) => ({ title: label(), value, icon })),

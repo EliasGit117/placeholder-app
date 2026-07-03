@@ -25,16 +25,7 @@ export const CategoryState = {
 export type CategoryState = (typeof CategoryState)[keyof typeof CategoryState]
 
 
-export const GallerySectionState = {
-  ACTIVE: 'ACTIVE',
-  HIDDEN: 'HIDDEN'
-} as const
-
-export type GallerySectionState = (typeof GallerySectionState)[keyof typeof GallerySectionState]
-
-
 export const ImageResourceType = {
-  GALLERY_SECTION: 'GALLERY_SECTION',
   AVATAR: 'AVATAR',
   PRODUCT_VARIANT: 'PRODUCT_VARIANT',
   BANNER: 'BANNER'
@@ -44,7 +35,6 @@ export type ImageResourceType = (typeof ImageResourceType)[keyof typeof ImageRes
 
 
 export const ImagePurpose = {
-  GALLERY_SECTION_IMAGE: 'GALLERY_SECTION_IMAGE',
   AVATAR_IMAGE: 'AVATAR_IMAGE',
   PRODUCT_VARIANT_IMAGE: 'PRODUCT_VARIANT_IMAGE',
   BANNER_IMAGE_RO: 'BANNER_IMAGE_RO',

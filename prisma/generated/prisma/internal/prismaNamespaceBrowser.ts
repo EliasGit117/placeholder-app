@@ -54,7 +54,6 @@ export const ModelName = {
   Account: 'Account',
   Banner: 'Banner',
   Category: 'Category',
-  GallerySection: 'GallerySection',
   Image: 'Image',
   ImageVariant: 'ImageVariant',
   Product: 'Product',
@@ -128,21 +127,6 @@ export const CategoryScalarFieldEnum = {
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
-
-
-export const GallerySectionScalarFieldEnum = {
-  id: 'id',
-  slug: 'slug',
-  nameRo: 'nameRo',
-  nameRu: 'nameRu',
-  descriptionRo: 'descriptionRo',
-  descriptionRu: 'descriptionRu',
-  state: 'state',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type GallerySectionScalarFieldEnum = (typeof GallerySectionScalarFieldEnum)[keyof typeof GallerySectionScalarFieldEnum]
 
 
 export const ImageScalarFieldEnum = {

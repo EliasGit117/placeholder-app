@@ -33,11 +33,6 @@ export type Banner = Prisma.BannerModel
  */
 export type Category = Prisma.CategoryModel
 /**
- * Model GallerySection
- * 
- */
-export type GallerySection = Prisma.GallerySectionModel
-/**
  * Model Image
  * 
  */

@@ -18,32 +18,23 @@ import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as AdminSettingsRouteRouteImport } from './routes/admin/settings/route'
 import { Route as AdminProductsRouteRouteImport } from './routes/admin/products/route'
-import { Route as AdminGalleryRouteRouteImport } from './routes/admin/gallery/route'
 import { Route as AdminBannersRouteRouteImport } from './routes/admin/banners/route'
-import { Route as PublicGalleryRouteRouteImport } from './routes/_public/gallery/route'
 import { Route as AuthSignUpIndexRouteImport } from './routes/auth/sign-up/index'
 import { Route as AuthSignInIndexRouteImport } from './routes/auth/sign-in/index'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminSettingsIndexRouteImport } from './routes/admin/settings/index'
 import { Route as AdminSessionsIndexRouteImport } from './routes/admin/sessions/index'
 import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
-import { Route as AdminGalleryIndexRouteImport } from './routes/admin/gallery/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as AdminBannersIndexRouteImport } from './routes/admin/banners/index'
-import { Route as PublicGalleryIndexRouteImport } from './routes/_public/gallery/index'
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as AdminSettingsSecurityRouteImport } from './routes/admin/settings/security'
 import { Route as AdminSettingsProfileRouteImport } from './routes/admin/settings/profile'
-import { Route as PublicGallerySlugRouteImport } from './routes/_public/gallery/$slug'
-import { Route as AdminGallerySectionsRouteRouteImport } from './routes/admin/gallery/sections/route'
 import { Route as AdminProductsProductIdIndexRouteImport } from './routes/admin/products/$productId/index'
-import { Route as AdminGallerySectionsIndexRouteImport } from './routes/admin/gallery/sections/index'
 import { Route as AdminBannersBannerIdIndexRouteImport } from './routes/admin/banners/$bannerId/index'
-import { Route as AdminGallerySectionsSectionIdIndexRouteImport } from './routes/admin/gallery/sections/$sectionId/index'
 import { Route as ApiAdminBannersBannerIdImagesRouteImport } from './routes/api/admin/banners/$bannerId/images'
 import { Route as ApiAdminProductsVariantsVariantIdImagesRouteImport } from './routes/api/admin/products/variants/$variantId/images'
-import { Route as ApiAdminGallerySectionsSectionIdImagesRouteImport } from './routes/api/admin/gallery/sections/$sectionId/images'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
@@ -89,20 +80,10 @@ const AdminProductsRouteRoute = AdminProductsRouteRouteImport.update({
   path: '/products',
   getParentRoute: () => AdminRouteRoute,
 } as any)
-const AdminGalleryRouteRoute = AdminGalleryRouteRouteImport.update({
-  id: '/gallery',
-  path: '/gallery',
-  getParentRoute: () => AdminRouteRoute,
-} as any)
 const AdminBannersRouteRoute = AdminBannersRouteRouteImport.update({
   id: '/banners',
   path: '/banners',
   getParentRoute: () => AdminRouteRoute,
-} as any)
-const PublicGalleryRouteRoute = PublicGalleryRouteRouteImport.update({
-  id: '/gallery',
-  path: '/gallery',
-  getParentRoute: () => PublicRouteRoute,
 } as any)
 const AuthSignUpIndexRoute = AuthSignUpIndexRouteImport.update({
   id: '/sign-up/',
@@ -134,11 +115,6 @@ const AdminProductsIndexRoute = AdminProductsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminProductsRouteRoute,
 } as any)
-const AdminGalleryIndexRoute = AdminGalleryIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminGalleryRouteRoute,
-} as any)
 const AdminCategoriesIndexRoute = AdminCategoriesIndexRouteImport.update({
   id: '/categories/',
   path: '/categories/',
@@ -148,11 +124,6 @@ const AdminBannersIndexRoute = AdminBannersIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminBannersRouteRoute,
-} as any)
-const PublicGalleryIndexRoute = PublicGalleryIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => PublicGalleryRouteRoute,
 } as any)
 const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   id: '/api/rpc/$',
@@ -174,40 +145,17 @@ const AdminSettingsProfileRoute = AdminSettingsProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AdminSettingsRouteRoute,
 } as any)
-const PublicGallerySlugRoute = PublicGallerySlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => PublicGalleryRouteRoute,
-} as any)
-const AdminGallerySectionsRouteRoute =
-  AdminGallerySectionsRouteRouteImport.update({
-    id: '/sections',
-    path: '/sections',
-    getParentRoute: () => AdminGalleryRouteRoute,
-  } as any)
 const AdminProductsProductIdIndexRoute =
   AdminProductsProductIdIndexRouteImport.update({
     id: '/$productId/',
     path: '/$productId/',
     getParentRoute: () => AdminProductsRouteRoute,
   } as any)
-const AdminGallerySectionsIndexRoute =
-  AdminGallerySectionsIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AdminGallerySectionsRouteRoute,
-  } as any)
 const AdminBannersBannerIdIndexRoute =
   AdminBannersBannerIdIndexRouteImport.update({
     id: '/$bannerId/',
     path: '/$bannerId/',
     getParentRoute: () => AdminBannersRouteRoute,
-  } as any)
-const AdminGallerySectionsSectionIdIndexRoute =
-  AdminGallerySectionsSectionIdIndexRouteImport.update({
-    id: '/$sectionId/',
-    path: '/$sectionId/',
-    getParentRoute: () => AdminGallerySectionsRouteRoute,
   } as any)
 const ApiAdminBannersBannerIdImagesRoute =
   ApiAdminBannersBannerIdImagesRouteImport.update({
@@ -221,35 +169,23 @@ const ApiAdminProductsVariantsVariantIdImagesRoute =
     path: '/api/admin/products/variants/$variantId/images',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiAdminGallerySectionsSectionIdImagesRoute =
-  ApiAdminGallerySectionsSectionIdImagesRouteImport.update({
-    id: '/api/admin/gallery/sections/$sectionId/images',
-    path: '/api/admin/gallery/sections/$sectionId/images',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
-  '/gallery': typeof PublicGalleryRouteRouteWithChildren
   '/admin/banners': typeof AdminBannersRouteRouteWithChildren
-  '/admin/gallery': typeof AdminGalleryRouteRouteWithChildren
   '/admin/products': typeof AdminProductsRouteRouteWithChildren
   '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
-  '/admin/gallery/sections': typeof AdminGallerySectionsRouteRouteWithChildren
-  '/gallery/$slug': typeof PublicGallerySlugRoute
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
-  '/gallery/': typeof PublicGalleryIndexRoute
   '/admin/banners/': typeof AdminBannersIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
-  '/admin/gallery/': typeof AdminGalleryIndexRoute
   '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/sessions/': typeof AdminSessionsIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
@@ -257,11 +193,8 @@ export interface FileRoutesByFullPath {
   '/auth/sign-in/': typeof AuthSignInIndexRoute
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
   '/admin/banners/$bannerId/': typeof AdminBannersBannerIdIndexRoute
-  '/admin/gallery/sections/': typeof AdminGallerySectionsIndexRoute
   '/admin/products/$productId/': typeof AdminProductsProductIdIndexRoute
   '/api/admin/banners/$bannerId/images': typeof ApiAdminBannersBannerIdImagesRoute
-  '/admin/gallery/sections/$sectionId/': typeof AdminGallerySectionsSectionIdIndexRoute
-  '/api/admin/gallery/sections/$sectionId/images': typeof ApiAdminGallerySectionsSectionIdImagesRoute
   '/api/admin/products/variants/$variantId/images': typeof ApiAdminProductsVariantsVariantIdImagesRoute
 }
 export interface FileRoutesByTo {
@@ -269,15 +202,12 @@ export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
   '/admin': typeof AdminIndexRoute
   '/auth': typeof AuthIndexRoute
-  '/gallery/$slug': typeof PublicGallerySlugRoute
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
-  '/gallery': typeof PublicGalleryIndexRoute
   '/admin/banners': typeof AdminBannersIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
-  '/admin/gallery': typeof AdminGalleryIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
   '/admin/sessions': typeof AdminSessionsIndexRoute
   '/admin/settings': typeof AdminSettingsIndexRoute
@@ -285,11 +215,8 @@ export interface FileRoutesByTo {
   '/auth/sign-in': typeof AuthSignInIndexRoute
   '/auth/sign-up': typeof AuthSignUpIndexRoute
   '/admin/banners/$bannerId': typeof AdminBannersBannerIdIndexRoute
-  '/admin/gallery/sections': typeof AdminGallerySectionsIndexRoute
   '/admin/products/$productId': typeof AdminProductsProductIdIndexRoute
   '/api/admin/banners/$bannerId/images': typeof ApiAdminBannersBannerIdImagesRoute
-  '/admin/gallery/sections/$sectionId': typeof AdminGallerySectionsSectionIdIndexRoute
-  '/api/admin/gallery/sections/$sectionId/images': typeof ApiAdminGallerySectionsSectionIdImagesRoute
   '/api/admin/products/variants/$variantId/images': typeof ApiAdminProductsVariantsVariantIdImagesRoute
 }
 export interface FileRoutesById {
@@ -297,25 +224,19 @@ export interface FileRoutesById {
   '/_public': typeof PublicRouteRouteWithChildren
   '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
-  '/_public/gallery': typeof PublicGalleryRouteRouteWithChildren
   '/admin/banners': typeof AdminBannersRouteRouteWithChildren
-  '/admin/gallery': typeof AdminGalleryRouteRouteWithChildren
   '/admin/products': typeof AdminProductsRouteRouteWithChildren
   '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
   '/_public/': typeof PublicIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
-  '/admin/gallery/sections': typeof AdminGallerySectionsRouteRouteWithChildren
-  '/_public/gallery/$slug': typeof PublicGallerySlugRoute
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
-  '/_public/gallery/': typeof PublicGalleryIndexRoute
   '/admin/banners/': typeof AdminBannersIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
-  '/admin/gallery/': typeof AdminGalleryIndexRoute
   '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/sessions/': typeof AdminSessionsIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
@@ -323,11 +244,8 @@ export interface FileRoutesById {
   '/auth/sign-in/': typeof AuthSignInIndexRoute
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
   '/admin/banners/$bannerId/': typeof AdminBannersBannerIdIndexRoute
-  '/admin/gallery/sections/': typeof AdminGallerySectionsIndexRoute
   '/admin/products/$productId/': typeof AdminProductsProductIdIndexRoute
   '/api/admin/banners/$bannerId/images': typeof ApiAdminBannersBannerIdImagesRoute
-  '/admin/gallery/sections/$sectionId/': typeof AdminGallerySectionsSectionIdIndexRoute
-  '/api/admin/gallery/sections/$sectionId/images': typeof ApiAdminGallerySectionsSectionIdImagesRoute
   '/api/admin/products/variants/$variantId/images': typeof ApiAdminProductsVariantsVariantIdImagesRoute
 }
 export interface FileRouteTypes {
@@ -336,24 +254,18 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
-    | '/gallery'
     | '/admin/banners'
-    | '/admin/gallery'
     | '/admin/products'
     | '/admin/settings'
     | '/api/$'
     | '/admin/'
     | '/auth/'
-    | '/admin/gallery/sections'
-    | '/gallery/$slug'
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
     | '/api/rpc/$'
-    | '/gallery/'
     | '/admin/banners/'
     | '/admin/categories/'
-    | '/admin/gallery/'
     | '/admin/products/'
     | '/admin/sessions/'
     | '/admin/settings/'
@@ -361,11 +273,8 @@ export interface FileRouteTypes {
     | '/auth/sign-in/'
     | '/auth/sign-up/'
     | '/admin/banners/$bannerId/'
-    | '/admin/gallery/sections/'
     | '/admin/products/$productId/'
     | '/api/admin/banners/$bannerId/images'
-    | '/admin/gallery/sections/$sectionId/'
-    | '/api/admin/gallery/sections/$sectionId/images'
     | '/api/admin/products/variants/$variantId/images'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -373,15 +282,12 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
-    | '/gallery/$slug'
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
     | '/api/rpc/$'
-    | '/gallery'
     | '/admin/banners'
     | '/admin/categories'
-    | '/admin/gallery'
     | '/admin/products'
     | '/admin/sessions'
     | '/admin/settings'
@@ -389,36 +295,27 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/admin/banners/$bannerId'
-    | '/admin/gallery/sections'
     | '/admin/products/$productId'
     | '/api/admin/banners/$bannerId/images'
-    | '/admin/gallery/sections/$sectionId'
-    | '/api/admin/gallery/sections/$sectionId/images'
     | '/api/admin/products/variants/$variantId/images'
   id:
     | '__root__'
     | '/_public'
     | '/admin'
     | '/auth'
-    | '/_public/gallery'
     | '/admin/banners'
-    | '/admin/gallery'
     | '/admin/products'
     | '/admin/settings'
     | '/api/$'
     | '/_public/'
     | '/admin/'
     | '/auth/'
-    | '/admin/gallery/sections'
-    | '/_public/gallery/$slug'
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
     | '/api/rpc/$'
-    | '/_public/gallery/'
     | '/admin/banners/'
     | '/admin/categories/'
-    | '/admin/gallery/'
     | '/admin/products/'
     | '/admin/sessions/'
     | '/admin/settings/'
@@ -426,11 +323,8 @@ export interface FileRouteTypes {
     | '/auth/sign-in/'
     | '/auth/sign-up/'
     | '/admin/banners/$bannerId/'
-    | '/admin/gallery/sections/'
     | '/admin/products/$productId/'
     | '/api/admin/banners/$bannerId/images'
-    | '/admin/gallery/sections/$sectionId/'
-    | '/api/admin/gallery/sections/$sectionId/images'
     | '/api/admin/products/variants/$variantId/images'
   fileRoutesById: FileRoutesById
 }
@@ -442,7 +336,6 @@ export interface RootRouteChildren {
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
   ApiAdminBannersBannerIdImagesRoute: typeof ApiAdminBannersBannerIdImagesRoute
-  ApiAdminGallerySectionsSectionIdImagesRoute: typeof ApiAdminGallerySectionsSectionIdImagesRoute
   ApiAdminProductsVariantsVariantIdImagesRoute: typeof ApiAdminProductsVariantsVariantIdImagesRoute
 }
 
@@ -511,26 +404,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsRouteRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/admin/gallery': {
-      id: '/admin/gallery'
-      path: '/gallery'
-      fullPath: '/admin/gallery'
-      preLoaderRoute: typeof AdminGalleryRouteRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
     '/admin/banners': {
       id: '/admin/banners'
       path: '/banners'
       fullPath: '/admin/banners'
       preLoaderRoute: typeof AdminBannersRouteRouteImport
       parentRoute: typeof AdminRouteRoute
-    }
-    '/_public/gallery': {
-      id: '/_public/gallery'
-      path: '/gallery'
-      fullPath: '/gallery'
-      preLoaderRoute: typeof PublicGalleryRouteRouteImport
-      parentRoute: typeof PublicRouteRoute
     }
     '/auth/sign-up/': {
       id: '/auth/sign-up/'
@@ -574,13 +453,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsIndexRouteImport
       parentRoute: typeof AdminProductsRouteRoute
     }
-    '/admin/gallery/': {
-      id: '/admin/gallery/'
-      path: '/'
-      fullPath: '/admin/gallery/'
-      preLoaderRoute: typeof AdminGalleryIndexRouteImport
-      parentRoute: typeof AdminGalleryRouteRoute
-    }
     '/admin/categories/': {
       id: '/admin/categories/'
       path: '/categories'
@@ -594,13 +466,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/banners/'
       preLoaderRoute: typeof AdminBannersIndexRouteImport
       parentRoute: typeof AdminBannersRouteRoute
-    }
-    '/_public/gallery/': {
-      id: '/_public/gallery/'
-      path: '/'
-      fullPath: '/gallery/'
-      preLoaderRoute: typeof PublicGalleryIndexRouteImport
-      parentRoute: typeof PublicGalleryRouteRoute
     }
     '/api/rpc/$': {
       id: '/api/rpc/$'
@@ -630,20 +495,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsProfileRouteImport
       parentRoute: typeof AdminSettingsRouteRoute
     }
-    '/_public/gallery/$slug': {
-      id: '/_public/gallery/$slug'
-      path: '/$slug'
-      fullPath: '/gallery/$slug'
-      preLoaderRoute: typeof PublicGallerySlugRouteImport
-      parentRoute: typeof PublicGalleryRouteRoute
-    }
-    '/admin/gallery/sections': {
-      id: '/admin/gallery/sections'
-      path: '/sections'
-      fullPath: '/admin/gallery/sections'
-      preLoaderRoute: typeof AdminGallerySectionsRouteRouteImport
-      parentRoute: typeof AdminGalleryRouteRoute
-    }
     '/admin/products/$productId/': {
       id: '/admin/products/$productId/'
       path: '/$productId'
@@ -651,26 +502,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsProductIdIndexRouteImport
       parentRoute: typeof AdminProductsRouteRoute
     }
-    '/admin/gallery/sections/': {
-      id: '/admin/gallery/sections/'
-      path: '/'
-      fullPath: '/admin/gallery/sections/'
-      preLoaderRoute: typeof AdminGallerySectionsIndexRouteImport
-      parentRoute: typeof AdminGallerySectionsRouteRoute
-    }
     '/admin/banners/$bannerId/': {
       id: '/admin/banners/$bannerId/'
       path: '/$bannerId'
       fullPath: '/admin/banners/$bannerId/'
       preLoaderRoute: typeof AdminBannersBannerIdIndexRouteImport
       parentRoute: typeof AdminBannersRouteRoute
-    }
-    '/admin/gallery/sections/$sectionId/': {
-      id: '/admin/gallery/sections/$sectionId/'
-      path: '/$sectionId'
-      fullPath: '/admin/gallery/sections/$sectionId/'
-      preLoaderRoute: typeof AdminGallerySectionsSectionIdIndexRouteImport
-      parentRoute: typeof AdminGallerySectionsRouteRoute
     }
     '/api/admin/banners/$bannerId/images': {
       id: '/api/admin/banners/$bannerId/images'
@@ -686,36 +523,14 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminProductsVariantsVariantIdImagesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/admin/gallery/sections/$sectionId/images': {
-      id: '/api/admin/gallery/sections/$sectionId/images'
-      path: '/api/admin/gallery/sections/$sectionId/images'
-      fullPath: '/api/admin/gallery/sections/$sectionId/images'
-      preLoaderRoute: typeof ApiAdminGallerySectionsSectionIdImagesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
-interface PublicGalleryRouteRouteChildren {
-  PublicGallerySlugRoute: typeof PublicGallerySlugRoute
-  PublicGalleryIndexRoute: typeof PublicGalleryIndexRoute
-}
-
-const PublicGalleryRouteRouteChildren: PublicGalleryRouteRouteChildren = {
-  PublicGallerySlugRoute: PublicGallerySlugRoute,
-  PublicGalleryIndexRoute: PublicGalleryIndexRoute,
-}
-
-const PublicGalleryRouteRouteWithChildren =
-  PublicGalleryRouteRoute._addFileChildren(PublicGalleryRouteRouteChildren)
-
 interface PublicRouteRouteChildren {
-  PublicGalleryRouteRoute: typeof PublicGalleryRouteRouteWithChildren
   PublicIndexRoute: typeof PublicIndexRoute
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
-  PublicGalleryRouteRoute: PublicGalleryRouteRouteWithChildren,
   PublicIndexRoute: PublicIndexRoute,
 }
 
@@ -735,36 +550,6 @@ const AdminBannersRouteRouteChildren: AdminBannersRouteRouteChildren = {
 
 const AdminBannersRouteRouteWithChildren =
   AdminBannersRouteRoute._addFileChildren(AdminBannersRouteRouteChildren)
-
-interface AdminGallerySectionsRouteRouteChildren {
-  AdminGallerySectionsIndexRoute: typeof AdminGallerySectionsIndexRoute
-  AdminGallerySectionsSectionIdIndexRoute: typeof AdminGallerySectionsSectionIdIndexRoute
-}
-
-const AdminGallerySectionsRouteRouteChildren: AdminGallerySectionsRouteRouteChildren =
-  {
-    AdminGallerySectionsIndexRoute: AdminGallerySectionsIndexRoute,
-    AdminGallerySectionsSectionIdIndexRoute:
-      AdminGallerySectionsSectionIdIndexRoute,
-  }
-
-const AdminGallerySectionsRouteRouteWithChildren =
-  AdminGallerySectionsRouteRoute._addFileChildren(
-    AdminGallerySectionsRouteRouteChildren,
-  )
-
-interface AdminGalleryRouteRouteChildren {
-  AdminGallerySectionsRouteRoute: typeof AdminGallerySectionsRouteRouteWithChildren
-  AdminGalleryIndexRoute: typeof AdminGalleryIndexRoute
-}
-
-const AdminGalleryRouteRouteChildren: AdminGalleryRouteRouteChildren = {
-  AdminGallerySectionsRouteRoute: AdminGallerySectionsRouteRouteWithChildren,
-  AdminGalleryIndexRoute: AdminGalleryIndexRoute,
-}
-
-const AdminGalleryRouteRouteWithChildren =
-  AdminGalleryRouteRoute._addFileChildren(AdminGalleryRouteRouteChildren)
 
 interface AdminProductsRouteRouteChildren {
   AdminProductsIndexRoute: typeof AdminProductsIndexRoute
@@ -796,7 +581,6 @@ const AdminSettingsRouteRouteWithChildren =
 
 interface AdminRouteRouteChildren {
   AdminBannersRouteRoute: typeof AdminBannersRouteRouteWithChildren
-  AdminGalleryRouteRoute: typeof AdminGalleryRouteRouteWithChildren
   AdminProductsRouteRoute: typeof AdminProductsRouteRouteWithChildren
   AdminSettingsRouteRoute: typeof AdminSettingsRouteRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
@@ -807,7 +591,6 @@ interface AdminRouteRouteChildren {
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminBannersRouteRoute: AdminBannersRouteRouteWithChildren,
-  AdminGalleryRouteRoute: AdminGalleryRouteRouteWithChildren,
   AdminProductsRouteRoute: AdminProductsRouteRouteWithChildren,
   AdminSettingsRouteRoute: AdminSettingsRouteRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
@@ -844,8 +627,6 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
   ApiAdminBannersBannerIdImagesRoute: ApiAdminBannersBannerIdImagesRoute,
-  ApiAdminGallerySectionsSectionIdImagesRoute:
-    ApiAdminGallerySectionsSectionIdImagesRoute,
   ApiAdminProductsVariantsVariantIdImagesRoute:
     ApiAdminProductsVariantsVariantIdImagesRoute,
 }

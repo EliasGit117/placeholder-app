@@ -387,7 +387,6 @@ export const ModelName = {
   Account: 'Account',
   Banner: 'Banner',
   Category: 'Category',
-  GallerySection: 'GallerySection',
   Image: 'Image',
   ImageVariant: 'ImageVariant',
   Product: 'Product',
@@ -410,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "banner" | "category" | "gallerySection" | "image" | "imageVariant" | "product" | "productVariant" | "session" | "user" | "verification"
+    modelProps: "account" | "banner" | "category" | "image" | "imageVariant" | "product" | "productVariant" | "session" | "user" | "verification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -633,80 +632,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CategoryCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CategoryCountAggregateOutputType> | number
-        }
-      }
-    }
-    GallerySection: {
-      payload: Prisma.$GallerySectionPayload<ExtArgs>
-      fields: Prisma.GallerySectionFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.GallerySectionFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GallerySectionPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.GallerySectionFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GallerySectionPayload>
-        }
-        findFirst: {
-          args: Prisma.GallerySectionFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GallerySectionPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.GallerySectionFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GallerySectionPayload>
-        }
-        findMany: {
-          args: Prisma.GallerySectionFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GallerySectionPayload>[]
-        }
-        create: {
-          args: Prisma.GallerySectionCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GallerySectionPayload>
-        }
-        createMany: {
-          args: Prisma.GallerySectionCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.GallerySectionCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GallerySectionPayload>[]
-        }
-        delete: {
-          args: Prisma.GallerySectionDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GallerySectionPayload>
-        }
-        update: {
-          args: Prisma.GallerySectionUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GallerySectionPayload>
-        }
-        deleteMany: {
-          args: Prisma.GallerySectionDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.GallerySectionUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.GallerySectionUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GallerySectionPayload>[]
-        }
-        upsert: {
-          args: Prisma.GallerySectionUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$GallerySectionPayload>
-        }
-        aggregate: {
-          args: Prisma.GallerySectionAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateGallerySection>
-        }
-        groupBy: {
-          args: Prisma.GallerySectionGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.GallerySectionGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.GallerySectionCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.GallerySectionCountAggregateOutputType> | number
         }
       }
     }
@@ -1317,21 +1242,6 @@ export const CategoryScalarFieldEnum = {
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
 
 
-export const GallerySectionScalarFieldEnum = {
-  id: 'id',
-  slug: 'slug',
-  nameRo: 'nameRo',
-  nameRu: 'nameRu',
-  descriptionRo: 'descriptionRo',
-  descriptionRu: 'descriptionRu',
-  state: 'state',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type GallerySectionScalarFieldEnum = (typeof GallerySectionScalarFieldEnum)[keyof typeof GallerySectionScalarFieldEnum]
-
-
 export const ImageScalarFieldEnum = {
   id: 'id',
   url: 'url',
@@ -1569,20 +1479,6 @@ export type ListEnumCategoryStateFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
- * Reference to a field of type 'GallerySectionState'
- */
-export type EnumGallerySectionStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GallerySectionState'>
-    
-
-
-/**
- * Reference to a field of type 'GallerySectionState[]'
- */
-export type ListEnumGallerySectionStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GallerySectionState[]'>
-    
-
-
-/**
  * Reference to a field of type 'ImageResourceType'
  */
 export type EnumImageResourceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ImageResourceType'>
@@ -1770,7 +1666,6 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   banner?: Prisma.BannerOmit
   category?: Prisma.CategoryOmit
-  gallerySection?: Prisma.GallerySectionOmit
   image?: Prisma.ImageOmit
   imageVariant?: Prisma.ImageVariantOmit
   product?: Prisma.ProductOmit

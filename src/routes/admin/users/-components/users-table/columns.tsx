@@ -58,7 +58,7 @@ export const userColumns = (options?: IOptions) => {
       enableSorting: false,
       meta: {
         label: m['common.select'](),
-        skeletonClassName: 'size-4.5 rounded-sm'
+        skeletonClassName: 'size-4 rounded-sm'
       },
       header: ({ table }) => (
         <div className="size-6 pr-2 flex items-center justify-center">
@@ -164,7 +164,7 @@ export const userColumns = (options?: IOptions) => {
       meta: {
         label: m['pages.users.index.table.role'](),
         icon: IconId,
-        skeletonClassName: 'h-5.5 w-16 rounded-sm',
+        skeletonClassName: 'h-5 w-16 rounded-sm',
         filter: {
           type: ColumnFilterType.MultiSelect,
           options: [
@@ -195,7 +195,7 @@ export const userColumns = (options?: IOptions) => {
       meta: {
         label: m['pages.users.index.table.emailVerified'](),
         icon: IconCircleCheck,
-        skeletonClassName: 'h-5.5 w-24 rounded-sm'
+        skeletonClassName: 'h-5 w-24 rounded-sm'
       }
     }),
 
@@ -219,7 +219,7 @@ export const userColumns = (options?: IOptions) => {
       meta: {
         label: m['common.status'](),
         icon: IconUserCircle,
-        skeletonClassName: 'h-5.5 w-20 rounded-sm',
+        skeletonClassName: 'h-5 w-20 rounded-sm',
         filter: {
           type: ColumnFilterType.Select,
           options: [

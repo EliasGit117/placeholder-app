@@ -66,7 +66,7 @@ export const sessionColumns = (options?: IOptions) => {
       enableSorting: false,
       meta: {
         label: m['common.select'](),
-        skeletonClassName: 'size-4.5 rounded-sm'
+        skeletonClassName: 'size-4 rounded-sm'
       },
       header: ({ table }) => (
         <div className="size-6 pr-2 flex items-center justify-center">

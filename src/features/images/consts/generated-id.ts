@@ -10,7 +10,7 @@ import type { ImagePurpose, ImageResourceType, ImageVariantKind } from '~/prisma
 // `customId` reserved after deletion (deletes are eventually consistent), so a
 // deterministic slug collides on the next upload with `409 File already exists`.
 // Always append a short random suffix so every upload gets a fresh customId, e.g.
-// `AVATAR:12:AVATAR_IMAGE:x7f3a9`, `GALLERY_SECTION:7:GALLERY_SECTION_IMAGE:x7f3a9`.
+// `AVATAR:12:AVATAR_IMAGE:x7f3a9`, `PRODUCT_VARIANT:7:PRODUCT_VARIANT_IMAGE:x7f3a9`.
 // The value is persisted (Image.generatedId) and never recomputed for lookup, so
 // it doesn't need to be predictable.
 

@@ -85,15 +85,12 @@
         "users": "Utilizatori",
         "sessions": "Sesiuni",
         "catalog": "Catalog",
-        "categories": "Categorii",
-        "gallery": "Galerie",
-        "gallery_sections": "Secțiuni galerie"
+        "categories": "Categorii"
       }
     },
     "header": {
       "categories": "Categorii",
       "show_all": "Vezi toate",
-      "gallery": "Galerie",
       "admin": "Admin"
     },
     "user_dropdown": {
@@ -283,13 +280,6 @@
         }
       }
     },
-    "gallery": {
-      "title": "Galerie",
-      "not_found": "Secțiunea nu a fost găsită.",
-      "not_found_description": "Secțiunea pe care o cauți nu există sau nu mai este disponibilă.",
-      "no_sections": "Nu există secțiuni",
-      "no_sections_description": "Momentan nu există secțiuni de galerie de afișat. Vă rugăm să reveniți mai târziu."
-    },
     "settings": {
       "title": "Setări",
       "tabs": {
@@ -376,69 +366,6 @@
           "deleting": "Ștergere...",
           "delete_success": "Categoria a fost ștearsă",
           "delete_error": "Eroare la ștergere"
-        }
-      }
-    },
-    "gallery_sections": {
-      "title": "Secțiuni",
-      "detail": {
-        "title": "Secțiune",
-        "no_images": "Nu există imagini",
-        "no_images_description": "Din păcate, momentan nu există conținut de afișat. Vă rugăm să reveniți mai târziu.",
-        "image_count": "imagini",
-        "purpose": {
-          "label": "Scop",
-          "base": "Originală",
-          "thumb_256": "Miniatură 256x256",
-          "thumb_512": "Miniatură 512x512"
-        },
-        "upload_sheet": {
-          "title": "Încarcă imagini",
-          "description": "Plasează imagini pentru a le încărca în această secțiune.",
-          "trigger": "Încarcă"
-        },
-        "delete": {
-          "trigger": "Șterge",
-          "title": "Șterge imaginile",
-          "description": "Sigur vrei să ștergi imaginile selectate? Această acțiune este ireversibilă.",
-          "deleting": "Se șterge...",
-          "success": "Imaginile au fost șterse.",
-          "error": "Nu s-au putut șterge imaginile."
-        },
-        "reorder": {
-          "trigger": "Reordonează",
-          "hint": "Trage imaginile pentru a le reordona.",
-          "saving": "Se salvează...",
-          "success": "Ordinea a fost salvată.",
-          "error": "Nu s-a putut salva ordinea."
-        }
-      },
-      "index": {
-        "table": {
-          "name_ro": "Denumire (RO)",
-          "name_ru": "Denumire (RU)",
-          "slug": "Slug",
-          "state": "Stare",
-          "state_active": "Activă",
-          "state_hidden": "Ascunsă",
-          "actions": "Acțiuni",
-          "delete_title": "Ștergere secțiune",
-          "delete_description": "Sigur doriți să ștergeți această secțiune de galerie?",
-          "delete_success": "Secțiunea a fost ștearsă",
-          "delete_error": "Eroare la ștergere"
-        },
-        "sheet": {
-          "create_title": "Creare secțiune galerie",
-          "create_description": "Completați câmpurile pentru a crea o secțiune nouă",
-          "edit_title": "Editare secțiune galerie",
-          "edit_description": "Modificați câmpurile secțiunii selectate",
-          "name_ro": "Denumire (RO)",
-          "name_ru": "Denumire (RU)",
-          "slug": "Slug",
-          "description_ro": "Descriere (RO)",
-          "description_ru": "Descriere (RU)",
-          "state_active": "Activă",
-          "state_hidden": "Ascunsă"
         }
       }
     },

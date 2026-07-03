@@ -1,5 +1,4 @@
 enum ImageResourceType {
-  GALLERY_SECTION
   AVATAR
   PRODUCT_VARIANT
   BANNER
@@ -8,7 +7,6 @@ enum ImageResourceType {
 }
 
 enum ImagePurpose {
-  GALLERY_SECTION_IMAGE
   AVATAR_IMAGE
   PRODUCT_VARIANT_IMAGE
   BANNER_IMAGE_RO

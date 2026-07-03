@@ -5,8 +5,6 @@ import { sessionsPublicRoutes } from '@/features/sessions/routes/public';
 import { sessionsAdminRoutes } from '@/features/sessions/routes/admin';
 import { usersAdminRoutes } from '@/features/users/routes/admin';
 import { categoriesAdminRoutes } from '@/features/categories/routes/admin';
-import { galleryAdminRoutes } from '@/features/gallery-sections/routes/admin';
-import { galleryPublicRoutes } from '@/features/gallery-sections/routes/public';
 import { profileRoutes } from '@/features/profile/routes';
 import { productsRoutes } from '@/features/products/routes/public';
 import { productsAdminRoutes } from '@/features/products/routes/admin';
@@ -17,7 +15,6 @@ import { bannersAdminRoutes } from '@/features/banners/routes/admin';
 export const orpcRouter = base.router({
   sessions: sessionsPublicRoutes,
   categories: categoriesRoutes,
-  gallery: galleryPublicRoutes,
   profile: profileRoutes,
   products: productsRoutes,
   banners: bannersPublicRoutes,
@@ -25,7 +22,6 @@ export const orpcRouter = base.router({
     sessions: sessionsAdminRoutes,
     users: usersAdminRoutes,
     categories: categoriesAdminRoutes,
-    gallery: galleryAdminRoutes,
     products: productsAdminRoutes,
     banners: bannersAdminRoutes
   }

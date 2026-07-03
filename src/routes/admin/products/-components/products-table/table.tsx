@@ -121,7 +121,7 @@ export const ProductsTable: FC<IProps> = (props) => {
             </div>
           </DataTableToolbar>
 
-          <DataTable skeletonTableCellClassName="h-[49px]"/>
+          <DataTable skeletonTableCellClassName="h-[41px]"/>
           <DataTablePagination/>
 
           <DataTableActionBar disabled={isFetchingData}>

@@ -5,7 +5,6 @@ import {
   IconDashboard,
   IconKey,
   IconLanguage,
-  IconLibraryPhoto,
   IconPackage,
   IconPhoto,
   IconShieldLock, IconShoppingCart,
@@ -70,6 +69,11 @@ const navMain: ISidebarMenuItem[] = [
     linkOptions: { to: '/admin', activeOptions: { includeSearch: false, exact: true } }
   },
   {
+    title: () => m['pages.banners.title'](),
+    icon: IconPhoto,
+    linkOptions: { to: '/admin/banners', activeOptions: { includeSearch: false } }
+  },
+  {
     title: () => m['components.sidebar.nav.catalog'](),
     icon: IconShoppingCart,
     items: [
@@ -84,16 +88,6 @@ const navMain: ISidebarMenuItem[] = [
         linkOptions: { to: '/admin/products', activeOptions: { includeSearch: false } }
       }
     ]
-  },
-  {
-    title: () => m['pages.banners.title'](),
-    icon: IconPhoto,
-    linkOptions: { to: '/admin/banners', activeOptions: { includeSearch: false } }
-  },
-  {
-    title: () => m['pages.gallery.title'](),
-    icon: IconLibraryPhoto,
-    linkOptions: { to: '/admin/gallery', activeOptions: { includeSearch: false } }
   },
   {
     title: () => m['components.sidebar.nav.security'](),
