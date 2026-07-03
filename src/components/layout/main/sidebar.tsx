@@ -7,7 +7,6 @@ import {
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { type ComponentProps, type FC, type ReactNode, useState } from 'react';
-import { cn } from '@/lib/utils';
 import { IconLayoutSidebar, IconMenu2Filled } from '@tabler/icons-react';
 import { contextFactory } from '@/lib/utils/context-factory.ts';
 import { LogoButton } from '@/components/layout/common';
@@ -90,8 +89,8 @@ export const AppSidebarTrigger: FC<IAppSidebarTrigger> = ({ className, onClick, 
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       variant="ghost"
-      size="icon-sm"
-      className={cn(className)}
+      size="icon"
+      className={className}
       onClick={(event) => {
         onClick?.(event);
         open();
