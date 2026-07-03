@@ -60,7 +60,7 @@ function RootDocument({ children }: { children: ReactNode }) {
       <HeadContent/>
     </head>
 
-    <body className="antialiased wrap-anywhere min-h-screen flex flex-col dark">
+    <body className="antialiased wrap-anywhere min-h-safe-scren flex flex-col dark">
     <RouteProgressProvider>
       <ConfirmDialogProvider>
         {children}

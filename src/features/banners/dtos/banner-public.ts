@@ -4,15 +4,15 @@ import {
   bannerImagePublicDtoSchema,
   BannerImagePublicDtoFactory,
 } from '@/features/banners/dtos/banner-image.ts';
-import { bannerImagePurposeByDevice } from '@/features/banners/consts/banner-devices.ts';
+import { bannerImagePurposeByLocaleDevice } from '@/features/banners/consts/banner-devices.ts';
 import type { TImageDto } from '@/features/images/dtos/image-dto.ts';
+import type { Locale } from '@/paraglide/runtime';
 
 
 export const bannerPublicDtoSchema = z.object({
   id: z.number(),
   order: z.number(),
   href: z.string().nullish(),
-  // Desktop image (3:1, required) plus the optional mobile image (6:5).
   image: bannerImagePublicDtoSchema.nullish(),
   mobileImage: bannerImagePublicDtoSchema.nullish(),
 });
@@ -21,10 +21,12 @@ export type TBannerPublicDto = z.infer<typeof bannerPublicDtoSchema>;
 
 export class BannerPublicDtoFactory {
 
-  // Picks the banner's desktop and mobile images out of `images` (which may hold
-  // images for other banners and devices), filtering by resource id and purpose.
-  static fromEntity(entity: Banner, images: TImageDto[] = []): TBannerPublicDto {
+  // Picks the banner's desktop and mobile images for `locale` out of `images`
+  // (which may hold images for other banners, locales and devices), filtering by
+  // resource id and purpose.
+  static fromEntity(entity: Banner, images: TImageDto[] = [], locale: Locale): TBannerPublicDto {
     const id = String(entity.id);
+    const purposes = bannerImagePurposeByLocaleDevice[locale];
     const byPurpose = (purpose: TImageDto['purpose']) =>
       images.find((img) => img.resourceId === id && img.purpose === purpose) ?? null;
 
@@ -32,12 +34,12 @@ export class BannerPublicDtoFactory {
       id: entity.id,
       order: entity.order,
       href: entity.href ?? undefined,
-      image: BannerImagePublicDtoFactory.fromImageDto(byPurpose(bannerImagePurposeByDevice.desktop)),
-      mobileImage: BannerImagePublicDtoFactory.fromImageDto(byPurpose(bannerImagePurposeByDevice.mobile)),
+      image: BannerImagePublicDtoFactory.fromImageDto(byPurpose(purposes.desktop)),
+      mobileImage: BannerImagePublicDtoFactory.fromImageDto(byPurpose(purposes.mobile)),
     };
   }
 
-  static fromEntities(entities: Banner[], images: TImageDto[]): TBannerPublicDto[] {
-    return entities.map((entity) => BannerPublicDtoFactory.fromEntity(entity, images));
+  static fromEntities(entities: Banner[], images: TImageDto[], locale: Locale): TBannerPublicDto[] {
+    return entities.map((entity) => BannerPublicDtoFactory.fromEntity(entity, images, locale));
   }
 }

@@ -49,10 +49,9 @@ const stateMeta: Record<BannerState, { label: () => string; icon: TablerIcon }> 
 };
 
 const imageStatusMeta: Record<BannerImageStatus, { label: () => string; icon: TablerIcon; problem: boolean }> = {
-  none: { label: () => m['pages.banners.index.status_none'](), icon: IconCircleCheck, problem: false },
-  missing_desktop: { label: () => m['pages.banners.index.status_missing_desktop'](), icon: IconAlertTriangle, problem: true },
-  missing_mobile: { label: () => m['pages.banners.index.status_missing_mobile'](), icon: IconAlertTriangle, problem: true },
-  missing_all: { label: () => m['pages.banners.index.status_missing_all'](), icon: IconAlertTriangle, problem: true }
+  complete: { label: () => m['pages.banners.index.status_complete'](), icon: IconCircleCheck, problem: false },
+  partial: { label: () => m['pages.banners.index.status_partial'](), icon: IconAlertTriangle, problem: true },
+  empty: { label: () => m['pages.banners.index.status_empty'](), icon: IconAlertTriangle, problem: true }
 };
 
 export const bannerColumns = (options: IOptions) => {
@@ -274,8 +273,6 @@ export const bannerColumns = (options: IOptions) => {
 };
 
 
-// Images come straight from the row (getAll embeds them), so the thumbhash
-// placeholder shows immediately — no per-cell request, no icon flash.
 function BannerImageCell({ image, aspectClass }: { image?: TBannerImageDto | null; aspectClass: string }) {
   const placeholder = thumbhashToDataUrl(image?.thumbhash);
 
@@ -283,7 +280,7 @@ function BannerImageCell({ image, aspectClass }: { image?: TBannerImageDto | nul
     <div
       style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
       className={cn(
-        'flex h-12 items-center justify-center overflow-hidden rounded-md border bg-muted bg-cover bg-center shrink-0',
+        'flex h-12 items-center justify-center overflow-hidden rounded-md bg-muted bg-cover bg-center border shrink-0',
         aspectClass
       )}
     >

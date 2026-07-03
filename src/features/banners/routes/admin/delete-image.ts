@@ -5,7 +5,8 @@ import { bannersAdminBase, bannersAdminPath } from './base.ts';
 import { BannerService } from '../../services/banner-service.ts';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
-import { bannerDevices, bannerImagePurposeByDevice } from '@/features/banners/consts/banner-devices.ts';
+import { bannerDevices, bannerImagePurposeByLocaleDevice } from '@/features/banners/consts/banner-devices.ts';
+import { baseLocale, locales } from '@/paraglide/runtime';
 
 export const adminBannersDeleteImage = bannersAdminBase
   .route({
@@ -19,6 +20,7 @@ export const adminBannersDeleteImage = bannersAdminBase
   .input(z.object({
     bannerId: z.coerce.number().int().positive(),
     device: z.enum(bannerDevices).default('desktop'),
+    locale: z.enum(locales).default(baseLocale),
   }))
   .output(z.object({ deleted: z.boolean() }))
   .handler(async ({ input, context: { user }, errors }) => {
@@ -36,7 +38,7 @@ export const adminBannersDeleteImage = bannersAdminBase
     const [image] = await ImageService.findByResource(
       ImageResourceType.BANNER,
       String(input.bannerId),
-      bannerImagePurposeByDevice[input.device]
+      bannerImagePurposeByLocaleDevice[input.locale][input.device]
     );
 
     if (image == null)

@@ -21,7 +21,7 @@ interface IProps extends ComponentProps<'section'> {
 const bannerBaseClassName = 'w-full max-h-svh object-cover';
 const desktopAspect = 'aspect-[3/1]';
 const responsiveAspect = 'aspect-[6/5] md:aspect-[3/1]';
-const baseClassName = 'container mx-auto sm:px-4 sm:pt-8';
+const baseClassName = 'container mx-auto sm:px-4 sm:pt-4';
 
 const BannerImage: FC<{ banner: TBannerPublicDto; priority?: boolean }> = ({ banner, priority }) => {
   const mobile = banner.mobileImage;
@@ -72,35 +72,29 @@ export const HeroBannerCarousel: FC<IProps> = ({ className, ...props }) => {
     return (
       <section className={cn(baseClassName, className)} {...props}>
         <Skeleton className={cn(bannerBaseClassName, responsiveAspect)}/>
-        <div className='flex justify-center items-center gap-2 h-8'>
-          <Skeleton className='size-2 rounded-full'/>
-          <Skeleton className='size-2 rounded-full'/>
-          <Skeleton className='size-2 rounded-full'/>
+        <div className="flex justify-center items-center gap-2 h-8">
+          <Skeleton className="size-2 rounded-full"/>
+          <Skeleton className="size-2 rounded-full"/>
+          <Skeleton className="size-2 rounded-full"/>
         </div>
       </section>
     );
   }
 
-  if (!banners || banners.length === 0) {
+  if (!banners || banners.length === 0)
     return null;
-  }
 
-  if (banners.length === 1) {
+  if (banners.length === 1)
     return (
       <section className={cn(baseClassName, className)} {...props}>
         <BannerImage banner={banners[0]} priority/>
+        <div className="h-8"/>
       </section>
     );
-  }
 
   return (
     <section className={cn(baseClassName, className)} {...props}>
-      <Carousel
-        setApi={setApi}
-        plugins={[autoplay.current]}
-        opts={{ loop: true }}
-        className="group"
-      >
+      <Carousel setApi={setApi} plugins={[autoplay.current]} opts={{ loop: true }} className="group">
         <CarouselContent className="ml-0">
           {banners.map((banner, index) => (
             <CarouselItem key={banner.id} className="pl-0">
@@ -115,8 +109,8 @@ export const HeroBannerCarousel: FC<IProps> = ({ className, ...props }) => {
           <button
             key={banner.id}
             type="button"
-            aria-label={`Go to slide ${index + 1}`}
             aria-current={index === selected}
+            aria-label={`Go to slide ${index + 1}`}
             onClick={() => api?.scrollTo(index)}
             className={cn(
               'size-2 rounded-full transition-colors',

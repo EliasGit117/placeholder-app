@@ -32,7 +32,15 @@ export const uploadAvatar = profileBase
     });
 
     if (existing)
-      await ImageService.delete(existing.id).catch(() => undefined);
+      await ImageService.delete(existing.id).catch((error) => {
+        // Non-fatal: a stale previous avatar shouldn't block the new upload, but
+        // it leaves an orphaned storage object, so surface it for cleanup.
+        console.error('[Avatar] Failed to delete previous avatar before replace', {
+          imageId: existing.id,
+          userId: user.id,
+          error,
+        });
+      });
 
     const image = await ImageService.upload({
       file: input.file,

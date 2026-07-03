@@ -6,7 +6,8 @@ import { prisma, type TxClient } from '@/lib/db';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
 import { BannerDtoFactory } from '@/features/banners/dtos/banner.ts';
-import { bannerImagePurposeByDevice } from '@/features/banners/consts/banner-devices.ts';
+import { bannerImagePurposeByLocaleDevice } from '@/features/banners/consts/banner-devices.ts';
+import type { Locale } from '@/paraglide/runtime';
 import type { TCreateBannerDto } from '@/features/banners/dtos/create-banner.ts';
 import type { TUpdateBannerDto } from '@/features/banners/dtos/update-banner.ts';
 import type { TSearchBannersRequestDto } from '@/features/banners/dtos/search-banner.ts';
@@ -24,12 +25,14 @@ export class BannerService {
     return prisma.banner.findMany({ orderBy: { order: 'asc' } });
   }
 
-  static async findAllValid(): Promise<Banner[]> {
-    // A banner is only public-valid once it has both device images: the desktop
-    // (3:1) and the mobile (6:5). Intersect the resource ids that own each.
+  static async findAllValid(locale: Locale): Promise<Banner[]> {
+    // A banner is only public-valid for a locale once it has both of that
+    // locale's device images: the desktop (3:1) and the mobile (6:5). Intersect
+    // the resource ids that own each.
+    const purposes = bannerImagePurposeByLocaleDevice[locale];
     const [desktopIds, mobileIds] = await Promise.all([
-      ImageService.findResourceIdsWithImage(ImageResourceType.BANNER, bannerImagePurposeByDevice.desktop),
-      ImageService.findResourceIdsWithImage(ImageResourceType.BANNER, bannerImagePurposeByDevice.mobile),
+      ImageService.findResourceIdsWithImage(ImageResourceType.BANNER, purposes.desktop),
+      ImageService.findResourceIdsWithImage(ImageResourceType.BANNER, purposes.mobile),
     ]);
 
     const mobileSet = new Set(mobileIds);
@@ -107,8 +110,9 @@ export class BannerService {
     if (!existing)
       throw new ORPCError('NOT_FOUND');
 
-    // Remove the three device images (and their storage objects) first, then
-    // drop the row and compact the remaining banners to a gapless 1..N.
+    // Remove all of the banner's images (every locale + device, and their
+    // storage objects) first, then drop the row and compact the remaining
+    // banners to a gapless 1..N.
     await ImageService.deleteAllForResource(ImageResourceType.BANNER, String(id));
 
     await prisma.$transaction(async (tx) => {

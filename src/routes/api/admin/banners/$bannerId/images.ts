@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { BannerService } from '@/features/banners/services/banner-service.ts';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
-import { bannerDeviceFromString, bannerImagePurposeByDevice } from '@/features/banners/consts/banner-devices.ts';
+import { bannerDeviceFromString, bannerImagePurposeByLocaleDevice, bannerLocaleFromString } from '@/features/banners/consts/banner-devices.ts';
 
 async function handle({ request, params }: { request: Request; params: Record<string, string> }): Promise<Response> {
   const session = await auth.api.getSession({ headers: request.headers });
@@ -23,9 +23,12 @@ async function handle({ request, params }: { request: Request; params: Record<st
   if (isNaN(bannerId))
     return Response.json({ error: 'Invalid banner ID' }, { status: 400 });
 
-  // Which device slot this upload targets (?device=mobile); defaults to desktop.
-  const device = bannerDeviceFromString(new URL(request.url).searchParams.get('device'));
-  const purpose = bannerImagePurposeByDevice[device];
+  // Which locale + device slot this upload targets (?locale=ru&device=mobile);
+  // default to the base locale's desktop.
+  const url = new URL(request.url);
+  const device = bannerDeviceFromString(url.searchParams.get('device'));
+  const locale = bannerLocaleFromString(url.searchParams.get('locale'));
+  const purpose = bannerImagePurposeByLocaleDevice[locale][device];
 
   const banner = await BannerService.findById(bannerId);
   if (!banner)
@@ -57,7 +60,7 @@ async function handle({ request, params }: { request: Request; params: Record<st
       resourceType: ImageResourceType.BANNER,
       purpose,
       resourceId: String(bannerId),
-      fileName: `banner-${bannerId}-${device}`,
+      fileName: `banner-${bannerId}-${locale}-${device}`,
     });
 
     return Response.json(image, { status: 201 });

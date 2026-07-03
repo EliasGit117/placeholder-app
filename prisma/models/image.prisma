@@ -11,8 +11,10 @@ enum ImagePurpose {
   GALLERY_SECTION_IMAGE
   AVATAR_IMAGE
   PRODUCT_VARIANT_IMAGE
-  BANNER_IMAGE
-  BANNER_IMAGE_MOBILE
+  BANNER_IMAGE_RO
+  BANNER_IMAGE_MOBILE_RO
+  BANNER_IMAGE_RU
+  BANNER_IMAGE_MOBILE_RU
 
   @@map("image_purpose")
 }
@@ -29,6 +31,7 @@ model Image {
   url          String
   key          String
   customId     String?           @map("custom_id")
+  generatedId  String?           @unique @map("generated_id")
   name         String
   size         Int
   mimeType     String            @map("mime_type")
@@ -57,6 +60,7 @@ model ImageVariant {
   url     String
   key     String
   customId String?         @map("custom_id")
+  generatedId String?      @unique @map("generated_id")
   name    String
   size    Int
   width   Int

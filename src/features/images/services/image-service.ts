@@ -8,6 +8,7 @@ import { bytesToMb } from '@/lib/utils';
 import { s3Storage } from '@/features/shared/services/s3-storage.ts';
 import { ImageDtoFactory, type TImageDto } from '@/features/images/dtos/image-dto.ts';
 import { getImagePolicy, type ImageConfig, type ImageTransform } from '@/features/images/consts/image-resource-map.ts';
+import { buildImageGeneratedId, buildVariantGeneratedId } from '@/features/images/consts/generated-id.ts';
 import type { TCreateImageInput } from '@/features/images/schemas/image-mutations.ts';
 
 interface UploadInput {
@@ -79,26 +80,40 @@ export class ImageService {
   static async upload(input: UploadInput): Promise<TImageDto> {
     const prepared = await ImageService.prepareImage(input);
 
-    // Generate a GUID per file up front so it can travel as the UploadThing
-    // customId and then be persisted on the entity after a successful upload.
+    // Derive an identifier from what we know about the image up front, so it can
+    // travel as the UploadThing customId and then be persisted on the entity.
+    // Always carries a random suffix so a replace (delete + re-upload under the
+    // same scope) never collides with a still-reserved customId (see
+    // buildImageGeneratedId).
+    const generatedId = buildImageGeneratedId({
+      resourceType: input.resourceType,
+      resourceId: input.resourceId,
+      purpose: input.purpose,
+    });
+
     const uploadedOriginal = await s3Storage.upload(prepared.original.file, {
       acl: 'public-read',
-      customId: crypto.randomUUID(),
+      customId: generatedId,
     });
     const uploadedVariants = await Promise.all(
-      prepared.variants.map(async (variant) => ({
-        variant,
-        uploaded: await s3Storage.upload(variant.file, {
-          acl: 'public-read',
-          customId: crypto.randomUUID(),
-        }),
-      }))
+      prepared.variants.map(async (variant) => {
+        const variantGeneratedId = buildVariantGeneratedId(generatedId, variant.kind);
+        return {
+          variant,
+          variantGeneratedId,
+          uploaded: await s3Storage.upload(variant.file, {
+            acl: 'public-read',
+            customId: variantGeneratedId,
+          }),
+        };
+      })
     );
 
     return ImageService.create({
       url: uploadedOriginal.url,
       key: uploadedOriginal.key,
       customId: uploadedOriginal.customId ?? undefined,
+      generatedId,
       name: uploadedOriginal.name,
       size: uploadedOriginal.size,
       mimeType: 'image/webp',
@@ -108,11 +123,12 @@ export class ImageService {
       resourceType: input.resourceType,
       resourceId: input.resourceId,
       purpose: input.purpose,
-      variants: uploadedVariants.map(({ variant, uploaded }) => ({
+      variants: uploadedVariants.map(({ variant, variantGeneratedId, uploaded }) => ({
         kind: variant.kind,
         url: uploaded.url,
         key: uploaded.key,
         customId: uploaded.customId ?? undefined,
+        generatedId: variantGeneratedId,
         name: uploaded.name,
         size: uploaded.size,
         width: variant.width,
@@ -156,6 +172,7 @@ export class ImageService {
           url: input.url,
           key: input.key,
           customId: input.customId ?? null,
+          generatedId: input.generatedId,
           name: input.name,
           size: input.size,
           mimeType: input.mimeType,

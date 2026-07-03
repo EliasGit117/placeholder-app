@@ -19,7 +19,7 @@ const blurClassName = 'backdrop-blur-xl supports-backdrop-filter:bg-background/7
 export const Header = ({ className, ...props }: IProps) => {
 
   return (
-    <header className={cn('border-b sticky top-0 z-30', blurClassName, className)} {...props}>
+    <header className={cn('border-b sticky top-0 z-30 h-16 flex items-center', blurClassName, className)} {...props}>
       <nav className="container mx-auto p-4 flex gap-4 items-center">
         <AppSidebarTrigger className="md:hidden"/>
         <LogoButton/>

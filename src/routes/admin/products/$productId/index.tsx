@@ -60,7 +60,7 @@ export const Route = createFileRoute('/admin/products/$productId/')({
       throw notFound();
 
     const locale = getLocale();
-    const crumbs: IBreadcrumb[] = [{ title: product[`name${capitalizeFirst(locale)}`] }];
+    const crumbs: IBreadcrumb[] = [{ title: `«${product[`name${capitalizeFirst(locale)}`]}»`}];
     return { crumbs, product };
   }
 });

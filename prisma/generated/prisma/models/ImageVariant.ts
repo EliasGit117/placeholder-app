@@ -49,6 +49,7 @@ export type ImageVariantMinAggregateOutputType = {
   url: string | null
   key: string | null
   customId: string | null
+  generatedId: string | null
   name: string | null
   size: number | null
   width: number | null
@@ -63,6 +64,7 @@ export type ImageVariantMaxAggregateOutputType = {
   url: string | null
   key: string | null
   customId: string | null
+  generatedId: string | null
   name: string | null
   size: number | null
   width: number | null
@@ -77,6 +79,7 @@ export type ImageVariantCountAggregateOutputType = {
   url: number
   key: number
   customId: number
+  generatedId: number
   name: number
   size: number
   width: number
@@ -109,6 +112,7 @@ export type ImageVariantMinAggregateInputType = {
   url?: true
   key?: true
   customId?: true
+  generatedId?: true
   name?: true
   size?: true
   width?: true
@@ -123,6 +127,7 @@ export type ImageVariantMaxAggregateInputType = {
   url?: true
   key?: true
   customId?: true
+  generatedId?: true
   name?: true
   size?: true
   width?: true
@@ -137,6 +142,7 @@ export type ImageVariantCountAggregateInputType = {
   url?: true
   key?: true
   customId?: true
+  generatedId?: true
   name?: true
   size?: true
   width?: true
@@ -238,6 +244,7 @@ export type ImageVariantGroupByOutputType = {
   url: string
   key: string
   customId: string | null
+  generatedId: string | null
   name: string
   size: number
   width: number
@@ -275,6 +282,7 @@ export type ImageVariantWhereInput = {
   url?: Prisma.StringFilter<"ImageVariant"> | string
   key?: Prisma.StringFilter<"ImageVariant"> | string
   customId?: Prisma.StringNullableFilter<"ImageVariant"> | string | null
+  generatedId?: Prisma.StringNullableFilter<"ImageVariant"> | string | null
   name?: Prisma.StringFilter<"ImageVariant"> | string
   size?: Prisma.IntFilter<"ImageVariant"> | number
   width?: Prisma.IntFilter<"ImageVariant"> | number
@@ -290,6 +298,7 @@ export type ImageVariantOrderByWithRelationInput = {
   url?: Prisma.SortOrder
   key?: Prisma.SortOrder
   customId?: Prisma.SortOrderInput | Prisma.SortOrder
+  generatedId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   size?: Prisma.SortOrder
   width?: Prisma.SortOrder
@@ -300,6 +309,7 @@ export type ImageVariantOrderByWithRelationInput = {
 
 export type ImageVariantWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  generatedId?: string
   imageId_kind?: Prisma.ImageVariantImageIdKindCompoundUniqueInput
   AND?: Prisma.ImageVariantWhereInput | Prisma.ImageVariantWhereInput[]
   OR?: Prisma.ImageVariantWhereInput[]
@@ -315,7 +325,7 @@ export type ImageVariantWhereUniqueInput = Prisma.AtLeast<{
   height?: Prisma.IntFilter<"ImageVariant"> | number
   createdAt?: Prisma.DateTimeFilter<"ImageVariant"> | Date | string
   image?: Prisma.XOR<Prisma.ImageScalarRelationFilter, Prisma.ImageWhereInput>
-}, "id" | "imageId_kind">
+}, "id" | "generatedId" | "imageId_kind">
 
 export type ImageVariantOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -324,6 +334,7 @@ export type ImageVariantOrderByWithAggregationInput = {
   url?: Prisma.SortOrder
   key?: Prisma.SortOrder
   customId?: Prisma.SortOrderInput | Prisma.SortOrder
+  generatedId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   size?: Prisma.SortOrder
   width?: Prisma.SortOrder
@@ -346,6 +357,7 @@ export type ImageVariantScalarWhereWithAggregatesInput = {
   url?: Prisma.StringWithAggregatesFilter<"ImageVariant"> | string
   key?: Prisma.StringWithAggregatesFilter<"ImageVariant"> | string
   customId?: Prisma.StringNullableWithAggregatesFilter<"ImageVariant"> | string | null
+  generatedId?: Prisma.StringNullableWithAggregatesFilter<"ImageVariant"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"ImageVariant"> | string
   size?: Prisma.IntWithAggregatesFilter<"ImageVariant"> | number
   width?: Prisma.IntWithAggregatesFilter<"ImageVariant"> | number
@@ -358,6 +370,7 @@ export type ImageVariantCreateInput = {
   url: string
   key: string
   customId?: string | null
+  generatedId?: string | null
   name: string
   size: number
   width: number
@@ -373,6 +386,7 @@ export type ImageVariantUncheckedCreateInput = {
   url: string
   key: string
   customId?: string | null
+  generatedId?: string | null
   name: string
   size: number
   width: number
@@ -385,6 +399,7 @@ export type ImageVariantUpdateInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   customId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  generatedId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   width?: Prisma.IntFieldUpdateOperationsInput | number
@@ -400,6 +415,7 @@ export type ImageVariantUncheckedUpdateInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   customId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  generatedId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   width?: Prisma.IntFieldUpdateOperationsInput | number
@@ -414,6 +430,7 @@ export type ImageVariantCreateManyInput = {
   url: string
   key: string
   customId?: string | null
+  generatedId?: string | null
   name: string
   size: number
   width: number
@@ -426,6 +443,7 @@ export type ImageVariantUpdateManyMutationInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   customId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  generatedId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   width?: Prisma.IntFieldUpdateOperationsInput | number
@@ -440,6 +458,7 @@ export type ImageVariantUncheckedUpdateManyInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   customId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  generatedId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   width?: Prisma.IntFieldUpdateOperationsInput | number
@@ -469,6 +488,7 @@ export type ImageVariantCountOrderByAggregateInput = {
   url?: Prisma.SortOrder
   key?: Prisma.SortOrder
   customId?: Prisma.SortOrder
+  generatedId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   size?: Prisma.SortOrder
   width?: Prisma.SortOrder
@@ -491,6 +511,7 @@ export type ImageVariantMaxOrderByAggregateInput = {
   url?: Prisma.SortOrder
   key?: Prisma.SortOrder
   customId?: Prisma.SortOrder
+  generatedId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   size?: Prisma.SortOrder
   width?: Prisma.SortOrder
@@ -505,6 +526,7 @@ export type ImageVariantMinOrderByAggregateInput = {
   url?: Prisma.SortOrder
   key?: Prisma.SortOrder
   customId?: Prisma.SortOrder
+  generatedId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   size?: Prisma.SortOrder
   width?: Prisma.SortOrder
@@ -571,6 +593,7 @@ export type ImageVariantCreateWithoutImageInput = {
   url: string
   key: string
   customId?: string | null
+  generatedId?: string | null
   name: string
   size: number
   width: number
@@ -584,6 +607,7 @@ export type ImageVariantUncheckedCreateWithoutImageInput = {
   url: string
   key: string
   customId?: string | null
+  generatedId?: string | null
   name: string
   size: number
   width: number
@@ -627,6 +651,7 @@ export type ImageVariantScalarWhereInput = {
   url?: Prisma.StringFilter<"ImageVariant"> | string
   key?: Prisma.StringFilter<"ImageVariant"> | string
   customId?: Prisma.StringNullableFilter<"ImageVariant"> | string | null
+  generatedId?: Prisma.StringNullableFilter<"ImageVariant"> | string | null
   name?: Prisma.StringFilter<"ImageVariant"> | string
   size?: Prisma.IntFilter<"ImageVariant"> | number
   width?: Prisma.IntFilter<"ImageVariant"> | number
@@ -640,6 +665,7 @@ export type ImageVariantCreateManyImageInput = {
   url: string
   key: string
   customId?: string | null
+  generatedId?: string | null
   name: string
   size: number
   width: number
@@ -652,6 +678,7 @@ export type ImageVariantUpdateWithoutImageInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   customId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  generatedId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   width?: Prisma.IntFieldUpdateOperationsInput | number
@@ -665,6 +692,7 @@ export type ImageVariantUncheckedUpdateWithoutImageInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   customId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  generatedId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   width?: Prisma.IntFieldUpdateOperationsInput | number
@@ -678,6 +706,7 @@ export type ImageVariantUncheckedUpdateManyWithoutImageInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   key?: Prisma.StringFieldUpdateOperationsInput | string
   customId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  generatedId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
   width?: Prisma.IntFieldUpdateOperationsInput | number
@@ -694,6 +723,7 @@ export type ImageVariantSelect<ExtArgs extends runtime.Types.Extensions.Internal
   url?: boolean
   key?: boolean
   customId?: boolean
+  generatedId?: boolean
   name?: boolean
   size?: boolean
   width?: boolean
@@ -709,6 +739,7 @@ export type ImageVariantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   url?: boolean
   key?: boolean
   customId?: boolean
+  generatedId?: boolean
   name?: boolean
   size?: boolean
   width?: boolean
@@ -724,6 +755,7 @@ export type ImageVariantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   url?: boolean
   key?: boolean
   customId?: boolean
+  generatedId?: boolean
   name?: boolean
   size?: boolean
   width?: boolean
@@ -739,6 +771,7 @@ export type ImageVariantSelectScalar = {
   url?: boolean
   key?: boolean
   customId?: boolean
+  generatedId?: boolean
   name?: boolean
   size?: boolean
   width?: boolean
@@ -746,7 +779,7 @@ export type ImageVariantSelectScalar = {
   createdAt?: boolean
 }
 
-export type ImageVariantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "imageId" | "kind" | "url" | "key" | "customId" | "name" | "size" | "width" | "height" | "createdAt", ExtArgs["result"]["imageVariant"]>
+export type ImageVariantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "imageId" | "kind" | "url" | "key" | "customId" | "generatedId" | "name" | "size" | "width" | "height" | "createdAt", ExtArgs["result"]["imageVariant"]>
 export type ImageVariantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   image?: boolean | Prisma.ImageDefaultArgs<ExtArgs>
 }
@@ -769,6 +802,7 @@ export type $ImageVariantPayload<ExtArgs extends runtime.Types.Extensions.Intern
     url: string
     key: string
     customId: string | null
+    generatedId: string | null
     name: string
     size: number
     width: number
@@ -1204,6 +1238,7 @@ export interface ImageVariantFieldRefs {
   readonly url: Prisma.FieldRef<"ImageVariant", 'String'>
   readonly key: Prisma.FieldRef<"ImageVariant", 'String'>
   readonly customId: Prisma.FieldRef<"ImageVariant", 'String'>
+  readonly generatedId: Prisma.FieldRef<"ImageVariant", 'String'>
   readonly name: Prisma.FieldRef<"ImageVariant", 'String'>
   readonly size: Prisma.FieldRef<"ImageVariant", 'Int'>
   readonly width: Prisma.FieldRef<"ImageVariant", 'Int'>

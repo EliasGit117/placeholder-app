@@ -15,7 +15,7 @@ import { BannerState } from '~/prisma/generated/prisma/enums.ts';
 import { updateBannerDtoSchema, type TUpdateBannerDto } from '@/features/banners/dtos/update-banner.ts';
 import type { TBannerDto } from '@/features/banners/dtos/banner.ts';
 import { BannerStateSelect } from './banner-state-select.tsx';
-import { BannerImageCard } from './banner-image-card.tsx';
+import { BannerImages } from './banner-images.tsx';
 import { BannerFormSkeleton } from './banner-form-skeleton.tsx';
 
 
@@ -86,10 +86,7 @@ export const BannerForm: FC<IProps> = ({ id, initialData }) => {
       <Card>
         <CardContent className="@container space-y-6">
           <fieldset disabled={disabled} className="space-y-6">
-            <div className="flex flex-col gap-6 @2xl:flex-row @2xl:items-start">
-              <BannerImageCard bannerId={id} device="mobile" disabled={disabled}/>
-              <BannerImageCard bannerId={id} device="desktop" disabled={disabled}/>
-            </div>
+            <BannerImages bannerId={id} disabled={disabled}/>
 
             <Separator/>
 

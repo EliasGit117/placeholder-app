@@ -4,8 +4,6 @@ import { serverEnvConfig } from '@/lib/config/server-env-config';
 export interface UploadOptions {
   acl?: 'public-read' | 'private';
   contentDisposition?: 'inline' | 'attachment';
-  // Our own identifier stored on the UploadThing file; lets us reference/delete
-  // by customId later (keyType: 'customId').
   customId?: string;
 }
 
@@ -46,9 +44,9 @@ export class S3Storage implements IS3Storage {
 
   async upload(file: File, opts?: UploadOptions): Promise<UploadResult> {
     // UTFile carries the customId onto the stored UploadThing object.
-    const toUpload = opts?.customId
-      ? new UTFile([file], file.name, { customId: opts.customId, type: file.type })
-      : file;
+    const toUpload = opts?.customId ?
+      new UTFile([file], file.name, { customId: opts.customId, type: file.type }) :
+      file;
 
     const result = await this.api.uploadFiles(toUpload, {
       acl: opts?.acl,

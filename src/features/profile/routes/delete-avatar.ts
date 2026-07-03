@@ -29,7 +29,15 @@ export const deleteAvatar = profileBase
     });
 
     if (existing)
-      await ImageService.delete(existing.id).catch(() => undefined);
+      await ImageService.delete(existing.id).catch((error) => {
+        // Non-fatal: the user record is already cleared, but a failed image
+        // delete leaves an orphaned storage object, so surface it for cleanup.
+        console.error('[Avatar] Failed to delete avatar image', {
+          imageId: existing.id,
+          userId: user.id,
+          error,
+        });
+      });
 
     return { ok: true as const };
   });

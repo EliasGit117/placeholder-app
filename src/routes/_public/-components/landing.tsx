@@ -5,11 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { HeroBannerCarousel } from '@/routes/_public/-components/hero-banner-carousel';
 
-/**
- * Skinery marketing landing — static content (no backend). Uses only the app's
- * theme tokens (colors, font, radius) so it adapts to light/dark and the global
- * design system. The site header + footer come from MainLayout, not this page.
- */
 
 export const SkineryLanding: FC = () => (
   <div className="flex-1">
@@ -217,7 +212,7 @@ const About: FC = () => (
             className="group relative flex flex-col gap-4 overflow-hidden rounded-xl border border-border bg-card p-6 text-card-foreground transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5"
           >
             <div
-              className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"/>
+              className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"/>
             <div
               className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-primary/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"/>
 

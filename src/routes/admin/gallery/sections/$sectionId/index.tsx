@@ -36,7 +36,7 @@ export const Route = createFileRoute('/admin/gallery/sections/$sectionId/')({
       throw notFound();
 
     const locale = getLocale();
-    const crumbs: IBreadcrumb[] = [{ title: section[`name${capitalizeFirst(locale)}`] }];
+    const crumbs: IBreadcrumb[] = [{ title: `«${section[`name${capitalizeFirst(locale)}`]}»`}];
     return { crumbs };
   }
 });

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { imageDtoSchema, type TImageDto } from '@/features/images/dtos/image-dto.ts';
 import { bannerImagePurpose } from '@/features/banners/consts/banner-devices.ts';
+import { locales } from '@/paraglide/runtime';
 
 // Only rendering essentials are exposed — internal storage fields (key, size,
 // resource ownership, timestamps) are intentionally dropped so they never reach
@@ -56,5 +57,11 @@ export const bannerImagesDtoSchema = z.object({
 });
 
 export type TBannerImagesDto = z.infer<typeof bannerImagesDtoSchema>;
+
+// Every locale's device images for a banner, keyed by locale. Fetched in one
+// request so the admin editor holds a single query for all locale tabs.
+export const bannerImagesByLocaleDtoSchema = z.record(z.enum(locales), bannerImagesDtoSchema);
+
+export type TBannerImagesByLocaleDto = z.infer<typeof bannerImagesByLocaleDtoSchema>;
 
 export { bannerImagePurpose };

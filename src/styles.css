@@ -189,4 +189,8 @@
     content: attr(data-placeholder);
     @apply pointer-events-none float-left h-0 text-muted-foreground;
   }
+
+  .min-h-safe-screen {
+    @apply min-h-[calc(100svh-(--spacing(16)-(--spacing(8))))];
+  }
 }

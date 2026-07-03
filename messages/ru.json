@@ -52,6 +52,11 @@
     }
   },
   "components": {
+    "announcement_bar": {
+      "free_shipping": "Бесплатная доставка при заказе от 500 лей",
+      "botanical": "Ботаническая косметика, чистые формулы",
+      "new_serum": "Новинка: сыворотка с гиалуроновой кислотой"
+    },
     "data_table": {
       "clear": "Сбросить",
       "clear_filters": "Сбросить фильтры",
@@ -276,7 +281,9 @@
     "gallery": {
       "title": "Галерея",
       "not_found": "Раздел не найден.",
-      "not_found_description": "Раздел, который вы ищете, не существует или больше недоступен."
+      "not_found_description": "Раздел, который вы ищете, не существует или больше недоступен.",
+      "no_sections": "Разделов нет",
+      "no_sections_description": "Сейчас нет разделов галереи для отображения. Пожалуйста, зайдите позже."
     },
     "users": {
       "title": "Пользователи",
@@ -461,10 +468,9 @@
         "empty_description": "Создайте первый баннер, чтобы начать.",
         "col_preview": "Превью",
         "col_problem": "Состояние изображений",
-        "status_none": "Полный",
-        "status_missing_desktop": "Нет десктопа",
-        "status_missing_mobile": "Нет мобильного",
-        "status_missing_all": "Нет изображений",
+        "status_complete": "Полный",
+        "status_partial": "Частично",
+        "status_empty": "Нет изображений",
         "col_title": "Заголовок",
         "col_title_ro": "Заголовок (RO)",
         "col_title_ru": "Заголовок (RU)",

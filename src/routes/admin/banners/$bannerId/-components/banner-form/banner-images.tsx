@@ -9,19 +9,76 @@ import { DropZone } from '@/components/file-upload/drop-zone.tsx';
 import { Skeleton } from '@/components/ui/skeleton.tsx';
 import { LoadingButton } from '@/components/ui/loading-button.tsx';
 import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { m } from '@/paraglide/messages';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import {
   type BannerDevice,
   bannerAspectByDevice,
-  bannerImagePurposeByDevice
+  bannerImagePurposeByLocaleDevice,
+  bannerLocales
 } from '@/features/banners/consts/banner-devices.ts';
 import { getImageUploadConstraints } from '@/features/images/consts/image-resource-map.ts';
+import type { TBannerImageDto } from '@/features/banners/dtos/banner-image.ts';
+import type { Locale } from '@/paraglide/runtime';
 
 
 interface IProps {
   bannerId: number;
+  disabled?: boolean;
+}
+
+// Banner artwork is language-specific, so each locale owns its own desktop +
+// mobile image. A single query loads every locale's images; the locale tabs and
+// device slots just slice into it.
+export const BannerImages: FC<IProps> = ({ bannerId, disabled }) => {
+  const { data: imagesByLocale, isPending } = useQuery(
+    orpc.admin.banners.getImages.queryOptions({ input: { bannerId } })
+  );
+
+  return (
+    <Tabs defaultValue={bannerLocales[0]}>
+      <TabsList>
+        {bannerLocales.map((locale) => (
+          <TabsTrigger key={locale} value={locale}>
+            {locale.toUpperCase()}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+      {bannerLocales.map((locale) => (
+        <TabsContent
+          key={locale}
+          value={locale}
+          className="flex flex-col gap-6 @2xl:flex-row @2xl:items-start"
+        >
+          <ImageSlot
+            bannerId={bannerId}
+            locale={locale}
+            device="mobile"
+            image={imagesByLocale?.[locale]?.mobile ?? null}
+            pending={isPending}
+            disabled={disabled}
+          />
+          <ImageSlot
+            bannerId={bannerId}
+            locale={locale}
+            device="desktop"
+            image={imagesByLocale?.[locale]?.desktop ?? null}
+            pending={isPending}
+            disabled={disabled}
+          />
+        </TabsContent>
+      ))}
+    </Tabs>
+  );
+};
+
+interface ISlotProps {
+  bannerId: number;
+  locale: Locale;
   device: BannerDevice;
+  image: TBannerImageDto | null;
+  pending: boolean;
   disabled?: boolean;
 }
 
@@ -49,20 +106,17 @@ const deviceConfig: Record<BannerDevice, {
   },
 };
 
-export const BannerImageCard: FC<IProps> = ({ bannerId, device, disabled }) => {
+// A single (locale, device) upload slot. The image comes from the parent's one
+// query; the slot owns only its upload/delete, which invalidate that query.
+const ImageSlot: FC<ISlotProps> = ({ bannerId, locale, device, image, pending, disabled }) => {
   const queryClient = useQueryClient();
   const confirm = useConfirm();
   const [isUploading, setIsUploading] = useState(false);
 
   const config = deviceConfig[device];
-  const purpose = bannerImagePurposeByDevice[device];
+  const purpose = bannerImagePurposeByLocaleDevice[locale][device];
   const targetAspect = bannerAspectByDevice[device];
   const constraints = getImageUploadConstraints(ImageResourceType.BANNER, purpose);
-
-  const { data: images, isPending: imagePending } = useQuery(
-    orpc.admin.banners.getImages.queryOptions({ input: { bannerId } })
-  );
-  const image = images?.[device] ?? null;
   const placeholder = thumbhashToDataUrl(image?.thumbhash);
 
   const refresh = async () => {
@@ -83,7 +137,7 @@ export const BannerImageCard: FC<IProps> = ({ bannerId, device, disabled }) => {
     try {
       const body = new FormData();
       body.append('file', file);
-      await xhrUpload(`/api/admin/banners/${bannerId}/images?device=${device}`, body, {
+      await xhrUpload(`/api/admin/banners/${bannerId}/images?device=${device}&locale=${locale}`, body, {
         onProgress: (progress) => {
           const message = progress >= 100 ?
             m['pages.banners.detail.image_processing']() :
@@ -125,7 +179,7 @@ export const BannerImageCard: FC<IProps> = ({ bannerId, device, disabled }) => {
   };
 
   const { mutate: removeImage, isPending: isRemoving } = useMutation({
-    mutationFn: () => orpc.admin.banners.deleteImage.call({ bannerId, device }),
+    mutationFn: () => orpc.admin.banners.deleteImage.call({ bannerId, device, locale }),
     onSuccess: async () => {
       await refresh();
       toast.success(m['pages.banners.detail.image_removed']());
@@ -142,7 +196,7 @@ export const BannerImageCard: FC<IProps> = ({ bannerId, device, disabled }) => {
         <span className="text-sm font-medium">{config.label()}</span>
       </div>
 
-      {imagePending ? (
+      {pending ? (
         <Skeleton className={cn(config.aspectClass, 'w-full rounded-md')}/>
       ) : image ? (
         <div className="flex flex-col gap-1">

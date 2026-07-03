@@ -16,7 +16,7 @@ function RouteComponent() {
   const { data: sections = [] } = useQuery(orpc.gallery.sections.getAll.queryOptions());
 
   return (
-    <>
+    <div className='flex flex-col min-h-[calc(100svh-(--spacing(24)))]'>
       <nav className="container mx-auto px-4 py-2 flex items-center gap-4">
         {sections.map((s) => (
           <Button key={s.slug} variant="link" className='p-0' asChild>
@@ -32,6 +32,6 @@ function RouteComponent() {
       </nav>
 
       <Outlet/>
-    </>
+    </div>
   );
 }

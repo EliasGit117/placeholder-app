@@ -4,7 +4,6 @@ import { orpc } from '@/lib/orpc';
 import { roleHasPermission } from '@/lib/auth';
 import { getLocale } from '@/paraglide/runtime';
 import { capitalizeFirst } from '@/lib/utils';
-import { m } from '@/paraglide/messages';
 import type { IBreadcrumb } from '@/components/layout/admin/nav-breadcrumbs.tsx';
 import { BannerForm } from './-components/banner-form';
 
@@ -25,12 +24,10 @@ export const Route = createFileRoute('/admin/banners/$bannerId/')({
   },
   loader: async ({ params: { bannerId } }) => {
     const banner = await orpc.admin.banners.getById.call({ id: bannerId });
-
     const locale = getLocale();
-    const title = banner[`title${capitalizeFirst(locale)}`] || m['pages.banners.index.untitled']();
-    const crumbs: IBreadcrumb[] = [{ title }];
+    const crumbs: IBreadcrumb[] = [{ title: `«${banner[`title${capitalizeFirst(locale)}`]}»` }];
 
-    return { banner, crumbs };
+    return { banner: banner, crumbs: crumbs };
   }
 });
 

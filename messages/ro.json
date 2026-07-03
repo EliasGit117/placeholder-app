@@ -54,6 +54,11 @@
     }
   },
   "components": {
+    "announcement_bar": {
+      "free_shipping": "Livrare gratuită la comenzi peste 500 lei",
+      "botanical": "Cosmetică botanică, formule curate",
+      "new_serum": "Nou: ser cu acid hialuronic"
+    },
     "data_table": {
       "clear": "Golire",
       "clear_filters": "Golire filtre",
@@ -281,7 +286,9 @@
     "gallery": {
       "title": "Galerie",
       "not_found": "Secțiunea nu a fost găsită.",
-      "not_found_description": "Secțiunea pe care o cauți nu există sau nu mai este disponibilă."
+      "not_found_description": "Secțiunea pe care o cauți nu există sau nu mai este disponibilă.",
+      "no_sections": "Nu există secțiuni",
+      "no_sections_description": "Momentan nu există secțiuni de galerie de afișat. Vă rugăm să reveniți mai târziu."
     },
     "settings": {
       "title": "Setări",
@@ -466,10 +473,9 @@
         "empty_description": "Creează primul banner pentru a începe.",
         "col_preview": "Previzualizare",
         "col_problem": "Stare imagini",
-        "status_none": "Complet",
-        "status_missing_desktop": "Lipsește desktop",
-        "status_missing_mobile": "Lipsește mobil",
-        "status_missing_all": "Lipsesc toate",
+        "status_complete": "Complet",
+        "status_partial": "Parțial",
+        "status_empty": "Fără imagini",
         "col_title": "Titlu",
         "col_title_ro": "Titlu (RO)",
         "col_title_ru": "Titlu (RU)",

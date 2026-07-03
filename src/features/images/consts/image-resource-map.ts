@@ -65,20 +65,39 @@ export const imagePolicy: Record<ImageResourceType, Partial<Record<ImagePurpose,
   },
 
   BANNER: {
-    // Desktop banner: 3:1, shown on tablet/desktop viewports.
-    BANNER_IMAGE: {
+    // Desktop banner (3:1), per locale — artwork has baked-in text so each
+    // language owns its own image. Cropped to 3:1 via fit: 'cover'. No
+    // thumbnails: the full image is used everywhere.
+    BANNER_IMAGE_RO: {
       multiple: false,
       maxSize: mbToBytes(10),
       mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
-      // Banner images are always 3:1 — the original is cropped to that ratio
-      // via fit: 'cover'. No thumbnails: the full image is used everywhere.
       width: 3840,
       height: 1280,
       fit: 'cover',
       variants: [],
     },
-    // Mobile banner: 6:5, an optional override shown on narrow viewports.
-    BANNER_IMAGE_MOBILE: {
+    BANNER_IMAGE_RU: {
+      multiple: false,
+      maxSize: mbToBytes(10),
+      mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+      width: 3840,
+      height: 1280,
+      fit: 'cover',
+      variants: [],
+    },
+    // Mobile banner (6:5), per locale — an optional override shown on narrow
+    // viewports.
+    BANNER_IMAGE_MOBILE_RO: {
+      multiple: false,
+      maxSize: mbToBytes(10),
+      mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+      width: 1500,
+      height: 1250,
+      fit: 'cover',
+      variants: [],
+    },
+    BANNER_IMAGE_MOBILE_RU: {
       multiple: false,
       maxSize: mbToBytes(10),
       mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
