@@ -12,5 +12,6 @@ dist-ssr
 __unconfig*
 todos.json
 .idea
+.claude
 
 /generated/prisma

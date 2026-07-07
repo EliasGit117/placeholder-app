@@ -162,6 +162,18 @@
       "code": "Код",
       "strike": "Зачёркнутый",
       "link": "Ссылка"
+    },
+    "shop": {
+      "search_placeholder": "Поиск товаров…",
+      "sort_newest": "Новинки",
+      "sort_name_asc": "Название А–Я",
+      "sort_name_desc": "Название Я–А",
+      "sort_price_asc": "Цена по возрастанию",
+      "sort_price_desc": "Цена по убыванию",
+      "empty_title": "Товары не найдены",
+      "empty_description": "Попробуйте другой запрос.",
+      "add_to_cart": "В корзину",
+      "currency": "лей"
     }
   },
   "pages": {

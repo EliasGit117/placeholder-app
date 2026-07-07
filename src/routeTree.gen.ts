@@ -27,6 +27,7 @@ import { Route as AdminSessionsIndexRouteImport } from './routes/admin/sessions/
 import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as AdminBannersIndexRouteImport } from './routes/admin/banners/index'
+import { Route as PublicProductsIndexRouteImport } from './routes/_public/products/index'
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as AdminSettingsSecurityRouteImport } from './routes/admin/settings/security'
@@ -125,6 +126,11 @@ const AdminBannersIndexRoute = AdminBannersIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminBannersRouteRoute,
 } as any)
+const PublicProductsIndexRoute = PublicProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
 const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   id: '/api/rpc/$',
   path: '/api/rpc/$',
@@ -184,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/products/': typeof PublicProductsIndexRoute
   '/admin/banners/': typeof AdminBannersIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/products/': typeof AdminProductsIndexRoute
@@ -206,6 +213,7 @@ export interface FileRoutesByTo {
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/products': typeof PublicProductsIndexRoute
   '/admin/banners': typeof AdminBannersIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
@@ -235,6 +243,7 @@ export interface FileRoutesById {
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
+  '/_public/products/': typeof PublicProductsIndexRoute
   '/admin/banners/': typeof AdminBannersIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/products/': typeof AdminProductsIndexRoute
@@ -264,6 +273,7 @@ export interface FileRouteTypes {
     | '/admin/settings/security'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/products/'
     | '/admin/banners/'
     | '/admin/categories/'
     | '/admin/products/'
@@ -286,6 +296,7 @@ export interface FileRouteTypes {
     | '/admin/settings/security'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/products'
     | '/admin/banners'
     | '/admin/categories'
     | '/admin/products'
@@ -314,6 +325,7 @@ export interface FileRouteTypes {
     | '/admin/settings/security'
     | '/api/auth/$'
     | '/api/rpc/$'
+    | '/_public/products/'
     | '/admin/banners/'
     | '/admin/categories/'
     | '/admin/products/'
@@ -467,6 +479,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBannersIndexRouteImport
       parentRoute: typeof AdminBannersRouteRoute
     }
+    '/_public/products/': {
+      id: '/_public/products/'
+      path: '/products'
+      fullPath: '/products/'
+      preLoaderRoute: typeof PublicProductsIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
     '/api/rpc/$': {
       id: '/api/rpc/$'
       path: '/api/rpc/$'
@@ -528,10 +547,12 @@ declare module '@tanstack/react-router' {
 
 interface PublicRouteRouteChildren {
   PublicIndexRoute: typeof PublicIndexRoute
+  PublicProductsIndexRoute: typeof PublicProductsIndexRoute
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicIndexRoute: PublicIndexRoute,
+  PublicProductsIndexRoute: PublicProductsIndexRoute,
 }
 
 const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(

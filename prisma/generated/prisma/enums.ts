@@ -47,6 +47,7 @@ export type ImagePurpose = (typeof ImagePurpose)[keyof typeof ImagePurpose]
 
 
 export const ImageVariantKind = {
+  THUMB_1024x1024: 'THUMB_1024x1024',
   THUMB_512x512: 'THUMB_512x512',
   THUMB_256x256: 'THUMB_256x256'
 } as const

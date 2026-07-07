@@ -18,6 +18,7 @@ enum ImagePurpose {
 }
 
 enum ImageVariantKind {
+  THUMB_1024x1024
   THUMB_512x512
   THUMB_256x256
 

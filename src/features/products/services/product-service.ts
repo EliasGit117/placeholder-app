@@ -2,6 +2,7 @@ import { ORPCError } from '@orpc/server';
 import { type Prisma, type Product, type ProductVariant } from '~/prisma/generated/prisma/client.ts';
 import { ImageResourceType, ImageVariantKind, ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { prisma } from '@/lib/db';
+import { getLocale } from '@/paraglide/runtime';
 import { buildFullSlug } from '@/features/products/lib/slug.ts';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { ProductVariantImageDtoFactory, type TProductVariantImageDto } from '@/features/products/dtos/product-variant-image.ts';
@@ -13,6 +14,7 @@ import type { TProductVariant } from '@/features/products/schemas/product-varian
 import type { TCreateProductInput, TUpdateProductInput } from '@/features/products/schemas/product-mutations.ts';
 import type { TAddVariantInput, TUpdateVariantInput } from '@/features/products/schemas/product-variant-mutations.ts';
 import type { TSearchProductsRequestDto } from '@/features/products/schemas/search-products.ts';
+import type { TSearchPublicProductsRequestDto, TBriefProductPublicDto } from '@/features/products/schemas/search-public-products.ts';
 
 export class ProductService {
 
@@ -116,9 +118,102 @@ export class ProductService {
   }
 
   static async search(input: TSearchProductsRequestDto) {
+    return ProductService.paginate(getWhere(input), input);
+  }
+
+  // Public shop grid: one product card per ACTIVE variant of an ACTIVE product
+  // (each variant is a standalone product to the public layer).
+  static async searchPublicProducts(input: TSearchPublicProductsRequestDto) {
+    // Localize on the server for the request's locale; the DTO carries single strings.
+    const ru = getLocale() === 'ru';
+
+    const where: Prisma.ProductVariantWhereInput = {
+      state: ProductState.ACTIVE,
+      product: { state: ProductState.ACTIVE },
+    };
+
+    if (input.name != null) {
+      // Display name = product name + variant name, so match either part.
+      const filter = { contains: input.name, mode: 'insensitive' as const };
+      where.OR = ru
+        ? [{ nameRu: filter }, { product: { nameRu: filter } }]
+        : [{ nameRo: filter }, { product: { nameRo: filter } }];
+    }
+
+    // 'name' sorts by the localized variant name; other keys map to real columns.
+    const dir = input.dir ?? (input.sort === 'name' ? 'asc' : 'desc');
+    const orderBy: Prisma.ProductVariantOrderByWithRelationInput =
+      input.sort === 'name' ? (ru ? { nameRu: dir } : { nameRo: dir })
+        : input.sort === 'price' ? { price: dir }
+          : { createdAt: dir };
+
+    const [items, meta] = await prisma.productVariant
+      .paginate({
+        where,
+        orderBy,
+        include: {
+          product: {
+            select: {
+              nameRo: true,
+              nameRu: true,
+              categoryId: true,
+              category: { select: { nameRo: true, nameRu: true } },
+            },
+          },
+        },
+      })
+      .withPages({
+        page: input.page ?? 1,
+        limit: input.limit ?? 10,
+        includePageCount: true,
+      });
+
+    // Batch-load the lead image (display order) for every variant on the page.
+    const images = await ImageService.findByResources(
+      ImageResourceType.PRODUCT_VARIANT,
+      items.map((v) => String(v.id))
+    );
+    const firstImageByVariant = new Map<number, { imageUrl: string | null; thumbhash: string | null }>();
+    for (const img of images) {
+      const variantId = Number(img.resourceId);
+      if (firstImageByVariant.has(variantId))
+        continue;
+
+      const preferred = new Set([
+        ImageVariantKind.THUMB_1024x1024,
+        ImageVariantKind.THUMB_512x512,
+        ImageVariantKind.THUMB_256x256,
+      ]);
+
+      const thumb = img.variants.find(v => preferred.has(v.kind));
+      firstImageByVariant.set(variantId, { imageUrl: thumb?.url ?? img.url, thumbhash: img.thumbhash });
+    }
+
+    const result: TBriefProductPublicDto[] = items.map((v) => {
+      const category = ru ? v.product.category?.nameRu : v.product.category?.nameRo;
+      return {
+        id: v.id,
+        // Full display name = parent product + option (e.g. "iPhone 17 Pro Max Orange 128 gb").
+        name: ru ? `${v.product.nameRu} ${v.nameRu}` : `${v.product.nameRo} ${v.nameRo}`,
+        price: v.price,
+        slug: v.fullSlug,
+        categoryId: v.product.categoryId,
+        category: category ?? null,
+        imageUrl: firstImageByVariant.get(v.id)?.imageUrl ?? null,
+        thumbhash: firstImageByVariant.get(v.id)?.thumbhash ?? null,
+      };
+    });
+
+    return PaginationResultDtoFactory.getWithCount(result, meta);
+  }
+
+  private static async paginate(
+    where: Prisma.ProductWhereInput,
+    input: TSearchProductsRequestDto
+  ) {
     const [items, meta] = await prisma.product
       .paginate({
-        where: getWhere(input),
+        where,
         orderBy: { [input.sort ?? 'createdAt']: input.dir ?? 'desc' },
         include: {
           variants: {

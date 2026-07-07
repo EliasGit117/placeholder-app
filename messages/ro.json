@@ -164,6 +164,18 @@
       "code": "Cod",
       "strike": "Tăiat",
       "link": "Link"
+    },
+    "shop": {
+      "search_placeholder": "Caută produse…",
+      "sort_newest": "Cele mai noi",
+      "sort_name_asc": "Nume A–Z",
+      "sort_name_desc": "Nume Z–A",
+      "sort_price_asc": "Preț crescător",
+      "sort_price_desc": "Preț descrescător",
+      "empty_title": "Niciun produs găsit",
+      "empty_description": "Încearcă alt termen de căutare.",
+      "add_to_cart": "Adaugă în coș",
+      "currency": "lei"
     }
   },
   "pages": {
