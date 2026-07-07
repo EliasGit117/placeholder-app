@@ -46,10 +46,15 @@ export const OptionSheet: FC<IProps> = ({ open, onOpenChange, option, loading, o
 
   const { fields, append, remove } = useFieldArray({ control: form.control, name: 'values' });
 
+  // Reset only when the sheet opens or the *edited option* changes — not on every
+  // parent re-render. `option` is a fresh object each render (rebuilt from the
+  // options record), so depending on its identity would re-reset the form mid-edit
+  // (e.g. when submitting flips `loading`), wiping unsaved value rows.
   useEffect(() => {
     if (!open) return;
     form.reset(option ?? emptyOption());
-  }, [open, option]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, option?.key]);
 
   const handleOpenChange = (value: boolean) => {
     if (loading || value) return;

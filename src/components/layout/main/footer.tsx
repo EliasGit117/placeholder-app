@@ -1,5 +1,5 @@
 import type { ComponentProps, FC, ReactNode } from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, type LinkOptions } from '@tanstack/react-router';
 import {
   IconBrandFacebook,
   IconBrandInstagram,
@@ -7,36 +7,16 @@ import {
   IconBrandYoutube,
   type TablerIcon
 } from '@tabler/icons-react';
+import { useQuery } from '@tanstack/react-query';
+import { orpc } from '@/lib/orpc';
 import { cn } from '@/lib/utils';
 import { LogoButton } from '@/components/layout/common/logo-button.tsx';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import { m } from '@/paraglide/messages';
+import VisaIcon from '@/assets/icons/payment/visa.svg?react';
+import MastercardIcon from '@/assets/icons/payment/mastercard.svg?react';
+import ApplePayIcon from '@/assets/icons/payment/apple-pay.svg?react';
 
-/**
- * Skinery marketing footer — static content (no backend), theme-token styled so
- * it follows the design system. Used by the public MainLayout only; admin/auth
- * keep the minimal common Footer.
- */
-
-interface IFooterColumn {
-  title: string;
-  links: string[];
-}
-
-const columns: IFooterColumn[] = [
-  {
-    title: 'Магазин',
-    links: ['Уход за волосами', 'Уход за кожей', 'Микроинъекции', 'Seturi & Cadouri', 'Ediții limitate']
-  },
-  {
-    title: 'Компания',
-    links: ['Povestea noastră', 'Atelierul', 'Sustenabilitate', 'Jurnal', 'Cariere']
-  },
-  {
-    title: 'Поддержка',
-    links: ['Livrare & retur', 'Întrebări frecvente', 'Card cadou', 'Contact', 'Termeni & condiții']
-  }
-];
 
 const socials: { Icon: TablerIcon; label: string }[] = [
   { Icon: IconBrandInstagram, label: 'Instagram' },
@@ -45,89 +25,120 @@ const socials: { Icon: TablerIcon; label: string }[] = [
   { Icon: IconBrandYoutube, label: 'YouTube' }
 ];
 
-const payments = ['Visa', 'Mastercard', 'MAIB Pay', 'Apple Pay'];
+
+const navLinks: { to: LinkOptions['to']; label: () => string }[] = [
+  { to: '/', label: () => m['common.home']() },
+  { to: '/products', label: () => m['pages.products.title']() }
+];
 
 const Eyebrow: FC<{ children: ReactNode }> = ({ children }) => (
   <div className="text-xs font-medium uppercase tracking-[0.28em] text-primary">{children}</div>
 );
 
-export const SiteFooter: FC<ComponentProps<'footer'>> = ({ className, ...props }) => (
-  <footer className={cn('mt-auto border-t border-border bg-muted/40', className)} {...props}>
-    <div className="container mx-auto grid gap-12 px-4 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.4fr] lg:gap-10">
-      {/* Brand */}
-      <div>
-        <LogoButton/>
-        <p className="mt-6 max-w-xs text-sm leading-relaxed text-muted-foreground">
-          Cosmetică botanică formulată în Chișinău. Pentru ritualuri zilnice și piele care respiră.
-        </p>
-        <div className="mt-7 flex gap-3">
-          {socials.map(({ Icon, label }) => (
-            <a
-              key={label}
-              href="#"
-              aria-label={label}
-              className="grid size-10 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-            >
-              <Icon className="size-4"/>
-            </a>
-          ))}
-        </div>
-      </div>
+export const SiteFooter: FC<ComponentProps<'footer'>> = ({ className, ...props }) => {
+  const { data: categories, isPending } = useQuery(
+    orpc.categories.getTree.queryOptions({ input: { depth: 2 } })
+  );
 
-      {/* Link columns */}
-      {columns.map((col) => (
-        <nav key={col.title} className="flex flex-col gap-4">
-          <Eyebrow>{col.title}</Eyebrow>
+  return (
+    <footer className={cn('mt-auto border-t border-border bg-muted/40', className)} {...props}>
+      <div className="container mx-auto flex flex-col gap-12 px-4 py-16 lg:flex-row lg:justify-between lg:gap-10">
+
+        {/* Categories */}
+        <nav className="flex flex-col gap-4">
+          <Eyebrow>{m['components.header.categories']()}</Eyebrow>
           <ul className="flex flex-col gap-3.5">
-            {col.links.map((link) => (
-              <li key={link}>
+            {isPending ? (
+              Array.from({ length: 6 }).map((_, i) => (
+                <li key={i}>
+                  <Skeleton className="h-6" style={{ width: `${60 + ((i * 17) % 35)}%` }}/>
+                </li>
+              ))
+            ) : (
+              categories?.map((category) => (
+                <li key={category.slug}>
+                  <Link
+                    to="/"
+                    className="text-[15px] text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {category.name}
+                  </Link>
+                </li>
+              ))
+            )}
+          </ul>
+        </nav>
+
+        {/* Navigation */}
+        <nav className="flex flex-col gap-4">
+          <Eyebrow>{m['components.footer.navigation']()}</Eyebrow>
+          <ul className="flex flex-col gap-3.5">
+            {navLinks.map(({ to, label }) => (
+              <li key={to}>
                 <Link
-                  to="/"
+                  to={to}
                   className="text-[15px] text-muted-foreground transition-colors hover:text-foreground"
                 >
-                  {link}
+                  {label()}
                 </Link>
               </li>
             ))}
           </ul>
         </nav>
-      ))}
 
-      {/* Newsletter */}
-      <div className="flex flex-col gap-4">
-        <Eyebrow>Newsletter</Eyebrow>
-        <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-          Ritualuri, produse noi și -10% la prima comandă.
-        </p>
-        <form className="flex max-w-sm gap-2" onSubmit={(e) => e.preventDefault()}>
-          <Input type="email" placeholder="adresa@email.md" className="rounded-none bg-background/50"/>
-          <Button type="submit" className="rounded-none uppercase tracking-[0.12em]">
-            Abonare
-          </Button>
-        </form>
-        <p className="mt-1 text-[13px] text-muted-foreground">
-          Atelier · str. Mihai Eminescu 12, Chișinău
-        </p>
-      </div>
-    </div>
+        {/* Contact */}
+        <div className="flex flex-col gap-4">
+          <Eyebrow>{m['components.footer.contact']()}</Eyebrow>
+          <ul className="flex flex-col gap-3.5 text-[15px] text-muted-foreground">
+            <li>
+              <a href="tel:+37322123456" className="transition-colors hover:text-foreground">
+                +373 22 123 456
+              </a>
+            </li>
+            <li>
+              <a href="mailto:hello@skinery.md" className="transition-colors hover:text-foreground">
+                hello@skinery.md
+              </a>
+            </li>
+          </ul>
+        </div>
 
-    {/* Bottom bar */}
-    <div className="border-t border-border">
-      <div className="container mx-auto flex flex-col items-start justify-between gap-4 px-4 py-6 sm:flex-row sm:items-center">
-        <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Skinery SRL. Toate drepturile rezervate.
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {payments.map((p) => (
-            <span
-              key={p}
-              className="rounded-none border border-border px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] text-muted-foreground"
-            >
-              {p}
-            </span>
-          ))}
+        <div className="lg:max-w-xs">
+          <LogoButton/>
+          <p className="mt-6 max-w-xs text-sm leading-relaxed text-muted-foreground">
+            {m['components.footer.description']()}
+          </p>
+          <div className="mt-7 flex gap-3">
+            {socials.map(({ Icon, label }) => (
+              <a
+                key={label}
+                href="#"
+                aria-label={label}
+                className="grid size-10 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+              >
+                <Icon className="size-4"/>
+              </a>
+            ))}
+          </div>
+          <p className="mt-7 text-[13px] text-muted-foreground">
+            {m['components.footer.address']()}
+          </p>
         </div>
       </div>
-    </div>
-  </footer>
-);
+
+      <div className="border-t border-border">
+        <div
+          className="container mx-auto flex flex-col items-start justify-between gap-4 px-4 py-6 sm:flex-row sm:items-center">
+          <p className="text-sm text-muted-foreground">
+            {m['components.footer.copyright']({ year: new Date().getFullYear(), app: 'Skinery SRL' })}
+          </p>
+          <div className="flex flex-wrap gap-2 text-foreground">
+            <VisaIcon className="h-12 w-fit"/>
+            <MastercardIcon className="h-12 w-fit"/>
+            <ApplePayIcon className="h-12 w-fit"/>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};

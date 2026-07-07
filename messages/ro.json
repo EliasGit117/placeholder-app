@@ -91,7 +91,8 @@
     "header": {
       "categories": "Categorii",
       "show_all": "Vezi toate",
-      "admin": "Admin"
+      "admin": "Admin",
+      "cart": "Coș"
     },
     "user_dropdown": {
       "settings": "Setări",
@@ -141,7 +142,11 @@
       }
     },
     "footer": {
-      "copyright": "© {year} {app}. Toate drepturile rezervate."
+      "copyright": "© {year} {app}. Toate drepturile rezervate.",
+      "navigation": "Navigare",
+      "contact": "Contact",
+      "description": "Cosmetică botanică formulată în Chișinău. Pentru ritualuri zilnice și piele care respiră.",
+      "address": "Atelier · str. Mihai Eminescu 12, Chișinău"
     },
     "rich_editor": {
       "undo": "Anulează",

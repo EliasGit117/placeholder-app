@@ -39,9 +39,16 @@ export const OptionsManager: FC<IProps> = ({ productId, options, canUpdate }) =>
 
   const { mutate: saveOptions, isPending } = useMutation({
     mutationFn: (options: TOptions) => orpc.admin.products.update.call({ id: productId, options }),
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success(m['pages.products.form.save_success']());
       setSheetOpen(false);
+      // Seed cache from the mutation response so the new list renders immediately,
+      // then revalidate. Without this the list falls back to stale server data
+      // during refetch and the just-added item flickers out.
+      queryClient.setQueryData(
+        orpc.admin.products.get.queryOptions({ input: { id: productId } }).queryKey,
+        data
+      );
       void queryClient.invalidateQueries({ queryKey: orpc.admin.products.get.key() });
     },
     onError: (error: unknown) => {

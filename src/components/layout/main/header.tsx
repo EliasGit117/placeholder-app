@@ -7,13 +7,12 @@ import { Button } from '@/components/ui/button';
 import { IconShoppingCart } from '@tabler/icons-react';
 import { HeaderNavigationMenu } from '@/components/layout/main/header-navigation-menu.tsx';
 import { Link } from '@tanstack/react-router';
+import { m } from '@/paraglide/messages';
 import Logo from '@/assets/icons/logo/icon.svg?react';
 import LogoText from '@/assets/icons/logo/text.svg?react';
 
 
-interface IProps extends ComponentProps<'header'> {
-
-}
+interface IProps extends ComponentProps<'header'> {}
 
 const blurClassName = 'backdrop-blur-xl supports-backdrop-filter:bg-background/75';
 
@@ -28,10 +27,13 @@ export const Header = ({ className, ...props }: IProps) => {
         <HeaderNavigationMenu className="hidden md:flex absolute left-1/2 -translate-x-1/2"/>
 
         <div className="flex items-center gap-1.5 sm:gap-3 ml-auto">
-          <Button variant="outline" size="icon" className="rounded-full hidden md:flex">
-            <IconShoppingCart/>
+          <Button size="icon" variant="outline" className="rounded-full hidden md:flex">
+            <IconShoppingCart aria-hidden="true"/>
+            <span className="sr-only">{m['components.header.cart']()}</span>
           </Button>
+
           <LocaleDropdown variant="outline" size="icon" align="end" className="rounded-full"/>
+
           <UserDropdown size="icon" align="end"/>
         </div>
       </nav>
@@ -43,11 +45,11 @@ export const Header = ({ className, ...props }: IProps) => {
 const LogoLink: FC<{ className?: string; }> = ({ className }) => {
 
   return (
-    <Link to="/" className={cn('flex items-center gap-2.5', className)}>
-      <figure className="border border-primary aspect-square hidden sm:flex justify-center items-center size-9">
-        <Logo className="h-7 text-foreground"/>
-      </figure>
-      <LogoText className="h-8 text-foreground"/>
+    <Link to="/" aria-label={m['common.home']()} className={cn('flex items-center gap-2.5', className)}>
+      <div className="border border-primary aspect-square hidden sm:flex justify-center items-center size-9">
+        <Logo aria-hidden="true" className="h-7 text-foreground"/>
+      </div>
+      <LogoText aria-hidden="true" className="h-8 text-foreground"/>
     </Link>
   )
 }
