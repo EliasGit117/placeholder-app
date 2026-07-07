@@ -29,7 +29,11 @@ interface IRouterContext {
 
 export const Route = createRootRouteWithContext<IRouterContext>()({
   beforeLoad: async ({ context: { queryClient } }) => {
-    const res = await queryClient.ensureQueryData(orpc.sessions.current.queryOptions());
+    const [res] = await Promise.all([
+      queryClient.ensureQueryData(orpc.sessions.current.queryOptions()),
+      queryClient.ensureQueryData(orpc.categories.getTree.queryOptions({ input: { depth: 2 } })).catch(() => null)
+    ]);
+
     return { session: res?.session, user: res?.user };
   },
   head: () => ({

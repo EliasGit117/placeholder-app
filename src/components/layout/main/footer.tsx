@@ -130,7 +130,7 @@ export const SiteFooter: FC<ComponentProps<'footer'>> = ({ className, ...props }
         <div
           className="container mx-auto flex flex-col items-start justify-between gap-4 px-4 py-6 sm:flex-row sm:items-center">
           <p className="text-sm text-muted-foreground">
-            {m['components.footer.copyright']({ year: new Date().getFullYear(), app: 'Skinery SRL' })}
+            {m['components.footer.copyright']({ year: new Date().getFullYear(), app: 'SKINERY SRL' })}
           </p>
           <div className="flex flex-wrap gap-2 text-foreground">
             <VisaIcon className="h-12 w-fit"/>
