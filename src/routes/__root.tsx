@@ -18,6 +18,9 @@ import { z } from 'zod';
 import { ConfirmDialogProvider } from '@/components/ui/confirm-dialog.tsx';
 import { Toaster } from '@/components/ui/sonner.tsx';
 import { RouteProgressController, RouteProgressProvider } from '@/components/layout/common/route-progress.tsx';
+import { TanStackDevtools } from '@tanstack/react-devtools';
+import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
 
 interface IRouterContext {
@@ -75,6 +78,13 @@ function RootDocument({ children }: { children: ReactNode }) {
 
     <Scripts/>
     <RouterInvalidation/>
+    <TanStackDevtools
+      config={{ position: 'bottom-right' }}
+      plugins={[
+        { name: 'TanStack Router', render: <TanStackRouterDevtoolsPanel/> },
+        { name: 'TanStack Query', render: <ReactQueryDevtoolsPanel/> }
+      ]}
+    />
     </body>
     </html>
   );
