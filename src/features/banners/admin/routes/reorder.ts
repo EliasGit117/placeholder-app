@@ -2,8 +2,8 @@ import { z } from 'zod';
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { bannersAdminBase, bannersAdminPath } from './base.ts';
-import { BannerService } from '../../services/banner-service.ts';
-import { BannerDtoFactory, bannerDtoSchema } from '@/features/banners/dtos/banner.ts';
+import { BannerService } from '@/features/banners/common/services/banner-service.ts';
+import { BannerDtoFactory, bannerDtoSchema } from '@/features/banners/admin/dtos/banner.ts';
 
 const reorderInputSchema = z.object({
   ids: z.array(z.number().int().positive()).min(1),

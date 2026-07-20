@@ -5,12 +5,12 @@ import { BannerState, ImageResourceType } from '~/prisma/generated/prisma/enums.
 import { prisma, type TxClient } from '@/lib/db';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
-import { BannerDtoFactory } from '@/features/banners/dtos/banner.ts';
-import { bannerImagePurposeByLocaleDevice } from '@/features/banners/consts/banner-devices.ts';
+import { BannerDtoFactory } from '@/features/banners/admin/dtos/banner.ts';
+import { bannerImagePurposeByLocaleDevice } from '@/features/banners/common/consts/banner-devices.ts';
 import type { Locale } from '@/paraglide/runtime';
-import type { TCreateBannerDto } from '@/features/banners/dtos/create-banner.ts';
-import type { TUpdateBannerDto } from '@/features/banners/dtos/update-banner.ts';
-import type { TSearchBannersRequestDto } from '@/features/banners/dtos/search-banner.ts';
+import type { TCreateBannerDto } from '@/features/banners/admin/dtos/create-banner.ts';
+import type { TUpdateBannerDto } from '@/features/banners/admin/dtos/update-banner.ts';
+import type { TSearchBannersRequestDto } from '@/features/banners/admin/dtos/search-banner.ts';
 
 
 const BANNER_LOCK = 'banners';

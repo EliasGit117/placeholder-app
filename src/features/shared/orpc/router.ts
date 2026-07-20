@@ -8,8 +8,8 @@ import { categoriesAdminRoutes } from '@/features/categories/routes/admin';
 import { profileRoutes } from '@/features/profile/routes';
 import { productsRoutes } from '@/features/products/routes/public';
 import { productsAdminRoutes } from '@/features/products/routes/admin';
-import { bannersPublicRoutes } from '@/features/banners/routes/public';
-import { bannersAdminRoutes } from '@/features/banners/routes/admin';
+import { bannersPublicRoutes } from '@/features/banners/public/routes';
+import { bannersAdminRoutes } from '@/features/banners/admin/routes';
 
 
 export const orpcRouter = base.router({

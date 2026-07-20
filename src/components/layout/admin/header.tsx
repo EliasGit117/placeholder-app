@@ -2,8 +2,7 @@ import { useEffect, type FC, useRef, type ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
 import { SidebarTrigger } from '@/components/ui/sidebar.tsx';
 import { Separator } from '@/components/ui/separator.tsx';
-import { UserDropdown } from '@/components/auth/user-dropdown';
-import { NavBreadcrumbs } from '@/components/layout/admin/nav-breadcrumbs';
+import { Breadcrumbs } from '@/components/layout/admin/breadcrumbs';
 
 
 interface IProps extends ComponentProps<'header'> {}
@@ -54,8 +53,7 @@ export const Header: FC<IProps> = ({ className, ...props }) => {
           className="data-[orientation=vertical]:h-4 my-auto"
         />
 
-        <NavBreadcrumbs className='ml-2'/>
-        <UserDropdown size='icon-sm' className='ml-auto' align='end'/>
+        <Breadcrumbs className='ml-2'/>
       </div>
     </header>
   );

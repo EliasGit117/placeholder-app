@@ -2,9 +2,9 @@ import { z } from 'zod';
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { bannersAdminBase, bannersAdminPath } from './base.ts';
-import { BannerService } from '../../services/banner-service.ts';
-import { updateBannerDtoSchema } from '@/features/banners/dtos/update-banner.ts';
-import { BannerDtoFactory, bannerDtoSchema } from '@/features/banners/dtos/banner.ts';
+import { BannerService } from '@/features/banners/common/services/banner-service.ts';
+import { updateBannerDtoSchema } from '@/features/banners/admin/dtos/update-banner.ts';
+import { BannerDtoFactory, bannerDtoSchema } from '@/features/banners/admin/dtos/banner.ts';
 
 export const adminBannersUpdate = bannersAdminBase
   .route({

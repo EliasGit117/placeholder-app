@@ -31,9 +31,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
 import { BannerState } from '~/prisma/generated/prisma/enums.ts';
-import type { TBannerImageDto } from '@/features/banners/dtos/banner-image.ts';
-import type { TBannerBriefDto } from '@/features/banners/dtos/banner-brief.ts';
-import type { BannerImageStatus } from '@/features/banners/consts/banner-image-status.ts';
+import type { TBannerImageDto } from '@/features/banners/admin/dtos/banner-image.ts';
+import type { TBannerBriefDto } from '@/features/banners/admin/dtos/banner-brief.ts';
+import type { BannerImageStatus } from '@/features/banners/common/consts/banner-image-status.ts';
 
 
 interface IOptions {

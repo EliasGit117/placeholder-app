@@ -2,9 +2,9 @@ import { z } from 'zod';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import { getLocale } from '@/paraglide/runtime';
 import { bannersPublicBase, bannersPublicPath } from './base.ts';
-import { BannerService } from '../../services/banner-service.ts';
+import { BannerService } from '@/features/banners/common/services/banner-service.ts';
 import { ImageService } from '@/features/images/services/image-service.ts';
-import { bannerPublicDtoSchema, BannerPublicDtoFactory } from '@/features/banners/dtos/banner-public.ts';
+import { bannerPublicDtoSchema, BannerPublicDtoFactory } from '@/features/banners/public/dtos/banner-public.ts';
 
 export const publicBannersGetValid = bannersPublicBase
   .route({

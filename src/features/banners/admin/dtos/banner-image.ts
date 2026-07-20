@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { imageDtoSchema, type TImageDto } from '@/features/images/dtos/image-dto.ts';
-import { bannerImagePurpose } from '@/features/banners/consts/banner-devices.ts';
+import { bannerImagePurpose } from '@/features/banners/common/consts/banner-devices.ts';
 import { locales } from '@/paraglide/runtime';
 
 // Only rendering essentials are exposed — internal storage fields (key, size,

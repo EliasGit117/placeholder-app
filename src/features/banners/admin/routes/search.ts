@@ -4,8 +4,8 @@ import { bannersAdminBase, bannersAdminPath } from './base.ts';
 import {
   searchBannersRequestDtoSchema,
   searchBannersResultDtoSchema,
-} from '@/features/banners/dtos/search-banner.ts';
-import { BannerService } from '../../services/banner-service.ts';
+} from '@/features/banners/admin/dtos/search-banner.ts';
+import { BannerService } from '@/features/banners/common/services/banner-service.ts';
 
 export const adminBannersSearch = bannersAdminBase
   .route({

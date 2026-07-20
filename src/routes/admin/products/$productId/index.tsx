@@ -11,7 +11,7 @@ import { orpc } from '@/lib/orpc';
 import { roleHasPermission } from '@/lib/auth';
 import { getLocale } from '@/paraglide/runtime';
 import { capitalizeFirst } from '@/lib/utils';
-import type { IBreadcrumb } from '@/components/layout/admin/nav-breadcrumbs.tsx';
+import type { IBreadcrumb } from '@/components/layout/admin/breadcrumbs.tsx';
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LoadingButton } from '@/components/ui/loading-button';
 import { IconDeviceFloppy } from '@tabler/icons-react';

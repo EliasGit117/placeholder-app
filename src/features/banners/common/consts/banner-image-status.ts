@@ -9,9 +9,7 @@ export const bannerImageStatuses = ['complete', 'partial', 'empty'] as const;
 export type BannerImageStatus = (typeof bannerImageStatuses)[number];
 
 // Derives the aggregate status from each locale's device presence.
-export function getBannerImageStatus(
-  perLocale: { hasDesktop: boolean; hasMobile: boolean }[]
-): BannerImageStatus {
+export function getBannerImageStatus(perLocale: { hasDesktop: boolean; hasMobile: boolean }[]): BannerImageStatus {
   const anyPresent = perLocale.some((l) => l.hasDesktop || l.hasMobile);
   if (!anyPresent)
     return 'empty';

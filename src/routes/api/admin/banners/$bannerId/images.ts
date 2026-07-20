@@ -3,9 +3,9 @@ import { ORPCError } from '@orpc/server';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { prisma } from '@/lib/db';
 import { ImageService } from '@/features/images/services/image-service.ts';
-import { BannerService } from '@/features/banners/services/banner-service.ts';
+import { BannerService } from '@/features/banners/common/services/banner-service.ts';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
-import { bannerDeviceFromString, bannerImagePurposeByLocaleDevice, bannerLocaleFromString } from '@/features/banners/consts/banner-devices.ts';
+import { bannerDeviceFromString, bannerImagePurposeByLocaleDevice, bannerLocaleFromString } from '@/features/banners/common/consts/banner-devices.ts';
 
 async function handle({ request, params }: { request: Request; params: Record<string, string> }): Promise<Response> {
   const session = await auth.api.getSession({ headers: request.headers });

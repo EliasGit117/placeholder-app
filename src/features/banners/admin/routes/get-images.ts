@@ -2,14 +2,14 @@ import { z } from 'zod';
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { bannersAdminBase, bannersAdminPath } from './base.ts';
-import { BannerService } from '../../services/banner-service.ts';
+import { BannerService } from '@/features/banners/common/services/banner-service.ts';
 import { ImageService } from '@/features/images/services/image-service.ts';
 import {
   bannerImagesByLocaleDtoSchema,
   BannerImageDtoFactory,
   type TBannerImagesByLocaleDto
-} from '@/features/banners/dtos/banner-image.ts';
-import { bannerImagePurposeByLocaleDevice } from '@/features/banners/consts/banner-devices.ts';
+} from '@/features/banners/admin/dtos/banner-image.ts';
+import { bannerImagePurposeByLocaleDevice } from '@/features/banners/common/consts/banner-devices.ts';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import { locales } from '@/paraglide/runtime';
 

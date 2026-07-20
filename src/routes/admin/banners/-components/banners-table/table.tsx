@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { IconRefresh } from '@tabler/icons-react';
 import { orpc } from '@/lib/orpc';
 import { bannerColumns } from './columns.tsx';
-import type { TBannerBriefDto } from '@/features/banners/dtos/banner-brief.ts';
+import type { TBannerBriefDto } from '@/features/banners/admin/dtos/banner-brief.ts';
 import { BannerSheet, BannerSheetProvider, BannerSheetTrigger } from '../banner-sheet';
 import {
   BannerReorderSheet,

@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { dateRangeSchema } from '@/components/data-table';
 import { paginatedRequestDtoSchema } from '@/features/shared/schemas/pagination.ts';
 import { paginationResultWithCountDtoSchema } from '@/features/shared/dtos/pagination-result-dto.ts';
-import { bannerDtoSchema } from '@/features/banners/dtos/banner.ts';
+import { bannerDtoSchema } from '@/features/banners/admin/dtos/banner.ts';
 import { BannerState } from '~/prisma/generated/prisma/enums.ts';
 
 

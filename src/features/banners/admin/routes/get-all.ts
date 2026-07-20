@@ -3,9 +3,9 @@ import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import { bannersAdminBase, bannersAdminPath } from './base.ts';
-import { BannerService } from '../../services/banner-service.ts';
+import { BannerService } from '@/features/banners/common/services/banner-service.ts';
 import { ImageService } from '@/features/images/services/image-service.ts';
-import { bannerBriefDtoSchema, BannerBriefDtoFactory } from '@/features/banners/dtos/banner-brief.ts';
+import { bannerBriefDtoSchema, BannerBriefDtoFactory } from '@/features/banners/admin/dtos/banner-brief.ts';
 
 export const adminBannersGetAll = bannersAdminBase
   .route({

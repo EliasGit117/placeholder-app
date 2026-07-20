@@ -22,7 +22,7 @@ interface IProps extends ComponentProps<'nav'> {}
 
 const responsiveClassName = 'hidden sm:flex';
 
-export const NavBreadcrumbs: FC<IProps> = ({ className, ...props }) => {
+export const Breadcrumbs: FC<IProps> = ({ className, ...props }) => {
   const matches = useMatches();
   const hideBreadcrumbs = matches.some((match) => match.staticData?.hideCrumbs === true);
   if (hideBreadcrumbs)

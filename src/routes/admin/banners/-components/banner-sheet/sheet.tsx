@@ -23,7 +23,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field
 import { Input } from '@/components/ui/input';
 import { m } from '@/paraglide/messages';
 import { BannerState } from '~/prisma/generated/prisma/enums.ts';
-import { createBannerDtoSchema, type TCreateBannerInput } from '@/features/banners/dtos/create-banner.ts';
+import { createBannerDtoSchema, type TCreateBannerInput } from '@/features/banners/admin/dtos/create-banner.ts';
 import { BannerStateSelect } from '../../$bannerId/-components/banner-form/banner-state-select.tsx';
 import { useBannerSheet } from './provider.tsx';
 

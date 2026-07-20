@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import type { Banner } from '~/prisma/generated/prisma/client.ts';
 import type { TImageDto } from '@/features/images/dtos/image-dto.ts';
-import { bannerDtoSchema, BannerDtoFactory } from '@/features/banners/dtos/banner.ts';
-import { bannerImageDtoSchema, BannerImageDtoFactory } from '@/features/banners/dtos/banner-image.ts';
-import { bannerImagePurposeByLocaleDevice } from '@/features/banners/consts/banner-devices.ts';
-import { bannerImageStatuses, getBannerImageStatus } from '@/features/banners/consts/banner-image-status.ts';
+import { bannerDtoSchema, BannerDtoFactory } from '@/features/banners/admin/dtos/banner.ts';
+import { bannerImageDtoSchema, BannerImageDtoFactory } from '@/features/banners/admin/dtos/banner-image.ts';
+import { bannerImagePurposeByLocaleDevice } from '@/features/banners/common/consts/banner-devices.ts';
+import { bannerImageStatuses, getBannerImageStatus } from '@/features/banners/common/consts/banner-image-status.ts';
 import { baseLocale, locales } from '@/paraglide/runtime';
 
 

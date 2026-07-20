@@ -10,7 +10,7 @@ import {
   CarouselItem,
   type CarouselApi
 } from '@/components/ui/carousel';
-import type { TBannerPublicDto } from '@/features/banners/dtos/banner-public.ts';
+import type { TBannerPublicDto } from '@/features/banners/public/dtos/banner-public.ts';
 
 
 interface IProps extends ComponentProps<'section'> {

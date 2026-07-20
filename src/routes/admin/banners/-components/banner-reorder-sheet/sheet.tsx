@@ -25,8 +25,8 @@ import {
 import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
-import type { TBannerImageDto } from '@/features/banners/dtos/banner-image.ts';
-import type { TBannerBriefDto } from '@/features/banners/dtos/banner-brief.ts';
+import type { TBannerImageDto } from '@/features/banners/admin/dtos/banner-image.ts';
+import type { TBannerBriefDto } from '@/features/banners/admin/dtos/banner-brief.ts';
 import { useBannerReorderSheet } from './provider.tsx';
 
 
