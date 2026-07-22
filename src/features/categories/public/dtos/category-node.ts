@@ -1,40 +1,40 @@
 import { z } from 'zod';
 import type { Category } from '~/prisma/generated/prisma/client.ts';
 import { capitalizeFirst } from '@/lib/utils';
-import type { Locale } from '~/src/paraglide/runtime';
+import type { Locale } from '@/paraglide/runtime';
 
 
-export interface ICategoryPublicNode {
+export interface ICategoryNode {
   id: number;
   slug: string;
   path: string;
   name: string;
   description?: string | null;
-  children: ICategoryPublicNode[];
+  children: ICategoryNode[];
 }
 
-export const categoryPublicNodeSchema: z.ZodType<ICategoryPublicNode> = z.lazy(() =>
+export const categoryNodeSchema: z.ZodType<ICategoryNode> = z.lazy(() =>
   z.object({
     id: z.number(),
     slug: z.string(),
     path: z.string(),
     name: z.string(),
     description: z.string().nullish(),
-    children: z.array(categoryPublicNodeSchema),
+    children: z.array(categoryNodeSchema),
   })
 );
 
-export const categoryPublicForestSchema = z.array(categoryPublicNodeSchema);
-export type TCategoryPublicForest = z.infer<typeof categoryPublicForestSchema>;
+export const categoryForestSchema = z.array(categoryNodeSchema);
+export type TCategoryForest = z.infer<typeof categoryForestSchema>;
 
-export class CategoryPublicDtoFactory {
+export class CategoryDtoFactory {
 
   static buildForest(
     entities: Category[],
     locale: Locale,
     maxDepth: number,
     parentId: number | null = null,
-  ): ICategoryPublicNode[] {
+  ): ICategoryNode[] {
     if (maxDepth < 1)
       return [];
 

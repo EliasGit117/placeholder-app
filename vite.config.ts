@@ -9,6 +9,9 @@ import svgr from 'vite-plugin-svgr';
 
 
 const config = defineConfig({
+  server: {
+    host: true,
+  },
   plugins: [
     devtools(),
     tsconfigPaths({ projects: ['./tsconfig.json'] }),

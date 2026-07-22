@@ -32,7 +32,7 @@ import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGr
 import { Tree, TreeItem, TreeItemLabel } from '@/components/ui/tree.tsx';
 import { Empty, EmptyContent, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty.tsx';
 import type { ItemInstance } from '@headless-tree/core';
-import type { TCategoryTreeNode } from '@/features/categories/schemas/category.ts';
+import type { TCategoryTreeNodeDto } from '@/features/categories/common/dtos/category-tree.ts';
 import { ButtonGroup } from '@/components/ui/button-group.tsx';
 import { m } from '@/paraglide/messages';
 import { Route } from '@/routes/admin/categories/index.tsx';
@@ -46,7 +46,7 @@ export const CategoryTree: FC<{ className?: string }> = ({ className }) => {
   const confirm = useConfirm();
   const { canCreate, canUpdate, canDelete } = Route.useRouteContext();
 
-  const isItemVisible = (item: ItemInstance<TCategoryTreeNode>): boolean => {
+  const isItemVisible = (item: ItemInstance<TCategoryTreeNodeDto>): boolean => {
     if (!filteredIds) return true;
     return filteredIds.has(item.getId());
   };

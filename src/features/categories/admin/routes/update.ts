@@ -2,11 +2,12 @@ import { z } from 'zod';
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { categoriesAdminBase } from './base.ts';
-import { updateCategorySchema } from '@/features/categories/schemas/category-mutations.ts';
-import { categorySchema } from '@/features/categories/schemas/category.ts';
-import { CategoryService } from '../../services/category-service.ts';
+import { categoryBaseDtoSchema } from '@/features/categories/common/dtos/category-base.ts';
+import { updateCategoryDtoSchema } from '@/features/categories/admin/dtos/update-category.ts';
+import { CategoryService } from '@/features/categories/common/services/category-service.ts';
 
-const updateCategoryInputSchema = updateCategorySchema.extend({ id: z.number() });
+
+const updateCategoryInputSchema = updateCategoryDtoSchema.extend({ id: z.number() });
 
 export const adminCategoriesUpdate = categoriesAdminBase
   .route({
@@ -17,7 +18,7 @@ export const adminCategoriesUpdate = categoriesAdminBase
   .errors({ FORBIDDEN: {}, NOT_FOUND: {} })
   .use(authMiddleware)
   .input(updateCategoryInputSchema)
-  .output(categorySchema)
+  .output(categoryBaseDtoSchema)
   .handler(async ({ input: { id, ...data }, context: { user }, errors }) => {
     const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { categories: ['update'] } },

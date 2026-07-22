@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { categoriesAdminBase } from './base.ts';
-import { CategoryService } from '../../services/category-service.ts';
+import { CategoryService } from '@/features/categories/common/services/category-service.ts';
 
 export const adminCategoriesDelete = categoriesAdminBase
   .route({

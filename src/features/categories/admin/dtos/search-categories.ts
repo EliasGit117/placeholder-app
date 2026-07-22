@@ -2,11 +2,18 @@ import { z } from 'zod';
 import { dateRangeSchema } from '@/components/data-table';
 import { paginatedRequestDtoSchema } from '@/features/shared/schemas/pagination.ts';
 import { paginationResultWithCountDtoSchema } from '@/features/shared/dtos/pagination-result-dto.ts';
-import { categorySchema } from '@/features/categories/schemas/category.ts';
+import { categoryBaseDtoSchema, type TCategoryBaseDto } from '@/features/categories/common/dtos/category-base.ts';
 import { CategoryState } from '~/prisma/generated/prisma/enums.ts';
 
 
-const sortableFields = ['nameRo', 'nameRu', 'state', 'slug', 'createdAt', 'updatedAt'] as const;
+const sortableFields = [
+  'nameRo',
+  'nameRu',
+  'state',
+  'slug',
+  'createdAt',
+  'updatedAt',
+] as const satisfies readonly (keyof TCategoryBaseDto)[];
 
 export const searchCategoriesRequestDtoSchema = paginatedRequestDtoSchema.extend({
   sort: z.enum(sortableFields).optional().catch(undefined),
@@ -19,4 +26,4 @@ export const searchCategoriesRequestDtoSchema = paginatedRequestDtoSchema.extend
 
 export type TSearchCategoriesRequestDto = z.infer<typeof searchCategoriesRequestDtoSchema>;
 
-export const searchCategoriesResultDtoSchema = paginationResultWithCountDtoSchema(categorySchema);
+export const searchCategoriesResultDtoSchema = paginationResultWithCountDtoSchema(categoryBaseDtoSchema);

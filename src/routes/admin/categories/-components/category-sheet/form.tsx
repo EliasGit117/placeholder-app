@@ -6,7 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton.tsx';
 import { m } from '@/paraglide/messages';
 import { cn } from '@/lib/utils';
 import type { TCreateCategoryForm, TUpdateCategoryForm } from './schemas.ts';
-import type { TCategoryTreeNode } from '@/features/categories/schemas/category.ts';
+import type { TCategoryTreeNodeDto } from '@/features/categories/common/dtos/category-tree.ts';
 import { CategoryState } from '~/prisma/generated/prisma/enums.ts';
 import { CategorySelectDropdown } from './category-select-dropdown.tsx';
 import { Textarea } from '@/components/ui/textarea.tsx';
@@ -29,7 +29,7 @@ interface IProps extends Omit<ComponentProps<'form'>, 'onSubmit'> {
   onSubmit: (data: TCreateCategoryForm | TUpdateCategoryForm) => void;
   disabled?: boolean;
   loading?: boolean;
-  forest?: TCategoryTreeNode[];
+  forest?: TCategoryTreeNodeDto[];
   currentCategoryId?: number;
 }
 

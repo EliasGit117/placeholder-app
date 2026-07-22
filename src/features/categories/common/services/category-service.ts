@@ -2,13 +2,16 @@ import { ORPCError } from '@orpc/server';
 import { type Category, Prisma } from '~/prisma/generated/prisma/client.ts';
 import { prisma } from '@/lib/db';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
-import type { TCategory, TCategoryTreeNode } from '@/features/categories/schemas/category.ts';
-import type { TCreateCategoryInput, TUpdateCategoryInput } from '@/features/categories/schemas/category-mutations.ts';
-import type { TSearchCategoriesRequestDto } from '@/features/categories/schemas/search-categories.ts';
+import type { TCategoryBaseDto } from '@/features/categories/common/dtos/category-base.ts';
+import type { TCategoryTreeNodeDto } from '@/features/categories/common/dtos/category-tree.ts';
+import type { TSearchCategoriesRequestDto } from '@/features/categories/admin/dtos/search-categories.ts';
+import type { TUpdateCategoryDto } from '@/features/categories/admin/dtos/update-category.ts';
+import type { TCreateCategoryDto } from '@/features/categories/admin/dtos/create-category.ts';
+
 
 export class CategoryService {
 
-  static fromEntity(entity: Category): TCategory {
+  static fromEntity(entity: Category): TCategoryBaseDto {
     return {
       id: entity.id,
       nameRo: entity.nameRo,
@@ -24,7 +27,7 @@ export class CategoryService {
     };
   }
 
-  static async getForest(): Promise<TCategoryTreeNode[]> {
+  static async getForest(): Promise<TCategoryTreeNodeDto[]> {
     const all = await prisma.category.findMany({ orderBy: { nameRo: 'asc' } });
     const dtos = all.map(CategoryService.fromEntity);
     return buildForest(dtos, null);
@@ -37,7 +40,7 @@ export class CategoryService {
     });
   }
 
-  static async list(opts?: { parentId?: number | null }): Promise<TCategory[]> {
+  static async list(opts?: { parentId?: number | null }): Promise<TCategoryBaseDto[]> {
     const where: Prisma.CategoryWhereInput = {};
     if (opts?.parentId !== undefined)
       where.parentId = opts.parentId;
@@ -46,7 +49,7 @@ export class CategoryService {
     return entities.map(CategoryService.fromEntity);
   }
 
-  static async findById(id: number): Promise<TCategory | null> {
+  static async findById(id: number): Promise<TCategoryBaseDto | null> {
     const entity = await prisma.category.findUnique({ where: { id } });
     return entity ? CategoryService.fromEntity(entity) : null;
   }
@@ -66,7 +69,7 @@ export class CategoryService {
     return PaginationResultDtoFactory.getWithCount(items.map(CategoryService.fromEntity), meta);
   }
 
-  static async create(input: TCreateCategoryInput): Promise<TCategory> {
+  static async create(input: TCreateCategoryDto): Promise<TCategoryBaseDto> {
     const { slug } = input;
     const parentPath = input.parentId ? await getParentPath(input.parentId) : null;
     const path = buildPath(slug, parentPath);
@@ -87,7 +90,7 @@ export class CategoryService {
     return CategoryService.fromEntity(entity);
   }
 
-  static async update(id: number, input: TUpdateCategoryInput): Promise<TCategory> {
+  static async update(id: number, input: TUpdateCategoryDto): Promise<TCategoryBaseDto> {
     const existing = await prisma.category.findUnique({ where: { id } });
     if (!existing)
       throw new ORPCError('NOT_FOUND');
@@ -149,7 +152,7 @@ export class CategoryService {
 }
 
 
-function buildForest(categories: TCategory[], parentId: number | null): TCategoryTreeNode[] {
+function buildForest(categories: TCategoryBaseDto[], parentId: number | null): TCategoryTreeNodeDto[] {
   return categories
     .filter(c => c.parentId === parentId)
     .map(c => ({ ...c, children: buildForest(categories, c.id) }));

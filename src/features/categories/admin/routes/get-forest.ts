@@ -1,8 +1,8 @@
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { categoriesAdminBase, categoriesAdminPath } from './base.ts';
-import { categoryForestSchema } from '@/features/categories/schemas/category.ts';
-import { CategoryService } from '../../services/category-service.ts';
+import { categoryForestDtoSchema } from '@/features/categories/common/dtos/category-tree.ts';
+import { CategoryService } from '@/features/categories/common/services/category-service.ts';
 
 export const adminCategoriesGetForest = categoriesAdminBase
   .route({
@@ -13,7 +13,7 @@ export const adminCategoriesGetForest = categoriesAdminBase
   })
   .errors({ FORBIDDEN: {} })
   .use(authMiddleware)
-  .output(categoryForestSchema)
+  .output(categoryForestDtoSchema)
   .handler(async ({ context: { user }, errors }) => {
     const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { categories: ['list'] } },

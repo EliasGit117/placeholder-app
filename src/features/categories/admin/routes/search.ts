@@ -4,8 +4,8 @@ import { categoriesAdminBase, categoriesAdminPath } from './base.ts';
 import {
   searchCategoriesRequestDtoSchema,
   searchCategoriesResultDtoSchema,
-} from '@/features/categories/schemas/search-categories.ts';
-import { CategoryService } from '../../services/category-service.ts';
+} from '@/features/categories/admin/dtos/search-categories.ts';
+import { CategoryService } from '@/features/categories/common/services/category-service.ts';
 
 export const adminCategoriesSearch = categoriesAdminBase
   .route({

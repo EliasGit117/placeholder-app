@@ -18,9 +18,6 @@ import { z } from 'zod';
 import { ConfirmDialogProvider } from '@/components/ui/confirm-dialog.tsx';
 import { Toaster } from '@/components/ui/sonner.tsx';
 import { RouteProgressController, RouteProgressProvider } from '@/components/layout/common/route-progress.tsx';
-import { TanStackDevtools } from '@tanstack/react-devtools';
-import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
 
 interface IRouterContext {
@@ -67,24 +64,19 @@ function RootDocument({ children }: { children: ReactNode }) {
       <HeadContent/>
     </head>
 
-    <body className="antialiased wrap-anywhere min-h-safe-scren flex flex-col dark">
-    <RouteProgressProvider>
-      <ConfirmDialogProvider>
-        {children}
-        <Toaster/>
-        <RouteProgressController/>
-      </ConfirmDialogProvider>
-    </RouteProgressProvider>
+    <body className="bg-background antialiased wrap-anywhere min-h-safe-screen flex flex-col dark">
+      <div className="relative z-10 flex min-h-safe-screen flex-col">
+        <RouteProgressProvider>
+          <ConfirmDialogProvider>
+            {children}
+            <Toaster />
+            <RouteProgressController />
+          </ConfirmDialogProvider>
+        </RouteProgressProvider>
+      </div>
 
-    <Scripts/>
-    <RouterInvalidation/>
-    <TanStackDevtools
-      config={{ position: 'bottom-right' }}
-      plugins={[
-        { name: 'TanStack Router', render: <TanStackRouterDevtoolsPanel/> },
-        { name: 'TanStack Query', render: <ReactQueryDevtoolsPanel/> }
-      ]}
-    />
+      <Scripts />
+      <RouterInvalidation />
     </body>
     </html>
   );

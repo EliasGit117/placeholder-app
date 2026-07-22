@@ -1,10 +1,10 @@
 import { base } from '@/features/shared/orpc/base.ts';
 import type { InferRouterInputs, InferRouterOutputs } from '@orpc/server';
-import { categoriesRoutes } from '../../categories/routes/public';
+import { categoriesRoutes } from '../../categories/public/routes';
 import { sessionsPublicRoutes } from '@/features/sessions/routes/public';
 import { sessionsAdminRoutes } from '@/features/sessions/routes/admin';
 import { usersAdminRoutes } from '@/features/users/routes/admin';
-import { categoriesAdminRoutes } from '@/features/categories/routes/admin';
+import { categoriesAdminRoutes } from '@/features/categories/admin/routes';
 import { profileRoutes } from '@/features/profile/routes';
 import { productsRoutes } from '@/features/products/routes/public';
 import { productsAdminRoutes } from '@/features/products/routes/admin';

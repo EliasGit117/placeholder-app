@@ -1,11 +1,11 @@
 import { getLocale } from '@/paraglide/runtime';
-import { categoryTreeRequestSchema } from 'src/features/categories/schemas/category.ts';
+import { categoryTreeRequestSchema } from '@/features/categories/public/dtos/category-tree-request.ts';
 import {
-  categoryPublicForestSchema,
-  CategoryPublicDtoFactory,
-} from '@/features/categories/dtos/category-public.ts';
+  categoryForestSchema,
+  CategoryDtoFactory,
+} from '@/features/categories/public/dtos/category-node.ts';
 import { categoriesBase, path } from './base.ts';
-import { CategoryService } from '../../services/category-service.ts';
+import { CategoryService } from '@/features/categories/common/services/category-service.ts';
 
 export const getCategoriesTree = categoriesBase
   .route({
@@ -16,10 +16,10 @@ export const getCategoriesTree = categoriesBase
   })
   .meta({ anonymous: true })
   .input(categoryTreeRequestSchema)
-  .output(categoryPublicForestSchema)
+  .output(categoryForestSchema)
   .handler(async ({ input }) => {
     const entities = await CategoryService.findAllActive();
     const locale = getLocale();
 
-    return CategoryPublicDtoFactory.buildForest(entities, locale, input.depth);
+    return CategoryDtoFactory.buildForest(entities, locale, input.depth);
   });

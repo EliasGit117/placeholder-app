@@ -1,9 +1,10 @@
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { categoriesAdminBase } from './base.ts';
-import { createCategorySchema } from '@/features/categories/schemas/category-mutations.ts';
-import { categorySchema } from '@/features/categories/schemas/category.ts';
-import { CategoryService } from '../../services/category-service.ts';
+import { categoryBaseDtoSchema } from '@/features/categories/common/dtos/category-base.ts';
+import { CategoryService } from '@/features/categories/common/services/category-service.ts';
+import { createCategoryDtoSchema } from '@/features/categories/admin/dtos/create-category.ts';
+
 
 export const adminCategoriesCreate = categoriesAdminBase
   .route({
@@ -13,8 +14,8 @@ export const adminCategoriesCreate = categoriesAdminBase
   })
   .errors({ FORBIDDEN: {} })
   .use(authMiddleware)
-  .input(createCategorySchema)
-  .output(categorySchema)
+  .input(createCategoryDtoSchema)
+  .output(categoryBaseDtoSchema)
   .handler(async ({ input, context: { user }, errors }) => {
     const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { categories: ['create'] } },

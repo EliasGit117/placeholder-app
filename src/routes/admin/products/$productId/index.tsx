@@ -24,6 +24,7 @@ import {
 } from './../-components/product-editor';
 import { OptionsManager } from './../-components/options-manager';
 import { VariantsManager } from './../-components/variants-manager';
+import { ORPCError } from '@orpc/server';
 
 
 export const Route = createFileRoute('/admin/products/$productId/')({
@@ -47,12 +48,11 @@ export const Route = createFileRoute('/admin/products/$productId/')({
 
     let product;
     try {
-      product = await queryClient.fetchQuery(
-        orpc.admin.products.get.queryOptions({ input: { id: productId } })
-      );
+      product = await queryClient.fetchQuery(orpc.admin.products.get.queryOptions({ input: { id: productId } }));
     } catch (error) {
-      if (error && typeof error === 'object' && 'code' in error && (error as { code?: string }).code === 'NOT_FOUND')
+      if (error instanceof ORPCError && error.code === 'NOT_FOUND')
         throw notFound();
+
       throw error;
     }
 
@@ -69,7 +69,7 @@ export const Route = createFileRoute('/admin/products/$productId/')({
 function NotFound() {
 
   return (
-    <main className="container mx-auto pb-4 px-4">
+    <div className="flex flex-1 items-center justify-center px-4">
       <Empty className="py-12">
         <EmptyHeader>
           <EmptyMedia variant="icon"><IconPackageOff/></EmptyMedia>
@@ -93,7 +93,7 @@ function NotFound() {
           </Button>
         </EmptyContent>
       </Empty>
-    </main>
+    </div>
   );
 }
 
