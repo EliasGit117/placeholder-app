@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { ORPCError } from '@orpc/server';
 import { auth } from '@/lib/auth/better-auth.ts';
-import { ImageService } from '@/features/images/services/image-service.ts';
+import { ImageService } from '@/features/images/common/services/image-service.ts';
 import { ProductService } from '@/features/products/services/product-service.ts';
 import { ImagePurpose, ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 

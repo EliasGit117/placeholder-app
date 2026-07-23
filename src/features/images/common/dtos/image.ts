@@ -1,9 +1,15 @@
 import { z } from 'zod';
 import { ImagePurpose, ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import type { Prisma } from '~/prisma/generated/prisma/client.ts';
-import { imageVariantDtoSchema, ImageVariantDtoFactory } from './image-variant-dto.ts';
+import { imageVariantDtoSchema, ImageVariantDtoFactory, type TImageVariantDto } from './image-variant.ts';
 
 type TImage = Prisma.ImageGetPayload<{ include: { variants: true } }>;
+
+type TImageDtoShape = Omit<TImage, 'variants' | 'createdAt' | 'updatedAt'> & {
+  variants: TImageVariantDto[];
+  createdAt: string;
+  updatedAt: string;
+};
 
 export const imageDtoSchema = z.object({
   id: z.number(),
@@ -24,7 +30,7 @@ export const imageDtoSchema = z.object({
   variants: z.array(imageVariantDtoSchema),
   createdAt: z.string(),
   updatedAt: z.string(),
-});
+}) satisfies z.ZodType<TImageDtoShape>;
 
 export type TImageDto = z.infer<typeof imageDtoSchema>;
 

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { prisma } from '@/lib/db';
-import { ImageService } from '@/features/images/services/image-service.ts';
+import { ImageService } from '@/features/images/common/services/image-service.ts';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import { profileBase, profilePath } from './base.ts';
 

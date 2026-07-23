@@ -3,7 +3,7 @@ import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { productsAdminBase, productsAdminPath } from './base.ts';
 import { ProductService } from '../../services/product-service.ts';
-import { ImageService } from '@/features/images/services/image-service.ts';
+import { ImageService } from '@/features/images/common/services/image-service.ts';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 
 const deleteVariantImagesInputSchema = z.object({

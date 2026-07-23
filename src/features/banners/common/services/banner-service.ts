@@ -3,7 +3,7 @@ import { Prisma } from '~/prisma/generated/prisma/client.ts';
 import type { Banner } from '~/prisma/generated/prisma/client.ts';
 import { BannerState, ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import { prisma, type TxClient } from '@/lib/db';
-import { ImageService } from '@/features/images/services/image-service.ts';
+import { ImageService } from '@/features/images/common/services/image-service.ts';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
 import { BannerDtoFactory } from '@/features/banners/admin/dtos/banner.ts';
 import { bannerImagePurposeByLocaleDevice } from '@/features/banners/common/consts/banner-devices.ts';

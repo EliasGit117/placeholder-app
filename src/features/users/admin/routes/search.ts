@@ -1,14 +1,14 @@
-import { usersAdminBase, usersAdminPath } from '@/features/users/routes/admin/base.ts';
+import { usersAdminBase, usersAdminPath } from '@/features/users/admin/routes/base.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
 import {
   searchUsersRequestDtoSchema,
   searchUsersResultDtoSchema,
   type TSearchUsersRequestDto
-} from '@/features/users/schemas/search-users.ts';
+} from '@/features/users/admin/dtos/search-users.ts';
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { prisma } from '@/lib/db';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
-import { UserBriefDtoFactory } from '@/features/users/schemas/user-brief.ts';
+import { UserBriefDtoFactory } from '@/features/users/admin/dtos/user-brief.ts';
 import { Prisma } from '~/prisma/generated/prisma/client.ts';
 
 

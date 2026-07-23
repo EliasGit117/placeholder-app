@@ -1,14 +1,14 @@
-import { sessionsPublicBase } from '@/features/sessions/routes/public/base.ts';
+import { sessionsPublicBase } from '@/features/sessions/public/routes/base.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
-import { sessionsAdminPath } from '@/features/sessions/routes/admin/base.ts';
+import { sessionsAdminPath } from '@/features/sessions/admin/routes/base.ts';
 import {
   searchSessionsRequestDtoSchema,
-  searchSessionsResultDtoSchema, SessionState, type TSearchSessionsRequestDto
-} from '@/features/sessions/schemas/search-sessions.ts';
+  searchSessionsResultDtoSchema, type TSearchSessionsRequestDto
+} from '@/features/sessions/common/dtos/search-sessions.ts';
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { prisma } from '@/lib/db';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
-import { SessionBriefDtoFactory } from '@/features/sessions/schemas/session-brief.ts';
+import { SessionBriefDtoFactory, SessionState } from '@/features/sessions/admin/dtos/session-brief.ts';
 import { Prisma } from '~/prisma/generated/prisma/client.ts';
 
 

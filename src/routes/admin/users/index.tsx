@@ -2,7 +2,7 @@ import { createFileRoute, redirect } from '@tanstack/react-router';
 import { orpc } from '@/lib/orpc';
 import { UsersTable } from '@/routes/admin/users/-components/users-table';
 import { m } from '@/paraglide/messages';
-import { searchUsersRequestDtoSchema } from '@/features/users/schemas/search-users.ts';
+import { searchUsersRequestDtoSchema } from '@/features/users/admin/dtos/search-users.ts';
 import { roleHasPermission } from '@/lib/auth';
 import { awaitIfServer } from '@/lib/server';
 

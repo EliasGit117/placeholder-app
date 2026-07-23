@@ -42,8 +42,7 @@ import { Badge } from '@/components/ui/badge.tsx';
 import { cn, pickFirstLetters } from '@/lib/utils';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard.ts';
 import { m } from '@/paraglide/messages';
-import type { TSessionBriefDto } from '@/features/sessions/schemas/session-brief.ts';
-import { SessionState } from '@/features/sessions/schemas/search-sessions.ts';
+import { SessionState, type TSessionBriefDto } from '@/features/sessions/admin/dtos/session-brief.ts';
 import { Link } from '@tanstack/react-router';
 
 

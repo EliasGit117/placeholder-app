@@ -4,7 +4,7 @@ import { ImageResourceType, ImageVariantKind, ProductState } from '~/prisma/gene
 import { prisma } from '@/lib/db';
 import { getLocale } from '@/paraglide/runtime';
 import { buildFullSlug } from '@/features/products/lib/slug.ts';
-import { ImageService } from '@/features/images/services/image-service.ts';
+import { ImageService } from '@/features/images/common/services/image-service.ts';
 import { ProductVariantImageDtoFactory, type TProductVariantImageDto } from '@/features/products/dtos/product-variant-image.ts';
 import type { TxClient } from '@/lib/db/prisma.ts';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';

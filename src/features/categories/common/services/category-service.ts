@@ -3,7 +3,6 @@ import { type Category, Prisma } from '~/prisma/generated/prisma/client.ts';
 import { prisma } from '@/lib/db';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
 import type { TCategoryBaseDto } from '@/features/categories/common/dtos/category-base.ts';
-import type { TCategoryTreeNodeDto } from '@/features/categories/common/dtos/category-tree.ts';
 import type { TSearchCategoriesRequestDto } from '@/features/categories/admin/dtos/search-categories.ts';
 import type { TUpdateCategoryDto } from '@/features/categories/admin/dtos/update-category.ts';
 import type { TCreateCategoryDto } from '@/features/categories/admin/dtos/create-category.ts';
@@ -25,12 +24,6 @@ export class CategoryService {
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
     };
-  }
-
-  static async getForest(): Promise<TCategoryTreeNodeDto[]> {
-    const all = await prisma.category.findMany({ orderBy: { nameRo: 'asc' } });
-    const dtos = all.map(CategoryService.fromEntity);
-    return buildForest(dtos, null);
   }
 
   static async findAllActive(): Promise<Category[]> {
@@ -151,12 +144,6 @@ export class CategoryService {
   }
 }
 
-
-function buildForest(categories: TCategoryBaseDto[], parentId: number | null): TCategoryTreeNodeDto[] {
-  return categories
-    .filter(c => c.parentId === parentId)
-    .map(c => ({ ...c, children: buildForest(categories, c.id) }));
-}
 
 function buildPath(slug: string, parentPath: string | null): string {
   return parentPath ? `${parentPath}/${slug}` : `/${slug}`;

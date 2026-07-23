@@ -4,28 +4,28 @@ import { capitalizeFirst } from '@/lib/utils';
 import type { Locale } from '@/paraglide/runtime';
 
 
-export interface ICategoryNode {
+export interface ICategoryNodeDto {
   id: number;
   slug: string;
   path: string;
   name: string;
   description?: string | null;
-  children: ICategoryNode[];
+  children: ICategoryNodeDto[];
 }
 
-export const categoryNodeSchema: z.ZodType<ICategoryNode> = z.lazy(() =>
+export const categoryNodeDtoSchema: z.ZodType<ICategoryNodeDto> = z.lazy(() =>
   z.object({
     id: z.number(),
     slug: z.string(),
     path: z.string(),
     name: z.string(),
     description: z.string().nullish(),
-    children: z.array(categoryNodeSchema),
+    children: z.array(categoryNodeDtoSchema),
   })
 );
 
-export const categoryForestSchema = z.array(categoryNodeSchema);
-export type TCategoryForest = z.infer<typeof categoryForestSchema>;
+export const categoryForestDtoSchema = z.array(categoryNodeDtoSchema);
+export type TCategoryForestDto = z.infer<typeof categoryForestDtoSchema>;
 
 export class CategoryDtoFactory {
 
@@ -34,7 +34,7 @@ export class CategoryDtoFactory {
     locale: Locale,
     maxDepth: number,
     parentId: number | null = null,
-  ): ICategoryNode[] {
+  ): ICategoryNodeDto[] {
     if (maxDepth < 1)
       return [];
 

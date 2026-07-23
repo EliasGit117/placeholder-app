@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { imageDtoSchema, type TImageDto } from '@/features/images/dtos/image-dto.ts';
+import { imageDtoSchema, type TImageDto } from '@/features/images/common/dtos/image.ts';
 import { bannerImagePurpose } from '@/features/banners/common/consts/banner-devices.ts';
 import { locales } from '@/paraglide/runtime';
 

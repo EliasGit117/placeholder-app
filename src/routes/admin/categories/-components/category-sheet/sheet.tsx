@@ -22,7 +22,7 @@ import { orpc } from '@/lib/orpc';
 import { CategoryForm } from './form.tsx';
 import { toast } from 'sonner';
 import type { TCategoryBaseDto } from '@/features/categories/common/dtos/category-base.ts';
-import type { TCategoryTreeNodeDto } from '@/features/categories/common/dtos/category-tree.ts';
+import type { ICategoryTreeNodeDto } from '@/features/categories/admin/dtos/category-tree.ts';
 import { CategoryState } from '~/prisma/generated/prisma/enums.ts';
 
 
@@ -162,7 +162,7 @@ export const CategorySheet: FC<IProps> = ({ onSuccess }) => {
 };
 
 
-function findInForest(nodes: TCategoryTreeNodeDto[], id: number): TCategoryBaseDto | undefined {
+function findInForest(nodes: ICategoryTreeNodeDto[], id: number): TCategoryBaseDto | undefined {
   for (const node of nodes) {
     if (node.id === id) {
       const { children: _, ...cat } = node;

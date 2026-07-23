@@ -5,7 +5,7 @@ import {
   BannerImagePublicDtoFactory,
 } from '@/features/banners/admin/dtos/banner-image.ts';
 import { bannerImagePurposeByLocaleDevice } from '@/features/banners/common/consts/banner-devices.ts';
-import type { TImageDto } from '@/features/images/dtos/image-dto.ts';
+import type { TImageDto } from '@/features/images/common/dtos/image.ts';
 import type { Locale } from '@/paraglide/runtime';
 
 

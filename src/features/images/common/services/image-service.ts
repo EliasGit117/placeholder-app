@@ -6,10 +6,10 @@ import { Prisma } from '~/prisma/generated/prisma/client.ts';
 import { prisma, type TxClient } from '@/lib/db';
 import { bytesToMb } from '@/lib/utils';
 import { s3Storage } from '@/features/shared/services/s3-storage.ts';
-import { ImageDtoFactory, type TImageDto } from '@/features/images/dtos/image-dto.ts';
-import { getImagePolicy, type ImageConfig, type ImageTransform } from '@/features/images/consts/image-resource-map.ts';
-import { buildImageGeneratedId, buildVariantGeneratedId } from '@/features/images/consts/generated-id.ts';
-import type { TCreateImageInput } from '@/features/images/schemas/image-mutations.ts';
+import { ImageDtoFactory, type TImageDto } from '@/features/images/common/dtos/image.ts';
+import { getImagePolicy, type ImageConfig, type ImageTransform } from '@/features/images/common/consts/image-resource-map.ts';
+import { buildImageGeneratedId, buildVariantGeneratedId } from '@/features/images/common/consts/generated-id.ts';
+import type { TCreateImageInput } from '@/features/images/common/dtos/create-image.ts';
 
 interface UploadInput {
   file: File;

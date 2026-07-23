@@ -1,6 +1,15 @@
 import { z } from "zod";
 import type { Prisma } from '~/prisma/generated/prisma/client.ts';
-import { sessionStateSchema, SessionState } from '@/features/sessions/schemas/session-state.ts';
+
+
+export enum SessionState {
+  Active = 'active',
+  Expired = 'expired'
+}
+
+export const sessionStateSchema = z.enum(SessionState);
+export type TSessionState = z.infer<typeof sessionStateSchema>;
+
 
 type TSessionWithUser = Prisma.SessionGetPayload<{ include: { user: true } }>
 

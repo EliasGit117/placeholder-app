@@ -7,9 +7,9 @@ import {
   type IUploadFile,
   type IUploadHelpers,
 } from '@/hooks/use-file-upload';
-import { getImageUploadConstraints } from '@/features/images/consts/image-resource-map';
+import { getImageUploadConstraints } from '@/features/images/common/consts/image-resource-map';
 import { ImagePurpose, ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
-import type { TImageDto } from '@/features/images/dtos/image-dto.ts';
+import type { TImageDto } from '@/features/images/common/dtos/image.ts';
 
 // Single source of truth: the picker accepts exactly what the server policy
 // allows for product-variant images (see imagePolicy in image-resource-map).

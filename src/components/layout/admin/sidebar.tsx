@@ -33,7 +33,7 @@ import {
 import { cn } from '@/lib/utils';
 import { envConfig } from '@/lib/config';
 import { m } from '@/paraglide/messages';
-import { SessionState } from '@/features/sessions/schemas/search-sessions.ts';
+import { SessionState } from '@/features/sessions/admin/dtos/session-brief.ts';
 import Logo from '@/assets/icons/logo/icon.svg?react';
 import { NavUser } from '@/components/layout/admin/nav-user';
 import { NavPreferences } from '@/components/layout/admin/nav-preferences';

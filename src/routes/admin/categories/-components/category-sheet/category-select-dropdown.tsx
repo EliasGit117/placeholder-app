@@ -7,17 +7,17 @@ import { IconCheck, IconChevronDown, IconFilter } from '@tabler/icons-react';
 import { cn } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
-import type { TCategoryTreeNodeDto } from '@/features/categories/common/dtos/category-tree.ts';
+import type { ICategoryTreeNodeDto } from '@/features/categories/admin/dtos/category-tree.ts';
 
 const locale = getLocale();
 
-const getLocaleName = (node: TCategoryTreeNodeDto): string =>
+const getLocaleName = (node: ICategoryTreeNodeDto): string =>
   locale === 'ru' ? node.nameRu : node.nameRo;
 
 interface IProps extends Omit<ComponentProps<typeof Button>, 'value' | 'onChange'> {
   value?: number | null;
   onValueChange?: (value: number | null) => void;
-  forest?: TCategoryTreeNodeDto[];
+  forest?: ICategoryTreeNodeDto[];
   excludeId?: number;
   placeholder?: string;
   loading?: boolean;
@@ -168,12 +168,12 @@ const DropdownItem: FC<IDropdownItemProps> = ({ selected, onClick, style, childr
 // ─── helpers ────────────────────────────────────────────────────────────────
 
 interface FlatItem {
-  node: TCategoryTreeNodeDto;
+  node: ICategoryTreeNodeDto;
   level: number;
 }
 
 function flattenForest(
-  nodes: TCategoryTreeNodeDto[],
+  nodes: ICategoryTreeNodeDto[],
   excludeId: number | undefined,
   level = 0,
 ): FlatItem[] {

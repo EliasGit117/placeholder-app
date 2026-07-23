@@ -1,9 +1,9 @@
 import type { User } from '~/prisma/generated/prisma/client.ts';
 import { dateRangeSchema } from '@/components/data-table';
 import { paginatedRequestDtoSchema } from '@/features/shared/schemas/pagination.ts';
-import { z } from 'zod';
 import { paginationResultWithCountDtoSchema } from '@/features/shared/dtos/pagination-result-dto.ts';
-import { userBriefDtoSchema } from '@/features/users/schemas/user-brief.ts';
+import { userBriefDtoSchema } from '@/features/users/admin/dtos/user-brief.ts';
+import { z } from 'zod';
 
 
 const sortableFields: (keyof User)[] = [

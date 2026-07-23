@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { ImageVariantKind } from '~/prisma/generated/prisma/enums.ts';
-import { imageDtoSchema, type TImageDto } from '@/features/images/dtos/image-dto.ts';
-import { imageVariantDtoSchema } from '@/features/images/dtos/image-variant-dto.ts';
+import { imageDtoSchema, type TImageDto } from '@/features/images/common/dtos/image.ts';
+import { imageVariantDtoSchema } from '@/features/images/common/dtos/image-variant.ts';
 
 // Variant fields safe to expose to clients — no storage key, size or timestamps.
 const variantImageVariantSchema = imageVariantDtoSchema.pick({

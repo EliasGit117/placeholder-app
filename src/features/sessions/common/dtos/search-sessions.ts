@@ -3,7 +3,7 @@ import { dateRangeSchema } from '@/components/data-table';
 import { paginatedRequestDtoSchema } from '@/features/shared/schemas/pagination.ts';
 import { z } from 'zod';
 import { paginationResultWithCountDtoSchema } from '@/features/shared/dtos/pagination-result-dto.ts';
-import { sessionBriefDtoSchema } from '@/features/sessions/schemas/session-brief.ts';
+import { sessionBriefDtoSchema, sessionStateSchema } from '@/features/sessions/admin/dtos/session-brief.ts';
 
 
 const sortableFields: (keyof Session)[] = [
@@ -15,8 +15,6 @@ const sortableFields: (keyof Session)[] = [
   'expiresAt',
 ];
 
-import { sessionStateSchema } from '@/features/sessions/schemas/session-state.ts';
-export { SessionState, sessionStateSchema, type TSessionState } from '@/features/sessions/schemas/session-state.ts';
 
 export const searchSessionsRequestDtoSchema = paginatedRequestDtoSchema.extend({
   id: z.string().optional().catch(undefined),

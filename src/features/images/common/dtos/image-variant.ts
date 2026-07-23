@@ -4,6 +4,11 @@ import type { Prisma } from '~/prisma/generated/prisma/client.ts';
 
 type TImageVariant = Prisma.ImageVariantGetPayload<Record<string, never>>;
 
+// `imageId` (FK) and `name` are intentionally not exposed on the read DTO.
+type TImageVariantDtoShape = Omit<TImageVariant, 'imageId' | 'name' | 'createdAt'> & {
+  createdAt: string;
+};
+
 export const imageVariantDtoSchema = z.object({
   id: z.number(),
   kind: z.enum(ImageVariantKind),
@@ -15,7 +20,7 @@ export const imageVariantDtoSchema = z.object({
   width: z.number(),
   height: z.number(),
   createdAt: z.string(),
-});
+}) satisfies z.ZodType<TImageVariantDtoShape>;
 
 export type TImageVariantDto = z.infer<typeof imageVariantDtoSchema>;
 

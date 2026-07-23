@@ -1,5 +1,5 @@
 import { useEffect, useMemo, type ComponentProps, type FC } from 'react';
-import type { TSearchUsersRequestDto } from '@/features/users/schemas/search-users.ts';
+import type { TSearchUsersRequestDto } from '@/features/users/admin/dtos/search-users.ts';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { orpc } from '@/lib/orpc';
 import { userColumns } from '@/routes/admin/users/-components/users-table/columns.tsx';
@@ -16,7 +16,7 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
 import { IconFileDownload, IconRefresh } from '@tabler/icons-react';
-import type { TUserBriefDto } from '@/features/users/schemas/user-brief.ts';
+import type { TUserBriefDto } from '@/features/users/admin/dtos/user-brief.ts';
 import { AdaptiveButton } from '@/components/ui/adaptive-button';
 import { m } from '@/paraglide/messages';
 import {

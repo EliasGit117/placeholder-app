@@ -2,7 +2,7 @@ import { type PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { contextFactory } from '@/lib/utils/context-factory.ts';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { orpc } from '@/lib/orpc';
-import type { TCategoryTreeNodeDto } from '@/features/categories/common/dtos/category-tree.ts';
+import type { ICategoryTreeNodeDto } from '@/features/categories/admin/dtos/category-tree.ts';
 import {
   expandAllFeature,
   hotkeysCoreFeature,
@@ -16,18 +16,18 @@ import { getLocale } from '@/paraglide/runtime';
 
 const locale = getLocale();
 
-const getLocaleName = (node: TCategoryTreeNodeDto): string =>
+const getLocaleName = (node: ICategoryTreeNodeDto): string =>
   locale === 'ru' ? node.nameRu : node.nameRo;
 
 const ROOT_ID = '__root__';
 
-const fallbackNode = (_id: string): TCategoryTreeNodeDto => ({
+const fallbackNode = (_id: string): ICategoryTreeNodeDto => ({
   id: 0,
   nameRo: '…',
   nameRu: '…',
   descriptionRo: null,
   descriptionRu: null,
-  state: 'ACTIVE' as TCategoryTreeNodeDto['state'],
+  state: 'ACTIVE' as ICategoryTreeNodeDto['state'],
   slug: '',
   path: '/',
   parentId: null,
@@ -36,14 +36,14 @@ const fallbackNode = (_id: string): TCategoryTreeNodeDto => ({
   children: [],
 });
 
-const rootSentinel: TCategoryTreeNodeDto = {
+const rootSentinel: ICategoryTreeNodeDto = {
   ...fallbackNode(ROOT_ID),
   nameRo: 'Categorii',
   nameRu: 'Категории',
 };
 
 interface ICategoryTreeContext {
-  tree: TreeInstance<TCategoryTreeNodeDto>;
+  tree: TreeInstance<ICategoryTreeNodeDto>;
   indent: number;
   disabled: boolean;
   isEmpty: boolean;
@@ -70,15 +70,15 @@ export const CategoryTreeProvider = ({ children, disabled }: PropsWithChildren<{
     onSuccess: () => refetch(),
   });
 
-  const [state, setState] = useState<Partial<TreeState<TCategoryTreeNodeDto>>>({});
+  const [state, setState] = useState<Partial<TreeState<ICategoryTreeNodeDto>>>({});
   const [searchValue, setSearchValue] = useState('');
 
   // Flat map: id → node (built by traversing the nested forest)
   const nodeMap = useMemo(() => {
-    const map = new Map<string, TCategoryTreeNodeDto>();
+    const map = new Map<string, ICategoryTreeNodeDto>();
     map.set(ROOT_ID, { ...rootSentinel, children: forest ?? [] });
 
-    const traverse = (nodes: TCategoryTreeNodeDto[]) => {
+    const traverse = (nodes: ICategoryTreeNodeDto[]) => {
       for (const node of nodes) {
         map.set(String(node.id), node);
         if (node.children.length) traverse(node.children);
@@ -91,7 +91,7 @@ export const CategoryTreeProvider = ({ children, disabled }: PropsWithChildren<{
 
   const isDisabled = isPending || isDeleting || !!disabled;
 
-  const tree = useTree<TCategoryTreeNodeDto>({
+  const tree = useTree<ICategoryTreeNodeDto>({
     indent,
     rootItemId: ROOT_ID,
     state,

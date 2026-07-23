@@ -24,9 +24,9 @@ import { getLinksPerRole } from '@/components/layout/main/links.ts';
 import { Link } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
 import {
-  type ICategoryNode,
-  type TCategoryForest
-} from '@/features/categories/public/dtos/category-node.ts';
+  type ICategoryNodeDto,
+  type TCategoryForestDto
+} from '@/features/categories/public/dtos/category-tree.ts';
 import {
   IconArrowUpRight,
   IconChevronRight
@@ -92,32 +92,32 @@ const ShopFlyoutSkeleton: FC = () => (
 );
 
 interface IShopFlyoutProps {
-  categories: TCategoryForest;
+  categories: TCategoryForestDto;
 }
 
 type TPointerType = 'mouse' | 'touch' | 'pen';
 
 const ShopFlyout: FC<IShopFlyoutProps> = ({ categories }) => {
-  const [active, setActive] = useState<ICategoryNode>();
+  const [active, setActive] = useState<ICategoryNodeDto>();
   const [pointerType, setPointerType] = useState<TPointerType>('mouse');
 
-  const handlePointerEnter = (category: ICategoryNode, e: PointerEvent<HTMLElement>) => {
+  const handlePointerEnter = (category: ICategoryNodeDto, e: PointerEvent<HTMLElement>) => {
     if (e.pointerType !== 'mouse')
       return;
 
     setActive(category);
   };
 
-  const handleFocus = (category: ICategoryNode, e: FocusEvent<HTMLElement>) => {
+  const handleFocus = (category: ICategoryNodeDto, e: FocusEvent<HTMLElement>) => {
     if (!e.target.matches(':focus-visible'))
       return;
 
     setActive(category);
   };
 
-  const wantsOpenOnly = (category: ICategoryNode) => pointerType === 'touch' && category.children.length > 0 && active?.slug !== category.slug;
+  const wantsOpenOnly = (category: ICategoryNodeDto) => pointerType === 'touch' && category.children.length > 0 && active?.slug !== category.slug;
 
-  const handleClick = (category: ICategoryNode, e: MouseEvent) => {
+  const handleClick = (category: ICategoryNodeDto, e: MouseEvent) => {
     if (!wantsOpenOnly(category))
       return;
 
@@ -125,7 +125,7 @@ const ShopFlyout: FC<IShopFlyoutProps> = ({ categories }) => {
     setActive(category);
   };
 
-  const handleSelect = (category: ICategoryNode, e: Event) => {
+  const handleSelect = (category: ICategoryNodeDto, e: Event) => {
     if (!wantsOpenOnly(category))
       return;
 
@@ -206,7 +206,7 @@ const ShopFlyout: FC<IShopFlyoutProps> = ({ categories }) => {
 };
 
 interface ICategoryLinkProps extends Omit<ComponentPropsWithoutRef<typeof Link>, 'to'> {
-  category?: ICategoryNode;
+  category?: ICategoryNodeDto;
 }
 
 const CategoryLink: FC<ICategoryLinkProps> = ({ category, ...props }) => {

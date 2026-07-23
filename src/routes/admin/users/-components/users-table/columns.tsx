@@ -34,7 +34,7 @@ import { Badge } from '@/components/ui/badge.tsx';
 import { cn } from '@/lib/utils';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard.ts';
 import { m } from '@/paraglide/messages';
-import type { TUserBriefDto } from '@/features/users/schemas/user-brief.ts';
+import type { TUserBriefDto } from '@/features/users/admin/dtos/user-brief.ts';
 import { Link } from '@tanstack/react-router';
 import { useUserSheet, UserSheetMode } from '@/routes/admin/users/-components/user-sheet/provider.tsx';
 import { UserRoleIcon } from '@/components/icons/user-role-icon.tsx';

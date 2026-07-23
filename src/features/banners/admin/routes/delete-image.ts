@@ -3,7 +3,7 @@ import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { bannersAdminBase, bannersAdminPath } from './base.ts';
 import { BannerService } from '@/features/banners/common/services/banner-service.ts';
-import { ImageService } from '@/features/images/services/image-service.ts';
+import { ImageService } from '@/features/images/common/services/image-service.ts';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 import { bannerDevices, bannerImagePurposeByLocaleDevice } from '@/features/banners/common/consts/banner-devices.ts';
 import { baseLocale, locales } from '@/paraglide/runtime';

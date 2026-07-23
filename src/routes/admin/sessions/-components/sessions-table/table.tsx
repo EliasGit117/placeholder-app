@@ -1,5 +1,5 @@
 import { useEffect, useMemo, type ComponentProps, type FC } from 'react';
-import type { TSearchSessionsRequestDto } from '@/features/sessions/schemas/search-sessions.ts';
+import type { TSearchSessionsRequestDto } from '@/features/sessions/common/dtos/search-sessions.ts';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { orpc } from '@/lib/orpc';
 import { sessionColumns } from '@/routes/admin/sessions/-components/sessions-table/columns.tsx';
@@ -15,7 +15,7 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { ActionBarButton } from '@/components/data-table/action-bar.tsx';
 import { IconFileDownload, IconRefresh } from '@tabler/icons-react';
-import type { TSessionBriefDto } from '@/features/sessions/schemas/session-brief.ts';
+import type { TSessionBriefDto } from '@/features/sessions/admin/dtos/session-brief.ts';
 import { AdaptiveButton } from '@/components/ui/adaptive-button';
 import { m } from '@/paraglide/messages';
 import { authClient } from '@/lib/auth';

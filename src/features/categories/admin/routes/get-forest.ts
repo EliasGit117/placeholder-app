@@ -1,7 +1,7 @@
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { categoriesAdminBase, categoriesAdminPath } from './base.ts';
-import { categoryForestDtoSchema } from '@/features/categories/common/dtos/category-tree.ts';
+import { buildCategoryForest, categoryForestDtoSchema } from '@/features/categories/admin/dtos/category-tree.ts';
 import { CategoryService } from '@/features/categories/common/services/category-service.ts';
 
 export const adminCategoriesGetForest = categoriesAdminBase
@@ -22,5 +22,6 @@ export const adminCategoriesGetForest = categoriesAdminBase
     if (!success)
       throw errors.FORBIDDEN();
 
-    return CategoryService.getForest();
+    const categories = await CategoryService.list();
+    return buildCategoryForest(categories);
   });

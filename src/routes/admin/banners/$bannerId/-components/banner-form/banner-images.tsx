@@ -18,7 +18,7 @@ import {
   bannerImagePurposeByLocaleDevice,
   bannerLocales
 } from '@/features/banners/common/consts/banner-devices.ts';
-import { getImageUploadConstraints } from '@/features/images/consts/image-resource-map.ts';
+import { getImageUploadConstraints } from '@/features/images/common/consts/image-resource-map.ts';
 import type { TBannerImageDto } from '@/features/banners/admin/dtos/banner-image.ts';
 import type { Locale } from '@/paraglide/runtime';
 
