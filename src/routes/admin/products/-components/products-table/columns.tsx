@@ -30,7 +30,7 @@ import { getLocale } from '@/paraglide/runtime';
 import { thumbhashToDataUrl } from '@/lib/utils';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { getProductStateOption, productStateOptions } from '../product-editor';
-import type { TProduct, TProductVariantBrief } from '@/features/products/schemas/product.ts';
+import type { TProductDto, TProductVariantBriefDto } from '@/features/products/common/dtos/product.ts';
 
 
 interface IOptions {
@@ -39,7 +39,7 @@ interface IOptions {
   onDelete?: (id: number) => void;
 }
 
-const columnHelper = createColumnHelper<TProduct>();
+const columnHelper = createColumnHelper<TProductDto>();
 
 export const productColumns = (options?: IOptions) => {
   const { disabled, canDelete, onDelete } = options ?? {};
@@ -249,7 +249,7 @@ export const productColumns = (options?: IOptions) => {
 
 const MAX_VARIANTS = 3;
 
-function VariantsCell({ variants }: { variants: TProductVariantBrief[] }) {
+function VariantsCell({ variants }: { variants: TProductVariantBriefDto[] }) {
   const isRu = getLocale() === 'ru';
 
   if (variants.length === 0)

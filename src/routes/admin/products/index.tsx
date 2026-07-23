@@ -3,7 +3,7 @@ import { orpc } from '@/lib/orpc';
 import { ProductsTable } from './-components/products-table';
 import { roleHasPermission } from '@/lib/auth';
 import { awaitIfServer } from '@/lib/server';
-import { searchProductsRequestDtoSchema } from '@/features/products/schemas/search-products.ts';
+import { searchProductsRequestDtoSchema } from '@/features/products/admin/dtos/search-products.ts';
 
 
 export const Route = createFileRoute('/admin/products/')({

@@ -28,15 +28,15 @@ import { VariantSheet, type TVariantSheetValues } from './variant-sheet.tsx';
 import { VariantImagesSheet } from './variant-images-sheet';
 import { getProductStateOption } from '../product-editor';
 import { capitalizeFirst, thumbhashToDataUrl } from '@/lib/utils';
-import type { TOptions } from '@/features/products/schemas/option-schema.ts';
-import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
-import type { TProductVariantImageDto } from '@/features/products/dtos/product-variant-image.ts';
+import type { TOptions } from '@/features/products/common/dtos/option-schema.ts';
+import type { TProductVariantDto } from '@/features/products/common/dtos/product-variant.ts';
+import type { TProductVariantImageDto } from '@/features/products/common/dtos/product-variant-image.ts';
 
 
 interface IProps {
   productId: number;
   options: TOptions;
-  variants: TProductVariant[];
+  variants: TProductVariantDto[];
   canUpdate?: boolean;
 }
 
@@ -45,10 +45,10 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
   const confirm = useConfirm();
 
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [editing, setEditing] = useState<TProductVariant | null>(null);
+  const [editing, setEditing] = useState<TProductVariantDto | null>(null);
 
   const [imagesOpen, setImagesOpen] = useState(false);
-  const [imagesVariant, setImagesVariant] = useState<TProductVariant | null>(null);
+  const [imagesVariant, setImagesVariant] = useState<TProductVariantDto | null>(null);
 
   const invalidate = () =>
     queryClient.invalidateQueries({ queryKey: orpc.admin.products.get.key() });
@@ -92,17 +92,17 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
     setSheetOpen(true);
   };
 
-  const onEditClick = (variant: TProductVariant) => {
+  const onEditClick = (variant: TProductVariantDto) => {
     setEditing(variant);
     setSheetOpen(true);
   };
 
-  const onManageImagesClick = (variant: TProductVariant) => {
+  const onManageImagesClick = (variant: TProductVariantDto) => {
     setImagesVariant(variant);
     setImagesOpen(true);
   };
 
-  const onDeleteClick = async (variant: TProductVariant) => {
+  const onDeleteClick = async (variant: TProductVariantDto) => {
     const confirmed = await confirm({
       title: m['pages.products.variants.delete_title'](),
       description: m['pages.products.variants.delete_description'](),
@@ -130,7 +130,7 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
   const locale = getLocale();
   const capitalizedLocale = capitalizeFirst(locale);
 
-  const optionValueBadges = (variant: TProductVariant) =>
+  const optionValueBadges = (variant: TProductVariantDto) =>
     Object.entries(variant.optionValues).map(([key, value]) => {
       const option = options[key];
       const label = option[`name${capitalizedLocale}`] ?? key;

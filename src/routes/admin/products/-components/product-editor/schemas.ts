@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
-import type { TOptions } from '@/features/products/schemas/option-schema.ts';
-import type { TProductWithVariants } from '@/features/products/schemas/product.ts';
+import type { TOptions } from '@/features/products/common/dtos/option-schema.ts';
+import type { TProductWithVariantsDto } from '@/features/products/common/dtos/product.ts';
 
 const slugSchema = z.string().trim().min(1).max(128)
   .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase letters, numbers and hyphens only');
@@ -92,7 +92,7 @@ export function emptyOption(): TProductOptionForm {
   return { key: '', nameRo: '', nameRu: '', values: [{ value: '', nameRo: '', nameRu: '' }] };
 }
 
-export function detailsDefaultsFromProduct(product: TProductWithVariants): TProductDetailsForm {
+export function detailsDefaultsFromProduct(product: TProductWithVariantsDto): TProductDetailsForm {
   return {
     nameRo: product.nameRo,
     nameRu: product.nameRu,

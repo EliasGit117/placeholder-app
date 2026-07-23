@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { productsBase, productsPath } from './base.ts';
-import { productWithVariantsSchema } from '@/features/products/schemas/product.ts';
-import { ProductService } from '../../services/product-service.ts';
+import { productWithVariantsDtoSchema } from '@/features/products/common/dtos/product.ts';
+import { ProductService } from '../../common/services/product-service.ts';
 
 export const getProductBySlug = productsBase
   .route({
@@ -14,7 +14,7 @@ export const getProductBySlug = productsBase
   .meta({ anonymous: true })
   .errors({ NOT_FOUND: {} })
   .input(z.object({ slug: z.string() }))
-  .output(productWithVariantsSchema)
+  .output(productWithVariantsDtoSchema)
   .handler(async ({ input: { slug }, errors }) => {
     const product = await ProductService.findBySlug(slug);
     if (product == null || product.state !== ProductState.ACTIVE)

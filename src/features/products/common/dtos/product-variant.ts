@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
-import { optionValuesSchema } from '@/features/products/schemas/option-schema.ts';
-import { productVariantImageDtoSchema } from '@/features/products/dtos/product-variant-image.ts';
+import { optionValuesSchema } from '@/features/products/common/dtos/option-schema.ts';
+import { productVariantImageDtoSchema } from '@/features/products/common/dtos/product-variant-image.ts';
 
 
-export const productVariantSchema = z.object({
+export const productVariantDtoSchema = z.object({
   id: z.number(),
   productId: z.number(),
   nameRo: z.string(),
@@ -20,6 +20,6 @@ export const productVariantSchema = z.object({
   updatedAt: z.string(),
 });
 
-export const productVariantsSchema = z.array(productVariantSchema);
+export const productVariantDtosSchema = z.array(productVariantDtoSchema);
 
-export type TProductVariant = z.infer<typeof productVariantSchema>;
+export type TProductVariantDto = z.infer<typeof productVariantDtoSchema>;

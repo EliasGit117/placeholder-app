@@ -4,8 +4,8 @@ import { productsAdminBase, productsAdminPath } from './base.ts';
 import {
   searchProductsRequestDtoSchema,
   searchProductsResultDtoSchema,
-} from '@/features/products/schemas/search-products.ts';
-import { ProductService } from '../../services/product-service.ts';
+} from '@/features/products/admin/dtos/search-products.ts';
+import { ProductService } from '../../common/services/product-service.ts';
 
 export const adminProductsSearch = productsAdminBase
   .route({

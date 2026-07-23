@@ -1,9 +1,9 @@
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { productsAdminBase, productsAdminPath } from './base.ts';
-import { addVariantSchema } from '@/features/products/schemas/product-variant-mutations.ts';
-import { productVariantSchema } from '@/features/products/schemas/product-variant.ts';
-import { ProductService } from '../../services/product-service.ts';
+import { addVariantDtoSchema } from '@/features/products/admin/dtos/product-variant-mutations.ts';
+import { productVariantDtoSchema } from '@/features/products/common/dtos/product-variant.ts';
+import { ProductService } from '../../common/services/product-service.ts';
 
 export const adminProductsAddVariant = productsAdminBase
   .route({
@@ -14,8 +14,8 @@ export const adminProductsAddVariant = productsAdminBase
   })
   .errors({ FORBIDDEN: {}, NOT_FOUND: {}, BAD_REQUEST: {}, CONFLICT: {} })
   .use(authMiddleware)
-  .input(addVariantSchema)
-  .output(productVariantSchema)
+  .input(addVariantDtoSchema)
+  .output(productVariantDtoSchema)
   .handler(async ({ input, context: { user }, errors }) => {
     const { success } = await auth.api.userHasPermission({
       body: { userId: user.id, permissions: { products: ['update'] } },

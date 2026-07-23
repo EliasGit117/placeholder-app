@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { validateOptionValues } from './product-service.ts';
-import { buildFullSlug, slugifyValue } from '@/features/products/lib/slug.ts';
-import type { TOptions } from '@/features/products/schemas/option-schema.ts';
+import { buildFullSlug, slugifyValue } from '@/features/products/common/lib/slug.ts';
+import type { TOptions } from '@/features/products/common/dtos/option-schema.ts';
 
 const options: TOptions = {
   color: {

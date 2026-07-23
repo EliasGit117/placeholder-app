@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { thumbhashToDataUrl } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { IconTrash } from '@tabler/icons-react';
-import type { TProductVariantImageDto } from '@/features/products/dtos/product-variant-image.ts';
+import type { TProductVariantImageDto } from '@/features/products/common/dtos/product-variant-image.ts';
 
 export const gridClass = 'grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4';
 

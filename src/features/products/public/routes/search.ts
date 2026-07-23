@@ -2,8 +2,8 @@ import { productsBase, productsPath } from './base.ts';
 import {
   searchPublicProductsRequestDtoSchema,
   searchPublicProductsResultDtoSchema,
-} from '@/features/products/schemas/search-public-products.ts';
-import { ProductService } from '../../services/product-service.ts';
+} from '@/features/products/public/dtos/search-public-products.ts';
+import { ProductService } from '../../common/services/product-service.ts';
 
 export const searchProducts = productsBase
   .route({

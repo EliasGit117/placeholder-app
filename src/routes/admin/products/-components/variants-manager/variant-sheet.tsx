@@ -30,11 +30,11 @@ import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { getProductStateOption, productStateOptions } from '../product-editor';
-import type { TOptions } from '@/features/products/schemas/option-schema.ts';
-import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
+import type { TOptions } from '@/features/products/common/dtos/option-schema.ts';
+import type { TProductVariantDto } from '@/features/products/common/dtos/product-variant.ts';
 import { Separator } from '@/components/ui/separator.tsx';
 import { capitalizeFirst } from '@/lib/utils';
-import { slugifyValue } from '@/features/products/lib/slug.ts';
+import { slugifyValue } from '@/features/products/common/lib/slug.ts';
 
 
 const variantSheetSchema = z.object({
@@ -57,7 +57,7 @@ interface IProps {
   onOpenChange: (open: boolean) => void;
   options: TOptions;
   /** When set, the sheet edits this variant; otherwise it creates a new one. */
-  variant?: TProductVariant | null;
+  variant?: TProductVariantDto | null;
   loading?: boolean;
   onSubmit: (values: TVariantSheetValues) => void;
 }

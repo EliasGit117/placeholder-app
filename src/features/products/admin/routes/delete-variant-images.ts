@@ -2,33 +2,29 @@ import { z } from 'zod';
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { productsAdminBase, productsAdminPath } from './base.ts';
-import { ProductService } from '../../services/product-service.ts';
+import { ProductService } from '../../common/services/product-service.ts';
 import { ImageService } from '@/features/images/common/services/image-service.ts';
-import {
-  productVariantImageDtoSchema,
-  ProductVariantImageDtoFactory,
-} from '../../dtos/product-variant-image.ts';
 import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 
-const reorderVariantImagesInputSchema = z.object({
+const deleteVariantImagesInputSchema = z.object({
   variantId: z.number().int().positive(),
   ids: z.array(z.number().int().positive()).min(1),
 });
 
-export const adminProductsReorderVariantImages = productsAdminBase
+export const adminProductsDeleteVariantImages = productsAdminBase
   .route({
-    method: 'PATCH',
-    path: `${productsAdminPath}/variants/{variantId}/images/order`,
-    summary: 'Reorder product variant images',
-    description: 'Applies a new display order for the images of a product variant',
+    method: 'DELETE',
+    path: `${productsAdminPath}/variants/{variantId}/images`,
+    summary: 'Delete product variant images',
+    description: 'Removes the given images (and their variants) from a product variant and storage',
   })
-  .errors({ FORBIDDEN: {}, NOT_FOUND: {}, BAD_REQUEST: {} })
+  .errors({ FORBIDDEN: {}, NOT_FOUND: {} })
   .use(authMiddleware)
-  .input(reorderVariantImagesInputSchema)
-  .output(z.array(productVariantImageDtoSchema))
+  .input(deleteVariantImagesInputSchema)
+  .output(z.object({ deleted: z.number() }))
   .handler(async ({ input, context: { user }, errors }) => {
     const { success } = await auth.api.userHasPermission({
-      body: { userId: user.id, permissions: { products: ['update'] } },
+      body: { userId: user.id, permissions: { products: ['delete'] } },
     });
 
     if (!success)
@@ -38,11 +34,11 @@ export const adminProductsReorderVariantImages = productsAdminBase
     if (variant == null)
       throw errors.NOT_FOUND();
 
-    const images = await ImageService.reorderForResource(
+    const deleted = await ImageService.deleteManyForResource(
       ImageResourceType.PRODUCT_VARIANT,
       String(input.variantId),
       input.ids
     );
 
-    return ProductVariantImageDtoFactory.fromImageDtos(images);
+    return { deleted };
   });

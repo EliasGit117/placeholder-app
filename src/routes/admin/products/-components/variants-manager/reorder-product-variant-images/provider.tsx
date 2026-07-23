@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { orpc } from '@/lib/orpc';
 import { contextFactory } from '@/lib/utils/context-factory.ts';
 import { m } from '@/paraglide/messages';
-import type { TProductVariantImageDto } from '@/features/products/dtos/product-variant-image.ts';
+import type { TProductVariantImageDto } from '@/features/products/common/dtos/product-variant-image.ts';
 
 export interface IReorderProductVariantImagesContextValue {
   items: TProductVariantImageDto[];

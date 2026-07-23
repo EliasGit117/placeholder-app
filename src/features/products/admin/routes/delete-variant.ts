@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { authMiddleware } from '@/lib/auth/middleware.ts';
 import { auth } from '@/lib/auth/better-auth.ts';
 import { productsAdminBase, productsAdminPath } from './base.ts';
-import { ProductService } from '../../services/product-service.ts';
+import { ProductService } from '../../common/services/product-service.ts';
 
 export const adminProductsDeleteVariant = productsAdminBase
   .route({

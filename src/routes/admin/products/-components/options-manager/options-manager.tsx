@@ -18,7 +18,7 @@ import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
 import { OptionSheet } from './option-sheet.tsx';
 import { optionsToRecord, recordToOptions, type TProductOptionForm } from '../product-editor';
-import type { TOptions } from '@/features/products/schemas/option-schema.ts';
+import type { TOptions } from '@/features/products/common/dtos/option-schema.ts';
 
 
 interface IProps {

@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { dateRangeSchema } from '@/components/data-table';
 import { paginatedRequestDtoSchema } from '@/features/shared/schemas/pagination.ts';
 import { paginationResultWithCountDtoSchema } from '@/features/shared/dtos/pagination-result-dto.ts';
-import { productSchema } from '@/features/products/schemas/product.ts';
+import { productDtoSchema } from '@/features/products/common/dtos/product.ts';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 
 
@@ -19,4 +19,4 @@ export const searchProductsRequestDtoSchema = paginatedRequestDtoSchema.extend({
 
 export type TSearchProductsRequestDto = z.infer<typeof searchProductsRequestDtoSchema>;
 
-export const searchProductsResultDtoSchema = paginationResultWithCountDtoSchema(productSchema);
+export const searchProductsResultDtoSchema = paginationResultWithCountDtoSchema(productDtoSchema);

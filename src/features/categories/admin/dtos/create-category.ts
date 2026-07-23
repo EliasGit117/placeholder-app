@@ -1,5 +1,5 @@
 import { CategoryState } from '~/prisma/generated/prisma/enums.ts';
-import { slugSchema } from '@/features/products/schemas/product-mutations.ts';
+import { slugSchema } from '@/features/shared/schemas/slug.ts';
 import { z } from 'zod';
 
 

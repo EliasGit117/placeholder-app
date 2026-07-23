@@ -19,7 +19,7 @@ import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
 import { toast } from 'sonner';
 import { IconFileDownload, IconRefresh } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
-import type { TSearchProductsRequestDto } from '@/features/products/schemas/search-products.ts';
+import type { TSearchProductsRequestDto } from '@/features/products/admin/dtos/search-products.ts';
 
 
 interface IProps extends ComponentProps<'div'> {

@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { IconPhotoOff } from '@tabler/icons-react';
-import type { TBriefProductPublicDto } from '@/features/products/schemas/search-public-products';
+import type { TBriefProductPublicDto } from '@/features/products/public/dtos/search-public-products';
 import { m } from '@/paraglide/messages';
 
 interface IProps {

@@ -6,8 +6,8 @@ import { sessionsAdminRoutes } from '@/features/sessions/admin/routes';
 import { usersAdminRoutes } from '@/features/users/admin/routes';
 import { categoriesAdminRoutes } from '@/features/categories/admin/routes';
 import { profileRoutes } from '@/features/profile/admin/routes';
-import { productsRoutes } from '@/features/products/routes/public';
-import { productsAdminRoutes } from '@/features/products/routes/admin';
+import { productsRoutes } from '@/features/products/public/routes';
+import { productsAdminRoutes } from '@/features/products/admin/routes';
 import { bannersPublicRoutes } from '@/features/banners/public/routes';
 import { bannersAdminRoutes } from '@/features/banners/admin/routes';
 

@@ -4,7 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { IconPhotoOff } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { cn } from '@/lib/utils';
-import type { TProductVariantImageDto } from '@/features/products/dtos/product-variant-image.ts';
+import type { TProductVariantImageDto } from '@/features/products/common/dtos/product-variant-image.ts';
 import { gridClass, ImageCard } from './image-card.tsx';
 
 

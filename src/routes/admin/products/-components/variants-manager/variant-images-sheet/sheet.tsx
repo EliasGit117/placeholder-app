@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { useConfirm } from '@/components/ui/confirm-dialog.tsx';
 import { IconArrowLeft, IconArrowsSort, IconUpload, IconX } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
-import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
+import type { TProductVariantDto } from '@/features/products/common/dtos/product-variant.ts';
 import {
   UploadProductVariantImagesProvider,
   UploadDropZone,
@@ -39,7 +39,7 @@ enum Mode {
 interface IProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  variant: TProductVariant | null;
+  variant: TProductVariantDto | null;
 }
 
 export const VariantImagesSheet: FC<IProps> = ({ open, onOpenChange, variant }) => {

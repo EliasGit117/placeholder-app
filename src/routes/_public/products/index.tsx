@@ -16,7 +16,7 @@ import {
 import {
   searchPublicProductsRequestDtoSchema,
   type TSearchPublicProductsRequestDto
-} from '@/features/products/schemas/search-public-products.ts';
+} from '@/features/products/public/dtos/search-public-products.ts';
 import { m } from '@/paraglide/messages';
 import { ProductCard } from './-components/product-card.tsx';
 import { ProductsHeader } from '@/routes/_public/products/-components/header';

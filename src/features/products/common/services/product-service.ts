@@ -3,22 +3,22 @@ import { type Prisma, type Product, type ProductVariant } from '~/prisma/generat
 import { ImageResourceType, ImageVariantKind, ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { prisma } from '@/lib/db';
 import { getLocale } from '@/paraglide/runtime';
-import { buildFullSlug } from '@/features/products/lib/slug.ts';
+import { buildFullSlug } from '@/features/products/common/lib/slug.ts';
 import { ImageService } from '@/features/images/common/services/image-service.ts';
-import { ProductVariantImageDtoFactory, type TProductVariantImageDto } from '@/features/products/dtos/product-variant-image.ts';
+import { ProductVariantImageDtoFactory, type TProductVariantImageDto } from '@/features/products/common/dtos/product-variant-image.ts';
 import type { TxClient } from '@/lib/db/prisma.ts';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
-import type { TOptions, TOptionValues } from '@/features/products/schemas/option-schema.ts';
-import type { TProduct, TProductVariantBrief, TProductWithVariants } from '@/features/products/schemas/product.ts';
-import type { TProductVariant } from '@/features/products/schemas/product-variant.ts';
-import type { TCreateProductInput, TUpdateProductInput } from '@/features/products/schemas/product-mutations.ts';
-import type { TAddVariantInput, TUpdateVariantInput } from '@/features/products/schemas/product-variant-mutations.ts';
-import type { TSearchProductsRequestDto } from '@/features/products/schemas/search-products.ts';
-import type { TSearchPublicProductsRequestDto, TBriefProductPublicDto } from '@/features/products/schemas/search-public-products.ts';
+import type { TOptions, TOptionValues } from '@/features/products/common/dtos/option-schema.ts';
+import type { TProductDto, TProductVariantBriefDto, TProductWithVariantsDto } from '@/features/products/common/dtos/product.ts';
+import type { TProductVariantDto } from '@/features/products/common/dtos/product-variant.ts';
+import type { TCreateProductDto, TUpdateProductDto } from '@/features/products/admin/dtos/product-mutations.ts';
+import type { TAddVariantDto, TUpdateVariantDto } from '@/features/products/admin/dtos/product-variant-mutations.ts';
+import type { TSearchProductsRequestDto } from '@/features/products/admin/dtos/search-products.ts';
+import type { TSearchPublicProductsRequestDto, TBriefProductPublicDto } from '@/features/products/public/dtos/search-public-products.ts';
 
 export class ProductService {
 
-  static fromEntity(entity: Product, variants: TProductVariantBrief[] = []): TProduct {
+  static fromEntity(entity: Product, variants: TProductVariantBriefDto[] = []): TProductDto {
     return {
       id: entity.id,
       nameRo: entity.nameRo,
@@ -38,7 +38,7 @@ export class ProductService {
   static variantFromEntity(
     entity: ProductVariant,
     images: TProductVariantImageDto[] = []
-  ): TProductVariant {
+  ): TProductVariantDto {
     return {
       id: entity.id,
       productId: entity.productId,
@@ -60,7 +60,7 @@ export class ProductService {
     product: Product,
     variants: ProductVariant[],
     imagesByVariant?: Map<number, TProductVariantImageDto[]>
-  ): TProductWithVariants {
+  ): TProductWithVariantsDto {
     return {
       ...ProductService.fromEntity(product),
       variants: variants.map((v) =>
@@ -90,12 +90,12 @@ export class ProductService {
     return map;
   }
 
-  static async list(): Promise<TProduct[]> {
+  static async list(): Promise<TProductDto[]> {
     const entities = await prisma.product.findMany({ orderBy: { nameRo: 'asc' } });
     return entities.map((e) => ProductService.fromEntity(e));
   }
 
-  static async listActive(): Promise<TProduct[]> {
+  static async listActive(): Promise<TProductDto[]> {
     const entities = await prisma.product.findMany({
       where: { state: ProductState.ACTIVE },
       orderBy: { nameRo: 'asc' },
@@ -103,7 +103,7 @@ export class ProductService {
     return entities.map((e) => ProductService.fromEntity(e));
   }
 
-  static async findById(id: number): Promise<TProductWithVariants | null> {
+  static async findById(id: number): Promise<TProductWithVariantsDto | null> {
     const entity = await prisma.product.findUnique({ where: { id }, include: { variants: true } });
     if (entity == null)
       return null;
@@ -112,7 +112,7 @@ export class ProductService {
     return ProductService.withVariants(entity, entity.variants, imagesByVariant);
   }
 
-  static async findBySlug(slug: string): Promise<TProductWithVariants | null> {
+  static async findBySlug(slug: string): Promise<TProductWithVariantsDto | null> {
     const entity = await prisma.product.findUnique({ where: { slug }, include: { variants: true } });
     return entity ? ProductService.withVariants(entity, entity.variants) : null;
   }
@@ -249,7 +249,7 @@ export class ProductService {
     }
 
     const result = items.map((item) => {
-      const variants: TProductVariantBrief[] = item.variants.map((v) => ({
+      const variants: TProductVariantBriefDto[] = item.variants.map((v) => ({
         id: v.id,
         nameRo: v.nameRo,
         nameRu: v.nameRu,
@@ -262,7 +262,7 @@ export class ProductService {
     return PaginationResultDtoFactory.getWithCount(result, meta);
   }
 
-  static async create(input: TCreateProductInput): Promise<TProductWithVariants> {
+  static async create(input: TCreateProductDto): Promise<TProductWithVariantsDto> {
     // Products are created with basic fields only; options and variants are added afterwards.
     const product = await prisma.product.create({
       data: {
@@ -281,7 +281,7 @@ export class ProductService {
     return ProductService.withVariants(product, product.variants);
   }
 
-  static async addVariant(input: TAddVariantInput): Promise<TProductVariant> {
+  static async addVariant(input: TAddVariantDto): Promise<TProductVariantDto> {
     const product = await prisma.product.findUnique({ where: { id: input.productId } });
     if (!product)
       throw new ORPCError('NOT_FOUND', { message: `Product '${input.productId}' not found` });
@@ -313,7 +313,7 @@ export class ProductService {
     return ProductService.variantFromEntity(variant);
   }
 
-  static async updateVariant(input: TUpdateVariantInput): Promise<TProductVariant> {
+  static async updateVariant(input: TUpdateVariantDto): Promise<TProductVariantDto> {
     const existing = await prisma.productVariant.findUnique({
       where: { id: input.id },
       include: { product: true },
@@ -358,7 +358,7 @@ export class ProductService {
     return ProductService.variantFromEntity(variant);
   }
 
-  static async findVariantById(id: number): Promise<TProductVariant | null> {
+  static async findVariantById(id: number): Promise<TProductVariantDto | null> {
     const entity = await prisma.productVariant.findUnique({ where: { id } });
     return entity ? ProductService.variantFromEntity(entity) : null;
   }
@@ -375,7 +375,7 @@ export class ProductService {
     await ImageService.deleteAllForResource(ImageResourceType.PRODUCT_VARIANT, String(id));
   }
 
-  static async update(id: number, input: TUpdateProductInput): Promise<TProductWithVariants> {
+  static async update(id: number, input: TUpdateProductDto): Promise<TProductWithVariantsDto> {
     const existing = await prisma.product.findUnique({ where: { id }, include: { variants: true } });
     if (!existing)
       throw new ORPCError('NOT_FOUND');
