@@ -30,12 +30,14 @@ export type ProductVariantAvgAggregateOutputType = {
   id: number | null
   productId: number | null
   price: number | null
+  discountPercent: number | null
 }
 
 export type ProductVariantSumAggregateOutputType = {
   id: number | null
   productId: number | null
   price: number | null
+  discountPercent: number | null
 }
 
 export type ProductVariantMinAggregateOutputType = {
@@ -48,6 +50,7 @@ export type ProductVariantMinAggregateOutputType = {
   fullSlug: string | null
   sku: string | null
   price: number | null
+  discountPercent: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,6 +65,7 @@ export type ProductVariantMaxAggregateOutputType = {
   fullSlug: string | null
   sku: string | null
   price: number | null
+  discountPercent: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -77,6 +81,7 @@ export type ProductVariantCountAggregateOutputType = {
   sku: number
   optionValues: number
   price: number
+  discountPercent: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -87,12 +92,14 @@ export type ProductVariantAvgAggregateInputType = {
   id?: true
   productId?: true
   price?: true
+  discountPercent?: true
 }
 
 export type ProductVariantSumAggregateInputType = {
   id?: true
   productId?: true
   price?: true
+  discountPercent?: true
 }
 
 export type ProductVariantMinAggregateInputType = {
@@ -105,6 +112,7 @@ export type ProductVariantMinAggregateInputType = {
   fullSlug?: true
   sku?: true
   price?: true
+  discountPercent?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -119,6 +127,7 @@ export type ProductVariantMaxAggregateInputType = {
   fullSlug?: true
   sku?: true
   price?: true
+  discountPercent?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -134,6 +143,7 @@ export type ProductVariantCountAggregateInputType = {
   sku?: true
   optionValues?: true
   price?: true
+  discountPercent?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -236,6 +246,7 @@ export type ProductVariantGroupByOutputType = {
   sku: string
   optionValues: runtime.JsonValue
   price: number
+  discountPercent: number | null
   createdAt: Date
   updatedAt: Date
   _count: ProductVariantCountAggregateOutputType | null
@@ -274,6 +285,7 @@ export type ProductVariantWhereInput = {
   sku?: Prisma.StringFilter<"ProductVariant"> | string
   optionValues?: Prisma.JsonFilter<"ProductVariant">
   price?: Prisma.IntFilter<"ProductVariant"> | number
+  discountPercent?: Prisma.IntNullableFilter<"ProductVariant"> | number | null
   createdAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
@@ -290,6 +302,7 @@ export type ProductVariantOrderByWithRelationInput = {
   sku?: Prisma.SortOrder
   optionValues?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  discountPercent?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   product?: Prisma.ProductOrderByWithRelationInput
@@ -310,6 +323,7 @@ export type ProductVariantWhereUniqueInput = Prisma.AtLeast<{
   sku?: Prisma.StringFilter<"ProductVariant"> | string
   optionValues?: Prisma.JsonFilter<"ProductVariant">
   price?: Prisma.IntFilter<"ProductVariant"> | number
+  discountPercent?: Prisma.IntNullableFilter<"ProductVariant"> | number | null
   createdAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
@@ -326,6 +340,7 @@ export type ProductVariantOrderByWithAggregationInput = {
   sku?: Prisma.SortOrder
   optionValues?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  discountPercent?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProductVariantCountOrderByAggregateInput
@@ -349,6 +364,7 @@ export type ProductVariantScalarWhereWithAggregatesInput = {
   sku?: Prisma.StringWithAggregatesFilter<"ProductVariant"> | string
   optionValues?: Prisma.JsonWithAggregatesFilter<"ProductVariant">
   price?: Prisma.IntWithAggregatesFilter<"ProductVariant"> | number
+  discountPercent?: Prisma.IntNullableWithAggregatesFilter<"ProductVariant"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProductVariant"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ProductVariant"> | Date | string
 }
@@ -362,6 +378,7 @@ export type ProductVariantCreateInput = {
   sku: string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price: number
+  discountPercent?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   product: Prisma.ProductCreateNestedOneWithoutVariantsInput
@@ -378,6 +395,7 @@ export type ProductVariantUncheckedCreateInput = {
   sku: string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price: number
+  discountPercent?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -391,6 +409,7 @@ export type ProductVariantUpdateInput = {
   sku?: Prisma.StringFieldUpdateOperationsInput | string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price?: Prisma.IntFieldUpdateOperationsInput | number
+  discountPercent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   product?: Prisma.ProductUpdateOneRequiredWithoutVariantsNestedInput
@@ -407,6 +426,7 @@ export type ProductVariantUncheckedUpdateInput = {
   sku?: Prisma.StringFieldUpdateOperationsInput | string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price?: Prisma.IntFieldUpdateOperationsInput | number
+  discountPercent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -422,6 +442,7 @@ export type ProductVariantCreateManyInput = {
   sku: string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price: number
+  discountPercent?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -435,6 +456,7 @@ export type ProductVariantUpdateManyMutationInput = {
   sku?: Prisma.StringFieldUpdateOperationsInput | string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price?: Prisma.IntFieldUpdateOperationsInput | number
+  discountPercent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -450,6 +472,7 @@ export type ProductVariantUncheckedUpdateManyInput = {
   sku?: Prisma.StringFieldUpdateOperationsInput | string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price?: Prisma.IntFieldUpdateOperationsInput | number
+  discountPercent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -480,6 +503,7 @@ export type ProductVariantCountOrderByAggregateInput = {
   sku?: Prisma.SortOrder
   optionValues?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  discountPercent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -488,6 +512,7 @@ export type ProductVariantAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  discountPercent?: Prisma.SortOrder
 }
 
 export type ProductVariantMaxOrderByAggregateInput = {
@@ -500,6 +525,7 @@ export type ProductVariantMaxOrderByAggregateInput = {
   fullSlug?: Prisma.SortOrder
   sku?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  discountPercent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -514,6 +540,7 @@ export type ProductVariantMinOrderByAggregateInput = {
   fullSlug?: Prisma.SortOrder
   sku?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  discountPercent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -522,6 +549,7 @@ export type ProductVariantSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   productId?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  discountPercent?: Prisma.SortOrder
 }
 
 export type ProductVariantCreateNestedManyWithoutProductInput = {
@@ -575,6 +603,7 @@ export type ProductVariantCreateWithoutProductInput = {
   sku: string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price: number
+  discountPercent?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -589,6 +618,7 @@ export type ProductVariantUncheckedCreateWithoutProductInput = {
   sku: string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price: number
+  discountPercent?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -633,6 +663,7 @@ export type ProductVariantScalarWhereInput = {
   sku?: Prisma.StringFilter<"ProductVariant"> | string
   optionValues?: Prisma.JsonFilter<"ProductVariant">
   price?: Prisma.IntFilter<"ProductVariant"> | number
+  discountPercent?: Prisma.IntNullableFilter<"ProductVariant"> | number | null
   createdAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProductVariant"> | Date | string
 }
@@ -647,6 +678,7 @@ export type ProductVariantCreateManyProductInput = {
   sku: string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price: number
+  discountPercent?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -660,6 +692,7 @@ export type ProductVariantUpdateWithoutProductInput = {
   sku?: Prisma.StringFieldUpdateOperationsInput | string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price?: Prisma.IntFieldUpdateOperationsInput | number
+  discountPercent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -674,6 +707,7 @@ export type ProductVariantUncheckedUpdateWithoutProductInput = {
   sku?: Prisma.StringFieldUpdateOperationsInput | string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price?: Prisma.IntFieldUpdateOperationsInput | number
+  discountPercent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -688,6 +722,7 @@ export type ProductVariantUncheckedUpdateManyWithoutProductInput = {
   sku?: Prisma.StringFieldUpdateOperationsInput | string
   optionValues?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   price?: Prisma.IntFieldUpdateOperationsInput | number
+  discountPercent?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -705,6 +740,7 @@ export type ProductVariantSelect<ExtArgs extends runtime.Types.Extensions.Intern
   sku?: boolean
   optionValues?: boolean
   price?: boolean
+  discountPercent?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
@@ -721,6 +757,7 @@ export type ProductVariantSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   sku?: boolean
   optionValues?: boolean
   price?: boolean
+  discountPercent?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
@@ -737,6 +774,7 @@ export type ProductVariantSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   sku?: boolean
   optionValues?: boolean
   price?: boolean
+  discountPercent?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
@@ -753,11 +791,12 @@ export type ProductVariantSelectScalar = {
   sku?: boolean
   optionValues?: boolean
   price?: boolean
+  discountPercent?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProductVariantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "nameRo" | "nameRu" | "state" | "slug" | "fullSlug" | "sku" | "optionValues" | "price" | "createdAt" | "updatedAt", ExtArgs["result"]["productVariant"]>
+export type ProductVariantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "nameRo" | "nameRu" | "state" | "slug" | "fullSlug" | "sku" | "optionValues" | "price" | "discountPercent" | "createdAt" | "updatedAt", ExtArgs["result"]["productVariant"]>
 export type ProductVariantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
 }
@@ -784,6 +823,7 @@ export type $ProductVariantPayload<ExtArgs extends runtime.Types.Extensions.Inte
     sku: string
     optionValues: runtime.JsonValue
     price: number
+    discountPercent: number | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["productVariant"]>
@@ -1220,6 +1260,7 @@ export interface ProductVariantFieldRefs {
   readonly sku: Prisma.FieldRef<"ProductVariant", 'String'>
   readonly optionValues: Prisma.FieldRef<"ProductVariant", 'Json'>
   readonly price: Prisma.FieldRef<"ProductVariant", 'Int'>
+  readonly discountPercent: Prisma.FieldRef<"ProductVariant", 'Int'>
   readonly createdAt: Prisma.FieldRef<"ProductVariant", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"ProductVariant", 'DateTime'>
 }

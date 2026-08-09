@@ -13,6 +13,7 @@ export const variantBaseDtoSchema = z.object({
   sku: z.string().trim().min(1).max(128),
   optionValues: optionValuesSchema,
   price: z.number().int().nonnegative(),
+  discountPercent: z.number().int().min(0).max(100).nullable().default(null).transform((v) => v ? v : null),
 });
 
 // Used for the variants nested in a product create payload.

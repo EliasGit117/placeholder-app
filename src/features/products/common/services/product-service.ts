@@ -50,6 +50,7 @@ export class ProductService {
       fullSlug: entity.fullSlug,
       optionValues: entity.optionValues as TOptionValues,
       price: entity.price,
+      discountPercent: entity.discountPercent,
       images,
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
@@ -307,6 +308,7 @@ export class ProductService {
         fullSlug,
         optionValues: input.optionValues as Prisma.InputJsonValue,
         price: input.price,
+        discountPercent: input.discountPercent,
       },
     });
 
@@ -352,6 +354,7 @@ export class ProductService {
         ...(input.optionValues !== undefined && { optionValues: input.optionValues as Prisma.InputJsonValue }),
         ...(slugChanged && { slug, fullSlug }),
         ...(input.price !== undefined && { price: input.price }),
+        ...(input.discountPercent !== undefined && { discountPercent: input.discountPercent }),
       },
     });
 
@@ -447,11 +450,22 @@ export class ProductService {
   }
 
   static async delete(id: number): Promise<void> {
-    const existing = await prisma.product.findUnique({ where: { id }, select: { id: true } });
+    const existing = await prisma.product.findUnique({
+      where: { id },
+      select: { variants: { select: { id: true } } },
+    });
     if (!existing)
       throw new ORPCError('NOT_FOUND');
 
     await prisma.product.delete({ where: { id } });
+
+    // Variant images are owned via the polymorphic image resource map (no FK cascade), so the
+    // product-delete cascade only removes the ProductVariant rows — clean their images too.
+    await Promise.all(
+      existing.variants.map((v) =>
+        ImageService.deleteAllForResource(ImageResourceType.PRODUCT_VARIANT, String(v.id))
+      )
+    );
   }
 }
 

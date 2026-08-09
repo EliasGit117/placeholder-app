@@ -29,6 +29,14 @@ describe('slugifyValue', () => {
     expect(slugifyValue('XL / 42')).toBe('xl-42');
     expect(slugifyValue('  M  ')).toBe('m');
   });
+
+  it('transliterates Romanian diacritics instead of dropping them', () => {
+    expect(slugifyValue('Mască Argilă Verde')).toBe('masca-argila-verde');
+  });
+
+  it('transliterates Cyrillic instead of dropping it', () => {
+    expect(slugifyValue('Маска зелёная глина')).toBe('maska-zelyonaya-glina');
+  });
 });
 
 describe('buildFullSlug', () => {

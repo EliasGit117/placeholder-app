@@ -257,6 +257,8 @@
           "slug": "Slug",
           "generate": "Generează",
           "price": "Preț (MDL)",
+          "discount": "Reducere",
+          "final_price": "Preț final",
           "sku": "SKU",
           "values": "Valori"
         },

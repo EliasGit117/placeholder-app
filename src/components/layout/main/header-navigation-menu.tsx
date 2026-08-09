@@ -63,7 +63,7 @@ export const HeaderNavigationMenu: FC<IProps> = ({ className, ...props }) => {
 
         {links.map((link) => (
           <NavigationMenuItem key={link.to}>
-            <NavigationMenuLink className={cn('uppercase font-normal',navigationMenuTriggerStyle())} asChild>
+            <NavigationMenuLink className={cn('uppercase font-normal!', navigationMenuTriggerStyle())} asChild>
               <Link to={link.to}>
                 {link.name()}
               </Link>

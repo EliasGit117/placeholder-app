@@ -32,9 +32,9 @@ function RouteComponent() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center gap-4">
-            <Avatar size='lg'>
-              <AvatarImage src={user?.image ?? ''} alt={user?.name ?? ''}/>
-              <AvatarFallback>
+            <Avatar size='lg' className='after:rounded-lg'>
+              <AvatarImage className='rounded-lg' src={user?.image ?? ''} alt={user?.name ?? ''}/>
+              <AvatarFallback className='rounded-lg'>
                 {pickFirstLetters(user?.name ?? '', 2, 'uppercase')}
               </AvatarFallback>
             </Avatar>

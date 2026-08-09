@@ -15,6 +15,7 @@ export const productVariantDtoSchema = z.object({
   sku: z.string(),
   optionValues: optionValuesSchema,
   price: z.number().int(),
+  discountPercent: z.number().int().nullable(),
   images: z.array(productVariantImageDtoSchema),
   createdAt: z.string(),
   updatedAt: z.string(),

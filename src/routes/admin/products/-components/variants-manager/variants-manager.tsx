@@ -28,6 +28,7 @@ import { VariantSheet, type TVariantSheetValues } from './variant-sheet.tsx';
 import { VariantImagesSheet } from './variant-images-sheet';
 import { getProductStateOption } from '../product-editor';
 import { capitalizeFirst, thumbhashToDataUrl } from '@/lib/utils';
+import { computeDiscountedPrice } from '@/features/products/common/lib/discount.ts';
 import type { TOptions } from '@/features/products/common/dtos/option-schema.ts';
 import type { TProductVariantDto } from '@/features/products/common/dtos/product-variant.ts';
 import type { TProductVariantImageDto } from '@/features/products/common/dtos/product-variant-image.ts';
@@ -214,8 +215,25 @@ export const VariantsManager: FC<IProps> = ({ productId, options, variants, canU
                         {variant.sku}
                       </TableCell>
                       <TableCell>
-                        <span className="text-sm tabular-nums">{variant.price}</span>
-                        <small className="text-muted-foreground ml-1">MDL</small>
+                        {variant.discountPercent ? (
+                          <div className="flex flex-col gap-0.5">
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-sm font-medium tabular-nums">
+                                {computeDiscountedPrice(variant.price, variant.discountPercent)}
+                              </span>
+                              <small className="text-muted-foreground">MDL</small>
+                              <Badge variant="secondary" className="text-[10px] px-1">-{variant.discountPercent}%</Badge>
+                            </div>
+                            <span className="text-xs text-muted-foreground line-through tabular-nums">
+                              {variant.price} MDL
+                            </span>
+                          </div>
+                        ) : (
+                          <>
+                            <span className="text-sm tabular-nums">{variant.price}</span>
+                            <small className="text-muted-foreground ml-1">MDL</small>
+                          </>
+                        )}
                       </TableCell>
                       <TableCell>
                         <div className="flex flex-wrap items-center gap-1">{optionValueBadges(variant)}</div>

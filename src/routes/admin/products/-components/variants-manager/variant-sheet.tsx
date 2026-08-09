@@ -1,5 +1,5 @@
 import { type FC, useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import {
@@ -35,6 +35,7 @@ import type { TProductVariantDto } from '@/features/products/common/dtos/product
 import { Separator } from '@/components/ui/separator.tsx';
 import { capitalizeFirst } from '@/lib/utils';
 import { slugifyValue } from '@/features/products/common/lib/slug.ts';
+import { computeDiscountedPrice } from '@/features/products/common/lib/discount.ts';
 
 
 const variantSheetSchema = z.object({
@@ -45,6 +46,7 @@ const variantSheetSchema = z.object({
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase letters, numbers and hyphens only'),
   sku: z.string().trim().min(1).max(128),
   price: z.number().int().nonnegative(),
+  discountPercent: z.number().int().min(0).max(100).nullable(),
   optionValues: z.record(z.string(), z.string())
 });
 
@@ -69,7 +71,7 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
 
   const form = useForm<TVariantSheetValues>({
     resolver: zodResolver(variantSheetSchema),
-    defaultValues: { nameRo: '', nameRu: '', state: ProductState.ACTIVE, slug: '', sku: '', price: 0, optionValues: {} }
+    defaultValues: { nameRo: '', nameRu: '', state: ProductState.ACTIVE, slug: '', sku: '', price: 0, discountPercent: null, optionValues: {} }
   });
 
   useEffect(() => {
@@ -82,13 +84,18 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
         slug: variant.slug,
         sku: variant.sku,
         price: variant.price,
+        discountPercent: variant.discountPercent,
         optionValues: { ...variant.optionValues }
       }
-      : { nameRo: '', nameRu: '', state: ProductState.ACTIVE, slug: '', sku: '', price: 0, optionValues: {} });
+      : { nameRo: '', nameRu: '', state: ProductState.ACTIVE, slug: '', sku: '', price: 0, discountPercent: null, optionValues: {} });
   }, [open, variant]);
 
   const onGenerateSlug = () =>
     form.setValue('slug', slugifyValue(form.getValues('nameRo')), { shouldValidate: true, shouldDirty: true });
+
+  const watchedPrice = useWatch({ control: form.control, name: 'price' });
+  const watchedDiscountPercent = useWatch({ control: form.control, name: 'discountPercent' });
+  const finalPrice = computeDiscountedPrice(watchedPrice, watchedDiscountPercent);
 
   const handleOpenChange = (v: boolean) => {
     if (loading || v) return;
@@ -189,6 +196,29 @@ export const VariantSheet: FC<IProps> = ({ open, onOpenChange, options, variant,
                       </Field>
                     )}
                   />
+                  <Controller
+                    name="discountPercent"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel>{m['pages.products.form.variants.discount']()}</FieldLabel>
+                        <NumberInput
+                          value={field.value ?? 0}
+                          onValueChange={(v) => field.onChange(v ?? null)}
+                          min={0}
+                          max={100}
+                        />
+                        {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
+                      </Field>
+                    )}
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                  <Field>
+                    <FieldLabel>{m['pages.products.form.variants.final_price']()}</FieldLabel>
+                    <Input value={finalPrice} readOnly disabled/>
+                  </Field>
                   <Controller
                     name="state"
                     control={form.control}

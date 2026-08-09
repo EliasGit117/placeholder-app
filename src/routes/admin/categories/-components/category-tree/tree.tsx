@@ -80,7 +80,7 @@ export const CategoryTree: FC<{ className?: string }> = ({ className }) => {
 
   if (isEmpty)
     return (
-      <Empty className={cn('-mt-12', className)}>
+      <Empty className={className}>
         <EmptyHeader>
           <EmptyMedia variant="icon">
             <IconCategory/>
@@ -155,8 +155,8 @@ export const CategoryTree: FC<{ className?: string }> = ({ className }) => {
                     <IconInfoCircle className="text-muted-foreground size-4"/>
                     <span>{m['pages.categories.index.tree.short_info']()}</span>
                   </ContextMenuSubTrigger>
-                  <ContextMenuSubContent className="p-2 min-w-48">
-                    <div className="text-xs whitespace-pre-wrap rounded-md bg-muted p-3 overflow-auto max-h-80 font-mono">
+                  <ContextMenuSubContent className="p-2 min-w-48 max-w-xs">
+                    <div className="text-xs whitespace-pre-wrap wrap-anywhere rounded-md bg-muted p-3 overflow-auto max-h-80 font-mono">
                       {JSON.stringify({ ...data, children: undefined }, null, 2)}
                     </div>
                   </ContextMenuSubContent>
