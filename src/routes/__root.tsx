@@ -4,7 +4,8 @@
 import {
   HeadContent,
   Scripts,
-  createRootRouteWithContext, useRouter
+  createRootRouteWithContext,
+  useRouter,
 } from '@tanstack/react-router';
 import appCss from '../styles.css?url';
 import { type QueryClient, useQuery } from '@tanstack/react-query';
@@ -65,18 +66,18 @@ function RootDocument({ children }: { children: ReactNode }) {
     </head>
 
     <body className="bg-background antialiased wrap-anywhere min-h-safe-screen flex flex-col dark">
-      <div className="relative z-10 flex min-h-safe-screen flex-col">
-        <RouteProgressProvider>
-          <ConfirmDialogProvider>
-            {children}
-            <Toaster />
-            <RouteProgressController />
-          </ConfirmDialogProvider>
-        </RouteProgressProvider>
-      </div>
+    <div className="relative z-10 flex min-h-safe-screen flex-col">
+      <RouteProgressProvider>
+        <ConfirmDialogProvider>
+          {children}
+          <Toaster/>
+          <RouteProgressController/>
+        </ConfirmDialogProvider>
+      </RouteProgressProvider>
+    </div>
 
-      <Scripts />
-      <RouterInvalidation />
+    <Scripts/>
+    <RouterInvalidation/>
     </body>
     </html>
   );
@@ -96,7 +97,7 @@ const RouterInvalidation: FC = () => {
       return;
 
     prevSession.current = authRes?.session;
-    router.invalidate();
+    void router.invalidate();
   }, [authRes]);
 
   return null;

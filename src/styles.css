@@ -191,6 +191,6 @@
   }
 
   .min-h-safe-screen {
-    @apply min-h-[calc(100svh-(--spacing(16)-(--spacing(8))))];
+    @apply min-h-[calc(100svh-(--spacing(24)))];
   }
 }

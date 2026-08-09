@@ -11,22 +11,40 @@ const maxLimit = 100;
 
 
 export const paginatedRequestDtoSchema = z.object({
-  page: z.number().int().min(1).default(1).meta({ example: 1, }),
+  page: z.number()
+    .int()
+    .min(1)
+    .default(1)
+    .meta({ example: 1 }),
 
-  limit: z.number().int().min(minLimit).max(maxLimit).default(defaultLimit).meta({
-    example: defaultLimit,
-    examples: getLimitSteps(minLimit, maxLimit, 4)
-  }),
+  limit: z.number()
+    .int()
+    .min(minLimit)
+    .max(maxLimit)
+    .nullish()
+    .meta({
+      example: defaultLimit,
+      examples: getLimitSteps(minLimit, maxLimit, 4)
+    }),
 
-  dir: z.enum(SortDirection).optional().meta({
-    example: SortDirection.DESC,
-    examples: Object.values(SortDirection)
-  })
+  dir: z.enum(SortDirection)
+    .optional()
+    .meta({
+      example: SortDirection.DESC,
+      examples: Object.values(SortDirection)
+    })
 });
 
 export const paginatedResultDtoSchema = paginatedRequestDtoSchema.extend({
-  totalItems: z.number().int().min(0).meta({ example: 0 }),
-  totalPages: z.number().int().min(1).meta({ example: 1 })
+  totalItems: z.number()
+    .int()
+    .min(0)
+    .meta({ example: 0 }),
+
+  totalPages: z.number()
+    .int()
+    .min(1)
+    .meta({ example: 1 })
 });
 
 

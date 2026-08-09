@@ -12,7 +12,7 @@ export const Route = createFileRoute('/auth')({
       return;
 
     throw redirect({ to: '/', replace: true });
-  }
+  },
 });
 
 function RouteComponent() {

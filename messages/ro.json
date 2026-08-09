@@ -45,7 +45,17 @@
     "open": "Deschide",
     "admin": "Admin",
     "retry": "Reîncearcă",
-    "cancel": "Anulare"
+    "cancel": "Anulare",
+    "page_not_found": {
+      "title": "404 - Pagina nu a fost găsită",
+      "description": "Pagina pe care o cauți nu există sau a fost mutată.\nVerifică adresa sau revino la pagina principală.",
+      "home": "Acasă"
+    },
+    "something_went_wrong": {
+      "title": "Ceva nu a mers bine",
+      "description": "A apărut o eroare neașteptată. Încearcă din nou sau revino la pagina principală.",
+      "error_details": "Detalii eroare"
+    }
   },
   "enums": {
     "user_role": {

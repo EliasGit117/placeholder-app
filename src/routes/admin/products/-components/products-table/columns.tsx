@@ -266,7 +266,7 @@ function VariantsCell({ variants }: { variants: TProductVariantBriefDto[] }) {
           <Badge key={variant.id} variant="outline" className="rounded-sm max-w-36 px-1 min-h-6">
             {variant.imageUrl ? (
               <span
-                className="size-4 shrink-0 overflow-hidden rounded-xs bg-muted bg-cover bg-center"
+                className="size-4 shrink-0 overflow-hidden bg-muted bg-cover bg-center"
                 style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
               >
                 <img src={variant.imageUrl} alt="" loading="lazy" decoding="async" className="size-full object-cover"/>
