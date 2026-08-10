@@ -1,4 +1,5 @@
 import { os } from '@orpc/server';
+import type { ResponseHeadersPluginContext } from '@orpc/server/plugins';
 
 
 interface IORPCMetadata {
@@ -7,4 +8,4 @@ interface IORPCMetadata {
 
 export const base = os
   .$meta<IORPCMetadata>({})
-  .$context<{ headers: Headers }>();
+  .$context<{ headers: Headers } & ResponseHeadersPluginContext>();

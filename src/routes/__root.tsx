@@ -5,7 +5,7 @@ import {
   HeadContent,
   Scripts,
   createRootRouteWithContext,
-  useRouter,
+  useRouter
 } from '@tanstack/react-router';
 import appCss from '../styles.css?url';
 import { type QueryClient, useQuery } from '@tanstack/react-query';
@@ -31,8 +31,9 @@ interface IRouterContext {
 export const Route = createRootRouteWithContext<IRouterContext>()({
   beforeLoad: async ({ context: { queryClient } }) => {
     const [res] = await Promise.all([
-      queryClient.ensureQueryData(orpc.sessions.current.queryOptions()),
-      queryClient.ensureQueryData(orpc.categories.getTree.queryOptions({ input: { depth: 2 } })).catch(() => null)
+      queryClient.ensureQueryData(orpc.sessions.current.queryOptions()).catch(() => null),
+      queryClient.ensureQueryData(orpc.categories.getTree.queryOptions({ input: { depth: 2 } })).catch(() => null),
+      queryClient.ensureQueryData(orpc.products.getFavorites.queryOptions()).catch(() => null),
     ]);
 
     return { session: res?.session, user: res?.user };
@@ -65,16 +66,14 @@ function RootDocument({ children }: { children: ReactNode }) {
       <HeadContent/>
     </head>
 
-    <body className="bg-background antialiased wrap-anywhere min-h-safe-screen flex flex-col dark">
-    <div className="relative z-10 flex min-h-safe-screen flex-col">
-      <RouteProgressProvider>
-        <ConfirmDialogProvider>
-          {children}
-          <Toaster/>
-          <RouteProgressController/>
-        </ConfirmDialogProvider>
-      </RouteProgressProvider>
-    </div>
+    <body className="bg-background antialiased wrap-anywhere min-h-svh flex flex-col dark">
+    <RouteProgressProvider>
+      <ConfirmDialogProvider>
+        {children}
+        <Toaster/>
+        <RouteProgressController/>
+      </ConfirmDialogProvider>
+    </RouteProgressProvider>
 
     <Scripts/>
     <RouterInvalidation/>

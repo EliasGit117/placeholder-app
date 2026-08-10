@@ -10,13 +10,13 @@ interface IProps extends PropsWithChildren {
 export const MainLayout: FC<IProps> = ({ children }) => {
 
   return (
-    <AppSidebarProvider>
-      <AppSidebar/>
+      <AppSidebarProvider>
+        <AppSidebar/>
 
-      <AnnouncementBar/>
-      <Header/>
-      {children}
-      <SiteFooter/>
-    </AppSidebarProvider>
+        <AnnouncementBar/>
+        <Header/>
+        {children}
+        <SiteFooter/>
+      </AppSidebarProvider>
   );
 };

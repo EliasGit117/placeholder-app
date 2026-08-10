@@ -190,7 +190,8 @@
       "empty_title": "Niciun produs găsit",
       "empty_description": "Încearcă alt termen de căutare.",
       "add_to_cart": "Adaugă în coș",
-      "currency": "lei"
+      "currency": "lei",
+      "wishlist": "Adaugă la favorite"
     }
   },
   "pages": {
@@ -505,6 +506,13 @@
         "previous_slide": "Diapozitivul anterior",
         "next_slide": "Diapozitivul următor",
         "show_details": "Detalii"
+      }
+    },
+    "checkout": {
+      "title": "Finalizare comandă",
+      "sheet": {
+        "title": "Finalizare comandă",
+        "description": "Verificați comanda și finalizați plata"
       }
     }
   }

@@ -77,7 +77,7 @@ export const HeaderNavigationMenu: FC<IProps> = ({ className, ...props }) => {
 
 
 const ShopFlyoutSkeleton: FC = () => (
-  <div className="flex min-h-64">
+  <div className="flex max-h-64">
     <ul className="flex w-60 flex-col gap-0.5 p-2">
       <li className="px-2 py-1.5 text-sm font-bold">
         {m['components.header.categories']()}
@@ -133,7 +133,7 @@ const ShopFlyout: FC<IShopFlyoutProps> = ({ categories }) => {
   };
 
   return (
-    <div className="flex min-h-64">
+    <div className="flex max-h-64">
       <ul className="flex w-60 flex-col gap-0.5 p-2">
         <li className="px-2 py-1.5 text-sm font-bold">
           {m['components.header.categories']()}

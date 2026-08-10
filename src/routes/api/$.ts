@@ -7,6 +7,7 @@ import { OpenAPIReferencePlugin } from '@orpc/openapi/plugins';
 import { orpcRouter } from '@/features/shared/orpc/router.ts';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 import { envConfig } from '@/lib/config';
+import { ResponseHeadersPlugin } from '@orpc/server/plugins'
 
 
 const handler = new OpenAPIHandler(orpcRouter, {
@@ -16,6 +17,7 @@ const handler = new OpenAPIHandler(orpcRouter, {
     })
   ],
   plugins: [
+    new ResponseHeadersPlugin(),
     new SmartCoercionPlugin({ schemaConverters: [new ZodToJsonSchemaConverter()] }),
     new OpenAPIReferencePlugin({
       schemaConverters: [new ZodToJsonSchemaConverter()],

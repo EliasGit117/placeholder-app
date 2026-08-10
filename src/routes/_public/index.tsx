@@ -7,12 +7,11 @@ import { SkineryLanding } from './-components/landing.tsx';
 export const Route = createFileRoute('/_public/')({
   component: App,
   loader: async ({ context: { queryClient } }) => {
-    await awaitIfServer(
-      queryClient.prefetchQuery(orpc.banners.getValid.queryOptions())
-    );
+    await awaitIfServer(queryClient.prefetchQuery(orpc.banners.getValid.queryOptions()));
   },
 });
 
 function App() {
+
   return <SkineryLanding />;
 }
