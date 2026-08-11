@@ -100,6 +100,13 @@
     },
     "header": {
       "categories": "Categorii",
+      "products": "Produse",
+      "favorites": "Favorit",
+      "favorites_empty": "Nu ai produse favorite încă.",
+      "favorites_remove": "Elimină din favorite",
+      "favorites_clear": "Golește",
+      "favorites_missing": "Produs indisponibil",
+      "favorites_missing_description": "Produsul nu a fost găsit, este indisponibil sau a fost eliminat.",
       "show_all": "Vezi toate",
       "admin": "Admin",
       "cart": "Coș"
@@ -228,6 +235,9 @@
         "short_description": "Descriere scurtă",
         "short_description_ro": "Descriere scurtă (RO)",
         "short_description_ru": "Descriere scurtă (RU)",
+        "description": "Descriere",
+        "description_ro": "Descriere (RO)",
+        "description_ru": "Descriere (RU)",
         "state_active": "Activ",
         "state_not_available": "Indisponibil",
         "state_hidden": "Ascuns",

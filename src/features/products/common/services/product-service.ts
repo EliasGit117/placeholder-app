@@ -1,5 +1,5 @@
 import { ORPCError } from '@orpc/server';
-import { type Prisma, type Product, type ProductVariant } from '~/prisma/generated/prisma/client.ts';
+import { type Prisma, type ProductVariant } from '~/prisma/generated/prisma/client.ts';
 import { ImageResourceType, ImageVariantKind, ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { prisma } from '@/lib/db';
 import { getLocale } from '@/paraglide/runtime';
@@ -9,66 +9,15 @@ import { ProductVariantImageDtoFactory, type TProductVariantImageDto } from '@/f
 import type { TxClient } from '@/lib/db/prisma.ts';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
 import type { TOptions, TOptionValues } from '@/features/products/common/dtos/option-schema.ts';
-import type { TProductDto, TProductVariantBriefDto, TProductWithVariantsDto } from '@/features/products/common/dtos/product.ts';
-import type { TProductVariantDto } from '@/features/products/common/dtos/product-variant.ts';
+import { ProductDtoFactory, type TProductDto, type TProductVariantBriefDto, type TProductWithVariantsDto } from '@/features/products/common/dtos/product.ts';
+import { ProductVariantDtoFactory, type TProductVariantDto } from '@/features/products/common/dtos/product-variant.ts';
 import type { TCreateProductDto, TUpdateProductDto } from '@/features/products/admin/dtos/product-mutations.ts';
 import type { TAddVariantDto, TUpdateVariantDto } from '@/features/products/admin/dtos/product-variant-mutations.ts';
 import type { TSearchProductsRequestDto } from '@/features/products/admin/dtos/search-products.ts';
+import { BriefProductPublicDtoFactory, briefProductVariantInclude } from '@/features/products/public/dtos/search-public-products.ts';
 import type { TSearchPublicProductsRequestDto, TBriefProductPublicDto } from '@/features/products/public/dtos/search-public-products.ts';
 
 export class ProductService {
-
-  static fromEntity(entity: Product, variants: TProductVariantBriefDto[] = []): TProductDto {
-    return {
-      id: entity.id,
-      nameRo: entity.nameRo,
-      nameRu: entity.nameRu,
-      shortDescriptionRo: entity.shortDescriptionRo,
-      shortDescriptionRu: entity.shortDescriptionRu,
-      state: entity.state,
-      slug: entity.slug,
-      options: entity.options as TOptions,
-      categoryId: entity.categoryId,
-      variants,
-      createdAt: entity.createdAt.toISOString(),
-      updatedAt: entity.updatedAt.toISOString(),
-    };
-  }
-
-  static variantFromEntity(
-    entity: ProductVariant,
-    images: TProductVariantImageDto[] = []
-  ): TProductVariantDto {
-    return {
-      id: entity.id,
-      productId: entity.productId,
-      nameRo: entity.nameRo,
-      nameRu: entity.nameRu,
-      state: entity.state,
-      sku: entity.sku,
-      slug: entity.slug,
-      fullSlug: entity.fullSlug,
-      optionValues: entity.optionValues as TOptionValues,
-      price: entity.price,
-      discountPercent: entity.discountPercent,
-      images,
-      createdAt: entity.createdAt.toISOString(),
-      updatedAt: entity.updatedAt.toISOString(),
-    };
-  }
-
-  static withVariants(
-    product: Product,
-    variants: ProductVariant[],
-    imagesByVariant?: Map<number, TProductVariantImageDto[]>
-  ): TProductWithVariantsDto {
-    return {
-      ...ProductService.fromEntity(product),
-      variants: variants.map((v) =>
-        ProductService.variantFromEntity(v, imagesByVariant?.get(v.id) ?? [])
-      ),
-    };
-  }
 
   // Batch-fetch images for the given variants, grouped by variant id, preserving
   // each variant's image display order.
@@ -93,7 +42,7 @@ export class ProductService {
 
   static async list(): Promise<TProductDto[]> {
     const entities = await prisma.product.findMany({ orderBy: { nameRo: 'asc' } });
-    return entities.map((e) => ProductService.fromEntity(e));
+    return entities.map((e) => ProductDtoFactory.fromEntity(e));
   }
 
   static async listActive(): Promise<TProductDto[]> {
@@ -101,7 +50,7 @@ export class ProductService {
       where: { state: ProductState.ACTIVE },
       orderBy: { nameRo: 'asc' },
     });
-    return entities.map((e) => ProductService.fromEntity(e));
+    return entities.map((e) => ProductDtoFactory.fromEntity(e));
   }
 
   static async findById(id: number): Promise<TProductWithVariantsDto | null> {
@@ -110,12 +59,12 @@ export class ProductService {
       return null;
 
     const imagesByVariant = await ProductService.variantImagesMap(entity.variants);
-    return ProductService.withVariants(entity, entity.variants, imagesByVariant);
+    return ProductDtoFactory.withVariants(entity, entity.variants, imagesByVariant);
   }
 
   static async findBySlug(slug: string): Promise<TProductWithVariantsDto | null> {
     const entity = await prisma.product.findUnique({ where: { slug }, include: { variants: true } });
-    return entity ? ProductService.withVariants(entity, entity.variants) : null;
+    return entity ? ProductDtoFactory.withVariants(entity, entity.variants) : null;
   }
 
   static async search(input: TSearchProductsRequestDto) {
@@ -152,16 +101,7 @@ export class ProductService {
       .paginate({
         where,
         orderBy,
-        include: {
-          product: {
-            select: {
-              nameRo: true,
-              nameRu: true,
-              categoryId: true,
-              category: { select: { nameRo: true, nameRu: true } },
-            },
-          },
-        },
+        include: briefProductVariantInclude,
       })
       .withPages({
         page: input.page ?? 1,
@@ -190,22 +130,56 @@ export class ProductService {
       firstImageByVariant.set(variantId, { imageUrl: thumb?.url ?? img.url, thumbhash: img.thumbhash });
     }
 
-    const result: TBriefProductPublicDto[] = items.map((v) => {
-      const category = ru ? v.product.category?.nameRu : v.product.category?.nameRo;
-      return {
-        id: v.id,
-        // Full display name = parent product + option (e.g. "iPhone 17 Pro Max Orange 128 gb").
-        name: ru ? `${v.product.nameRu} ${v.nameRu}` : `${v.product.nameRo} ${v.nameRo}`,
-        price: v.price,
-        slug: v.fullSlug,
-        categoryId: v.product.categoryId,
-        category: category ?? null,
-        imageUrl: firstImageByVariant.get(v.id)?.imageUrl ?? null,
-        thumbhash: firstImageByVariant.get(v.id)?.thumbhash ?? null,
-      };
-    });
+    const result = items.map((v) =>
+      BriefProductPublicDtoFactory.fromVariant(v, ru, firstImageByVariant.get(v.id) ?? { imageUrl: null, thumbhash: null })
+    );
 
     return PaginationResultDtoFactory.getWithCount(result, meta);
+  }
+
+  // Bulk lookup by variant id, keyed by id. Ids that don't resolve to an active
+  // variant are simply absent from the result (no error).
+  static async getProductsByIds(ids: number[]): Promise<Record<number, TBriefProductPublicDto>> {
+    if (ids.length === 0)
+      return {};
+
+    const ru = getLocale() === 'ru';
+
+    const items = await prisma.productVariant.findMany({
+      where: {
+        id: { in: ids },
+        state: ProductState.ACTIVE,
+        product: { state: ProductState.ACTIVE },
+      },
+      include: briefProductVariantInclude,
+    });
+
+    const images = await ImageService.findByResources(
+      ImageResourceType.PRODUCT_VARIANT,
+      items.map((v) => String(v.id))
+    );
+    const firstImageByVariant = new Map<number, { imageUrl: string | null; thumbhash: string | null }>();
+    for (const img of images) {
+      const variantId = Number(img.resourceId);
+      if (firstImageByVariant.has(variantId))
+        continue;
+
+      const preferred = new Set([
+        ImageVariantKind.THUMB_1024x1024,
+        ImageVariantKind.THUMB_512x512,
+        ImageVariantKind.THUMB_256x256,
+      ]);
+
+      const thumb = img.variants.find(v => preferred.has(v.kind));
+      firstImageByVariant.set(variantId, { imageUrl: thumb?.url ?? img.url, thumbhash: img.thumbhash });
+    }
+
+    const result: Record<number, TBriefProductPublicDto> = {};
+    for (const v of items) {
+      result[v.id] = BriefProductPublicDtoFactory.fromVariant(v, ru, firstImageByVariant.get(v.id) ?? { imageUrl: null, thumbhash: null });
+    }
+
+    return result;
   }
 
   private static async paginate(
@@ -257,7 +231,7 @@ export class ProductService {
         imageUrl: firstImageByVariant.get(v.id)?.imageUrl ?? null,
         thumbhash: firstImageByVariant.get(v.id)?.thumbhash ?? null,
       }));
-      return ProductService.fromEntity(item, variants);
+      return ProductDtoFactory.fromEntity(item, variants);
     });
 
     return PaginationResultDtoFactory.getWithCount(result, meta);
@@ -271,6 +245,8 @@ export class ProductService {
         nameRu: input.nameRu,
         shortDescriptionRo: input.shortDescriptionRo ?? null,
         shortDescriptionRu: input.shortDescriptionRu ?? null,
+        descriptionRo: input.descriptionRo ?? null,
+        descriptionRu: input.descriptionRu ?? null,
         state: input.state,
         slug: input.slug,
         options: (input.options ?? {}) as Prisma.InputJsonValue,
@@ -279,7 +255,7 @@ export class ProductService {
       include: { variants: true },
     });
 
-    return ProductService.withVariants(product, product.variants);
+    return ProductDtoFactory.withVariants(product, product.variants);
   }
 
   static async addVariant(input: TAddVariantDto): Promise<TProductVariantDto> {
@@ -312,7 +288,7 @@ export class ProductService {
       },
     });
 
-    return ProductService.variantFromEntity(variant);
+    return ProductVariantDtoFactory.fromEntity(variant);
   }
 
   static async updateVariant(input: TUpdateVariantDto): Promise<TProductVariantDto> {
@@ -358,12 +334,12 @@ export class ProductService {
       },
     });
 
-    return ProductService.variantFromEntity(variant);
+    return ProductVariantDtoFactory.fromEntity(variant);
   }
 
   static async findVariantById(id: number): Promise<TProductVariantDto | null> {
     const entity = await prisma.productVariant.findUnique({ where: { id } });
-    return entity ? ProductService.variantFromEntity(entity) : null;
+    return entity ? ProductVariantDtoFactory.fromEntity(entity) : null;
   }
 
   static async deleteVariant(id: number): Promise<void> {
@@ -405,6 +381,8 @@ export class ProductService {
           ...(input.nameRu !== undefined && { nameRu: input.nameRu }),
           ...(input.shortDescriptionRo !== undefined && { shortDescriptionRo: input.shortDescriptionRo }),
           ...(input.shortDescriptionRu !== undefined && { shortDescriptionRu: input.shortDescriptionRu }),
+          ...(input.descriptionRo !== undefined && { descriptionRo: input.descriptionRo }),
+          ...(input.descriptionRu !== undefined && { descriptionRu: input.descriptionRu }),
           ...(input.state !== undefined && { state: input.state }),
           ...(input.slug !== undefined && { slug: input.slug }),
           ...(input.options !== undefined && { options: input.options as Prisma.InputJsonValue }),
@@ -426,7 +404,7 @@ export class ProductService {
       }
 
       const variants = await tx.productVariant.findMany({ where: { productId: id } });
-      return ProductService.withVariants(product, variants);
+      return ProductDtoFactory.withVariants(product, variants);
     });
   }
 

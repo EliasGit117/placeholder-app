@@ -13,6 +13,8 @@ model Product {
   nameRu             String           @map("name_ru")
   shortDescriptionRo String?          @map("short_description_ro")
   shortDescriptionRu String?          @map("short_description_ru")
+  descriptionRo      String?          @map("description_ro")
+  descriptionRu      String?          @map("description_ru")
   state              ProductState     @default(ACTIVE)
   slug          String           @unique
   options       Json             @default("{}") @map("option_schema")

@@ -18,7 +18,7 @@ import {
   type TSearchPublicProductsRequestDto
 } from '@/features/products/public/dtos/search-public-products.ts';
 import { m } from '@/paraglide/messages';
-import { ProductCard } from './-components/product-card.tsx';
+import { ProductCard } from '@/components/product/card.tsx';
 import { ProductsHeader } from '@/routes/_public/products/-components/header';
 
 export const Route = createFileRoute('/_public/products/')({

@@ -1,7 +1,9 @@
 import { z } from 'zod';
+import type { Product, ProductVariant } from '~/prisma/generated/prisma/client.ts';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
-import { optionsSchema } from '@/features/products/common/dtos/option-schema.ts';
-import { productVariantDtoSchema } from '@/features/products/common/dtos/product-variant.ts';
+import { optionsSchema, type TOptions } from '@/features/products/common/dtos/option-schema.ts';
+import { productVariantDtoSchema, ProductVariantDtoFactory } from '@/features/products/common/dtos/product-variant.ts';
+import type { TProductVariantImageDto } from '@/features/products/common/dtos/product-variant-image.ts';
 
 
 // Lightweight variant summary for list views: identity + first thumbnail.
@@ -21,6 +23,8 @@ export const productDtoSchema = z.object({
   nameRu: z.string(),
   shortDescriptionRo: z.string().nullable(),
   shortDescriptionRu: z.string().nullable(),
+  descriptionRo: z.string().nullable(),
+  descriptionRu: z.string().nullable(),
   state: z.enum(ProductState),
   slug: z.string(),
   options: optionsSchema,
@@ -39,3 +43,38 @@ export const productWithVariantsDtoSchema = productDtoSchema.extend({
 });
 
 export type TProductWithVariantsDto = z.infer<typeof productWithVariantsDtoSchema>;
+
+export class ProductDtoFactory {
+
+  static fromEntity(entity: Product, variants: TProductVariantBriefDto[] = []): TProductDto {
+    return {
+      id: entity.id,
+      nameRo: entity.nameRo,
+      nameRu: entity.nameRu,
+      shortDescriptionRo: entity.shortDescriptionRo,
+      shortDescriptionRu: entity.shortDescriptionRu,
+      descriptionRo: entity.descriptionRo,
+      descriptionRu: entity.descriptionRu,
+      state: entity.state,
+      slug: entity.slug,
+      options: entity.options as TOptions,
+      categoryId: entity.categoryId,
+      variants,
+      createdAt: entity.createdAt.toISOString(),
+      updatedAt: entity.updatedAt.toISOString(),
+    };
+  }
+
+  static withVariants(
+    product: Product,
+    variants: ProductVariant[],
+    imagesByVariant?: Map<number, TProductVariantImageDto[]>
+  ): TProductWithVariantsDto {
+    return {
+      ...ProductDtoFactory.fromEntity(product),
+      variants: variants.map((v) =>
+        ProductVariantDtoFactory.fromEntity(v, imagesByVariant?.get(v.id) ?? [])
+      ),
+    };
+  }
+}

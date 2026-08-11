@@ -3,6 +3,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui/input-group';
 import { RichEditor } from '@/components/rich-editor';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -151,7 +152,7 @@ export const ProductFormFields: FC<IProps> = ({ disabled }) => {
               control={control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <RichEditor value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} disabled={disabled}/>
+                  <Textarea {...field} value={field.value ?? ''} disabled={disabled} rows={3}/>
                   {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
                 </Field>
               )}
@@ -161,6 +162,42 @@ export const ProductFormFields: FC<IProps> = ({ disabled }) => {
           <TabsContent value="ru">
             <Controller
               name="shortDescriptionRu"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <Textarea {...field} value={field.value ?? ''} disabled={disabled} rows={3}/>
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
+                </Field>
+              )}
+            />
+          </TabsContent>
+        </Tabs>
+      </Field>
+
+      <Field className="col-span-full">
+        <FieldLabel>{m['pages.products.form.description']()}</FieldLabel>
+        <Tabs defaultValue="ro">
+          <TabsList>
+            <TabsTrigger value="ro">RO</TabsTrigger>
+            <TabsTrigger value="ru">RU</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="ro">
+            <Controller
+              name="descriptionRo"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <RichEditor value={field.value ?? ''} onChange={field.onChange} onBlur={field.onBlur} disabled={disabled}/>
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
+                </Field>
+              )}
+            />
+          </TabsContent>
+
+          <TabsContent value="ru">
+            <Controller
+              name="descriptionRu"
               control={control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>

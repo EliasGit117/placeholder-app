@@ -1289,6 +1289,8 @@ export const ProductScalarFieldEnum = {
   nameRu: 'nameRu',
   shortDescriptionRo: 'shortDescriptionRo',
   shortDescriptionRu: 'shortDescriptionRu',
+  descriptionRo: 'descriptionRo',
+  descriptionRu: 'descriptionRu',
   state: 'state',
   slug: 'slug',
   options: 'options',

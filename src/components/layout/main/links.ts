@@ -1,10 +1,11 @@
-import { IconDashboard, type TablerIcon } from '@tabler/icons-react';
+import { IconDashboard, IconShoppingBag, type TablerIcon } from '@tabler/icons-react';
 import type { LinkOptions } from '@tanstack/react-router';
 import type { TUser } from '@/lib/auth/better-auth.ts';
 import { m } from '@/paraglide/messages';
 
 
 export const headerLinks: { name: () => string, to: LinkOptions['to']; icon: TablerIcon; roles?: TUser['role'][] }[] = [
+  { name: () => m['components.header.products'](), to: '/products', icon: IconShoppingBag },
   { name: () => m['components.header.admin'](), to: '/admin', icon: IconDashboard, roles: ['admin'] }
 ];
 

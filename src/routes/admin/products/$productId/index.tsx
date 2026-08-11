@@ -127,6 +127,8 @@ function RouteComponent() {
         nameRu: values.nameRu,
         shortDescriptionRo: values.shortDescriptionRo,
         shortDescriptionRu: values.shortDescriptionRu,
+        descriptionRo: values.descriptionRo,
+        descriptionRu: values.descriptionRu,
         slug: values.slug,
         state: values.state,
         categoryId: values.categoryId

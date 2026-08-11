@@ -100,6 +100,13 @@
     },
     "header": {
       "categories": "Категории",
+      "products": "Продукты",
+      "favorites": "Избранное",
+      "favorites_empty": "Пока нет избранных товаров.",
+      "favorites_remove": "Убрать из избранного",
+      "favorites_clear": "Очистить",
+      "favorites_missing": "Товар недоступен",
+      "favorites_missing_description": "Товар не найден, недоступен или был удалён.",
       "show_all": "Показать все",
       "admin": "Админ",
       "cart": "Корзина"
@@ -228,6 +235,9 @@
         "short_description": "Краткое описание",
         "short_description_ro": "Краткое описание (RO)",
         "short_description_ru": "Краткое описание (RU)",
+        "description": "Описание",
+        "description_ro": "Описание (RO)",
+        "description_ru": "Описание (RU)",
         "state_active": "Активен",
         "state_not_available": "Недоступен",
         "state_hidden": "Скрыт",

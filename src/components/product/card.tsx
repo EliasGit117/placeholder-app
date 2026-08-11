@@ -5,7 +5,6 @@ import { Badge } from '@/components/ui/badge';
 import { CardContent, CardFooter } from '@/components/ui/card';
 import { IconHeart, IconPhotoOff, IconShoppingBagPlus, IconTag } from '@tabler/icons-react';
 import type { TBriefProductPublicDto } from '@/features/products/public/dtos/search-public-products';
-import { computeDiscountedPrice } from '@/features/products/common/lib/discount';
 import { m } from '@/paraglide/messages';
 import { useFavoritesContext } from '@/providers/favorites.tsx';
 import { Skeleton } from "@/components/ui/skeleton";
@@ -15,10 +14,9 @@ interface IProps {
 }
 
 export const ProductCard: FC<IProps> = ({ product }) => {
-  const { name, description, category, discountPercent } = product;
+  const { name, shortDescription, category, discountPercent, finalPrice } = product;
   const { items, toggle, isPending: isPendingFavorites } = useFavoritesContext();
   const placeholder = thumbhashToDataUrl(product.thumbhash);
-  const finalPrice = computeDiscountedPrice(product.price, discountPercent);
   const hasDiscount = !!discountPercent;
   const isFavorite = items.has(product.id);
 
@@ -86,9 +84,9 @@ export const ProductCard: FC<IProps> = ({ product }) => {
           {name}
         </h3>
 
-        {description && (
+        {shortDescription && (
           <p className="line-clamp-2 text-[13px] text-muted-foreground">
-            {description}
+            {shortDescription}
           </p>
         )}
       </CardContent>

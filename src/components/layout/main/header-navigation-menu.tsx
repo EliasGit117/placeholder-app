@@ -45,7 +45,7 @@ export const HeaderNavigationMenu: FC<IProps> = ({ className, ...props }) => {
   const { data: categories, isPending } = useQuery(orpc.categories.getTree.queryOptions({ input: { depth: 2 } }));
 
   return (
-    <NavigationMenu className={cn('[&>div:last-child]:mt-2.75', className)} {...props}>
+    <NavigationMenu className={cn('[&>div:last-child]:mt-2', className)} {...props}>
       <NavigationMenuList className="gap-1">
         <NavigationMenuItem className="hidden md:flex">
           <NavigationMenuTrigger className='uppercase font-normal'>

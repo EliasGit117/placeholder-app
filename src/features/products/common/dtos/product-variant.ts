@@ -1,7 +1,8 @@
 import { z } from 'zod';
+import type { ProductVariant } from '~/prisma/generated/prisma/client.ts';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
-import { optionValuesSchema } from '@/features/products/common/dtos/option-schema.ts';
-import { productVariantImageDtoSchema } from '@/features/products/common/dtos/product-variant-image.ts';
+import { optionValuesSchema, type TOptionValues } from '@/features/products/common/dtos/option-schema.ts';
+import { productVariantImageDtoSchema, type TProductVariantImageDto } from '@/features/products/common/dtos/product-variant-image.ts';
 
 
 export const productVariantDtoSchema = z.object({
@@ -24,3 +25,25 @@ export const productVariantDtoSchema = z.object({
 export const productVariantDtosSchema = z.array(productVariantDtoSchema);
 
 export type TProductVariantDto = z.infer<typeof productVariantDtoSchema>;
+
+export class ProductVariantDtoFactory {
+
+  static fromEntity(entity: ProductVariant, images: TProductVariantImageDto[] = []): TProductVariantDto {
+    return {
+      id: entity.id,
+      productId: entity.productId,
+      nameRo: entity.nameRo,
+      nameRu: entity.nameRu,
+      state: entity.state,
+      sku: entity.sku,
+      slug: entity.slug,
+      fullSlug: entity.fullSlug,
+      optionValues: entity.optionValues as TOptionValues,
+      price: entity.price,
+      discountPercent: entity.discountPercent,
+      images,
+      createdAt: entity.createdAt.toISOString(),
+      updatedAt: entity.updatedAt.toISOString(),
+    };
+  }
+}

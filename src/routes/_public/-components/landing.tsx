@@ -1,9 +1,13 @@
 import type { FC, ReactNode, SVGProps } from 'react';
 import { Accordion as AccordionPrimitive } from 'radix-ui';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
+import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { HeroBannerCarousel } from '@/routes/_public/-components/hero-banner-carousel';
+import { ProductCard } from '@/components/product/card.tsx';
+import { Skeleton } from '@/components/ui/skeleton';
+import { orpc } from '@/lib/orpc';
+import { SortDirection } from '@/features/shared/schemas/pagination.ts';
 
 
 export const SkineryLanding: FC = () => (
@@ -40,100 +44,40 @@ const Section: FC<{ className?: string; children: ReactNode }> = ({ className, c
 
 // ─── New arrivals ────────────────────────────────────────────────────────────
 
-interface IProduct {
-  cat: string;
-  name: string;
-  desc: string;
-  reviews: string;
-  price: ReactNode;
-  tag?: { label: string; variant?: 'default' | 'secondary' };
-  solid?: boolean;
-}
+export const newArrivalsQuery = orpc.products.search.queryOptions({
+  input: { page: 1, limit: 4, sort: 'createdAt', dir: SortDirection.DESC },
+});
 
-function Lei() {
-  return <small className="text-[13px] font-normal text-muted-foreground">lei</small>;
-}
+const Arrivals: FC = () => {
+  const { data, isPending } = useQuery(newArrivalsQuery);
+  const products = data?.items ?? [];
 
-const products: IProduct[] = [
-  {
-    cat: 'Уход за кожей',
-    name: 'Ser Botanic Renew',
-    desc: 'Concentrat de vitamina C și extract de măslin verde.',
-    reviews: '(124)',
-    price: <>680 <Lei/></>,
-    tag: { label: 'Nou' }
-  },
-  {
-    cat: 'Уход за волосами',
-    name: 'Ulei Reparator Argan',
-    desc: 'Pentru păr deteriorat, cu cheratină vegetală.',
-    reviews: '(88)',
-    price: <><s className="mr-1.5 text-sm font-normal text-muted-foreground">540</s>432 <Lei/></>,
-    tag: { label: '-20%', variant: 'secondary' }
-  },
-  {
-    cat: 'Микроинъекции',
-    name: 'Mezo Complex Acid',
-    desc: 'Acid hialuronic stabilizat, fiole 5×2ml.',
-    reviews: '(56)',
-    price: <>1.240 <Lei/></>,
-    solid: true
-  },
-  {
-    cat: 'Уход за кожей',
-    name: 'Cremă Noapte Velvet',
-    desc: 'Retinol botanic și unt de karité organic.',
-    reviews: '(212)',
-    price: <>820 <Lei/></>,
-    tag: { label: 'Nou' }
-  }
-];
+  return (
+    <Section className="bg-background">
+      <SectionHead
+        eyebrow="Новые поступления"
+        title={<>Sosite în atelier această săptămână.</>}
+        right={<Button variant="link" className="h-auto p-0 text-foreground">Vezi toate produsele →</Button>}
+      />
 
-const Arrivals: FC = () => (
-  <Section className="bg-background">
-    <SectionHead
-      eyebrow="Новые поступления"
-      title={<>Sosite în atelier această săptămână.</>}
-      right={<Button variant="link" className="h-auto p-0 text-foreground">Vezi toate produsele →</Button>}
-    />
-
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-      {products.map((p) => (
-        <article key={p.name}
-                 className="flex flex-col overflow-hidden rounded-xl border border-border bg-card text-card-foreground">
-          <div
-            className="ph-stripes relative grid aspect-[1/1.05] place-items-center border-b border-border bg-muted font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-            {p.tag && (
-              <Badge
-                className="absolute left-3.5 top-3.5 rounded-none bg-primary text-[10px] uppercase tracking-[0.18em] text-primary-foreground hover:bg-primary/90">
-                {p.tag.label}
-              </Badge>
-            )}
-            <button
-              className="absolute right-3.5 top-3.5 grid size-8 place-items-center rounded-full border border-border bg-background/70 text-[13px] text-primary">
-              ♡
-            </button>
-            Product · 320 × 340
-          </div>
-
-          <div className="flex flex-1 flex-col p-5">
-            <div className="text-[10px] uppercase tracking-[0.22em] text-primary">{p.cat}</div>
-            <h4 className="my-1.5 font-heading text-2xl font-medium">{p.name}</h4>
-            <div className="min-h-9.5 text-[13px] text-muted-foreground">{p.desc}</div>
-            <div className="mt-1.5 text-[11px] tracking-[2px] text-primary">
-              ★★★★★ <span className="text-muted-foreground">{p.reviews}</span>
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {isPending ? (
+          Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="overflow-hidden rounded-xl border border-border">
+              <Skeleton className="aspect-square w-full rounded-none"/>
+              <div className="space-y-3 p-4">
+                <Skeleton className="h-6 w-2/3"/>
+                <Skeleton className="h-9 w-full"/>
+              </div>
             </div>
-
-            <div className="mt-auto flex items-center justify-between border-t border-border pt-4">
-              <div className="font-heading text-2xl font-semibold">{p.price}</div>
-              <Button size="sm" variant={p.solid ? 'default' : 'outline'}>В корзину</Button>
-            </div>
-          </div>
-        </article>
-      ))}
-    </div>
-  </Section>
-);
+          ))
+        ) : (
+          products.map((product) => <ProductCard key={product.id} product={product}/>)
+        )}
+      </div>
+    </Section>
+  );
+};
 
 
 // ─── About / benefits ────────────────────────────────────────────────────────

@@ -10,6 +10,8 @@ export const createProductFormSchema = z.object({
   nameRu: z.string().trim().min(1).max(128),
   shortDescriptionRo: z.string().trim().max(4096).optional(),
   shortDescriptionRu: z.string().trim().max(4096).optional(),
+  descriptionRo: z.string().trim().max(20000).optional(),
+  descriptionRu: z.string().trim().max(20000).optional(),
   slug: slugSchema,
   state: z.enum(ProductState),
   categoryId: z.number().int().positive().nullable(),

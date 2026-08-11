@@ -10,6 +10,7 @@ import { Link } from '@tanstack/react-router';
 import { m } from '@/paraglide/messages';
 import Logo from '@/assets/icons/logo/icon.svg?react';
 import LogoText from '@/assets/icons/logo/text.svg?react';
+import { FavoritesPopover } from '@/components/layout/main/favorites-popover.tsx';
 
 
 interface IProps extends ComponentProps<'header'> {}
@@ -27,6 +28,8 @@ export const Header = ({ className, ...props }: IProps) => {
         <HeaderNavigationMenu className="hidden md:flex absolute left-1/2 -translate-x-1/2"/>
 
         <div className="flex items-center gap-1.5 sm:gap-3 ml-auto">
+          <FavoritesPopover contentClassName='mt-3'/>
+
           <Button size="icon" variant="outline" className="rounded-full hidden md:flex">
             <IconShoppingCart aria-hidden="true"/>
             <span className="sr-only">{m['components.header.cart']()}</span>

@@ -35,6 +35,8 @@ function getDefaults(): TCreateProductForm {
     nameRu: '',
     shortDescriptionRo: '',
     shortDescriptionRu: '',
+    descriptionRo: '',
+    descriptionRu: '',
     slug: '',
     state: ProductState.ACTIVE,
     categoryId: null,

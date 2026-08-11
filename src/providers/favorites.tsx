@@ -1,6 +1,6 @@
 import { contextFactory } from '@/lib/utils/context-factory.ts';
-import { type ReactNode, useMemo } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { type ReactNode } from 'react';
+import { useMutation, useQuery, useQueryClient, type QueryKey } from '@tanstack/react-query';
 import { client, orpc } from '@/lib/orpc';
 
 
@@ -13,6 +13,7 @@ interface IActions {
   add: (id: number) => void;
   remove: (id: number) => void;
   toggle: (id: number) => void;
+  clear: () => void;
 }
 
 interface IContextValue extends IState, IActions {}
@@ -20,54 +21,37 @@ interface IContextValue extends IState, IActions {}
 const [FavoritesContext, useFavoritesContext] = contextFactory<IContextValue>({ name: 'FavoritesContext' });
 
 export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
-  const queryClient = useQueryClient();
   const favoritesQuery = orpc.products.getFavorites.queryOptions();
-
   const { data, isPending } = useQuery(favoritesQuery);
-  const items = useMemo(() => new Set(data ?? []), [data]);
+  const items = new Set(data ?? []);
 
-  const addMutation = useMutation({
-    mutationFn: (id: number) => client.products.addToFavorites({ id }),
-    onMutate: async (id) => {
-      await queryClient.cancelQueries({ queryKey: favoritesQuery.queryKey });
-      const previous = queryClient.getQueryData(favoritesQuery.queryKey);
-      queryClient.setQueryData(favoritesQuery.queryKey, (current = []) =>
-        current.includes(id) ? current : [id, ...current]
-      );
-      return { previous };
-    },
-    onError: (_err, _id, context) => {
-      if (context) queryClient.setQueryData(favoritesQuery.queryKey, context.previous);
-    },
-    onSuccess: (next) => queryClient.setQueryData(favoritesQuery.queryKey, next),
-  });
+  const addMutation = useOptimisticFavoritesMutation(
+    favoritesQuery.queryKey,
+    (id: number) => client.products.addToFavorites({ id }),
+    (current, id) => (current.includes(id) ? current : [id, ...current])
+  );
 
-  const removeMutation = useMutation({
-    mutationFn: (id: number) => client.products.removeFromFavorites({ id }),
-    onMutate: async (id) => {
-      await queryClient.cancelQueries({ queryKey: favoritesQuery.queryKey });
-      const previous = queryClient.getQueryData(favoritesQuery.queryKey);
-      queryClient.setQueryData(favoritesQuery.queryKey, (current = []) =>
-        current.filter((favoriteId) => favoriteId !== id)
-      );
-      return { previous };
-    },
-    onError: (_err, _id, context) => {
-      if (context) queryClient.setQueryData(favoritesQuery.queryKey, context.previous);
-    },
-    onSuccess: (next) => queryClient.setQueryData(favoritesQuery.queryKey, next),
-  });
+  const removeMutation = useOptimisticFavoritesMutation(
+    favoritesQuery.queryKey,
+    (id: number) => client.products.removeFromFavorites({ id }),
+    (current, id) => current.filter((favoriteId) => favoriteId !== id)
+  );
 
-  const add = (id: number) => addMutation.mutate(id);
-  const remove = (id: number) => removeMutation.mutate(id);
-  const toggle = (id: number) => (items.has(id) ? remove(id) : add(id));
+  const clearMutation = useOptimisticFavoritesMutation<void>(
+    favoritesQuery.queryKey,
+    () => client.products.clearFavorites(),
+    () => []
+  );
 
-  const value = {
+  const toggle = (id: number) => (items.has(id) ? removeMutation.mutate(id) : addMutation.mutate(id));
+
+  const value: IContextValue = {
     items: items,
     isPending: isPending,
     toggle: toggle,
-    remove: remove,
-    add: add,
+    remove: (id) => removeMutation.mutate(id),
+    add: (id) => addMutation.mutate(id),
+    clear: () => clearMutation.mutate(),
   };
 
   return (
@@ -78,3 +62,26 @@ export const FavoritesProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export { useFavoritesContext };
+
+
+function useOptimisticFavoritesMutation<TVars>(
+  queryKey: QueryKey,
+  mutationFn: (vars: TVars) => Promise<number[]>,
+  nextIds: (current: number[], vars: TVars) => number[]
+) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn,
+    onMutate: async (vars: TVars) => {
+      await queryClient.cancelQueries({ queryKey });
+      const previous = queryClient.getQueryData<number[]>(queryKey) ?? [];
+      queryClient.setQueryData(queryKey, nextIds(previous, vars));
+      return { previous };
+    },
+    onError: (_err, _vars, context) => {
+      if (context) queryClient.setQueryData(queryKey, context.previous);
+    },
+    onSuccess: (next) => queryClient.setQueryData(queryKey, next),
+  });
+}
