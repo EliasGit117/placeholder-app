@@ -205,10 +205,16 @@ const ShopFlyout: FC<IShopFlyoutProps> = ({ categories }) => {
   );
 };
 
-interface ICategoryLinkProps extends Omit<ComponentPropsWithoutRef<typeof Link>, 'to'> {
+interface ICategoryLinkProps extends ComponentPropsWithoutRef<'a'> {
   category?: ICategoryNodeDto;
 }
 
 const CategoryLink: FC<ICategoryLinkProps> = ({ category, ...props }) => {
-  return <Link to="/" {...props} />;
+  return (
+    <Link
+      to="/products"
+      search={{ categoryId: category?.id }}
+      {...props}
+    />
+  );
 };

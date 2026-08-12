@@ -97,7 +97,7 @@ export const FavoritesPopover: FC<IProps> = ({ contentClassName, ...props }) => 
                 }
 
                 return (
-                  <li key={id} className="flex items-start gap-2 p-2">
+                  <li key={id} className={cn('flex items-start gap-2 p-2', !product.isAvailable && 'opacity-60')}>
                     <div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/10">
                       {product.imageUrl ? (
                         <img
@@ -113,9 +113,16 @@ export const FavoritesPopover: FC<IProps> = ({ contentClassName, ...props }) => 
 
                     <div className="min-w-0 flex-1">
                       <p className="text-xs font-medium leading-tight">{product.name}</p>
-                      <p className="text-sm text-primary">
-                        {product.finalPrice} {m['components.shop.currency']()}
-                      </p>
+
+                      {product.isAvailable ? (
+                        <p className="text-sm text-primary">
+                          {product.finalPrice} {m['components.shop.currency']()}
+                        </p>
+                      ) : (
+                        <p className="text-sm text-muted-foreground">
+                          {m['components.shop.unavailable']()}
+                        </p>
+                      )}
                     </div>
 
                     <Button

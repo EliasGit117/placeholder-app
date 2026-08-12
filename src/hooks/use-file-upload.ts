@@ -48,6 +48,7 @@ export interface IUseFileUploadOptions {
   maxSize?: number;
   maxFiles?: number;
   multiple?: boolean;
+  staggerDelay?: number;
   initialFiles?: IFileMetadata[];
   upload?: UploadFn;
   onReject?: (rejections: IFileRejection[]) => void;
@@ -119,6 +120,7 @@ export const useFileUpload = (
     maxSize = Number.POSITIVE_INFINITY,
     maxFiles = Number.POSITIVE_INFINITY,
     multiple = false,
+    staggerDelay = 0,
     initialFiles = [],
     upload,
     onReject,
@@ -144,9 +146,12 @@ export const useFileUpload = (
   callbacksRef.current = { upload, onFileSuccess, onFileError };
 
   const controllersRef = useRef<Map<string, AbortController>>(new Map());
+  const timersRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
 
   useEffect(() => {
     return () => {
+      for (const t of timersRef.current) clearTimeout(t);
+      timersRef.current.clear();
       for (const c of controllersRef.current.values()) c.abort();
       controllersRef.current.clear();
       for (const f of filesRef.current) {
@@ -257,7 +262,18 @@ export const useFileUpload = (
       setFiles(newItems);
     }
 
-    for (const item of newItems) startUpload(item);
+    newItems.forEach((item, index) => {
+      if (staggerDelay > 0 && index > 0) {
+        const timer = setTimeout(() => {
+          timersRef.current.delete(timer);
+          if (!filesRef.current.some((f) => f.id === item.id)) return;
+          startUpload(item);
+        }, staggerDelay * index);
+        timersRef.current.add(timer);
+      } else {
+        startUpload(item);
+      }
+    });
   };
 
   const removeFile = (id: string) => {
@@ -288,6 +304,8 @@ export const useFileUpload = (
   };
 
   const clear = () => {
+    for (const t of timersRef.current) clearTimeout(t);
+    timersRef.current.clear();
     for (const c of controllersRef.current.values()) c.abort();
     controllersRef.current.clear();
 

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { Prisma } from '~/prisma/generated/prisma/client.ts';
+import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { paginatedRequestDtoSchema } from '@/features/shared/schemas/pagination.ts';
 import { paginationResultWithCountDtoSchema } from '@/features/shared/dtos/pagination-result-dto.ts';
 import { computeDiscountedPrice } from '@/features/products/common/lib/discount.ts';
@@ -19,6 +20,7 @@ export const briefProductPublicDtoSchema = z.object({
   category: z.string().nullable(),
   imageUrl: z.string().nullable(),
   thumbhash: z.string().nullable(),
+  isAvailable: z.boolean(),
 });
 
 export type TBriefProductPublicDto = z.infer<typeof briefProductPublicDtoSchema>;
@@ -28,6 +30,9 @@ const sortableFields = ['name', 'price', 'createdAt'] as const;
 export const searchPublicProductsRequestDtoSchema = paginatedRequestDtoSchema.extend({
   sort: z.enum(sortableFields).optional().catch(undefined),
   name: z.string().optional().catch(undefined),
+  categoryId: z.number().int().optional().catch(undefined),
+  priceMin: z.number().int().min(0).optional().catch(undefined),
+  priceMax: z.number().int().min(0).optional().catch(undefined),
 });
 
 export type TSearchPublicProductsRequestDto = z.infer<typeof searchPublicProductsRequestDtoSchema>;
@@ -75,6 +80,7 @@ export class BriefProductPublicDtoFactory {
       category: category ?? null,
       imageUrl: image.imageUrl,
       thumbhash: image.thumbhash,
+      isAvailable: variant.state === ProductState.ACTIVE,
     };
   }
 }

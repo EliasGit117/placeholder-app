@@ -194,11 +194,22 @@
       "sort_name_desc": "Название Я–А",
       "sort_price_asc": "Цена по возрастанию",
       "sort_price_desc": "Цена по убыванию",
+      "sort_label": "Сортировать по",
+      "items_per_page": "Товаров на странице",
       "empty_title": "Товары не найдены",
       "empty_description": "Попробуйте другой запрос.",
       "add_to_cart": "В корзину",
       "currency": "лей",
-      "wishlist": "Добавить в избранное"
+      "wishlist": "Добавить в избранное",
+      "unavailable": "Недоступно",
+      "filters": {
+        "title": "Фильтры",
+        "name_label": "Название",
+        "price_label": "Цена",
+        "category_label": "Категория",
+        "category_all": "Все категории",
+        "reset": "Сбросить фильтры"
+      }
     }
   },
   "pages": {

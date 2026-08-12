@@ -5,67 +5,26 @@ import { orpc } from '@/lib/orpc';
 import { cn } from '@/lib/utils';
 import { awaitIfServer } from '@/lib/server';
 import { Skeleton } from '@/components/ui/skeleton';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious
-} from '@/components/ui/pagination';
-import {
-  searchPublicProductsRequestDtoSchema,
-  type TSearchPublicProductsRequestDto
-} from '@/features/products/public/dtos/search-public-products.ts';
+import { searchPublicProductsRequestDtoSchema } from '@/features/products/public/dtos/search-public-products.ts';
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
+import { IconSearchOff } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { ProductCard } from '@/components/product/card.tsx';
-import { ProductsHeader } from '@/routes/_public/products/-components/header';
+import { ProductSearchPanel } from '@/routes/_public/products/-components/search';
+import { MobileSearchSheet } from '@/routes/_public/products/-components/search/mobile-search-sheet.tsx';
+import { SortSelect } from '@/routes/_public/products/-components/search/sort-select.tsx';
+import { ProductsPagination } from '@/routes/_public/products/-components/pagination';
+
 
 export const Route = createFileRoute('/_public/products/')({
   component: RouteComponent,
   validateSearch: searchPublicProductsRequestDtoSchema,
   loaderDeps: (deps) => deps,
   loader: async ({ context: { queryClient }, deps: { search } }) => {
-    await awaitIfServer(
-      queryClient.prefetchQuery(
-        orpc.products.search.queryOptions({ input: search })
-      )
-    );
+    await awaitIfServer(queryClient.prefetchQuery(orpc.products.search.queryOptions({ input: search })));
   }
 });
-//
-// const sortOptions = [
-//   {
-//     value: 'new',
-//     label: m['components.shop.sort_newest'],
-//     sort: 'createdAt',
-//     dir: SortDirection.DESC
-//   },
-//   {
-//     value: 'name-asc',
-//     label: m['components.shop.sort_name_asc'],
-//     sort: 'name',
-//     dir: SortDirection.ASC
-//   },
-//   {
-//     value: 'name-desc',
-//     label: m['components.shop.sort_name_desc'],
-//     sort: 'name',
-//     dir: SortDirection.DESC
-//   },
-//   {
-//     value: 'price-asc',
-//     label: m['components.shop.sort_price_asc'],
-//     sort: 'price',
-//     dir: SortDirection.ASC
-//   },
-//   {
-//     value: 'price-desc',
-//     label: m['components.shop.sort_price_desc'],
-//     sort: 'price',
-//     dir: SortDirection.DESC
-//   }
-// ] as const;
+
 
 function RouteComponent() {
   const search = Route.useSearch();
@@ -85,7 +44,7 @@ function RouteComponent() {
     }
 
     const timer = setTimeout(() => {
-      navigate({
+      void navigate({
         search: (prev) => ({
           ...prev,
           name: next,
@@ -107,70 +66,65 @@ function RouteComponent() {
   const pageCount = data?.pageCount ?? 0;
   const page = search.page ?? 1;
 
-  // 3
-
   return (
-    <main className="flex-1 bg-background">
-      <div className="container mx-auto p-4 space-y-4">
+    <main className="flex flex-col flex-1 bg-background min-h-safe-screen">
+      <div className="container mx-auto flex flex-1 flex-col gap-4 p-4">
 
-        <ProductsHeader/>
+        <div className="flex items-center gap-2 lg:hidden">
+          <MobileSearchSheet/>
+          <SortSelect showLabel={false} className="flex-1 space-y-0"/>
+        </div>
 
-        <section
-          aria-label="Products"
-          className={cn(
-            'transition-opacity',
-            isPlaceholderData && 'opacity-60'
-          )}
-        >
-          {isPending ? (
-            <ProductGridSkeleton/>
-          ) : products.length === 0 ? (
-            <section
-              aria-labelledby="products-empty-title"
-              className="grid place-items-center rounded-xl border border-dashed border-border py-24 text-center"
-            >
-              <div>
-                <h2
-                  id="products-empty-title"
-                  className="font-heading text-2xl"
-                >
-                  {m['components.shop.empty_title']()}
-                </h2>
+        <div className="flex flex-1 flex-col gap-6 lg:flex-row">
+          <aside className="hidden shrink-0 lg:block lg:w-64">
+            <ProductSearchPanel className="lg:sticky lg:top-20"/>
+          </aside>
 
-                <p className="mt-2 text-sm text-muted-foreground">
-                  {m['components.shop.empty_description']()}
-                </p>
-              </div>
+          <div className="flex min-w-0 flex-1 flex-col">
+            <section aria-label="Products" className={cn('flex flex-1 flex-col transition-opacity', isPlaceholderData && 'opacity-60')}>
+              {isPending ? (
+                <ProductGridSkeleton count={search.limit ?? 8}/>
+              ) : products.length === 0 ? (
+                <Empty className="rounded-xl border border-dashed py-24 h-full">
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                      <IconSearchOff/>
+                    </EmptyMedia>
+                    <EmptyTitle>{m['components.shop.empty_title']()}</EmptyTitle>
+                    <EmptyDescription>{m['components.shop.empty_description']()}</EmptyDescription>
+                  </EmptyHeader>
+                </Empty>
+              ) : (
+                <ul className="grid gap-4 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+                  {products.map((product) => (
+                    <li key={product.id} className="contents">
+                      <ProductCard product={product}/>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </section>
-          ) : (
-            <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {products.map((product) => (
-                <li key={product.id} className="contents">
-                  <ProductCard product={product}/>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
 
-        <nav aria-label="Product pagination">
-          <ProductsPagination
-            page={page}
-            pageCount={pageCount}
-            search={search}
-          />
-        </nav>
+            <nav aria-label="Product pagination" className="mt-10">
+              <ProductsPagination
+                page={page}
+                pageCount={pageCount}
+                search={search}
+              />
+            </nav>
+          </div>
+        </div>
       </div>
     </main>
   );
 }
 
-const ProductGridSkeleton: FC = () => (
+const ProductGridSkeleton: FC<{ count: number }> = ({ count }) => (
   <div
-    className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+    className="grid gap-4 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
     aria-hidden="true"
   >
-    {Array.from({ length: 9 }).map((_, i) => (
+    {Array.from({ length: count }).map((_, i) => (
       <div
         key={i}
         className="overflow-hidden rounded-xl border border-border"
@@ -187,80 +141,3 @@ const ProductGridSkeleton: FC = () => (
   </div>
 );
 
-interface IPaginationProps {
-  page: number;
-  pageCount: number;
-  search: TSearchPublicProductsRequestDto;
-}
-
-const ProductsPagination: FC<IPaginationProps> = ({
-                                                    page,
-                                                    pageCount,
-                                                    search
-                                                  }) => {
-  const window = 2;
-
-  const pages = Array.from(
-    { length: pageCount },
-    (_, i) => i + 1
-  ).filter(
-    (p) =>
-      p === 1 ||
-      p === pageCount ||
-      Math.abs(p - page) <= window
-  );
-
-  return (
-    <Pagination className="mt-10">
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious
-            to="/products"
-            search={{ ...search, page: Math.max(1, page - 1) }}
-            disabled={page <= 1}
-          />
-        </PaginationItem>
-
-        {pages.map((p, i) => {
-          const prev = pages[i - 1];
-          const gap = prev != null && p - prev > 1;
-
-          return (
-            <PaginationItem
-              key={p}
-              className="flex items-center gap-1"
-            >
-              {gap && (
-                <span
-                  aria-hidden="true"
-                  className="px-1 text-muted-foreground"
-                >
-                  …
-                </span>
-              )}
-
-              <PaginationLink
-                to="/products"
-                search={{ ...search, page: p }}
-                isActive={p === page}
-              >
-                {p}
-              </PaginationLink>
-            </PaginationItem>
-          );
-        })}
-
-        <PaginationItem>
-          <PaginationNext
-            to="/products"
-            search={{
-              ...search,
-              page: Math.min(pageCount, page + 1)
-            }}
-            disabled={page >= pageCount}
-          />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
-  );
-};

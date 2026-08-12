@@ -23,11 +23,11 @@ export const Header = ({ className, ...props }: IProps) => {
     <header className={cn('border-b sticky top-0 z-30 h-16 flex items-center', blurClassName, className)} {...props}>
       <nav className="container mx-auto p-4 flex gap-4 items-center">
         <AppSidebarTrigger className="border border-border rounded-full md:hidden"/>
-        <LogoLink className='absolute left-1/2 -translate-x-1/2 md:static md:left-0 md:translate-x-0'/>
+        <LogoLink/>
 
         <HeaderNavigationMenu className="hidden md:flex absolute left-1/2 -translate-x-1/2"/>
 
-        <div className="flex items-center gap-1.5 sm:gap-3 ml-auto">
+        <div className="flex items-center gap-2 sm:gap-3 ml-auto">
           <FavoritesPopover contentClassName='mt-3'/>
 
           <Button size="icon" variant="outline" className="rounded-full hidden md:flex">
@@ -48,11 +48,15 @@ export const Header = ({ className, ...props }: IProps) => {
 const LogoLink: FC<{ className?: string; }> = ({ className }) => {
 
   return (
-    <Link to="/" aria-label={m['common.home']()} className={cn('flex items-center gap-2.5', className)}>
-      <div className="border border-primary aspect-square hidden sm:flex justify-center items-center size-9">
+    <Link
+      to="/"
+      aria-label={m['common.home']()}
+      className={cn('flex items-center gap-2.5', className)}
+    >
+      <div className="border border-primary aspect-square hidden md:flex justify-center items-center size-9">
         <Logo aria-hidden="true" className="h-7 text-foreground"/>
       </div>
-      <LogoText aria-hidden="true" className="h-8 text-foreground"/>
+      <LogoText aria-hidden="true" className="h-7 sm:h-8 text-foreground"/>
     </Link>
   )
 }

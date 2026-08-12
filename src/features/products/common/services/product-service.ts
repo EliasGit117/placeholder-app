@@ -71,15 +71,31 @@ export class ProductService {
     return ProductService.paginate(getWhere(input), input);
   }
 
-  // Public shop grid: one product card per ACTIVE variant of an ACTIVE product
-  // (each variant is a standalone product to the public layer).
+
   static async searchPublicProducts(input: TSearchPublicProductsRequestDto) {
-    // Localize on the server for the request's locale; the DTO carries single strings.
     const ru = getLocale() === 'ru';
 
+    const productWhere: Prisma.ProductWhereInput = { state: ProductState.ACTIVE };
+
+    if (input.categoryId != null) {
+      const category = await prisma.category.findUnique({
+        where: { id: input.categoryId },
+        select: { path: true },
+      });
+
+      if (category) {
+        productWhere.category = {
+          OR: [
+            { path: category.path },
+            { path: { startsWith: `${category.path}/` } },
+          ],
+        };
+      }
+    }
+
     const where: Prisma.ProductVariantWhereInput = {
-      state: ProductState.ACTIVE,
-      product: { state: ProductState.ACTIVE },
+      state: { in: [ProductState.ACTIVE, ProductState.NOT_AVAILABLE] },
+      product: productWhere,
     };
 
     if (input.name != null) {
@@ -90,12 +106,22 @@ export class ProductService {
         : [{ nameRo: filter }, { product: { nameRo: filter } }];
     }
 
+    if (input.priceMin != null || input.priceMax != null) {
+      where.price = {
+        ...(input.priceMin != null && { gte: input.priceMin }),
+        ...(input.priceMax != null && { lte: input.priceMax }),
+      };
+    }
+
     // 'name' sorts by the localized variant name; other keys map to real columns.
     const dir = input.dir ?? (input.sort === 'name' ? 'asc' : 'desc');
-    const orderBy: Prisma.ProductVariantOrderByWithRelationInput =
+    // 'state' sorts before the chosen key so NOT_AVAILABLE variants ('not_available' > 'active') always trail ACTIVE ones.
+    const orderBy: Prisma.ProductVariantOrderByWithRelationInput[] = [
+      { state: 'asc' },
       input.sort === 'name' ? (ru ? { nameRu: dir } : { nameRo: dir })
         : input.sort === 'price' ? { price: dir }
-          : { createdAt: dir };
+          : { createdAt: dir },
+    ];
 
     const [items, meta] = await prisma.productVariant
       .paginate({
@@ -105,7 +131,7 @@ export class ProductService {
       })
       .withPages({
         page: input.page ?? 1,
-        limit: input.limit ?? 10,
+        limit: input.limit ?? 8,
         includePageCount: true,
       });
 
@@ -148,7 +174,7 @@ export class ProductService {
     const items = await prisma.productVariant.findMany({
       where: {
         id: { in: ids },
-        state: ProductState.ACTIVE,
+        state: { in: [ProductState.ACTIVE, ProductState.NOT_AVAILABLE] },
         product: { state: ProductState.ACTIVE },
       },
       include: briefProductVariantInclude,

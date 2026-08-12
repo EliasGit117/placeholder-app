@@ -194,11 +194,22 @@
       "sort_name_desc": "Nume Z–A",
       "sort_price_asc": "Preț crescător",
       "sort_price_desc": "Preț descrescător",
+      "sort_label": "Sortează după",
+      "items_per_page": "Produse pe pagină",
       "empty_title": "Niciun produs găsit",
       "empty_description": "Încearcă alt termen de căutare.",
       "add_to_cart": "Adaugă în coș",
       "currency": "lei",
-      "wishlist": "Adaugă la favorite"
+      "wishlist": "Adaugă la favorite",
+      "unavailable": "Indisponibil",
+      "filters": {
+        "title": "Filtre",
+        "name_label": "Denumire",
+        "price_label": "Preț",
+        "category_label": "Categorie",
+        "category_all": "Toate categoriile",
+        "reset": "Resetează filtrele"
+      }
     }
   },
   "pages": {

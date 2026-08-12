@@ -133,9 +133,9 @@ export const SiteFooter: FC<ComponentProps<'footer'>> = ({ className, ...props }
             {m['components.footer.copyright']({ year: new Date().getFullYear(), app: 'SKINERY SRL' })}
           </p>
           <div className="flex flex-wrap gap-2 text-foreground">
-            <VisaIcon className="h-12 w-fit"/>
-            <MastercardIcon className="h-12 w-fit"/>
-            <ApplePayIcon className="h-12 w-fit"/>
+            <VisaIcon className="h-12 w-14"/>
+            <MastercardIcon className="h-12 w-14"/>
+            <ApplePayIcon className="h-12 w-14"/>
           </div>
         </div>
       </div>

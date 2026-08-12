@@ -1,4 +1,5 @@
 import { type FC } from 'react';
+import { Link } from '@tanstack/react-router';
 import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -14,9 +15,9 @@ interface IProps {
 }
 
 export const ProductCard: FC<IProps> = ({ product }) => {
-  const { name, shortDescription, category, discountPercent, finalPrice } = product;
+  const { name, shortDescription, category, categoryId, discountPercent, finalPrice, isAvailable } = product;
   const { items, toggle, isPending: isPendingFavorites } = useFavoritesContext();
-  const placeholder = thumbhashToDataUrl(product.thumbhash);
+  const imgPlaceholder = thumbhashToDataUrl(product.thumbhash);
   const hasDiscount = !!discountPercent;
   const isFavorite = items.has(product.id);
 
@@ -24,16 +25,23 @@ export const ProductCard: FC<IProps> = ({ product }) => {
     <article
       itemScope
       itemType="https://schema.org/Product"
-      className="group row-span-3 grid grid-rows-subgrid gap-y-0 overflow-hidden rounded-2xl bg-card ring-1 ring-foreground/10 transition-shadow hover:shadow-lg"
+      className={cn(
+        'group row-span-3 grid grid-rows-subgrid gap-y-0 overflow-hidden rounded-2xl bg-card ring-1 ring-foreground/10 transition-shadow hover:shadow-lg',
+        !isAvailable && 'opacity-70'
+      )}
     >
       <div
+        style={imgPlaceholder ? { backgroundImage: `url(${imgPlaceholder})` } : undefined}
         className={cn(
           'ph-stripes relative grid aspect-square place-items-center overflow-hidden bg-muted bg-cover bg-center',
-          'font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground'
+          'uppercase tracking-[0.15em] font-semibold text-muted-foreground'
         )}
-        style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
       >
-        {hasDiscount && (
+        {!isAvailable ? (
+          <Badge variant="outline" className="absolute left-3 top-3 z-10 rounded-full bg-background px-2.5">
+            {m['components.shop.unavailable']()}
+          </Badge>
+        ) : hasDiscount && (
           <Badge variant='secondary' className="absolute left-3 top-3 z-10 rounded-full px-2.5">
             -{discountPercent}%
           </Badge>
@@ -74,10 +82,22 @@ export const ProductCard: FC<IProps> = ({ product }) => {
 
       <CardContent className="flex flex-col gap-1.5 p-4">
         {category && (
-          <div className="mb-1 flex items-center gap-1.5 text-xs">
-            <IconTag className="size-3.5"/>
-            {category}
-          </div>
+          categoryId != null ? (
+            <Link
+              to="/products"
+              search={{ categoryId }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative z-10 mb-1 flex w-fit items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground hover:underline underline-offset-2"
+            >
+              <IconTag className="size-3.5"/>
+              {category}
+            </Link>
+          ) : (
+            <div className="mb-1 flex items-center gap-1.5 text-xs">
+              <IconTag className="size-3.5"/>
+              {category}
+            </div>
+          )
         )}
 
         <h3 className="font-heading text-base font-semibold leading-tight" itemProp="name">
@@ -109,10 +129,10 @@ export const ProductCard: FC<IProps> = ({ product }) => {
           </small>
         </div>
 
-        <Button size="sm" variant="outline-primary" className="@xs:w-auto w-full">
+        <Button size="sm" variant="outline-primary" className="@xs:w-auto w-full" disabled={!isAvailable}>
           <IconShoppingBagPlus/>
           <span>
-            {m['components.shop.add_to_cart']()}
+            {isAvailable ? m['components.shop.add_to_cart']() : m['components.shop.unavailable']()}
           </span>
         </Button>
       </CardFooter>
