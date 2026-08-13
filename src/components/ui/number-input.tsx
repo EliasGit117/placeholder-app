@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from 'react';
+import { type FocusEventHandler, forwardRef, useEffect, useState } from 'react';
 import { NumericFormat, type NumericFormatProps } from 'react-number-format';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,15 +42,18 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       inputSize,
       className,
       inputClassName,
+      onFocus,
+      onBlur: onBlurProp,
       ...restOfProps
     },
     ref
   ) => {
     const [value, setValue] = useState<number | undefined>(controlledValue ?? defaultValue);
+    const [isFocused, setIsFocused] = useState(false);
 
     useEffect(() => {
-      setValue(controlledValue);
-    }, [controlledValue]);
+      if (!isFocused) setValue(controlledValue);
+    }, [controlledValue, isFocused]);
 
     const handleIncrement = () =>
       setValue((prev) => prev === undefined ? stepper : Math.min(prev + stepper, max));
@@ -67,7 +70,14 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       onValueChange?.(newValue);
     };
 
-    const handleBlur = () => {
+    const handleFocus: FocusEventHandler<HTMLInputElement> = (e) => {
+      setIsFocused(true);
+      onFocus?.(e);
+    };
+
+    const handleBlur: FocusEventHandler<HTMLInputElement> = (e) => {
+      setIsFocused(false);
+
       if (value !== undefined) {
         let adjusted = value;
         if (value < min) adjusted = min;
@@ -77,6 +87,8 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           onValueChange?.(adjusted);
         }
       }
+
+      onBlurProp?.(e);
     };
 
     return (
@@ -88,6 +100,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           decimalScale={decimalScale}
           fixedDecimalScale={fixedDecimalScale}
           allowNegative={min < 0}
+          onFocus={handleFocus}
           onBlur={handleBlur}
           max={max}
           min={min}

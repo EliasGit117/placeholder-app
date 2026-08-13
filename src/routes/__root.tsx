@@ -34,6 +34,7 @@ export const Route = createRootRouteWithContext<IRouterContext>()({
       queryClient.ensureQueryData(orpc.sessions.current.queryOptions()).catch(() => null),
       queryClient.ensureQueryData(orpc.categories.getTree.queryOptions({ input: { depth: 2 } })).catch(() => null),
       queryClient.ensureQueryData(orpc.products.getFavorites.queryOptions()).catch(() => null),
+      queryClient.ensureQueryData(orpc.checkout.getCart.queryOptions()).catch(() => null),
     ]);
 
     return { session: res?.session, user: res?.user };

@@ -10,6 +10,7 @@ import { productsRoutes } from '@/features/products/public/routes';
 import { productsAdminRoutes } from '@/features/products/admin/routes';
 import { bannersPublicRoutes } from '@/features/banners/public/routes';
 import { bannersAdminRoutes } from '@/features/banners/admin/routes';
+import { checkoutRoutes } from '@/features/checkout/public/routes';
 
 
 export const orpcRouter = base.router({
@@ -18,6 +19,7 @@ export const orpcRouter = base.router({
   profile: profileRoutes,
   products: productsRoutes,
   banners: bannersPublicRoutes,
+  checkout: checkoutRoutes,
   admin: {
     sessions: sessionsAdminRoutes,
     users: usersAdminRoutes,

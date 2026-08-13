@@ -3,12 +3,27 @@ import { Link } from '@tanstack/react-router';
 import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 import { CardContent, CardFooter } from '@/components/ui/card';
-import { IconHeart, IconPhotoOff, IconShoppingBagPlus, IconTag } from '@tabler/icons-react';
+import {
+  IconHeart,
+  IconPhotoOff,
+  IconShoppingBagMinus,
+  IconShoppingBagPlus,
+  IconTag
+} from '@tabler/icons-react';
 import type { TBriefProductPublicDto } from '@/features/products/public/dtos/search-public-products';
 import { m } from '@/paraglide/messages';
 import { useFavoritesContext } from '@/providers/favorites.tsx';
-import { Skeleton } from "@/components/ui/skeleton";
+import { useCartContext } from '@/providers/cart.tsx';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const CART_QUANTITY_OPTIONS = Array.from({ length: 10 }, (_, i) => i + 1);
 
 interface IProps {
   product: TBriefProductPublicDto;
@@ -17,9 +32,11 @@ interface IProps {
 export const ProductCard: FC<IProps> = ({ product }) => {
   const { name, shortDescription, category, categoryId, discountPercent, finalPrice, isAvailable } = product;
   const { items, toggle, isPending: isPendingFavorites } = useFavoritesContext();
+  const { items: cartItems, add: addToCart, remove: removeFromCart } = useCartContext();
   const imgPlaceholder = thumbhashToDataUrl(product.thumbhash);
   const hasDiscount = !!discountPercent;
   const isFavorite = items.has(product.id);
+  const cartItem = cartItems.find((item) => item.id === product.id);
 
   return (
     <article
@@ -37,12 +54,9 @@ export const ProductCard: FC<IProps> = ({ product }) => {
           'uppercase tracking-[0.15em] font-semibold text-muted-foreground'
         )}
       >
-        {!isAvailable ? (
-          <Badge variant="outline" className="absolute left-3 top-3 z-10 rounded-full bg-background px-2.5">
-            {m['components.shop.unavailable']()}
-          </Badge>
-        ) : hasDiscount && (
-          <Badge variant='secondary' className="absolute left-3 top-3 z-10 rounded-full px-2.5">
+
+        {hasDiscount && (
+          <Badge variant="secondary" className="absolute left-3 top-3 z-10 rounded-full px-2.5">
             -{discountPercent}%
           </Badge>
         )}
@@ -58,12 +72,11 @@ export const ProductCard: FC<IProps> = ({ product }) => {
               isFavorite && 'bg-red-300/25 backdrop-blur-sm'
             )}
           >
-            <IconHeart className={cn("size-5", isFavorite && "text-red-500 fill-red-500")}/>
+            <IconHeart className={cn('size-5', isFavorite && 'text-red-500 fill-red-500')}/>
           </button>
         ) : (
-          <Skeleton className='absolute right-3 top-3 z-10 size-8 rounded-full bg-muted opacity-10'/>
+          <Skeleton className="absolute right-3 top-3 z-10 size-8 rounded-full bg-muted opacity-10"/>
         )}
-
 
 
         {product.imageUrl ? (
@@ -112,29 +125,77 @@ export const ProductCard: FC<IProps> = ({ product }) => {
       </CardContent>
 
       <CardFooter
-        className="@container flex flex-col items-stretch gap-3 self-end border-t border-dashed bg-transparent p-4 pt-3.5 @xs:flex-row @xs:items-center @xs:justify-between">
-        <div
-          className="flex items-baseline gap-1.5"
-          itemProp="offers"
-          itemScope
-          itemType="https://schema.org/Offer"
-        >
-          <meta itemProp="priceCurrency" content="EUR"/>
-          {hasDiscount && (
-            <s className="text-xs text-muted-foreground">{product.price}</s>
+        className="flex flex-col items-stretch gap-3 self-end border-t border-dashed bg-transparent p-4 pt-3.5">
+        <div className="flex items-center justify-between gap-2">
+          <div
+            className="flex items-baseline gap-1.5"
+            itemProp="offers"
+            itemScope
+            itemType="https://schema.org/Offer"
+          >
+            <meta itemProp="priceCurrency" content="EUR"/>
+            {hasDiscount && (
+              <s className="text-xs text-muted-foreground">{product.price}</s>
+            )}
+
+            <span className="font-heading text-lg font-semibold" itemProp="price">{finalPrice}</span>
+            <small className="text-[13px] text-muted-foreground">
+              {m['components.shop.currency']()}
+            </small>
+          </div>
+
+          {cartItem && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="aspect-square px-0 -mr-1"
+                  aria-label={m['components.shop.cart_options']()}
+                >
+                  <span>x{cartItem.count}</span>
+                </Button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent align="end" className="min-w-10">
+                {CART_QUANTITY_OPTIONS.map((quantity) => (
+                  <DropdownMenuItem
+                    key={quantity}
+                    className={cn('justify-center', quantity === cartItem.count && 'bg-foreground/10')}
+                    onClick={() => addToCart(product.id, quantity - cartItem.count)}
+                  >
+                    {quantity}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
-          <span className="font-heading text-lg font-semibold" itemProp="price">{finalPrice}</span>
-          <small className="text-[13px] text-muted-foreground">
-            {m['components.shop.currency']()}
-          </small>
         </div>
 
-        <Button size="sm" variant="outline-primary" className="@xs:w-auto w-full" disabled={!isAvailable}>
-          <IconShoppingBagPlus/>
-          <span>
-            {isAvailable ? m['components.shop.add_to_cart']() : m['components.shop.unavailable']()}
-          </span>
-        </Button>
+        {cartItem ? (
+          <Button
+            size="sm"
+            variant="outline-primary"
+            className="w-full"
+            disabled={!isAvailable}
+            onClick={() => removeFromCart(product.id)}
+          >
+            <IconShoppingBagMinus/>
+            <span>{m['components.shop.remove_from_cart']()}</span>
+          </Button>
+        ) : (
+          <Button
+            size="sm"
+            variant="outline-primary"
+            className="w-full"
+            disabled={!isAvailable}
+            onClick={() => addToCart(product.id)}
+          >
+            <IconShoppingBagPlus/>
+            <span>
+              {isAvailable ? m['components.shop.add_to_cart']() : m['components.shop.unavailable']()}
+            </span>
+          </Button>
+        )}
       </CardFooter>
     </article>
   );

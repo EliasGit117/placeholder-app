@@ -3,7 +3,7 @@ import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useDebouncedCallback } from 'use-debounce';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { Input } from '@/components/ui/input';
+import { NumberInput } from '@/components/ui/number-input';
 import { m } from '@/paraglide/messages';
 
 const MIN = 0;
@@ -43,13 +43,13 @@ export const PriceRangeFilter: FC = () => {
     commit(next);
   };
 
-  const onMinInput = (raw: string) => {
-    const parsed = Math.min(Math.max(Number(raw) || MIN, MIN), value[1]);
+  const onMinInput = (raw: number | undefined) => {
+    const parsed = Math.min(Math.max(raw ?? MIN, MIN), value[1]);
     update([parsed, value[1]]);
   };
 
-  const onMaxInput = (raw: string) => {
-    const parsed = Math.max(Math.min(Number(raw) || MAX, MAX), value[0]);
+  const onMaxInput = (raw: number | undefined) => {
+    const parsed = Math.max(Math.min(raw ?? MAX, MAX), value[0]);
     update([value[0], parsed]);
   };
 
@@ -67,25 +67,25 @@ export const PriceRangeFilter: FC = () => {
       />
 
       <div className="flex items-center gap-2">
-        <Input
-          type="number"
+        <NumberInput
+          inputSize="sm"
           min={MIN}
           max={value[1]}
-          value={value[0]}
-          onChange={(e) => onMinInput(e.target.value)}
-          className="h-8"
+          value={value[0] === MIN ? undefined : value[0]}
+          onValueChange={onMinInput}
+          placeholder={String(MIN)}
           aria-label={m['components.shop.filters.price_label']()}
         />
 
         <span className="text-muted-foreground">–</span>
 
-        <Input
-          type="number"
+        <NumberInput
+          inputSize="sm"
           min={value[0]}
           max={MAX}
-          value={value[1]}
-          onChange={(e) => onMaxInput(e.target.value)}
-          className="h-8"
+          value={value[1] === MAX ? undefined : value[1]}
+          onValueChange={onMaxInput}
+          placeholder={String(MAX)}
           aria-label={m['components.shop.filters.price_label']()}
         />
       </div>
