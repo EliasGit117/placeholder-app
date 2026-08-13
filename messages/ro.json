@@ -109,7 +109,13 @@
       "favorites_missing_description": "Produsul nu a fost găsit, este indisponibil sau a fost eliminat.",
       "show_all": "Vezi toate",
       "admin": "Admin",
-      "cart": "Coș"
+      "cart": "Coș",
+      "cart_description": "Produsele adăugate în coș",
+      "cart_empty": "Coșul tău este gol.",
+      "cart_total": "Total",
+      "cart_items_count": "{count} produse",
+      "cart_missing": "Produs indisponibil",
+      "cart_missing_description": "Produsul nu a fost găsit, este indisponibil sau a fost eliminat."
     },
     "user_dropdown": {
       "settings": "Setări",

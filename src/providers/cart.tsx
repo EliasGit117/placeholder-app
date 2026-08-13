@@ -17,6 +17,7 @@ interface IState {
 interface IActions {
   add: (id: number, count?: number) => void;
   remove: (id: number) => void;
+  clear: () => void;
 }
 
 interface IContextValue extends IState, IActions {}
@@ -49,12 +50,19 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     (current, id) => current.filter((item) => item.id !== id)
   );
 
+  const clearMutation = useOptimisticCartMutation<void>(
+    cartQuery.queryKey,
+    () => client.checkout.clearCart(),
+    () => []
+  );
+
   const value: IContextValue = {
     items: items,
     isPending: isPending,
     totalCount: items.reduce((sum, item) => sum + item.count, 0),
     add: (id, count = 1) => addMutation.mutate({ id, count }),
     remove: (id) => removeMutation.mutate(id),
+    clear: () => clearMutation.mutate(),
   };
 
   return (

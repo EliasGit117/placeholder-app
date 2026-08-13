@@ -109,7 +109,13 @@
       "favorites_missing_description": "Товар не найден, недоступен или был удалён.",
       "show_all": "Показать все",
       "admin": "Админ",
-      "cart": "Корзина"
+      "cart": "Корзина",
+      "cart_description": "Товары, добавленные в корзину",
+      "cart_empty": "Ваша корзина пуста.",
+      "cart_total": "Итого",
+      "cart_items_count": "{count} товаров",
+      "cart_missing": "Товар недоступен",
+      "cart_missing_description": "Товар не найден, недоступен или был удалён."
     },
     "user_dropdown": {
       "settings": "Настройки",

@@ -3,7 +3,6 @@ import { cn } from '@/lib/utils';
 import { LocaleDropdown } from '@/components/locale';
 import { UserDropdown } from '../../auth/user-dropdown';
 import { AppSidebarTrigger } from '@/components/layout/main/sidebar.tsx';
-import { Button } from '@/components/ui/button';
 import { IconShoppingCart } from '@tabler/icons-react';
 import { HeaderNavigationMenu } from '@/components/layout/main/header-navigation-menu.tsx';
 import { Link } from '@tanstack/react-router';
@@ -11,6 +10,8 @@ import { m } from '@/paraglide/messages';
 import Logo from '@/assets/icons/logo/icon.svg?react';
 import LogoText from '@/assets/icons/logo/text.svg?react';
 import { FavoritesPopover } from '@/components/layout/main/favorites-popover.tsx';
+import { CartSheetTrigger } from '@/components/cart/cart-sheet';
+import { useCartContext } from '@/providers/cart.tsx';
 
 
 interface IProps extends ComponentProps<'header'> {}
@@ -18,6 +19,7 @@ interface IProps extends ComponentProps<'header'> {}
 const blurClassName = 'backdrop-blur-xl supports-backdrop-filter:bg-background/75';
 
 export const Header = ({ className, ...props }: IProps) => {
+  const { items } = useCartContext();
 
   return (
     <header className={cn('border-b sticky top-0 z-30 h-16 flex items-center', blurClassName, className)} {...props}>
@@ -30,10 +32,21 @@ export const Header = ({ className, ...props }: IProps) => {
         <div className="flex items-center gap-2 sm:gap-3 ml-auto">
           <FavoritesPopover contentClassName='mt-3'/>
 
-          <Button size="icon" variant="outline" className="rounded-full hidden md:flex">
+          <CartSheetTrigger size="icon" variant="outline" className="rounded-full hidden md:flex relative">
             <IconShoppingCart aria-hidden="true"/>
             <span className="sr-only">{m['components.header.cart']()}</span>
-          </Button>
+
+            {items.length > 0 && (
+              <span
+                className={cn(
+                  'absolute -top-1.5 -right-1.5 rounded-full size-4 flex items-center justify-center',
+                  'bg-primary text-primary-foreground text-xs'
+                )}
+              >
+                {items.length}
+              </span>
+            )}
+          </CartSheetTrigger>
 
           <LocaleDropdown variant="outline" size="icon" align="end" className="rounded-full"/>
 

@@ -114,9 +114,16 @@ export const FavoritesPopover: FC<IProps> = ({ contentClassName, ...props }) => 
                     <div className="min-w-0 flex-1">
                       <p className="text-xs font-medium leading-tight">{product.name}</p>
 
+                      {product.category && (
+                        <p className="text-xs text-muted-foreground">{product.category}</p>
+                      )}
+
                       {product.isAvailable ? (
-                        <p className="text-sm text-primary">
-                          {product.finalPrice} {m['components.shop.currency']()}
+                        <p className="flex items-baseline gap-1 text-sm text-primary">
+                          {!!product.discountPercent && (
+                            <s className="text-xs text-muted-foreground">{product.price}</s>
+                          )}
+                          <span>{product.finalPrice} {m['components.shop.currency']()}</span>
                         </p>
                       ) : (
                         <p className="text-sm text-muted-foreground">
