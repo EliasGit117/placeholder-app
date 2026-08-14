@@ -15,8 +15,7 @@ import { ButtonGroup } from '@/components/ui/button-group.tsx';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.tsx';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -110,7 +109,7 @@ export const CartSheet: FC = () => {
                       {product.imageUrl ? (
                         <img
                           src={product.imageUrl}
-                          alt={product.name}
+                          alt={`${product.name} ${product.variantName}`}
                           style={imgStyles}
                           className="size-full object-cover"
                         />
@@ -122,21 +121,17 @@ export const CartSheet: FC = () => {
                     <div className="flex min-w-0 flex-1 flex-col justify-between self-stretch">
                       <div className="space-y-1.5">
                         <div className="space-y-1">
-                          <p className="text-sm font-medium leading-tight">{product.name}</p>
+                          <p className="text-sm font-medium leading-tight">
+                            {product.name}
+                            <span className="block text-sm font-normal">{product.variantName}</span>
+                          </p>
 
                           {product.category && (
                             <p className="text-xs text-muted-foreground">{product.category}</p>
                           )}
                         </div>
 
-                        {product.isAvailable ? (
-                          <p className="flex items-baseline gap-1 text-sm text-primary">
-                            {!!product.discountPercent && (
-                              <s className="text-xs text-muted-foreground">{product.price}</s>
-                            )}
-                            <span>{product.finalPrice} {m['components.shop.currency']()}</span>
-                          </p>
-                        ) : (
+                        {!product.isAvailable && (
                           <p className="text-sm text-muted-foreground">
                             {m['components.shop.unavailable']()}
                           </p>
@@ -146,7 +141,7 @@ export const CartSheet: FC = () => {
                       <ButtonGroup className="mt-1.5">
                         <Button
                           type="button"
-                          size="icon-sm"
+                          size="icon-xs"
                           variant="outline"
                           className="shadow-none"
                           disabled={item.count <= 1}
@@ -160,9 +155,9 @@ export const CartSheet: FC = () => {
                           <DropdownMenuTrigger asChild>
                             <Button
                               type="button"
-                              size="sm"
+                              size="xs"
                               variant="outline"
-                              className="min-w-12 shadow-none"
+                              className="min-w-10 shadow-none"
                               aria-label={m['components.shop.cart_options']()}
                             >
                               <span>{item.count}</span>
@@ -170,19 +165,21 @@ export const CartSheet: FC = () => {
                           </DropdownMenuTrigger>
 
                           <DropdownMenuContent className='min-w-16' align="start">
-                            <DropdownMenuRadioGroup onValueChange={(value) => add(item.id, Number(value) - item.count)}>
-                              {cartQuantityOptions.map((quantity) => (
-                                <DropdownMenuRadioItem key={quantity} value={String(quantity)}>
-                                  {quantity}
-                                </DropdownMenuRadioItem>
-                              ))}
-                            </DropdownMenuRadioGroup>
+                            {cartQuantityOptions.map((quantity) => (
+                              <DropdownMenuItem
+                                key={quantity}
+                                className={cn('justify-center', quantity === item.count && 'bg-foreground/10')}
+                                onClick={() => add(item.id, quantity - item.count)}
+                              >
+                                {quantity}
+                              </DropdownMenuItem>
+                            ))}
                           </DropdownMenuContent>
                         </DropdownMenu>
 
                         <Button
                           type="button"
-                          size="icon-sm"
+                          size="icon-xs"
                           variant="outline"
                           className="shadow-none"
                           onClick={() => add(item.id, 1)}
@@ -211,7 +208,7 @@ export const CartSheet: FC = () => {
                               {product.price * item.count}
                             </s>
                           )}
-                          <span className="font-heading text-base">
+                          <span className={cn('font-heading text-base', !!product.discountPercent && 'text-primary')}>
                             {product.finalPrice * item.count} {m['components.shop.currency']()}
                           </span>
                         </span>

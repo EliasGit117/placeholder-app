@@ -7,10 +7,12 @@ import { computeDiscountedPrice } from '@/features/products/common/lib/discount.
 
 
 // A single sellable product on the public shop grid, already localized for the
-// request's locale (name = parent product + option, e.g. "iPhone 17 Pro Max Orange 128 gb").
+// request's locale. `name` is the parent product name, `variantName` is the option
+// (e.g. name = "iPhone 17 Pro Max", variantName = "Orange 128 gb").
 export const briefProductPublicDtoSchema = z.object({
   id: z.number(),
   name: z.string(),
+  variantName: z.string(),
   shortDescription: z.string().nullable(),
   price: z.number().int(),
   discountPercent: z.number().int().nullable(),
@@ -69,8 +71,8 @@ export class BriefProductPublicDtoFactory {
 
     return {
       id: variant.id,
-      // Full display name = parent product + option (e.g. "iPhone 17 Pro Max Orange 128 gb").
-      name: ru ? `${variant.product.nameRu} ${variant.nameRu}` : `${variant.product.nameRo} ${variant.nameRo}`,
+      name: ru ? variant.product.nameRu : variant.product.nameRo,
+      variantName: ru ? variant.nameRu : variant.nameRo,
       shortDescription: shortDescription ?? null,
       price: variant.price,
       discountPercent: variant.discountPercent,

@@ -56,8 +56,6 @@ export const FavoritesPopover: FC<IProps> = ({ contentClassName, ...props }) => 
         <PopoverHeader className="flex-row items-center justify-between border-b p-3">
           <PopoverTitle>
             {m['components.header.favorites']()}
-
-            {items.size > 0 && ` (${items.size})`}
           </PopoverTitle>
 
           {items.size > 0 && (
@@ -97,12 +95,22 @@ export const FavoritesPopover: FC<IProps> = ({ contentClassName, ...props }) => 
                 }
 
                 return (
-                  <li key={id} className={cn('flex items-start gap-2 p-2', !product.isAvailable && 'opacity-60')}>
-                    <div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/10">
+                  <li key={id} className={cn('relative flex items-stretch gap-2 p-2', !product.isAvailable && 'opacity-60')}>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="absolute right-1 top-1 text-muted-foreground opacity-50"
+                      aria-label={m['components.header.favorites_remove']()}
+                      onClick={() => remove(product.id)}
+                    >
+                      <IconX/>
+                    </Button>
+
+                    <div className="relative size-18 shrink-0 overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/10">
                       {product.imageUrl ? (
                         <img
                           src={product.imageUrl}
-                          alt={product.name}
+                          alt={`${product.name} ${product.variantName}`}
                           style={imgStyles}
                           className="size-full object-cover"
                         />
@@ -111,36 +119,29 @@ export const FavoritesPopover: FC<IProps> = ({ contentClassName, ...props }) => 
                       )}
                     </div>
 
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-medium leading-tight">{product.name}</p>
+                    <div className="flex min-w-0 flex-1 flex-col pr-7">
+                      <p className="text-sm font-medium leading-tight">
+                        {product.name}
+                        <span className="block font-normal">{product.variantName}</span>
+                      </p>
 
                       {product.category && (
                         <p className="text-xs text-muted-foreground">{product.category}</p>
                       )}
 
                       {product.isAvailable ? (
-                        <p className="flex items-baseline gap-1 text-sm text-primary">
+                        <p className="mt-auto flex items-baseline gap-1 text-sm text-primary">
                           {!!product.discountPercent && (
                             <s className="text-xs text-muted-foreground">{product.price}</s>
                           )}
                           <span>{product.finalPrice} {m['components.shop.currency']()}</span>
                         </p>
                       ) : (
-                        <p className="text-sm text-muted-foreground">
+                        <p className="mt-auto text-sm text-muted-foreground">
                           {m['components.shop.unavailable']()}
                         </p>
                       )}
                     </div>
-
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="shrink-0 self-center text-muted-foreground opacity-50"
-                      aria-label={m['components.header.favorites_remove']()}
-                      onClick={() => remove(product.id)}
-                    >
-                      <IconX/>
-                    </Button>
                   </li>
                 );
               })}

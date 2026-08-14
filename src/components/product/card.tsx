@@ -30,7 +30,7 @@ interface IProps {
 }
 
 export const ProductCard: FC<IProps> = ({ product }) => {
-  const { name, shortDescription, category, categoryId, discountPercent, finalPrice, isAvailable } = product;
+  const { name, variantName, shortDescription, category, categoryId, discountPercent, finalPrice, isAvailable } = product;
   const { items, toggle, isPending: isPendingFavorites } = useFavoritesContext();
   const { items: cartItems, add: addToCart, remove: removeFromCart } = useCartContext();
   const imgPlaceholder = thumbhashToDataUrl(product.thumbhash);
@@ -82,7 +82,7 @@ export const ProductCard: FC<IProps> = ({ product }) => {
         {product.imageUrl ? (
           <img
             src={product.imageUrl}
-            alt={name}
+            alt={`${name} ${variantName}`}
             loading="lazy"
             decoding="async"
             className="absolute inset-0 size-full object-cover"
@@ -115,6 +115,7 @@ export const ProductCard: FC<IProps> = ({ product }) => {
 
         <h3 className="font-heading text-base font-semibold leading-tight" itemProp="name">
           {name}
+          <span className="block text-sm font-normal">{variantName}</span>
         </h3>
 
         {shortDescription && (
