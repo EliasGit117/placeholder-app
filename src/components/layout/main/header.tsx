@@ -32,7 +32,7 @@ export const Header = ({ className, ...props }: IProps) => {
         <div className="flex items-center gap-2 sm:gap-3 ml-auto">
           <FavoritesPopover contentClassName='mt-3'/>
 
-          <CartSheetTrigger size="icon" variant="outline" className="rounded-full hidden md:flex relative">
+          <CartSheetTrigger size="icon" variant="outline" className="rounded-full relative">
             <IconShoppingCart aria-hidden="true"/>
             <span className="sr-only">{m['components.header.cart']()}</span>
 

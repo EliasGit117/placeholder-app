@@ -42,10 +42,15 @@ export const ProductCard: FC<IProps> = ({ product }) => {
   } = product;
   const { items, toggle, isPending: isPendingFavorites } = useFavoritesContext();
   const { items: cartItems, add: addToCart, remove: removeFromCart } = useCartContext();
-  const imgPlaceholder = thumbhashToDataUrl(product.thumbhash);
+  const imgPlaceholder = thumbhashToDataUrl(product.image?.thumbhash ?? null);
   const hasDiscount = !!discountPercent;
   const isFavorite = items.has(product.id);
   const cartItem = cartItems.find((item) => item.id === product.id);
+  const image = product.image;
+  const imageUrl =
+    image?.variants.thumb1024?.url ??
+    image?.variants.thumb512?.url ??
+    image?.url;
 
   return (
     <article
@@ -65,7 +70,7 @@ export const ProductCard: FC<IProps> = ({ product }) => {
       >
 
         {hasDiscount && (
-          <Badge variant="secondary" className="absolute left-3 top-3 z-10 rounded-full px-2.5">
+          <Badge variant="secondary" className="absolute left-3 top-3 z-10 rounded-full border-secondary-foreground">
             -{discountPercent}%
           </Badge>
         )}
@@ -88,15 +93,19 @@ export const ProductCard: FC<IProps> = ({ product }) => {
         )}
 
 
-        {product.imageUrl ? (
-          <img
-            src={product.imageUrl}
-            alt={`${name} ${variantName}`}
-            loading="lazy"
-            decoding="async"
-            className="absolute inset-0 size-full object-cover"
-            itemProp="image"
-          />
+        {imageUrl ? (
+          <picture>
+            {image?.variants.thumb512 && <source media="(max-width: 1023px)" srcSet={image.variants.thumb512.url}/>}
+            {image?.variants.thumb1024 && <source media="(min-width: 1024px)" srcSet={image.variants.thumb1024.url}/>}
+            <img
+              src={imageUrl}
+              alt={`${name} ${variantName}`}
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 size-full object-cover"
+              itemProp="image"
+            />
+          </picture>
         ) : (
           <IconPhotoOff className="size-10 text-muted-foreground opacity-25"/>
         )}

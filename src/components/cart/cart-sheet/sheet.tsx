@@ -94,11 +94,12 @@ export const CartSheet: FC = () => {
                 }
 
                 const imgStyles: CSSProperties = {};
-                const thumbhashDataUrl = thumbhashToDataUrl(product.thumbhash);
+                const thumbhashDataUrl = thumbhashToDataUrl(product.image?.thumbhash ?? null);
                 if (thumbhashDataUrl) {
                   imgStyles.backgroundImage = `url(${thumbhashDataUrl})`;
                   imgStyles.backgroundSize = 'cover';
                 }
+                const imageUrl = product.image?.variants.thumb256?.url ?? product.image?.url;
 
                 return (
                   <li
@@ -106,9 +107,9 @@ export const CartSheet: FC = () => {
                     className={cn('flex items-start gap-3 rounded-lg p-2', !product.isAvailable && 'opacity-60')}
                   >
                     <div className="relative size-24 shrink-0 overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/10">
-                      {product.imageUrl ? (
+                      {imageUrl ? (
                         <img
-                          src={product.imageUrl}
+                          src={imageUrl}
                           alt={`${product.name} ${product.variantName}`}
                           style={imgStyles}
                           className="size-full object-cover"

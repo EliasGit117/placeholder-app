@@ -259,17 +259,18 @@ function VariantsCell({ variants }: { variants: TProductVariantBriefDto[] }) {
   const extra = variants.length - shown.length;
 
   return (
-    <div className="flex flex-wrap items-center gap-1">
+    <div className="flex items-center gap-1 overflow-hidden">
       {shown.map((variant) => {
-        const placeholder = thumbhashToDataUrl(variant.thumbhash);
+        const placeholder = thumbhashToDataUrl(variant.image?.thumbhash ?? null);
+        const imageUrl = variant.image?.variants.thumb256?.url ?? variant.image?.url;
         return (
-          <Badge key={variant.id} variant="outline" className="rounded-sm max-w-36 px-1 min-h-6">
-            {variant.imageUrl ? (
+          <Badge key={variant.id} variant="outline" className="max-w-36 shrink-0 rounded-sm px-1 min-h-6">
+            {imageUrl ? (
               <span
                 className="size-4 shrink-0 overflow-hidden bg-muted bg-cover bg-center"
                 style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
               >
-                <img src={variant.imageUrl} alt="" loading="lazy" decoding="async" className="size-full object-cover"/>
+                <img src={imageUrl} alt="" loading="lazy" decoding="async" className="size-full object-cover"/>
               </span>
             ) : (
               <span className="flex size-4 shrink-0 items-center justify-center rounded-xs bg-muted text-muted-foreground">

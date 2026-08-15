@@ -1,11 +1,12 @@
 import { ORPCError } from '@orpc/server';
 import { type Prisma, type ProductVariant } from '~/prisma/generated/prisma/client.ts';
-import { ImageResourceType, ImageVariantKind, ProductState } from '~/prisma/generated/prisma/enums.ts';
+import { ImageResourceType, ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { prisma } from '@/lib/db';
 import { getLocale } from '@/paraglide/runtime';
 import { buildFullSlug } from '@/features/products/common/lib/slug.ts';
 import { ImageService } from '@/features/images/common/services/image-service.ts';
 import { ProductVariantImageDtoFactory, type TProductVariantImageDto } from '@/features/products/common/dtos/product-variant-image.ts';
+import { BriefImageDtoFactory, type TBriefImageDto } from '@/features/products/common/dtos/brief-image.ts';
 import type { TxClient } from '@/lib/db/prisma.ts';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
 import type { TOptions, TOptionValues } from '@/features/products/common/dtos/option-schema.ts';
@@ -35,6 +36,27 @@ export class ProductService {
       const list = map.get(variantId) ?? [];
       list.push(ProductVariantImageDtoFactory.fromImageDto(image));
       map.set(variantId, list);
+    }
+
+    return map;
+  }
+
+  // Batch-fetch the lead (display order) image per variant, converted to the
+  // list/grid-friendly brief image shape (original + thumb size map).
+  private static async firstImageByVariant(variantIds: number[]): Promise<Map<number, TBriefImageDto>> {
+    const images = await ImageService.findByResources(
+      ImageResourceType.PRODUCT_VARIANT,
+      variantIds.map(String)
+    );
+
+    // findByResources is ordered by [resourceId, order], so the first hit per
+    // variant is its lead image.
+    const map = new Map<number, TBriefImageDto>();
+    for (const img of images) {
+      const variantId = Number(img.resourceId);
+      if (map.has(variantId))
+        continue;
+      map.set(variantId, BriefImageDtoFactory.fromImageDto(img));
     }
 
     return map;
@@ -136,28 +158,10 @@ export class ProductService {
       });
 
     // Batch-load the lead image (display order) for every variant on the page.
-    const images = await ImageService.findByResources(
-      ImageResourceType.PRODUCT_VARIANT,
-      items.map((v) => String(v.id))
-    );
-    const firstImageByVariant = new Map<number, { imageUrl: string | null; thumbhash: string | null }>();
-    for (const img of images) {
-      const variantId = Number(img.resourceId);
-      if (firstImageByVariant.has(variantId))
-        continue;
-
-      const preferred = new Set([
-        ImageVariantKind.THUMB_1024x1024,
-        ImageVariantKind.THUMB_512x512,
-        ImageVariantKind.THUMB_256x256,
-      ]);
-
-      const thumb = img.variants.find(v => preferred.has(v.kind));
-      firstImageByVariant.set(variantId, { imageUrl: thumb?.url ?? img.url, thumbhash: img.thumbhash });
-    }
+    const firstImageByVariant = await ProductService.firstImageByVariant(items.map((v) => v.id));
 
     const result = items.map((v) =>
-      BriefProductPublicDtoFactory.fromVariant(v, ru, firstImageByVariant.get(v.id) ?? { imageUrl: null, thumbhash: null })
+      BriefProductPublicDtoFactory.fromVariant(v, ru, firstImageByVariant.get(v.id) ?? null)
     );
 
     return PaginationResultDtoFactory.getWithCount(result, meta);
@@ -180,29 +184,11 @@ export class ProductService {
       include: briefProductVariantInclude,
     });
 
-    const images = await ImageService.findByResources(
-      ImageResourceType.PRODUCT_VARIANT,
-      items.map((v) => String(v.id))
-    );
-    const firstImageByVariant = new Map<number, { imageUrl: string | null; thumbhash: string | null }>();
-    for (const img of images) {
-      const variantId = Number(img.resourceId);
-      if (firstImageByVariant.has(variantId))
-        continue;
-
-      const preferred = new Set([
-        ImageVariantKind.THUMB_1024x1024,
-        ImageVariantKind.THUMB_512x512,
-        ImageVariantKind.THUMB_256x256,
-      ]);
-
-      const thumb = img.variants.find(v => preferred.has(v.kind));
-      firstImageByVariant.set(variantId, { imageUrl: thumb?.url ?? img.url, thumbhash: img.thumbhash });
-    }
+    const firstImageByVariant = await ProductService.firstImageByVariant(items.map((v) => v.id));
 
     const result: Record<number, TBriefProductPublicDto> = {};
     for (const v of items) {
-      result[v.id] = BriefProductPublicDtoFactory.fromVariant(v, ru, firstImageByVariant.get(v.id) ?? { imageUrl: null, thumbhash: null });
+      result[v.id] = BriefProductPublicDtoFactory.fromVariant(v, ru, firstImageByVariant.get(v.id) ?? null);
     }
 
     return result;
@@ -231,31 +217,14 @@ export class ProductService {
 
     // Batch-load the first image (display order) for every variant on the page.
     const variantIds = items.flatMap((p) => p.variants.map((v) => v.id));
-    const images = await ImageService.findByResources(
-      ImageResourceType.PRODUCT_VARIANT,
-      variantIds.map(String)
-    );
-    // findByResources is ordered by [resourceId, order], so the first hit per
-    // variant is its lead image.
-    const firstImageByVariant = new Map<number, { imageUrl: string | null; thumbhash: string | null }>();
-    for (const img of images) {
-      const variantId = Number(img.resourceId);
-      if (firstImageByVariant.has(variantId))
-        continue;
-      const thumb = img.variants.find((v) => v.kind === ImageVariantKind.THUMB_256x256);
-      firstImageByVariant.set(variantId, {
-        imageUrl: thumb?.url ?? img.url,
-        thumbhash: img.thumbhash,
-      });
-    }
+    const firstImageByVariant = await ProductService.firstImageByVariant(variantIds);
 
     const result = items.map((item) => {
       const variants: TProductVariantBriefDto[] = item.variants.map((v) => ({
         id: v.id,
         nameRo: v.nameRo,
         nameRu: v.nameRu,
-        imageUrl: firstImageByVariant.get(v.id)?.imageUrl ?? null,
-        thumbhash: firstImageByVariant.get(v.id)?.thumbhash ?? null,
+        image: firstImageByVariant.get(v.id) ?? null,
       }));
       return ProductDtoFactory.fromEntity(item, variants);
     });

@@ -88,11 +88,12 @@ export const FavoritesPopover: FC<IProps> = ({ contentClassName, ...props }) => 
                 }
 
                 const imgStyles: CSSProperties = {};
-                const thumbhashDataUrl = thumbhashToDataUrl(product.thumbhash);
+                const thumbhashDataUrl = thumbhashToDataUrl(product.image?.thumbhash ?? null);
                 if (thumbhashDataUrl) {
                   imgStyles.backgroundImage = `url(${thumbhashDataUrl})`;
                   imgStyles.backgroundSize = 'cover';
                 }
+                const imageUrl = product.image?.variants.thumb256?.url ?? product.image?.url;
 
                 return (
                   <li key={id} className={cn('relative flex items-stretch gap-2 p-2', !product.isAvailable && 'opacity-60')}>
@@ -107,9 +108,9 @@ export const FavoritesPopover: FC<IProps> = ({ contentClassName, ...props }) => 
                     </Button>
 
                     <div className="relative size-18 shrink-0 overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/10">
-                      {product.imageUrl ? (
+                      {imageUrl ? (
                         <img
-                          src={product.imageUrl}
+                          src={imageUrl}
                           alt={`${product.name} ${product.variantName}`}
                           style={imgStyles}
                           className="size-full object-cover"

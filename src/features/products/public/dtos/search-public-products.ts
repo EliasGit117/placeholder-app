@@ -4,6 +4,7 @@ import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { paginatedRequestDtoSchema } from '@/features/shared/schemas/pagination.ts';
 import { paginationResultWithCountDtoSchema } from '@/features/shared/dtos/pagination-result-dto.ts';
 import { computeDiscountedPrice } from '@/features/products/common/lib/discount.ts';
+import { briefImageDtoSchema, type TBriefImageDto } from '@/features/products/common/dtos/brief-image.ts';
 
 
 // A single sellable product on the public shop grid, already localized for the
@@ -20,8 +21,7 @@ export const briefProductPublicDtoSchema = z.object({
   slug: z.string(),
   categoryId: z.number().nullable(),
   category: z.string().nullable(),
-  imageUrl: z.string().nullable(),
-  thumbhash: z.string().nullable(),
+  image: briefImageDtoSchema.nullable(),
   isAvailable: z.boolean(),
 });
 
@@ -64,7 +64,7 @@ export class BriefProductPublicDtoFactory {
   static fromVariant(
     variant: TBriefProductVariantRow,
     ru: boolean,
-    image: { imageUrl: string | null; thumbhash: string | null }
+    image: TBriefImageDto | null
   ): TBriefProductPublicDto {
     const category = ru ? variant.product.category?.nameRu : variant.product.category?.nameRo;
     const shortDescription = ru ? variant.product.shortDescriptionRu : variant.product.shortDescriptionRo;
@@ -80,8 +80,7 @@ export class BriefProductPublicDtoFactory {
       slug: variant.fullSlug,
       categoryId: variant.product.categoryId,
       category: category ?? null,
-      imageUrl: image.imageUrl,
-      thumbhash: image.thumbhash,
+      image,
       isAvailable: variant.state === ProductState.ACTIVE,
     };
   }

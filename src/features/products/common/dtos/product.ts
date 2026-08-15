@@ -4,6 +4,7 @@ import { ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { optionsSchema, type TOptions } from '@/features/products/common/dtos/option-schema.ts';
 import { productVariantDtoSchema, ProductVariantDtoFactory } from '@/features/products/common/dtos/product-variant.ts';
 import type { TProductVariantImageDto } from '@/features/products/common/dtos/product-variant-image.ts';
+import { briefImageDtoSchema } from '@/features/products/common/dtos/brief-image.ts';
 
 
 // Lightweight variant summary for list views: identity + first thumbnail.
@@ -11,8 +12,7 @@ export const productVariantBriefDtoSchema = z.object({
   id: z.number(),
   nameRo: z.string(),
   nameRu: z.string(),
-  imageUrl: z.string().nullable(),
-  thumbhash: z.string().nullable(),
+  image: briefImageDtoSchema.nullable(),
 });
 
 export type TProductVariantBriefDto = z.infer<typeof productVariantBriefDtoSchema>;
