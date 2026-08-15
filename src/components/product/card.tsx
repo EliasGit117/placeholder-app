@@ -30,7 +30,16 @@ interface IProps {
 }
 
 export const ProductCard: FC<IProps> = ({ product }) => {
-  const { name, variantName, shortDescription, category, categoryId, discountPercent, finalPrice, isAvailable } = product;
+  const {
+    name,
+    variantName,
+    shortDescription,
+    category,
+    categoryId,
+    discountPercent,
+    finalPrice,
+    isAvailable
+  } = product;
   const { items, toggle, isPending: isPendingFavorites } = useFavoritesContext();
   const { items: cartItems, add: addToCart, remove: removeFromCart } = useCartContext();
   const imgPlaceholder = thumbhashToDataUrl(product.thumbhash);
@@ -127,18 +136,10 @@ export const ProductCard: FC<IProps> = ({ product }) => {
 
       <CardFooter
         className="flex flex-col items-stretch gap-3 self-end border-t border-dashed bg-transparent p-4 pt-3.5">
-        <div className="flex items-center justify-between gap-2">
-          <div
-            className="flex items-baseline gap-1.5"
-            itemProp="offers"
-            itemScope
-            itemType="https://schema.org/Offer"
-          >
-            <meta itemProp="priceCurrency" content="EUR"/>
-            {hasDiscount && (
-              <s className="text-xs text-muted-foreground">{product.price}</s>
-            )}
-
+        <div className="flex items-center justify-between gap-2 min-h-8">
+          <div itemProp="offers" itemType="https://schema.org/Offer" className="flex items-baseline gap-1.5" itemScope>
+            <meta itemProp="priceCurrency" content="MDL"/>
+            {hasDiscount && <s className="text-xs text-muted-foreground">{product.price}</s>}
             <span className="font-heading text-lg font-semibold" itemProp="price">{finalPrice}</span>
             <small className="text-[13px] text-muted-foreground">
               {m['components.shop.currency']()}
@@ -148,11 +149,7 @@ export const ProductCard: FC<IProps> = ({ product }) => {
           {cartItem && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="aspect-square px-0 -mr-1"
-                  aria-label={m['components.shop.cart_options']()}
-                >
+                <Button variant="ghost" className="aspect-square px-0 -mr-1" aria-label={m['components.shop.cart_options']()}>
                   <span>x{cartItem.count}</span>
                 </Button>
               </DropdownMenuTrigger>
