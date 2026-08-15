@@ -13,9 +13,8 @@ import { IconLogin, IconLogout, IconSelector, IconSettings, IconUserPlus } from 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authClient } from '@/lib/auth/better-auth-client.ts';
 import { orpc } from '@/lib/orpc';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
+import { UserAvatar } from '@/components/auth/user-avatar.tsx';
 import { Spinner } from '@/components/ui/spinner.tsx';
-import { pickFirstLetters } from '@/lib/utils';
 import { Link } from '@tanstack/react-router';
 import { m } from '@/paraglide/messages';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar.tsx';
@@ -42,12 +41,7 @@ export const NavUser: FC = () => {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="size-8 after:rounded-lg">
-                {!!user && <AvatarImage className='rounded-lg' src={user.image ?? ''}/>}
-                <AvatarFallback className="rounded-lg">
-                  {pickFirstLetters(user?.name ?? '?', 2)}
-                </AvatarFallback>
-              </Avatar>
+              <UserAvatar user={user} className="size-8 after:rounded-lg" imageClassName="rounded-lg" fallbackClassName="rounded-lg"/>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user?.name ?? m['components.user_dropdown.authorization']()}</span>
                 <span className="truncate text-xs text-muted-foreground">{user?.email}</span>
@@ -66,14 +60,9 @@ export const NavUser: FC = () => {
               <>
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                    <Avatar className="size-8 after:rounded-lg">
-                      <AvatarImage className='rounded-lg' src={user.image ?? ''}/>
-                      <AvatarFallback className="rounded-lg">
-                        {pickFirstLetters(user.name, 2)}
-                      </AvatarFallback>
-                    </Avatar>
+                    <UserAvatar user={user} className="size-8 after:rounded-lg" imageClassName="rounded-lg" fallbackClassName="rounded-lg"/>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-medium">{user.name}</span>
+                      <span className="truncate font-medium text-foreground">{user.name}</span>
                       <span className="truncate text-xs text-muted-foreground">{user.email}</span>
                     </div>
                   </div>

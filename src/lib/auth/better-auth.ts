@@ -15,6 +15,15 @@ export const auth = betterAuth({
   trustedOrigins: [envConfig.appBaseUrl],
   secret: serverEnvConfig.betterAuthSecret,
   emailAndPassword: { enabled: true },
+  user: {
+    additionalFields: {
+      imageThumbhash: {
+        type: 'string',
+        required: false,
+        input: false,
+      },
+    },
+  },
   plugins: [
     tanstackStartCookies(),
     openAPI({ disableDefaultReference: true }),

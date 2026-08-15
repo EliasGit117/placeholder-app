@@ -15,7 +15,7 @@ import { authClient } from '@/lib/auth/better-auth-client.ts';
 import { orpc } from '@/lib/orpc';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
 import { Spinner } from '@/components/ui/spinner.tsx';
-import { pickFirstLetters } from '@/lib/utils';
+import { pickFirstLetters, thumbhashToDataUrl } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import { Link } from '@tanstack/react-router';
 import { m } from '@/paraglide/messages';
@@ -29,6 +29,7 @@ interface IProps extends Omit<ComponentProps<typeof Button>, 'children' | 'onCli
 export const UserDropdown: FC<IProps> = ({ className, align, variant = 'outline', size = 'icon', ...props }) => {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const placeholder = thumbhashToDataUrl(user?.imageThumbhash ?? null);
 
   const { mutate: signOut, isPending } = useMutation({
     mutationKey: ['sign-out'],
@@ -43,11 +44,14 @@ export const UserDropdown: FC<IProps> = ({ className, align, variant = 'outline'
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className={cn('rounded-full', className)} size={size} variant={variant} {...props}>
-          <Avatar>
+          <Avatar
+            className={cn(placeholder && 'bg-transparent')}
+            style={placeholder ? { backgroundImage: `url(${placeholder})`, backgroundSize: 'cover' } : undefined}
+          >
             {!!user ? (
               <>
                 <AvatarImage src={user?.image ?? ''}/>
-                <AvatarFallback>
+                <AvatarFallback className={cn(placeholder && 'bg-transparent')}>
                   {pickFirstLetters(user?.name, 2)}
                 </AvatarFallback>
               </>
@@ -62,9 +66,13 @@ export const UserDropdown: FC<IProps> = ({ className, align, variant = 'outline'
         {!!user ? (
           <DropdownMenuGroup>
             <DropdownMenuLabel className="flex items-center gap-2">
-              <Avatar size="lg" className="after:rounded-md">
+              <Avatar
+                size="lg"
+                className={cn('after:rounded-md', placeholder && 'bg-transparent')}
+                style={placeholder ? { backgroundImage: `url(${placeholder})`, backgroundSize: 'cover' } : undefined}
+              >
                 <AvatarImage src={user.image ?? ''} className="rounded-md"/>
-                <AvatarFallback className="rounded-md text-base">
+                <AvatarFallback className={cn('rounded-md text-base', placeholder && 'bg-transparent')}>
                   {pickFirstLetters(user.name, 2)}
                 </AvatarFallback>
               </Avatar>

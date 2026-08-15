@@ -25,7 +25,7 @@ export const deleteAvatar = profileBase
 
     await prisma.user.update({
       where: { id: user.id },
-      data: { image: null },
+      data: { image: null, imageThumbhash: null },
     });
 
     if (existing)

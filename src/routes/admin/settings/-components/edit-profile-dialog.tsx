@@ -22,12 +22,12 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { LoadingButton } from '@/components/ui/loading-button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { UserAvatar } from '@/components/auth/user-avatar';
 
 import { authClient } from '@/lib/auth';
 import { orpc, client } from '@/lib/orpc';
 import { useAuth } from '@/hooks/use-auth';
-import { pickFirstLetters, xhrUpload } from '@/lib/utils';
+import { xhrUpload } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
 import type { TOrpcOutputs } from '@/features/shared/orpc/router';
 
@@ -130,12 +130,7 @@ export const EditProfileDialog: FC = () => {
         </AlertDialogHeader>
 
         <div className="flex flex-col items-center gap-4 my-2">
-          <Avatar className="size-24">
-            <AvatarImage src={user?.image ?? ''} alt={user?.name ?? ''} />
-            <AvatarFallback className='text-4xl'>
-              {pickFirstLetters(user?.name ?? '', 2, 'uppercase')}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar user={user} className="size-24" fallbackClassName="text-4xl"/>
 
           <input
             ref={inputRef}

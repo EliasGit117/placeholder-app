@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useAuth } from '@/hooks/use-auth';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { UserAvatar } from '@/components/auth/user-avatar';
 import {
   Card,
   CardContent,
@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/card';
 import { IconMail } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
-import { pickFirstLetters } from '@/lib/utils';
 import { EditProfileDialog } from '@/routes/admin/settings/-components/edit-profile-dialog.tsx';
 
 
@@ -32,12 +31,7 @@ function RouteComponent() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center gap-4">
-            <Avatar size='lg' className='after:rounded-lg'>
-              <AvatarImage className='rounded-lg' src={user?.image ?? ''} alt={user?.name ?? ''}/>
-              <AvatarFallback className='rounded-lg'>
-                {pickFirstLetters(user?.name ?? '', 2, 'uppercase')}
-              </AvatarFallback>
-            </Avatar>
+            <UserAvatar user={user} size="lg" className="after:rounded-lg" imageClassName="rounded-lg" fallbackClassName="rounded-lg"/>
             <div className="space-y-1.5">
               <p className="font-medium leading-none">{user?.name}</p>
               <div className="flex items-center gap-1.5 text-sm text-muted-foreground">

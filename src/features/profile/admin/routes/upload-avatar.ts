@@ -52,7 +52,7 @@ export const uploadAvatar = profileBase
 
     await prisma.user.update({
       where: { id: user.id },
-      data: { image: image.url },
+      data: { image: image.url, imageThumbhash: image.thumbhash },
     });
 
     return { image: image.url };
