@@ -95,31 +95,32 @@ export class ProductService {
   // variant, so the detail page can switch color/size without a refetch.
   static async findDetailsByVariantSlug(fullSlug: string): Promise<TProductDetailsDto | null> {
     const ru = getLocale() === 'ru';
+    const sellableStates = [ProductState.ACTIVE, ProductState.NOT_AVAILABLE];
 
-    const variant = await prisma.productVariant.findUnique({
-      where: { fullSlug },
-      include: { product: { include: { category: { select: { nameRo: true, nameRu: true } } } } },
-    });
-
-    if (!variant || variant.product.state !== ProductState.ACTIVE)
-      return null;
-    if (variant.state !== ProductState.ACTIVE && variant.state !== ProductState.NOT_AVAILABLE)
-      return null;
-
-    const siblingVariants = await prisma.productVariant.findMany({
+    const product = await prisma.product.findFirst({
       where: {
-        productId: variant.productId,
-        state: { in: [ProductState.ACTIVE, ProductState.NOT_AVAILABLE] },
+        state: ProductState.ACTIVE,
+        variants: { some: { fullSlug, state: { in: sellableStates } } },
       },
-      orderBy: { id: 'asc' },
+      include: {
+        category: { select: { nameRo: true, nameRu: true } },
+        variants: { where: { state: { in: sellableStates } }, orderBy: { id: 'asc' } },
+      },
     });
 
-    const imagesByVariant = await ProductService.variantImagesMap(siblingVariants);
+    if (!product)
+      return null;
+
+    const variant = product.variants.find((v) => v.fullSlug === fullSlug);
+    if (!variant)
+      return null;
+
+    const imagesByVariant = await ProductService.variantImagesMap(product.variants);
 
     return ProductDetailsDtoFactory.build(
-      variant.product,
-      variant.product.category,
-      siblingVariants,
+      product,
+      product.category,
+      product.variants,
       imagesByVariant,
       ru,
       variant.id

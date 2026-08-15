@@ -144,23 +144,28 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
 
             {images.length > 1 && (
               <div className="grid grid-cols-5 gap-3">
-                {images.map((img, i) => (
-                  <button
-                    key={img.id}
-                    type="button"
-                    onClick={() => setActiveImage(i)}
-                    className={cn(
-                      'aspect-square overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/10 transition-shadow',
-                      i === activeImage && 'ring-2 ring-primary'
-                    )}
-                  >
-                    <img
-                      src={img.variants.thumb256?.url ?? img.url}
-                      alt=""
-                      className="size-full object-cover"
-                    />
-                  </button>
-                ))}
+                {images.map((img, i) => {
+                  const thumbPlaceholder = thumbhashToDataUrl(img.thumbhash ?? null);
+
+                  return (
+                    <button
+                      key={img.id}
+                      type="button"
+                      onClick={() => setActiveImage(i)}
+                      style={thumbPlaceholder ? { backgroundImage: `url(${thumbPlaceholder})` } : undefined}
+                      className={cn(
+                        'aspect-square overflow-hidden rounded-lg bg-muted bg-cover bg-center ring-1 ring-foreground/10 transition-shadow',
+                        i === activeImage && 'ring-2 ring-primary'
+                      )}
+                    >
+                      <img
+                        src={img.variants.thumb256?.url ?? img.url}
+                        alt=""
+                        className="size-full object-cover"
+                      />
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -353,13 +358,10 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
         )}
 
         {product.categoryId != null && (
-          <div>
-            <Separator className="mb-6"/>
-            <SimilarProducts
-              categoryId={product.categoryId}
-              excludeSlugs={product.variants.map((v) => v.slug)}
-            />
-          </div>
+          <SimilarProducts
+            categoryId={product.categoryId}
+            excludeSlugs={product.variants.map((v) => v.slug)}
+          />
         )}
       </div>
     </main>

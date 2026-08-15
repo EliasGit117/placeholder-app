@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { orpc } from '@/lib/orpc';
 import { m } from '@/paraglide/messages';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from '@/components/ui/separator';
 import { ProductCard } from '@/components/product/card.tsx';
 
 const SIMILAR_PRODUCTS_LIMIT = 4;
@@ -28,6 +29,8 @@ export const SimilarProducts: FC<IProps> = ({ categoryId, excludeSlugs }) => {
 
   return (
     <div>
+      <Separator className="mb-6"/>
+
       <h2 className="mb-4 font-heading text-lg font-semibold">
         {m['components.shop.similar_products']()}
       </h2>
