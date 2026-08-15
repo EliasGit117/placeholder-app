@@ -31,6 +31,7 @@ export const productVariantImageDtoSchema = imageDtoSchema
     variants: z.object({
       thumb256: variantImageVariantSchema.optional(),
       thumb512: variantImageVariantSchema.optional(),
+      thumb1024: variantImageVariantSchema.optional(),
     }),
   });
 
@@ -49,6 +50,7 @@ export class ProductVariantImageDtoFactory {
       variants: {
         thumb256: findVariant(dto, ImageVariantKind.THUMB_256x256),
         thumb512: findVariant(dto, ImageVariantKind.THUMB_512x512),
+        thumb1024: findVariant(dto, ImageVariantKind.THUMB_1024x1024),
       },
     };
   }

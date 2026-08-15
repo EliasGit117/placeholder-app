@@ -93,22 +93,24 @@ export const ProductCard: FC<IProps> = ({ product }) => {
         )}
 
 
-        {imageUrl ? (
-          <picture>
-            {image?.variants.thumb512 && <source media="(max-width: 1023px)" srcSet={image.variants.thumb512.url}/>}
-            {image?.variants.thumb1024 && <source media="(min-width: 1024px)" srcSet={image.variants.thumb1024.url}/>}
-            <img
-              src={imageUrl}
-              alt={`${name} ${variantName}`}
-              loading="lazy"
-              decoding="async"
-              className="absolute inset-0 size-full object-cover"
-              itemProp="image"
-            />
-          </picture>
-        ) : (
-          <IconPhotoOff className="size-10 text-muted-foreground opacity-25"/>
-        )}
+        <Link to="/products/$slug" params={{ slug: product.slug }} className="absolute inset-0">
+          {imageUrl ? (
+            <picture>
+              {image?.variants.thumb512 && <source media="(max-width: 1023px)" srcSet={image.variants.thumb512.url}/>}
+              {image?.variants.thumb1024 && <source media="(min-width: 1024px)" srcSet={image.variants.thumb1024.url}/>}
+              <img
+                src={imageUrl}
+                alt={`${name} ${variantName}`}
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 size-full object-cover"
+                itemProp="image"
+              />
+            </picture>
+          ) : (
+            <IconPhotoOff className="absolute inset-0 m-auto size-10 text-muted-foreground opacity-25"/>
+          )}
+        </Link>
       </div>
 
       <CardContent className="flex flex-col gap-1.5 p-4">
@@ -132,8 +134,10 @@ export const ProductCard: FC<IProps> = ({ product }) => {
         )}
 
         <h3 className="font-heading text-base font-semibold leading-tight" itemProp="name">
-          {name}
-          <span className="block text-sm font-normal">{variantName}</span>
+          <Link to="/products/$slug" params={{ slug: product.slug }} className="hover:underline underline-offset-2">
+            {name}
+            <span className="block text-sm font-normal">{variantName}</span>
+          </Link>
         </h3>
 
         {shortDescription && (
@@ -181,7 +185,6 @@ export const ProductCard: FC<IProps> = ({ product }) => {
         {cartItem ? (
           <Button
             size="sm"
-            variant="outline-primary"
             className="w-full"
             disabled={!isAvailable}
             onClick={() => removeFromCart(product.id)}

@@ -35,6 +35,7 @@ import { Route as AdminSettingsSecurityRouteImport } from './routes/admin/settin
 import { Route as AdminSettingsProfileRouteImport } from './routes/admin/settings/profile'
 import { Route as AdminProductsProductIdIndexRouteImport } from './routes/admin/products/$productId/index'
 import { Route as AdminBannersBannerIdIndexRouteImport } from './routes/admin/banners/$bannerId/index'
+import { Route as PublicProductsSlugIndexRouteImport } from './routes/_public/products/$slug/index'
 import { Route as ApiAdminBannersBannerIdImagesRouteImport } from './routes/api/admin/banners/$bannerId/images'
 import { Route as ApiAdminProductsVariantsVariantIdImagesRouteImport } from './routes/api/admin/products/variants/$variantId/images'
 
@@ -169,6 +170,11 @@ const AdminBannersBannerIdIndexRoute =
     path: '/$bannerId/',
     getParentRoute: () => AdminBannersRouteRoute,
   } as any)
+const PublicProductsSlugIndexRoute = PublicProductsSlugIndexRouteImport.update({
+  id: '/products/$slug/',
+  path: '/products/$slug/',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
 const ApiAdminBannersBannerIdImagesRoute =
   ApiAdminBannersBannerIdImagesRouteImport.update({
     id: '/api/admin/banners/$bannerId/images',
@@ -206,6 +212,7 @@ export interface FileRoutesByFullPath {
   '/admin/users/': typeof AdminUsersIndexRoute
   '/auth/sign-in/': typeof AuthSignInIndexRoute
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
+  '/products/$slug/': typeof PublicProductsSlugIndexRoute
   '/admin/banners/$bannerId/': typeof AdminBannersBannerIdIndexRoute
   '/admin/products/$productId/': typeof AdminProductsProductIdIndexRoute
   '/api/admin/banners/$bannerId/images': typeof ApiAdminBannersBannerIdImagesRoute
@@ -230,6 +237,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AdminUsersIndexRoute
   '/auth/sign-in': typeof AuthSignInIndexRoute
   '/auth/sign-up': typeof AuthSignUpIndexRoute
+  '/products/$slug': typeof PublicProductsSlugIndexRoute
   '/admin/banners/$bannerId': typeof AdminBannersBannerIdIndexRoute
   '/admin/products/$productId': typeof AdminProductsProductIdIndexRoute
   '/api/admin/banners/$bannerId/images': typeof ApiAdminBannersBannerIdImagesRoute
@@ -261,6 +269,7 @@ export interface FileRoutesById {
   '/admin/users/': typeof AdminUsersIndexRoute
   '/auth/sign-in/': typeof AuthSignInIndexRoute
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
+  '/_public/products/$slug/': typeof PublicProductsSlugIndexRoute
   '/admin/banners/$bannerId/': typeof AdminBannersBannerIdIndexRoute
   '/admin/products/$productId/': typeof AdminProductsProductIdIndexRoute
   '/api/admin/banners/$bannerId/images': typeof ApiAdminBannersBannerIdImagesRoute
@@ -292,6 +301,7 @@ export interface FileRouteTypes {
     | '/admin/users/'
     | '/auth/sign-in/'
     | '/auth/sign-up/'
+    | '/products/$slug/'
     | '/admin/banners/$bannerId/'
     | '/admin/products/$productId/'
     | '/api/admin/banners/$bannerId/images'
@@ -316,6 +326,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/products/$slug'
     | '/admin/banners/$bannerId'
     | '/admin/products/$productId'
     | '/api/admin/banners/$bannerId/images'
@@ -346,6 +357,7 @@ export interface FileRouteTypes {
     | '/admin/users/'
     | '/auth/sign-in/'
     | '/auth/sign-up/'
+    | '/_public/products/$slug/'
     | '/admin/banners/$bannerId/'
     | '/admin/products/$productId/'
     | '/api/admin/banners/$bannerId/images'
@@ -547,6 +559,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBannersBannerIdIndexRouteImport
       parentRoute: typeof AdminBannersRouteRoute
     }
+    '/_public/products/$slug/': {
+      id: '/_public/products/$slug/'
+      path: '/products/$slug'
+      fullPath: '/products/$slug/'
+      preLoaderRoute: typeof PublicProductsSlugIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
     '/api/admin/banners/$bannerId/images': {
       id: '/api/admin/banners/$bannerId/images'
       path: '/api/admin/banners/$bannerId/images'
@@ -568,12 +587,14 @@ interface PublicRouteRouteChildren {
   PublicIndexRoute: typeof PublicIndexRoute
   PublicCheckoutIndexRoute: typeof PublicCheckoutIndexRoute
   PublicProductsIndexRoute: typeof PublicProductsIndexRoute
+  PublicProductsSlugIndexRoute: typeof PublicProductsSlugIndexRoute
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicIndexRoute: PublicIndexRoute,
   PublicCheckoutIndexRoute: PublicCheckoutIndexRoute,
   PublicProductsIndexRoute: PublicProductsIndexRoute,
+  PublicProductsSlugIndexRoute: PublicProductsSlugIndexRoute,
 }
 
 const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(

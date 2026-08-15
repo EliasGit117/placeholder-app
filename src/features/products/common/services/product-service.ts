@@ -17,6 +17,7 @@ import type { TAddVariantDto, TUpdateVariantDto } from '@/features/products/admi
 import type { TSearchProductsRequestDto } from '@/features/products/admin/dtos/search-products.ts';
 import { BriefProductPublicDtoFactory, briefProductVariantInclude } from '@/features/products/public/dtos/search-public-products.ts';
 import type { TSearchPublicProductsRequestDto, TBriefProductPublicDto } from '@/features/products/public/dtos/search-public-products.ts';
+import { ProductDetailsDtoFactory, type TProductDetailsDto } from '@/features/products/public/dtos/product-details.ts';
 
 export class ProductService {
 
@@ -87,6 +88,42 @@ export class ProductService {
   static async findBySlug(slug: string): Promise<TProductWithVariantsDto | null> {
     const entity = await prisma.product.findUnique({ where: { slug }, include: { variants: true } });
     return entity ? ProductDtoFactory.withVariants(entity, entity.variants) : null;
+  }
+
+  // Public product-detail lookup: resolves by a variant's `fullSlug` (the URL shown
+  // on the shop grid) and returns the parent product with every sellable sibling
+  // variant, so the detail page can switch color/size without a refetch.
+  static async findDetailsByVariantSlug(fullSlug: string): Promise<TProductDetailsDto | null> {
+    const ru = getLocale() === 'ru';
+
+    const variant = await prisma.productVariant.findUnique({
+      where: { fullSlug },
+      include: { product: { include: { category: { select: { nameRo: true, nameRu: true } } } } },
+    });
+
+    if (!variant || variant.product.state !== ProductState.ACTIVE)
+      return null;
+    if (variant.state !== ProductState.ACTIVE && variant.state !== ProductState.NOT_AVAILABLE)
+      return null;
+
+    const siblingVariants = await prisma.productVariant.findMany({
+      where: {
+        productId: variant.productId,
+        state: { in: [ProductState.ACTIVE, ProductState.NOT_AVAILABLE] },
+      },
+      orderBy: { id: 'asc' },
+    });
+
+    const imagesByVariant = await ProductService.variantImagesMap(siblingVariants);
+
+    return ProductDetailsDtoFactory.build(
+      variant.product,
+      variant.product.category,
+      siblingVariants,
+      imagesByVariant,
+      ru,
+      variant.id
+    );
   }
 
   static async search(input: TSearchProductsRequestDto) {
