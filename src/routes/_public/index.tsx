@@ -83,7 +83,7 @@ const Categories: FC = () => {
         }
       />
 
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 justify-items-center gap-4">
         {isPending ? (
           Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="space-y-3">
@@ -139,7 +139,7 @@ const CategoryCard: FC<{ category: ICategoryNodeDto }> = ({ category }) => {
 // ─── New arrivals ────────────────────────────────────────────────────────────
 
 const newArrivalsQuery = orpc.products.search.queryOptions({
-  input: { page: 1, limit: 4, sort: 'createdAt', dir: SortDirection.DESC },
+  input: { page: 1, limit: 5, sort: 'createdAt', dir: SortDirection.DESC },
 });
 
 const Arrivals: FC = () => {
@@ -158,9 +158,9 @@ const Arrivals: FC = () => {
         }
       />
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 justify-items-center gap-4">
         {isPending ? (
-          Array.from({ length: 4 }).map((_, i) => (
+          Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="overflow-hidden rounded-xl border border-border">
               <Skeleton className="aspect-square w-full rounded-none"/>
               <div className="space-y-3 p-4">
