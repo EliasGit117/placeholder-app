@@ -115,7 +115,9 @@
       "cart_total": "Итого",
       "cart_items_count": "{count} товаров",
       "cart_missing": "Товар недоступен",
-      "cart_missing_description": "Товар не найден, недоступен или был удалён."
+      "cart_missing_description": "Товар не найден, недоступен или был удалён.",
+      "cart_checkout": "Оформить заказ",
+      "cart_clear": "Очистить корзину"
     },
     "user_dropdown": {
       "settings": "Настройки",
@@ -551,9 +553,35 @@
     },
     "checkout": {
       "title": "Оформление заказа",
-      "sheet": {
-        "title": "Оформление заказа",
-        "description": "Проверьте заказ и завершите оплату"
+      "description": "Подтвердите доставку и оплату заказа.",
+      "breadcrumb_current": "Оформление заказа",
+      "summary": {
+        "title": "Ваш заказ",
+        "description": "Проверьте товары перед оплатой.",
+        "total": "Итого",
+        "empty_title": "Ваша корзина пуста",
+        "empty_description": "Добавьте товары в корзину, чтобы перейти к оформлению."
+      },
+      "payment": {
+        "title": "Данные оплаты",
+        "description": "Укажите способ оплаты и доставки.",
+        "email": "Email",
+        "address": "Адрес",
+        "delivery_method": "Способ доставки",
+        "delivery_courier": "Доставка курьером",
+        "delivery_pickup": "Самовывоз из магазина",
+        "success": "Заказ успешно оформлен.",
+        "payment_type": "Способ оплаты",
+        "payment_type_cash": "Наличными",
+        "contact_title": "Контактные данные",
+        "phone": "Телефон",
+        "delivery_title": "Доставка",
+        "pickup_address": "Адрес самовывоза",
+        "submit": "Заказать",
+        "full_name_placeholder": "Думитру Вагин",
+        "phone_placeholder": "+373 6X XXX XXX",
+        "email_placeholder": "email@example.com",
+        "address_placeholder": "Улица, номер дома, квартира"
       }
     }
   }

@@ -115,7 +115,9 @@
       "cart_total": "Total",
       "cart_items_count": "{count} produse",
       "cart_missing": "Produs indisponibil",
-      "cart_missing_description": "Produsul nu a fost găsit, este indisponibil sau a fost eliminat."
+      "cart_missing_description": "Produsul nu a fost găsit, este indisponibil sau a fost eliminat.",
+      "cart_checkout": "Finalizează comanda",
+      "cart_clear": "Golește coșul"
     },
     "user_dropdown": {
       "settings": "Setări",
@@ -551,9 +553,35 @@
     },
     "checkout": {
       "title": "Finalizare comandă",
-      "sheet": {
-        "title": "Finalizare comandă",
-        "description": "Verificați comanda și finalizați plata"
+      "description": "Confirmă livrarea și plata pentru comanda ta.",
+      "breadcrumb_current": "Finalizare comandă",
+      "summary": {
+        "title": "Comanda ta",
+        "description": "Verifică produsele înainte de plată.",
+        "total": "Total",
+        "empty_title": "Coșul tău este gol",
+        "empty_description": "Adaugă produse în coș pentru a continua spre finalizare."
+      },
+      "payment": {
+        "title": "Detalii plată",
+        "description": "Completează metoda de plată și livrare.",
+        "email": "Email",
+        "address": "Adresă",
+        "delivery_method": "Metodă livrare",
+        "delivery_courier": "Livrare curier",
+        "delivery_pickup": "Ridicare din magazin",
+        "success": "Comanda a fost plasată cu succes.",
+        "payment_type": "Metodă de plată",
+        "payment_type_cash": "Numerar",
+        "contact_title": "Date de contact",
+        "phone": "Telefon",
+        "delivery_title": "Livrare",
+        "pickup_address": "Adresă ridicare",
+        "submit": "Comandă",
+        "full_name_placeholder": "Ion Popescu",
+        "phone_placeholder": "+373 6X XXX XXX",
+        "email_placeholder": "nume@exemplu.com",
+        "address_placeholder": "Strada, numărul casei, apartament"
       }
     }
   }

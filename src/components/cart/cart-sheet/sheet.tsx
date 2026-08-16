@@ -1,5 +1,6 @@
 import { type CSSProperties, type FC } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import {
   Sheet,
   SheetClose,
@@ -19,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.tsx';
 import { Skeleton } from '@/components/ui/skeleton';
-import { IconMinus, IconPhotoOff, IconPlus, IconTrash, IconX } from '@tabler/icons-react';
+import { IconBasketCheck, IconMinus, IconPhotoOff, IconPlus, IconTrash, IconX } from '@tabler/icons-react';
 import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
 import { orpc } from '@/lib/orpc';
@@ -29,8 +30,9 @@ import { useCartSheet } from './provider.tsx';
 const cartQuantityOptions = Array.from({ length: 10 }, (_, i) => i + 1);
 
 export const CartSheet: FC = () => {
+  const navigate = useNavigate();
   const { isOpen, close } = useCartSheet();
-  const { items, totalCount, add, remove } = useCartContext();
+  const { items, totalCount, add, remove, clear } = useCartContext();
   const ids = items.map((item) => item.id);
 
   const { data: products, isPlaceholderData } = useQuery({
@@ -145,8 +147,7 @@ export const CartSheet: FC = () => {
                           size="icon-xs"
                           variant="outline"
                           className="shadow-none"
-                          disabled={item.count <= 1}
-                          onClick={() => add(item.id, -1)}
+                          onClick={() => item.count > 1 && add(item.id, -1)}
                           aria-label={m['components.shop.decrease_quantity']()}
                         >
                           <IconMinus/>
@@ -224,23 +225,41 @@ export const CartSheet: FC = () => {
 
         <SheetFooter className="flex flex-col gap-4 border-t pt-3.5">
           {items.length > 0 && (
-            <div className="flex items-start justify-between text-sm">
-              <span className="text-muted-foreground">
-                {m['components.header.cart_total']()}
-                {' · '}
-                {m['components.header.cart_items_count']({ count: totalCount })}
-              </span>
-              <span className="flex flex-col items-end">
-                {hasTotalDiscount && (
-                  <s className="text-xs text-muted-foreground">
-                    {originalTotal} {m['components.shop.currency']()}
-                  </s>
-                )}
-                <span className="font-heading text-lg font-semibold">
-                  {total} {m['components.shop.currency']()}
+            <>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">
+                  {m['components.header.cart_total']()}
+                  {' · '}
+                  {m['components.header.cart_items_count']({ count: totalCount })}
                 </span>
-              </span>
-            </div>
+                <span className="flex items-baseline gap-1.5">
+                  {hasTotalDiscount && (
+                    <s className="text-xs text-muted-foreground">{originalTotal}</s>
+                  )}
+                  <span className="font-heading text-lg font-semibold">
+                    {total} {m['components.shop.currency']()}
+                  </span>
+                </span>
+              </div>
+
+              <div className="flex gap-2">
+                <Button type="button" variant="outline" className="flex-1" onClick={() => clear()}>
+                  <IconTrash/>
+                  {m['components.header.cart_clear']()}
+                </Button>
+                <Button
+                  type="button"
+                  className="flex-1"
+                  onClick={() => {
+                    close();
+                    void navigate({ to: '/checkout' });
+                  }}
+                >
+                  <IconBasketCheck/>
+                  {m['components.header.cart_checkout']()}
+                </Button>
+              </div>
+            </>
           )}
         </SheetFooter>
       </SheetContent>
