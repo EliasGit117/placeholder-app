@@ -28,7 +28,8 @@ export type CategoryState = (typeof CategoryState)[keyof typeof CategoryState]
 export const ImageResourceType = {
   AVATAR: 'AVATAR',
   PRODUCT_VARIANT: 'PRODUCT_VARIANT',
-  BANNER: 'BANNER'
+  BANNER: 'BANNER',
+  CATEGORY: 'CATEGORY'
 } as const
 
 export type ImageResourceType = (typeof ImageResourceType)[keyof typeof ImageResourceType]
@@ -40,7 +41,8 @@ export const ImagePurpose = {
   BANNER_IMAGE_RO: 'BANNER_IMAGE_RO',
   BANNER_IMAGE_MOBILE_RO: 'BANNER_IMAGE_MOBILE_RO',
   BANNER_IMAGE_RU: 'BANNER_IMAGE_RU',
-  BANNER_IMAGE_MOBILE_RU: 'BANNER_IMAGE_MOBILE_RU'
+  BANNER_IMAGE_MOBILE_RU: 'BANNER_IMAGE_MOBILE_RU',
+  CATEGORY_IMAGE: 'CATEGORY_IMAGE'
 } as const
 
 export type ImagePurpose = (typeof ImagePurpose)[keyof typeof ImagePurpose]

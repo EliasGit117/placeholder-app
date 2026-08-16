@@ -1,4 +1,4 @@
-import { type FC, useEffect } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import {
   Sheet,
   SheetClose,
@@ -20,6 +20,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { orpc } from '@/lib/orpc';
 import { CategoryForm } from './form.tsx';
+import { CategoryImage } from './category-image.tsx';
 import { toast } from 'sonner';
 import type { TCategoryBaseDto } from '@/features/categories/common/dtos/category-base.ts';
 import type { ICategoryTreeNodeDto } from '@/features/categories/admin/dtos/category-tree.ts';
@@ -35,6 +36,7 @@ export const CategorySheet: FC<IProps> = ({ onSuccess }) => {
   const mode = options?.mode;
   const categoryId = options?.mode === CategorySheetMode.Update ? options.categoryId : undefined;
   const defaultParentId = options?.mode === CategorySheetMode.Create ? options.parentId : undefined;
+  const [isImagePending, setIsImagePending] = useState(false);
 
 
   const form = useForm<TCreateCategoryForm | TUpdateCategoryForm>({
@@ -75,7 +77,7 @@ export const CategorySheet: FC<IProps> = ({ onSuccess }) => {
   });
 
   const onOpenChange = (v: boolean) => {
-    if (isCreating || isUpdating || v) return;
+    if (isCreating || isUpdating || isImagePending || v) return;
     close();
   };
 
@@ -126,11 +128,17 @@ export const CategorySheet: FC<IProps> = ({ onSuccess }) => {
         </SheetHeader>
 
         <ScrollArea className="flex-1 overflow-y-auto mr-2 my-2" type="always">
+          {mode === CategorySheetMode.Update && categoryId && (
+            <div className="px-4 pt-1 pb-4">
+              <CategoryImage categoryId={categoryId} onPendingChange={setIsImagePending}/>
+            </div>
+          )}
+
           <CategoryForm
             id="category-form"
             form={form}
             className="px-4 py-1"
-            disabled={isCreating || isUpdating}
+            disabled={isCreating || isUpdating || isImagePending}
             forest={forest}
             currentCategoryId={categoryId}
             onSubmit={onSubmit}
@@ -140,7 +148,7 @@ export const CategorySheet: FC<IProps> = ({ onSuccess }) => {
         <SheetFooter className="flex flex-col sm:flex-row gap-4 justify-between items-end pt-0">
           <div className="flex flex-row sm:justify-end gap-2 w-full">
             <SheetClose className="grow sm:grow-0 sm:min-w-32" asChild>
-              <Button variant="outline" disabled={isCreating || isUpdating}>
+              <Button variant="outline" disabled={isCreating || isUpdating || isImagePending}>
                 <IconX/>
                 <span>{m['common.close']()}</span>
               </Button>
@@ -150,6 +158,7 @@ export const CategorySheet: FC<IProps> = ({ onSuccess }) => {
               form="category-form"
               className="grow sm:min-w-32 sm:grow-0"
               loading={isCreating || isUpdating}
+              disabled={isImagePending}
             >
               {mode === CategorySheetMode.Create ? <IconFilePlus/> : <IconDeviceFloppy/>}
               <span>{mode === CategorySheetMode.Create ? m['common.create']() : m['common.save']()}</span>

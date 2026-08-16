@@ -36,7 +36,7 @@ export function DropZone({ maxFileSize, className, hideIcon, ...dropzoneOptions 
     >
       <input {...getInputProps()} className="sr-only"/>
 
-      <div className="flex flex-col items-center gap-2 @sm:gap-4">
+      <div className="flex h-full flex-col items-center justify-center gap-2 @sm:gap-4">
         {!hideIcon && (
           <div
             className={cn(

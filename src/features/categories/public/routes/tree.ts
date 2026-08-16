@@ -6,6 +6,9 @@ import {
 } from '@/features/categories/public/dtos/category-tree.ts';
 import { categoriesBase, path } from './base.ts';
 import { CategoryService } from '@/features/categories/common/services/category-service.ts';
+import { ImageService } from '@/features/images/common/services/image-service.ts';
+import { CategoryImageDtoFactory, type TCategoryImageDto } from '@/features/categories/common/dtos/category-image.ts';
+import { ImageResourceType } from '~/prisma/generated/prisma/enums.ts';
 
 
 export const getCategoriesTree = categoriesBase
@@ -22,5 +25,16 @@ export const getCategoriesTree = categoriesBase
     const entities = await CategoryService.findAllActive();
     const locale = getLocale();
 
-    return CategoryDtoFactory.buildForest(entities, locale, input.depth);
+    const images = await ImageService.findByResources(
+      ImageResourceType.CATEGORY,
+      entities.map(e => String(e.id))
+    );
+
+    const imagesByCategoryId = new Map<number, TCategoryImageDto>(
+      images
+        .filter(img => img.resourceId != null)
+        .map(img => [Number(img.resourceId), CategoryImageDtoFactory.fromImageDto(img)])
+    );
+
+    return CategoryDtoFactory.buildForest(entities, locale, input.depth, imagesByCategoryId);
   });

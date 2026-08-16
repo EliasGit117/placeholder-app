@@ -2,6 +2,7 @@ enum ImageResourceType {
   AVATAR
   PRODUCT_VARIANT
   BANNER
+  CATEGORY
 
   @@map("image_resource_type")
 }
@@ -13,6 +14,7 @@ enum ImagePurpose {
   BANNER_IMAGE_MOBILE_RO
   BANNER_IMAGE_RU
   BANNER_IMAGE_MOBILE_RU
+  CATEGORY_IMAGE
 
   @@map("image_purpose")
 }

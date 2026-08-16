@@ -428,7 +428,12 @@
           "description_ru": "Descriere (RU)",
           "slug": "Slug",
           "state_active": "Activă",
-          "state_hidden": "Ascunsă"
+          "state_hidden": "Ascunsă",
+          "image": "Imagine",
+          "change_image": "Schimbare imagine",
+          "remove_image": "Ștergere imagine",
+          "image_updated": "Imaginea a fost actualizată",
+          "image_removed": "Imaginea a fost ștearsă"
         },
         "tree": {
           "no_categories": "Nu există categorii",
@@ -545,10 +550,56 @@
       }
     },
     "home": {
-      "hero_banners": {
-        "previous_slide": "Diapozitivul anterior",
-        "next_slide": "Diapozitivul următor",
-        "show_details": "Detalii"
+      "categories": {
+        "eyebrow": "Categorii",
+        "title_prefix": "Explorează după",
+        "title_highlight": "categorie."
+      },
+      "arrivals": {
+        "eyebrow": "Noutăți",
+        "title": "Sosite în atelier această săptămână.",
+        "cta": "Vezi toate produsele"
+      },
+      "about": {
+        "eyebrow": "Despre noi",
+        "title_prefix": "Frumusețea cultivată cu",
+        "title_highlight": "răbdare.",
+        "paragraph_1": "Skinery s-a născut dintr-o convingere simplă: pielea și părul nostru merită mai mult decât compromisuri. Începând din 2018, formulăm produse într-un atelier din Chișinău, alături de farmaciști și cosmetologi care cred în puterea botanicii și a științei aplicate cu grijă.",
+        "paragraph_2": "Fiecare flacon trece prin patruzeci de verificări înainte să ajungă la tine. Niciodată mai puțin.",
+        "founder": "— Veronica Țurcanu, fondator",
+        "credential_cruelty_free": "Cruelty-free",
+        "credential_synthetic_fragrances": "Parfumuri sintetice",
+        "credential_active_ingredients": "Ingrediente active",
+        "benefit_1_title": "Creștere capilară",
+        "benefit_1_text": "Stimulează foliculii cu extract de rozmarin și peptide vegetale clinic testate.",
+        "benefit_2_title": "Scalp echilibrat",
+        "benefit_2_text": "Reglează producția de sebum și calmează scalpul sensibil în 14 zile.",
+        "benefit_3_title": "Strălucire vizibilă",
+        "benefit_3_text": "Activează luminozitatea naturală a tenului cu acizi blânzi și vitamina C botanică.",
+        "benefit_4_title": "Premiată internațional",
+        "benefit_4_text": "Trei distincții la Clean Beauty Awards și Pure Beauty Global, 2023–2025.",
+        "benefit_5_title": "Formule trasabile",
+        "benefit_5_text": "Fiecare ingredient activ are origine documentată și certificat de proveniență.",
+        "benefit_6_title": "Hidratare profundă",
+        "benefit_6_text": "Acid hialuronic în trei greutăți moleculare pentru hidratare la toate nivelurile."
+      },
+      "faq": {
+        "eyebrow": "FAQ",
+        "title_prefix": "Întrebări",
+        "title_highlight": "frecvente.",
+        "description": "Nu ai găsit răspunsul? Scrie-ne pe formularul de mai sus și revenim în câteva ore.",
+        "q1": "În cât timp livrați comenzile în Chișinău?",
+        "a1": "Comenzile plasate până la 14:00 se livrează în aceeași zi în Chișinău. Restul Moldovei: 24–48h prin curier Nova Poshta sau Posta Moldovei.",
+        "q2": "Pot returna un produs deschis?",
+        "a2": "Da, în termen de 14 zile, dacă produsul a fost folosit rezonabil pentru testare. Rambursăm integral valoarea comenzii.",
+        "q3": "Cum funcționează consultația cu cosmetologul?",
+        "a3": "Programezi o sesiune online gratuită de 20 de minute, în care analizăm tipul de piele și îți recomandăm un ritual personalizat.",
+        "q4": "Faceți livrări în România?",
+        "a4": "Da, livrăm în toată România prin curier, în 3–5 zile lucrătoare. Taxele vamale sunt incluse în prețul afișat.",
+        "q5": "Produsele sunt testate pe animale?",
+        "a5": "Niciodată. Toate formulele sunt 100% cruelty-free și certificate, testate exclusiv dermatologic pe voluntari.",
+        "q6": "Aveți eșantioane gratuite?",
+        "a6": "Adăugăm câte două eșantioane la fiecare comandă, alese în funcție de tipul tău de piele indicat la checkout."
       }
     },
     "checkout": {
