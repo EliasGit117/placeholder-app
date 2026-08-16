@@ -2,7 +2,7 @@ import { useEffect, type FC, useRef, type ComponentProps } from 'react';
 import { cn } from '@/lib/utils';
 import { SidebarTrigger } from '@/components/ui/sidebar.tsx';
 import { Separator } from '@/components/ui/separator.tsx';
-import { Breadcrumbs } from '@/components/layout/admin/breadcrumbs';
+import { Breadcrumbs } from '@/components/layout/common/breadcrumbs';
 
 
 interface IProps extends ComponentProps<'header'> {}

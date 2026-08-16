@@ -4,7 +4,7 @@ import { orpc } from '@/lib/orpc';
 import { roleHasPermission } from '@/lib/auth';
 import { getLocale } from '@/paraglide/runtime';
 import { capitalizeFirst } from '@/lib/utils';
-import type { IBreadcrumb } from '@/components/layout/admin/breadcrumbs.tsx';
+import type { IBreadcrumb } from '@/components/layout/common/breadcrumbs.tsx';
 import { BannerForm } from './-components/banner-form';
 
 

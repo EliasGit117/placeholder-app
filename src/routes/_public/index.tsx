@@ -6,6 +6,7 @@ import { newArrivalsQuery, SkineryLanding } from './-components/landing.tsx';
 
 export const Route = createFileRoute('/_public/')({
   component: App,
+  staticData: { hideCrumbs: true },
   loader: async ({ context: { queryClient } }) => {
     await Promise.all([
       awaitIfServer(queryClient.prefetchQuery(orpc.banners.getValid.queryOptions())),

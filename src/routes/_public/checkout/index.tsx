@@ -1,12 +1,17 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { orpc } from '@/lib/orpc';
 import { m } from '@/paraglide/messages';
-import { useCartSheet } from '@/components/cart/cart-sheet';
 import { OrderSummary } from './-components/order-summary.tsx';
 import { PaymentForm } from './-components/payment-form.tsx';
 
 export const Route = createFileRoute('/_public/checkout/')({
   component: RouteComponent,
+  staticData: {
+    crumbs: [
+      { title: () => m['components.header.products'](), link: { to: '/products' } },
+      { title: () => m['pages.checkout.breadcrumb_current']() }
+    ]
+  },
   loader: async ({ context: { queryClient } }) => {
     const cart = await queryClient.ensureQueryData(orpc.checkout.getCart.queryOptions());
     const ids = cart.map((item) => item.id);
@@ -18,23 +23,9 @@ export const Route = createFileRoute('/_public/checkout/')({
 });
 
 function RouteComponent() {
-  const { open: openCart } = useCartSheet();
-
   return (
     <main className="flex flex-1 flex-col bg-background min-h-safe-screen mt-2 mb-12">
       <div className="container mx-auto flex flex-col gap-6 p-4">
-        <nav className="flex items-center gap-1.5 text-sm text-muted-foreground">
-          <Link to="/products" className="hover:text-foreground hover:underline underline-offset-2">
-            {m['components.header.products']()}
-          </Link>
-          <span>/</span>
-          <button type="button" onClick={openCart} className="hover:text-foreground hover:underline underline-offset-2">
-            {m['components.header.cart']()}
-          </button>
-          <span>/</span>
-          <span className="text-foreground">{m['pages.checkout.breadcrumb_current']()}</span>
-        </nav>
-
         <div>
           <h1 className="font-heading text-2xl font-semibold lg:text-3xl">{m['pages.checkout.title']()}</h1>
           <p className="text-sm text-muted-foreground">{m['pages.checkout.description']()}</p>

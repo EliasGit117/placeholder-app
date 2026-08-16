@@ -18,6 +18,7 @@ import { ProductsPagination } from '@/routes/_public/products/-components/pagina
 
 export const Route = createFileRoute('/_public/products/')({
   component: RouteComponent,
+  staticData: { crumbs: { title: () => m['components.header.products']() } },
   validateSearch: searchPublicProductsRequestDtoSchema,
   loaderDeps: (deps) => deps,
   loader: async ({ context: { queryClient }, deps: { search } }) => {

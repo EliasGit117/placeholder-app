@@ -26,6 +26,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { SimilarProducts } from './-components/similar-products.tsx';
 import type { TProductDetailsDto } from '@/features/products/public/dtos/product-details';
+import type { IBreadcrumb } from '@/components/layout/common/breadcrumbs';
 
 export const Route = createFileRoute('/_public/products/$slug/')({
   component: RouteComponent,
@@ -33,7 +34,22 @@ export const Route = createFileRoute('/_public/products/$slug/')({
   pendingComponent: ProductSkeleton,
   loader: async ({ context: { queryClient }, params: { slug } }) => {
     try {
-      await queryClient.ensureQueryData(orpc.products.getBySlug.queryOptions({ input: { slug } }));
+      const product = await queryClient.ensureQueryData(orpc.products.getBySlug.queryOptions({ input: { slug } }));
+
+      const crumbs: IBreadcrumb[] = [
+        { title: m['components.header.products'](), link: { to: '/products' } }
+      ];
+      if (product.category) {
+        crumbs.push({
+          title: product.category,
+          link: product.categoryId != null ?
+            { to: '/products', search: { categoryId: product.categoryId } } :
+            { to: '/products' }
+        });
+      }
+      crumbs.push({ title: product.name });
+
+      return { crumbs };
     } catch (error) {
       if (error instanceof ORPCError && error.code === 'NOT_FOUND')
         throw notFound();
@@ -96,30 +112,6 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
   return (
     <main className="flex flex-col flex-1 bg-background min-h-safe-screen mt-2 mb-12">
       <div className="container mx-auto flex flex-col gap-8 p-4">
-        <nav className="flex items-center gap-1.5 text-sm text-muted-foreground">
-          <Link to="/products" className="hover:text-foreground hover:underline underline-offset-2">
-            {m['common.home']()}
-          </Link>
-          {product.category && (
-            <>
-              <span>/</span>
-              {product.categoryId != null ? (
-                <Link
-                  to="/products"
-                  search={{ categoryId: product.categoryId }}
-                  className="hover:text-foreground hover:underline underline-offset-2"
-                >
-                  {product.category}
-                </Link>
-              ) : (
-                <span>{product.category}</span>
-              )}
-            </>
-          )}
-          <span>/</span>
-          <span className="text-foreground">{product.name}</span>
-        </nav>
-
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12">
           <div className="flex flex-col gap-3">
             <div

@@ -1,5 +1,5 @@
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
-import type { IBreadcrumb } from '@/components/layout/admin/breadcrumbs';
+import type { IBreadcrumb } from '@/components/layout/common/breadcrumbs';
 import { routeTree } from './routeTree.gen';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
 import { RootProvider } from '@/providers';

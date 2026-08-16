@@ -28,7 +28,7 @@ export const Breadcrumbs: FC<IProps> = ({ className, ...props }) => {
   if (hideBreadcrumbs)
     return null;
 
-  const items: { label: string; to: string }[] = matches
+  const items: { label: string; link?: LinkOptions; pathname: string }[] = matches
     .flatMap(({ pathname, loaderData, staticData }) => {
       const loaderCrumbs = parseBreadcrumbList(extractCrumbs(loaderData));
       const staticCrumbs = parseBreadcrumbList(staticData?.crumbs);
@@ -38,11 +38,12 @@ export const Breadcrumbs: FC<IProps> = ({ className, ...props }) => {
         .filter((crumb) => !crumb.disabled)
         .map((crumb) => ({
           label: typeof crumb.title === 'function' ? crumb.title() : crumb.title,
-          to: crumb.link?.to ?? pathname
+          link: crumb.link,
+          pathname
         }));
     });
 
-  items.unshift({ label: m['common.home'](), to: '/' });
+  items.unshift({ label: m['common.home'](), pathname: '/' });
 
   return (
     <nav className={cn(className)} {...props}>
@@ -56,9 +57,15 @@ export const Breadcrumbs: FC<IProps> = ({ className, ...props }) => {
                 return (
                   <Fragment key={`${index}-${item.label}`}>
                     <BreadcrumbLink className={responsiveClassName} asChild>
-                      <Link to={item.to}>
-                        {item.label}
-                      </Link>
+                      {item.link ? (
+                        <Link {...item.link}>
+                          {item.label}
+                        </Link>
+                      ) : (
+                        <Link to={item.pathname}>
+                          {item.label}
+                        </Link>
+                      )}
                     </BreadcrumbLink>
                     <BreadcrumbSeparator className={responsiveClassName}/>
                   </Fragment>
