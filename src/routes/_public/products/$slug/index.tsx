@@ -24,7 +24,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
-import { SimilarProducts } from './-components/similar-products.tsx';
+import { SimilarProducts, SIMILAR_PRODUCTS_LIMIT } from './-components/similar-products.tsx';
 import type { TProductDetailsDto } from '@/features/products/public/dtos/product-details';
 import type { IBreadcrumb } from '@/components/layout/common/breadcrumbs';
 
@@ -35,18 +35,24 @@ export const Route = createFileRoute('/_public/products/$slug/')({
   loader: async ({ context: { queryClient }, params: { slug } }) => {
     try {
       const product = await queryClient.ensureQueryData(orpc.products.getBySlug.queryOptions({ input: { slug } }));
+      const crumbs: IBreadcrumb[] = [{ title: m['components.header.products'](), link: { to: '/products' } }];
 
-      const crumbs: IBreadcrumb[] = [
-        { title: m['components.header.products'](), link: { to: '/products' } }
-      ];
-      if (product.category) {
-        crumbs.push({
-          title: product.category,
-          link: product.categoryId != null ?
-            { to: '/products', search: { categoryId: product.categoryId } } :
-            { to: '/products' }
-        });
+      if (product.categoryId != null) {
+        const excludeSlugs = product.variants.map((v) => v.slug);
+
+        const [category] = await Promise.all([
+          queryClient.ensureQueryData(orpc.categories.getById.queryOptions({ input: { id: product.categoryId } })),
+          queryClient.ensureQueryData(orpc.products.search.queryOptions({
+            input: { categoryId: product.categoryId, limit: SIMILAR_PRODUCTS_LIMIT + excludeSlugs.length }
+          }))
+        ]);
+
+        for (const ancestor of category.ancestors)
+          crumbs.push({ title: ancestor.name, link: { to: '/products', search: { categoryId: ancestor.id } } });
+
+        crumbs.push({ title: category.name, link: { to: '/products', search: { categoryId: category.id } } });
       }
+
       crumbs.push({ title: product.name });
 
       return { crumbs };
@@ -110,7 +116,7 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
   const imgPlaceholder = thumbhashToDataUrl(image?.thumbhash ?? null);
 
   return (
-    <main className="flex flex-col flex-1 bg-background min-h-safe-screen mt-2 mb-12">
+    <main className="flex flex-col flex-1 bg-background min-h-safe-screen mb-12">
       <div className="container mx-auto flex flex-col gap-8 p-4">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12">
           <div className="flex flex-col gap-3">

@@ -1,9 +1,7 @@
 import { type FC, useEffect, useState } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
-import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { orpc } from '@/lib/orpc';
-import { cn } from '@/lib/utils';
-import { awaitIfServer } from '@/lib/server';
 import { Skeleton } from '@/components/ui/skeleton';
 import { searchPublicProductsRequestDtoSchema } from '@/features/products/public/dtos/search-public-products.ts';
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
@@ -14,15 +12,31 @@ import { ProductSearchPanel } from '@/routes/_public/products/-components/search
 import { MobileSearchSheet } from '@/routes/_public/products/-components/search/mobile-search-sheet.tsx';
 import { SortSelect } from '@/routes/_public/products/-components/search/sort-select.tsx';
 import { ProductsPagination } from '@/routes/_public/products/-components/pagination';
+import type { IBreadcrumb } from '@/components/layout/common/breadcrumbs';
 
 
 export const Route = createFileRoute('/_public/products/')({
   component: RouteComponent,
-  staticData: { crumbs: { title: () => m['components.header.products']() } },
+  pendingComponent: ProductsPending,
   validateSearch: searchPublicProductsRequestDtoSchema,
   loaderDeps: (deps) => deps,
   loader: async ({ context: { queryClient }, deps: { search } }) => {
-    await awaitIfServer(queryClient.prefetchQuery(orpc.products.search.queryOptions({ input: search })));
+    const [_, category] = await Promise.all([
+      queryClient.ensureQueryData(orpc.products.search.queryOptions({ input: search })),
+      search.categoryId != null ?
+        queryClient.ensureQueryData(orpc.categories.getById.queryOptions({ input: { id: search.categoryId } })) :
+        Promise.resolve(null)
+    ]);
+
+    const crumbs: IBreadcrumb[] = [{ title: m['components.header.products'](), link: { to: '/products' } }];
+    if (category) {
+      for (const ancestor of category.ancestors)
+        crumbs.push({ title: ancestor.name, link: { to: '/products', search: { categoryId: ancestor.id } } });
+
+      crumbs.push({ title: category.name });
+    }
+
+    return { crumbs };
   }
 });
 
@@ -58,13 +72,9 @@ function RouteComponent() {
     return () => clearTimeout(timer);
   }, [term, navigate, search]);
 
-  const { data, isPending, isPlaceholderData } = useQuery({
-    ...orpc.products.search.queryOptions({ input: search }),
-    placeholderData: keepPreviousData
-  });
-
-  const products = data?.items ?? [];
-  const pageCount = data?.pageCount ?? 0;
+  const { data } = useSuspenseQuery(orpc.products.search.queryOptions({ input: search }));
+  const products = data.items;
+  const pageCount = data.pageCount;
   const page = search.page ?? 1;
 
   return (
@@ -82,10 +92,8 @@ function RouteComponent() {
           </aside>
 
           <div className="flex min-w-0 flex-1 flex-col">
-            <section aria-label="Products" className={cn('flex flex-1 flex-col transition-opacity', isPlaceholderData && 'opacity-60')}>
-              {isPending ? (
-                <ProductGridSkeleton count={search.limit ?? 8}/>
-              ) : products.length === 0 ? (
+            <section aria-label="Products" className="flex flex-1 flex-col">
+              {products.length === 0 ? (
                 <Empty className="rounded-xl border border-dashed py-24 h-full">
                   <EmptyHeader>
                     <EmptyMedia variant="icon">
@@ -120,6 +128,31 @@ function RouteComponent() {
   );
 }
 
+function ProductsPending() {
+  const search = Route.useSearch();
+
+  return (
+    <main className="flex flex-col flex-1 bg-background min-h-safe-screen">
+      <div className="container mx-auto flex flex-1 flex-col gap-4 p-4">
+        <div className="flex items-center gap-2 lg:hidden">
+          <MobileSearchSheet/>
+          <SortSelect showLabel={false} className="flex-1 space-y-0"/>
+        </div>
+
+        <div className="flex flex-1 flex-col gap-6 lg:flex-row">
+          <aside className="hidden shrink-0 lg:block lg:w-64">
+            <ProductSearchPanel className="lg:sticky lg:top-20"/>
+          </aside>
+
+          <div className="flex min-w-0 flex-1 flex-col">
+            <ProductGridSkeleton count={search.limit ?? 8}/>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
+
 const ProductGridSkeleton: FC<{ count: number }> = ({ count }) => (
   <div
     className="grid gap-4 grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
@@ -141,4 +174,3 @@ const ProductGridSkeleton: FC<{ count: number }> = ({ count }) => (
     ))}
   </div>
 );
-

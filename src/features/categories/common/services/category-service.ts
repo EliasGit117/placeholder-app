@@ -1,11 +1,14 @@
 import { ORPCError } from '@orpc/server';
 import { type Category, Prisma } from '~/prisma/generated/prisma/client.ts';
 import { prisma } from '@/lib/db';
+import { capitalizeFirst } from '@/lib/utils';
+import type { Locale } from '@/paraglide/runtime';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
 import type { TCategoryBaseDto } from '@/features/categories/common/dtos/category-base.ts';
 import type { TSearchCategoriesRequestDto } from '@/features/categories/admin/dtos/search-categories.ts';
 import type { TUpdateCategoryDto } from '@/features/categories/admin/dtos/update-category.ts';
 import type { TCreateCategoryDto } from '@/features/categories/admin/dtos/create-category.ts';
+import type { TCategoryAncestorDto, TCategoryDetailsDto } from '@/features/categories/public/dtos/category-details.ts';
 
 
 export class CategoryService {
@@ -45,6 +48,31 @@ export class CategoryService {
   static async findById(id: number): Promise<TCategoryBaseDto | null> {
     const entity = await prisma.category.findUnique({ where: { id } });
     return entity ? CategoryService.fromEntity(entity) : null;
+  }
+
+  static async findByIdWithAncestors(id: number, locale: Locale): Promise<TCategoryDetailsDto | null> {
+    const entity = await prisma.category.findUnique({ where: { id } });
+    if (!entity)
+      return null;
+
+    const ancestors: TCategoryAncestorDto[] = [];
+    let parentId = entity.parentId;
+
+    while (parentId != null) {
+      const parent: Category | null = await prisma.category.findUnique({ where: { id: parentId } });
+      if (!parent)
+        break;
+
+      ancestors.unshift({ id: parent.id, slug: parent.slug, name: parent[`name${capitalizeFirst(locale)}`] });
+      parentId = parent.parentId;
+    }
+
+    return {
+      id: entity.id,
+      slug: entity.slug,
+      name: entity[`name${capitalizeFirst(locale)}`],
+      ancestors,
+    };
   }
 
   static async search(input: TSearchCategoriesRequestDto) {

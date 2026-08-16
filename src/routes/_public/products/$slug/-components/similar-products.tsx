@@ -6,7 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
 import { ProductCard } from '@/components/product/card.tsx';
 
-const SIMILAR_PRODUCTS_LIMIT = 4;
+export const SIMILAR_PRODUCTS_LIMIT = 4;
 
 interface IProps {
   categoryId: number;
