@@ -1,12 +1,18 @@
-import { RPCHandler } from '@orpc/server/fetch';
+import { CompressionPlugin, RPCHandler } from '@orpc/server/fetch';
 import { createFileRoute } from '@tanstack/react-router';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 import { ResponseHeadersPlugin } from '@orpc/server/plugins';
+import { LoggingHandlerPlugin } from '@orpc/experimental-pino';
 import { orpcRouter } from '@/features/shared/orpc/router.ts';
+import { logger } from '@/lib/logger.ts';
 
 
 const handler = new RPCHandler(orpcRouter, {
-  plugins: [new ResponseHeadersPlugin()]
+  plugins: [
+    new ResponseHeadersPlugin(),
+    new CompressionPlugin(),
+    new LoggingHandlerPlugin({ logger })
+  ]
 });
 
 async function handle({ request }: { request: Request }) {
