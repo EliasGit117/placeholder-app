@@ -14,7 +14,6 @@ import {
   IconTag
 } from '@tabler/icons-react';
 import { orpc } from '@/lib/orpc';
-import { awaitIfServer } from '@/lib/server';
 import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
@@ -34,9 +33,7 @@ export const Route = createFileRoute('/_public/products/$slug/')({
   pendingComponent: ProductSkeleton,
   loader: async ({ context: { queryClient }, params: { slug } }) => {
     try {
-      await awaitIfServer(
-        queryClient.ensureQueryData(orpc.products.getBySlug.queryOptions({ input: { slug } }))
-      );
+      await queryClient.ensureQueryData(orpc.products.getBySlug.queryOptions({ input: { slug } }));
     } catch (error) {
       if (error instanceof ORPCError && error.code === 'NOT_FOUND')
         throw notFound();
@@ -262,7 +259,7 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
                 <div className="flex items-stretch gap-2">
                   <Button
                     type="button"
-                    className='w-full max-w-xs'
+                    className="w-full max-w-xs"
                     onClick={() => removeFromCart(variant.id)}
                   >
                     <IconShoppingBagMinus/>
@@ -312,7 +309,7 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
             ) : (
               <div className="flex items-stretch gap-2">
                 <Button
-                  className='w-full max-w-xs'
+                  className="w-full max-w-xs"
                   variant="outline-primary"
                   disabled={!variant.isAvailable}
                   onClick={() => addToCart(variant.id, 1)}
