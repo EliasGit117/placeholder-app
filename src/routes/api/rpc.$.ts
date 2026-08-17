@@ -10,7 +10,11 @@ import { logger } from '@/lib/logger.ts';
 const handler = new RPCHandler(orpcRouter, {
   plugins: [
     new ResponseHeadersPlugin(),
-    new LoggingHandlerPlugin({ logger, logRequestResponse: true })
+    new LoggingHandlerPlugin({
+      logger,
+      logRequestResponse: true,
+      logRequestAbort: true,
+    })
   ]
 });
 
