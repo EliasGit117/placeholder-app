@@ -380,6 +380,10 @@ export class ProductService {
     if (!existing)
       throw new ORPCError('NOT_FOUND');
 
+    const orderedCount = await prisma.orderProduct.count({ where: { variantId: id } });
+    if (orderedCount > 0)
+      throw new ORPCError('CONFLICT', { message: 'Cannot delete a variant that is part of an order' });
+
     await prisma.productVariant.delete({ where: { id } });
 
     // Variant images are owned via the polymorphic image resource map (no FK
@@ -467,6 +471,12 @@ export class ProductService {
     });
     if (!existing)
       throw new ORPCError('NOT_FOUND');
+
+    const orderedCount = await prisma.orderProduct.count({
+      where: { variantId: { in: existing.variants.map((v) => v.id) } },
+    });
+    if (orderedCount > 0)
+      throw new ORPCError('CONFLICT', { message: 'Cannot delete a product that has ordered variants' });
 
     await prisma.product.delete({ where: { id } });
 

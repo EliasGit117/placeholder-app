@@ -61,6 +61,13 @@
     "user_role": {
       "user": "Пользователь",
       "admin": "Администратор"
+    },
+    "order_status": {
+      "pending": "В ожидании",
+      "processing": "В обработке",
+      "shipped": "Отправлен",
+      "completed": "Завершён",
+      "cancelled": "Отменён"
     }
   },
   "components": {
@@ -622,6 +629,7 @@
         "delivery_courier": "Доставка курьером",
         "delivery_pickup": "Самовывоз из магазина",
         "success": "Заказ успешно оформлен.",
+        "error": "Не удалось оформить заказ. Попробуйте снова.",
         "payment_type": "Способ оплаты",
         "payment_type_cash": "Наличными",
         "contact_title": "Контактные данные",
@@ -633,6 +641,57 @@
         "phone_placeholder": "+373 6X XXX XXX",
         "email_placeholder": "email@example.com",
         "address_placeholder": "Улица, номер дома, квартира"
+      }
+    },
+    "order_confirmation": {
+      "breadcrumb_current": "Детали заказа",
+      "summary_title": "Ваш заказ",
+      "contact_title": "Контактные данные и доставка",
+      "not_found_title": "Заказ не найден",
+      "not_found_description": "Проверьте ссылку или свяжитесь с нами, если нужна помощь.",
+      "status": {
+        "pending": {
+          "title": "Заказ оформлен",
+          "description": "Спасибо! Мы свяжемся с вами для подтверждения заказа."
+        },
+        "processing": {
+          "title": "Заказ обрабатывается",
+          "description": "Мы готовим ваш заказ к отправке."
+        },
+        "shipped": {
+          "title": "Заказ в пути",
+          "description": "Ваш заказ отправлен и уже в пути."
+        },
+        "completed": {
+          "title": "Заказ выполнен",
+          "description": "Ваш заказ доставлен. Спасибо за покупку!"
+        },
+        "cancelled": {
+          "title": "Заказ отменён",
+          "description": "Этот заказ был отменён. Свяжитесь с нами, если есть вопросы."
+        }
+      }
+    },
+    "orders": {
+      "title": "Заказы",
+      "not_found": "Заказ не найден",
+      "not_found_description": "Проверьте ссылку или вернитесь к списку заказов.",
+      "index": {
+        "table": {
+          "uid": "Id заказа",
+          "customer": "Клиент",
+          "status": "Статус",
+          "total": "Итого",
+          "items": "Товары",
+          "deliveryMethod": "Доставка"
+        }
+      },
+      "detail": {
+        "section_general": "Детали заказа",
+        "section_general_description": "Информация о заказе и клиенте",
+        "section_items": "Заказанные товары",
+        "status_label": "Статус заказа",
+        "save_success": "Статус успешно обновлён."
       }
     }
   }

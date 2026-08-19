@@ -1,0 +1,53 @@
+enum OrderStatus {
+  PENDING    @map("pending")
+  PROCESSING @map("processing")
+  SHIPPED    @map("shipped")
+  COMPLETED  @map("completed")
+  CANCELLED  @map("cancelled")
+
+  @@map("order_status")
+}
+
+enum DeliveryMethod {
+  COURIER @map("courier")
+  PICKUP  @map("pickup")
+
+  @@map("delivery_method")
+}
+
+model Order {
+  id             Int            @id @default(autoincrement())
+  uid            String         @unique @default(uuid())
+  status         OrderStatus    @default(PENDING)
+  totalPrice     Int            @map("total_price")
+  fullName       String         @map("full_name")
+  phone          String
+  email          String
+  deliveryMethod DeliveryMethod @map("delivery_method")
+  address        String
+  items          OrderProduct[]
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  @@map("orders")
+}
+
+model OrderProduct {
+  id              Int            @id @default(autoincrement())
+  orderId         Int            @map("order_id")
+  order           Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variantId       Int            @map("variant_id")
+  variant         ProductVariant @relation(fields: [variantId], references: [id], onDelete: Restrict)
+  count           Int
+  productNameRo   String         @map("product_name_ro")
+  productNameRu   String         @map("product_name_ru")
+  variantNameRo   String         @map("variant_name_ro")
+  variantNameRu   String         @map("variant_name_ru")
+  price           Int
+  discountPercent Int?           @map("discount_percent")
+  createdAt       DateTime       @default(now()) @map("created_at")
+
+  @@index([orderId])
+  @@index([variantId])
+  @@map("order_products")
+}

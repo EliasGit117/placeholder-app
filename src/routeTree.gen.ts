@@ -18,6 +18,7 @@ import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as AdminSettingsRouteRouteImport } from './routes/admin/settings/route'
 import { Route as AdminProductsRouteRouteImport } from './routes/admin/products/route'
+import { Route as AdminOrdersRouteRouteImport } from './routes/admin/orders/route'
 import { Route as AdminBannersRouteRouteImport } from './routes/admin/banners/route'
 import { Route as AuthSignUpIndexRouteImport } from './routes/auth/sign-up/index'
 import { Route as AuthSignInIndexRouteImport } from './routes/auth/sign-in/index'
@@ -25,6 +26,7 @@ import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminSettingsIndexRouteImport } from './routes/admin/settings/index'
 import { Route as AdminSessionsIndexRouteImport } from './routes/admin/sessions/index'
 import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/index'
+import { Route as AdminOrdersIndexRouteImport } from './routes/admin/orders/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as AdminBannersIndexRouteImport } from './routes/admin/banners/index'
 import { Route as PublicProductsIndexRouteImport } from './routes/_public/products/index'
@@ -34,8 +36,10 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as AdminSettingsSecurityRouteImport } from './routes/admin/settings/security'
 import { Route as AdminSettingsProfileRouteImport } from './routes/admin/settings/profile'
 import { Route as AdminProductsProductIdIndexRouteImport } from './routes/admin/products/$productId/index'
+import { Route as AdminOrdersOrderIdIndexRouteImport } from './routes/admin/orders/$orderId/index'
 import { Route as AdminBannersBannerIdIndexRouteImport } from './routes/admin/banners/$bannerId/index'
 import { Route as PublicProductsSlugIndexRouteImport } from './routes/_public/products/$slug/index'
+import { Route as PublicOrdersUidIndexRouteImport } from './routes/_public/orders/$uid/index'
 import { Route as ApiAdminBannersBannerIdImagesRouteImport } from './routes/api/admin/banners/$bannerId/images'
 import { Route as ApiAdminProductsVariantsVariantIdImagesRouteImport } from './routes/api/admin/products/variants/$variantId/images'
 
@@ -83,6 +87,11 @@ const AdminProductsRouteRoute = AdminProductsRouteRouteImport.update({
   path: '/products',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminOrdersRouteRoute = AdminOrdersRouteRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminBannersRouteRoute = AdminBannersRouteRouteImport.update({
   id: '/banners',
   path: '/banners',
@@ -117,6 +126,11 @@ const AdminProductsIndexRoute = AdminProductsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminProductsRouteRoute,
+} as any)
+const AdminOrdersIndexRoute = AdminOrdersIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminOrdersRouteRoute,
 } as any)
 const AdminCategoriesIndexRoute = AdminCategoriesIndexRouteImport.update({
   id: '/categories/',
@@ -164,6 +178,11 @@ const AdminProductsProductIdIndexRoute =
     path: '/$productId/',
     getParentRoute: () => AdminProductsRouteRoute,
   } as any)
+const AdminOrdersOrderIdIndexRoute = AdminOrdersOrderIdIndexRouteImport.update({
+  id: '/$orderId/',
+  path: '/$orderId/',
+  getParentRoute: () => AdminOrdersRouteRoute,
+} as any)
 const AdminBannersBannerIdIndexRoute =
   AdminBannersBannerIdIndexRouteImport.update({
     id: '/$bannerId/',
@@ -173,6 +192,11 @@ const AdminBannersBannerIdIndexRoute =
 const PublicProductsSlugIndexRoute = PublicProductsSlugIndexRouteImport.update({
   id: '/products/$slug/',
   path: '/products/$slug/',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicOrdersUidIndexRoute = PublicOrdersUidIndexRouteImport.update({
+  id: '/orders/$uid/',
+  path: '/orders/$uid/',
   getParentRoute: () => PublicRouteRoute,
 } as any)
 const ApiAdminBannersBannerIdImagesRoute =
@@ -193,6 +217,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/admin/banners': typeof AdminBannersRouteRouteWithChildren
+  '/admin/orders': typeof AdminOrdersRouteRouteWithChildren
   '/admin/products': typeof AdminProductsRouteRouteWithChildren
   '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
@@ -206,14 +231,17 @@ export interface FileRoutesByFullPath {
   '/products/': typeof PublicProductsIndexRoute
   '/admin/banners/': typeof AdminBannersIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
+  '/admin/orders/': typeof AdminOrdersIndexRoute
   '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/sessions/': typeof AdminSessionsIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/auth/sign-in/': typeof AuthSignInIndexRoute
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
+  '/orders/$uid/': typeof PublicOrdersUidIndexRoute
   '/products/$slug/': typeof PublicProductsSlugIndexRoute
   '/admin/banners/$bannerId/': typeof AdminBannersBannerIdIndexRoute
+  '/admin/orders/$orderId/': typeof AdminOrdersOrderIdIndexRoute
   '/admin/products/$productId/': typeof AdminProductsProductIdIndexRoute
   '/api/admin/banners/$bannerId/images': typeof ApiAdminBannersBannerIdImagesRoute
   '/api/admin/products/variants/$variantId/images': typeof ApiAdminProductsVariantsVariantIdImagesRoute
@@ -231,14 +259,17 @@ export interface FileRoutesByTo {
   '/products': typeof PublicProductsIndexRoute
   '/admin/banners': typeof AdminBannersIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
+  '/admin/orders': typeof AdminOrdersIndexRoute
   '/admin/products': typeof AdminProductsIndexRoute
   '/admin/sessions': typeof AdminSessionsIndexRoute
   '/admin/settings': typeof AdminSettingsIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/auth/sign-in': typeof AuthSignInIndexRoute
   '/auth/sign-up': typeof AuthSignUpIndexRoute
+  '/orders/$uid': typeof PublicOrdersUidIndexRoute
   '/products/$slug': typeof PublicProductsSlugIndexRoute
   '/admin/banners/$bannerId': typeof AdminBannersBannerIdIndexRoute
+  '/admin/orders/$orderId': typeof AdminOrdersOrderIdIndexRoute
   '/admin/products/$productId': typeof AdminProductsProductIdIndexRoute
   '/api/admin/banners/$bannerId/images': typeof ApiAdminBannersBannerIdImagesRoute
   '/api/admin/products/variants/$variantId/images': typeof ApiAdminProductsVariantsVariantIdImagesRoute
@@ -249,6 +280,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/admin/banners': typeof AdminBannersRouteRouteWithChildren
+  '/admin/orders': typeof AdminOrdersRouteRouteWithChildren
   '/admin/products': typeof AdminProductsRouteRouteWithChildren
   '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
@@ -263,14 +295,17 @@ export interface FileRoutesById {
   '/_public/products/': typeof PublicProductsIndexRoute
   '/admin/banners/': typeof AdminBannersIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
+  '/admin/orders/': typeof AdminOrdersIndexRoute
   '/admin/products/': typeof AdminProductsIndexRoute
   '/admin/sessions/': typeof AdminSessionsIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
   '/auth/sign-in/': typeof AuthSignInIndexRoute
   '/auth/sign-up/': typeof AuthSignUpIndexRoute
+  '/_public/orders/$uid/': typeof PublicOrdersUidIndexRoute
   '/_public/products/$slug/': typeof PublicProductsSlugIndexRoute
   '/admin/banners/$bannerId/': typeof AdminBannersBannerIdIndexRoute
+  '/admin/orders/$orderId/': typeof AdminOrdersOrderIdIndexRoute
   '/admin/products/$productId/': typeof AdminProductsProductIdIndexRoute
   '/api/admin/banners/$bannerId/images': typeof ApiAdminBannersBannerIdImagesRoute
   '/api/admin/products/variants/$variantId/images': typeof ApiAdminProductsVariantsVariantIdImagesRoute
@@ -282,6 +317,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/admin/banners'
+    | '/admin/orders'
     | '/admin/products'
     | '/admin/settings'
     | '/api/$'
@@ -295,14 +331,17 @@ export interface FileRouteTypes {
     | '/products/'
     | '/admin/banners/'
     | '/admin/categories/'
+    | '/admin/orders/'
     | '/admin/products/'
     | '/admin/sessions/'
     | '/admin/settings/'
     | '/admin/users/'
     | '/auth/sign-in/'
     | '/auth/sign-up/'
+    | '/orders/$uid/'
     | '/products/$slug/'
     | '/admin/banners/$bannerId/'
+    | '/admin/orders/$orderId/'
     | '/admin/products/$productId/'
     | '/api/admin/banners/$bannerId/images'
     | '/api/admin/products/variants/$variantId/images'
@@ -320,14 +359,17 @@ export interface FileRouteTypes {
     | '/products'
     | '/admin/banners'
     | '/admin/categories'
+    | '/admin/orders'
     | '/admin/products'
     | '/admin/sessions'
     | '/admin/settings'
     | '/admin/users'
     | '/auth/sign-in'
     | '/auth/sign-up'
+    | '/orders/$uid'
     | '/products/$slug'
     | '/admin/banners/$bannerId'
+    | '/admin/orders/$orderId'
     | '/admin/products/$productId'
     | '/api/admin/banners/$bannerId/images'
     | '/api/admin/products/variants/$variantId/images'
@@ -337,6 +379,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/admin/banners'
+    | '/admin/orders'
     | '/admin/products'
     | '/admin/settings'
     | '/api/$'
@@ -351,14 +394,17 @@ export interface FileRouteTypes {
     | '/_public/products/'
     | '/admin/banners/'
     | '/admin/categories/'
+    | '/admin/orders/'
     | '/admin/products/'
     | '/admin/sessions/'
     | '/admin/settings/'
     | '/admin/users/'
     | '/auth/sign-in/'
     | '/auth/sign-up/'
+    | '/_public/orders/$uid/'
     | '/_public/products/$slug/'
     | '/admin/banners/$bannerId/'
+    | '/admin/orders/$orderId/'
     | '/admin/products/$productId/'
     | '/api/admin/banners/$bannerId/images'
     | '/api/admin/products/variants/$variantId/images'
@@ -440,6 +486,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsRouteRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/orders': {
+      id: '/admin/orders'
+      path: '/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AdminOrdersRouteRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/banners': {
       id: '/admin/banners'
       path: '/banners'
@@ -488,6 +541,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/products/'
       preLoaderRoute: typeof AdminProductsIndexRouteImport
       parentRoute: typeof AdminProductsRouteRoute
+    }
+    '/admin/orders/': {
+      id: '/admin/orders/'
+      path: '/'
+      fullPath: '/admin/orders/'
+      preLoaderRoute: typeof AdminOrdersIndexRouteImport
+      parentRoute: typeof AdminOrdersRouteRoute
     }
     '/admin/categories/': {
       id: '/admin/categories/'
@@ -552,6 +612,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProductsProductIdIndexRouteImport
       parentRoute: typeof AdminProductsRouteRoute
     }
+    '/admin/orders/$orderId/': {
+      id: '/admin/orders/$orderId/'
+      path: '/$orderId'
+      fullPath: '/admin/orders/$orderId/'
+      preLoaderRoute: typeof AdminOrdersOrderIdIndexRouteImport
+      parentRoute: typeof AdminOrdersRouteRoute
+    }
     '/admin/banners/$bannerId/': {
       id: '/admin/banners/$bannerId/'
       path: '/$bannerId'
@@ -564,6 +631,13 @@ declare module '@tanstack/react-router' {
       path: '/products/$slug'
       fullPath: '/products/$slug/'
       preLoaderRoute: typeof PublicProductsSlugIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/orders/$uid/': {
+      id: '/_public/orders/$uid/'
+      path: '/orders/$uid'
+      fullPath: '/orders/$uid/'
+      preLoaderRoute: typeof PublicOrdersUidIndexRouteImport
       parentRoute: typeof PublicRouteRoute
     }
     '/api/admin/banners/$bannerId/images': {
@@ -587,6 +661,7 @@ interface PublicRouteRouteChildren {
   PublicIndexRoute: typeof PublicIndexRoute
   PublicCheckoutIndexRoute: typeof PublicCheckoutIndexRoute
   PublicProductsIndexRoute: typeof PublicProductsIndexRoute
+  PublicOrdersUidIndexRoute: typeof PublicOrdersUidIndexRoute
   PublicProductsSlugIndexRoute: typeof PublicProductsSlugIndexRoute
 }
 
@@ -594,6 +669,7 @@ const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicIndexRoute: PublicIndexRoute,
   PublicCheckoutIndexRoute: PublicCheckoutIndexRoute,
   PublicProductsIndexRoute: PublicProductsIndexRoute,
+  PublicOrdersUidIndexRoute: PublicOrdersUidIndexRoute,
   PublicProductsSlugIndexRoute: PublicProductsSlugIndexRoute,
 }
 
@@ -613,6 +689,19 @@ const AdminBannersRouteRouteChildren: AdminBannersRouteRouteChildren = {
 
 const AdminBannersRouteRouteWithChildren =
   AdminBannersRouteRoute._addFileChildren(AdminBannersRouteRouteChildren)
+
+interface AdminOrdersRouteRouteChildren {
+  AdminOrdersIndexRoute: typeof AdminOrdersIndexRoute
+  AdminOrdersOrderIdIndexRoute: typeof AdminOrdersOrderIdIndexRoute
+}
+
+const AdminOrdersRouteRouteChildren: AdminOrdersRouteRouteChildren = {
+  AdminOrdersIndexRoute: AdminOrdersIndexRoute,
+  AdminOrdersOrderIdIndexRoute: AdminOrdersOrderIdIndexRoute,
+}
+
+const AdminOrdersRouteRouteWithChildren =
+  AdminOrdersRouteRoute._addFileChildren(AdminOrdersRouteRouteChildren)
 
 interface AdminProductsRouteRouteChildren {
   AdminProductsIndexRoute: typeof AdminProductsIndexRoute
@@ -644,6 +733,7 @@ const AdminSettingsRouteRouteWithChildren =
 
 interface AdminRouteRouteChildren {
   AdminBannersRouteRoute: typeof AdminBannersRouteRouteWithChildren
+  AdminOrdersRouteRoute: typeof AdminOrdersRouteRouteWithChildren
   AdminProductsRouteRoute: typeof AdminProductsRouteRouteWithChildren
   AdminSettingsRouteRoute: typeof AdminSettingsRouteRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
@@ -654,6 +744,7 @@ interface AdminRouteRouteChildren {
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminBannersRouteRoute: AdminBannersRouteRouteWithChildren,
+  AdminOrdersRouteRoute: AdminOrdersRouteRouteWithChildren,
   AdminProductsRouteRoute: AdminProductsRouteRouteWithChildren,
   AdminSettingsRouteRoute: AdminSettingsRouteRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,

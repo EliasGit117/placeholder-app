@@ -11,6 +11,8 @@ import { productsAdminRoutes } from '@/features/products/admin/routes';
 import { bannersPublicRoutes } from '@/features/banners/public/routes';
 import { bannersAdminRoutes } from '@/features/banners/admin/routes';
 import { checkoutRoutes } from '@/features/checkout/public/routes';
+import { ordersAdminRoutes } from '@/features/orders/admin/routes';
+import { ordersRoutes } from '@/features/orders/public/routes';
 
 
 export const orpcRouter = base.router({
@@ -20,12 +22,14 @@ export const orpcRouter = base.router({
   products: productsRoutes,
   banners: bannersPublicRoutes,
   checkout: checkoutRoutes,
+  orders: ordersRoutes,
   admin: {
     sessions: sessionsAdminRoutes,
     users: usersAdminRoutes,
     categories: categoriesAdminRoutes,
     products: productsAdminRoutes,
-    banners: bannersAdminRoutes
+    banners: bannersAdminRoutes,
+    orders: ordersAdminRoutes
   }
 });
 

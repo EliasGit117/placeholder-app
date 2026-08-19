@@ -178,6 +178,7 @@ function RouteComponent() {
         </FormProvider>
 
         <OptionsManager
+          className="h-fit"
           productId={productId}
           options={product.options}
           canUpdate={canUpdate}

@@ -41,6 +41,7 @@ model ProductVariant {
   optionValues Json     @default("{}") @map("option_values")
   price        Int
   discountPercent Int?  @map("discount_percent")
+  orderProducts OrderProduct[]
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 

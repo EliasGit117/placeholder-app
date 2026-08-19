@@ -3,6 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useNavigate } from '@tanstack/react-router';
+import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { IconBasketCheck, IconBuildingStore, IconCash, IconMapPin, IconSelector, IconTruckDelivery } from '@tabler/icons-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -12,7 +13,9 @@ import { Input } from '@/components/ui/input';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { m } from '@/paraglide/messages';
+import { client } from '@/lib/orpc';
 import { useCartContext } from '@/providers/cart.tsx';
+import { DeliveryMethod } from '~/prisma/generated/prisma/enums.ts';
 
 const pickupAddresses = [
   'Bulevardul Ștefan cel Mare 1, Chișinău',
@@ -59,13 +62,28 @@ export const PaymentForm: FC = () => {
 
   const deliveryMethod = form.watch('deliveryMethod');
 
-  const onSubmit = form.handleSubmit(() => {
-    clear();
-    toast.success(m['pages.checkout.payment.success']());
-    void navigate({ to: '/products' });
+  const createOrderMutation = useMutation({
+    mutationFn: (data: TSchema) => client.orders.create({
+      fullName: data.fullName,
+      phone: data.phone,
+      email: data.email,
+      deliveryMethod: data.deliveryMethod === 'pickup' ? DeliveryMethod.PICKUP : DeliveryMethod.COURIER,
+      address: (data.deliveryMethod === 'pickup' ? data.pickupAddress : data.address)!,
+    }),
   });
 
-  const disabled = items.length === 0 || form.formState.isSubmitting;
+  const onSubmit = form.handleSubmit(async (data) => {
+    try {
+      const order = await createOrderMutation.mutateAsync(data);
+      clear();
+      toast.success(m['pages.checkout.payment.success']());
+      void navigate({ to: '/orders/$uid', params: { uid: order.uid } });
+    } catch {
+      toast.error(m['pages.checkout.payment.error']());
+    }
+  });
+
+  const disabled = items.length === 0 || form.formState.isSubmitting || createOrderMutation.isPending;
 
   return (
     <Card>

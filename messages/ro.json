@@ -61,6 +61,13 @@
     "user_role": {
       "user": "Utilizator",
       "admin": "Administrator"
+    },
+    "order_status": {
+      "pending": "În așteptare",
+      "processing": "În procesare",
+      "shipped": "Expediată",
+      "completed": "Finalizată",
+      "cancelled": "Anulată"
     }
   },
   "components": {
@@ -622,6 +629,7 @@
         "delivery_courier": "Livrare curier",
         "delivery_pickup": "Ridicare din magazin",
         "success": "Comanda a fost plasată cu succes.",
+        "error": "Nu am putut plasa comanda. Încearcă din nou.",
         "payment_type": "Metodă de plată",
         "payment_type_cash": "Numerar",
         "contact_title": "Date de contact",
@@ -633,6 +641,57 @@
         "phone_placeholder": "+373 6X XXX XXX",
         "email_placeholder": "nume@exemplu.com",
         "address_placeholder": "Strada, numărul casei, apartament"
+      }
+    },
+    "order_confirmation": {
+      "breadcrumb_current": "Detalii comandă",
+      "summary_title": "Comanda ta",
+      "contact_title": "Date de contact și livrare",
+      "not_found_title": "Comanda nu a fost găsită",
+      "not_found_description": "Verifică linkul sau contactează-ne dacă ai nevoie de ajutor.",
+      "status": {
+        "pending": {
+          "title": "Comanda a fost plasată",
+          "description": "Mulțumim! Te vom contacta pentru confirmarea comenzii."
+        },
+        "processing": {
+          "title": "Comanda este în procesare",
+          "description": "Pregătim comanda ta pentru livrare."
+        },
+        "shipped": {
+          "title": "Comanda este pe drum",
+          "description": "Coletul tău a fost expediat și este pe drum către tine."
+        },
+        "completed": {
+          "title": "Comanda a fost finalizată",
+          "description": "Comanda ta a fost livrată. Mulțumim pentru cumpărătură!"
+        },
+        "cancelled": {
+          "title": "Comanda a fost anulată",
+          "description": "Această comandă a fost anulată. Contactează-ne dacă ai întrebări."
+        }
+      }
+    },
+    "orders": {
+      "title": "Comenzi",
+      "not_found": "Comanda nu a fost găsită",
+      "not_found_description": "Verifică linkul sau revino la lista de comenzi.",
+      "index": {
+        "table": {
+          "uid": "Id comandă",
+          "customer": "Client",
+          "status": "Stare",
+          "total": "Total",
+          "items": "Produse",
+          "deliveryMethod": "Livrare"
+        }
+      },
+      "detail": {
+        "section_general": "Detalii comandă",
+        "section_general_description": "Informații despre comandă și client",
+        "section_items": "Produse comandate",
+        "status_label": "Stare comandă",
+        "save_success": "Stare actualizată cu succes."
       }
     }
   }

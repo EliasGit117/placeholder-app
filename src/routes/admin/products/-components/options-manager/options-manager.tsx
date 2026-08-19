@@ -25,9 +25,10 @@ interface IProps {
   productId: number;
   options: TOptions;
   canUpdate?: boolean;
+  className?: string;
 }
 
-export const OptionsManager: FC<IProps> = ({ productId, options, canUpdate }) => {
+export const OptionsManager: FC<IProps> = ({ productId, options, canUpdate, className }) => {
   const queryClient = useQueryClient();
   const confirm = useConfirm();
   const isRu = getLocale() === 'ru';
@@ -99,7 +100,7 @@ export const OptionsManager: FC<IProps> = ({ productId, options, canUpdate }) =>
   const editingOption = editingKey ? list.find(o => o.key === editingKey) ?? null : null;
 
   return (
-    <Card>
+    <Card className={className}>
       <CardHeader>
         <CardTitle>{m['pages.products.form.section_options']()}</CardTitle>
         <CardDescription>{m['pages.products.form.section_options_edit_description']()}</CardDescription>

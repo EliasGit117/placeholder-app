@@ -8,9 +8,9 @@ export const adminProductsDelete = productsAdminBase
   .route({
     method: 'DELETE',
     summary: 'Delete product',
-    description: 'Hard deletes a product and all of its variants.',
+    description: 'Hard deletes a product and all of its variants. Fails if any variant is part of an order.',
   })
-  .errors({ FORBIDDEN: {}, NOT_FOUND: {} })
+  .errors({ FORBIDDEN: {}, NOT_FOUND: {}, CONFLICT: {} })
   .use(authMiddleware)
   .input(z.object({ id: z.number() }))
   .handler(async ({ input: { id }, context: { user }, errors }) => {

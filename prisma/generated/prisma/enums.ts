@@ -57,6 +57,25 @@ export const ImageVariantKind = {
 export type ImageVariantKind = (typeof ImageVariantKind)[keyof typeof ImageVariantKind]
 
 
+export const OrderStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  SHIPPED: 'SHIPPED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
+
+export const DeliveryMethod = {
+  COURIER: 'COURIER',
+  PICKUP: 'PICKUP'
+} as const
+
+export type DeliveryMethod = (typeof DeliveryMethod)[keyof typeof DeliveryMethod]
+
+
 export const ProductState = {
   ACTIVE: 'ACTIVE',
   NOT_AVAILABLE: 'NOT_AVAILABLE',

@@ -6,7 +6,7 @@ import {
   IconKey,
   IconPackage,
   IconPhoto,
-  IconShieldLock, IconShoppingCart,
+  IconShieldLock, IconShoppingBag, IconShoppingCart,
   IconUsers,
   type TablerIcon
 } from '@tabler/icons-react';
@@ -78,6 +78,11 @@ const navMain: ISidebarMenuItem[] = [
         linkOptions: { to: '/admin/products', activeOptions: { includeSearch: false } }
       }
     ]
+  },
+  {
+    title: () => m['pages.orders.title'](),
+    icon: IconShoppingBag,
+    linkOptions: { to: '/admin/orders', activeOptions: { includeSearch: false } }
   },
   {
     title: () => m['components.sidebar.nav.security'](),
