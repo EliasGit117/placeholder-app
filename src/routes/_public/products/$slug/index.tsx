@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createFileRoute, Link, notFound } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { ORPCError } from '@orpc/server';
@@ -22,6 +22,12 @@ import { useFavoritesContext } from '@/providers/favorites.tsx';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import {
+  type CarouselApi,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from '@/components/ui/carousel';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { SimilarProducts, SIMILAR_PRODUCTS_LIMIT } from './-components/similar-products.tsx';
@@ -101,6 +107,7 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
   const ru = locale === 'ru';
 
   const [activeImage, setActiveImage] = useState(0);
+  const [api, setApi] = useState<CarouselApi>();
 
   const variant = product.variants.find((v) => v.id === product.selectedVariantId) ?? product.variants[0];
 
@@ -112,30 +119,47 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
   const hasDiscount = !!variant.discountPercent;
 
   const images = variant.images;
-  const image = images[activeImage] ?? images[0];
-  const imgPlaceholder = thumbhashToDataUrl(image?.thumbhash ?? null);
+
+  useEffect(() => {
+    if (!api) return;
+
+    setActiveImage(api.selectedScrollSnap());
+    api.on('select', () => setActiveImage(api.selectedScrollSnap()));
+  }, [api]);
 
   return (
     <main className="flex flex-col flex-1 bg-background min-h-safe-screen mb-12">
       <div className="container mx-auto flex flex-col gap-8 p-4">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12">
           <div className="flex flex-col gap-3">
-            <div
-              style={imgPlaceholder ? { backgroundImage: `url(${imgPlaceholder})` } : undefined}
-              className="ph-stripes relative aspect-square overflow-hidden rounded-2xl bg-muted bg-cover bg-center"
-            >
-              {image ? (
-                <img
-                  src={image.variants.thumb1024?.url ?? image.variants.thumb512?.url ?? image.url}
-                  alt={`${product.name} ${variant.name}`}
-                  className="size-full object-cover"
-                />
-              ) : (
-                <div className="grid size-full place-items-center">
-                  <IconPhotoOff className="size-10 text-muted-foreground opacity-25"/>
-                </div>
-              )}
-            </div>
+            {images.length > 0 ? (
+              <Carousel setApi={setApi} opts={{ loop: images.length > 1 }}>
+                <CarouselContent>
+                  {images.map((img) => {
+                    const placeholder = thumbhashToDataUrl(img.thumbhash ?? null);
+
+                    return (
+                      <CarouselItem key={img.id}>
+                        <div
+                          style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
+                          className="ph-stripes relative aspect-square overflow-hidden rounded-2xl bg-muted bg-cover bg-center"
+                        >
+                          <img
+                            src={img.variants.thumb1024?.url ?? img.variants.thumb512?.url ?? img.url}
+                            alt={`${product.name} ${variant.name}`}
+                            className="size-full object-cover"
+                          />
+                        </div>
+                      </CarouselItem>
+                    );
+                  })}
+                </CarouselContent>
+              </Carousel>
+            ) : (
+              <div className="grid aspect-square place-items-center overflow-hidden rounded-2xl bg-muted">
+                <IconPhotoOff className="size-10 text-muted-foreground opacity-25"/>
+              </div>
+            )}
 
             {images.length > 1 && (
               <div className="grid grid-cols-5 gap-3">
@@ -146,7 +170,7 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
                     <button
                       key={img.id}
                       type="button"
-                      onClick={() => setActiveImage(i)}
+                      onClick={() => api?.scrollTo(i)}
                       style={thumbPlaceholder ? { backgroundImage: `url(${thumbPlaceholder})` } : undefined}
                       className={cn(
                         'aspect-square overflow-hidden rounded-lg bg-muted bg-cover bg-center ring-1 ring-foreground/10 transition-shadow',

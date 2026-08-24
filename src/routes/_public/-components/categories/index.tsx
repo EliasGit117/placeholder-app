@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { IconPhotoOff } from '@tabler/icons-react';
+import { IconArrowRight, IconPhotoOff } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -30,7 +30,10 @@ export const Categories: FC = () => {
         }
         right={
           <Button variant="link" className="h-auto p-0 text-foreground" asChild>
-            <Link to="/products">{m['pages.home.categories.cta']()} →</Link>
+            <Link to="/products">
+              <span>{m['pages.home.categories.cta']()}</span>
+              <IconArrowRight/>
+            </Link>
           </Button>
         }
       />

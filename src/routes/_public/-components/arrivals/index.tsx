@@ -9,6 +9,7 @@ import { orpc } from '@/lib/orpc';
 import { SortDirection } from '@/features/shared/schemas/pagination.ts';
 import { m } from '@/paraglide/messages';
 import { Section, SectionHead } from '@/routes/_public/-components/shared';
+import { IconArrowRight } from '@tabler/icons-react';
 
 export const newArrivalsQuery = orpc.products.search.queryOptions({
   input: { page: 1, limit: 12, sort: 'createdAt', dir: SortDirection.DESC },
@@ -25,7 +26,10 @@ export const Arrivals: FC = () => {
         title={<>{m['pages.home.arrivals.title']()}</>}
         right={
           <Button variant="link" className="h-auto p-0 text-foreground" asChild>
-            <Link to="/products">{m['pages.home.arrivals.cta']()} →</Link>
+            <Link to="/products">
+              <span>{m['pages.home.arrivals.cta']()}</span>
+              <IconArrowRight/>
+            </Link>
           </Button>
         }
       />
