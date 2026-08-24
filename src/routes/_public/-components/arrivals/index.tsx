@@ -38,7 +38,7 @@ export const Arrivals: FC = () => {
         <CarouselContent>
           {isPending ? (
             Array.from({ length: 12 }).map((_, i) => (
-              <CarouselItem key={i} className="basis-1/2 sm:basis-1/3 md:basis-1/4 2xl:basis-1/5">
+              <CarouselItem key={i} className="basis-1/1 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 2xl:basis-1/5">
                 <div className="overflow-hidden rounded-xl border border-border">
                   <Skeleton className="aspect-square w-full rounded-none"/>
                   <div className="space-y-3 p-4">
@@ -50,7 +50,7 @@ export const Arrivals: FC = () => {
             ))
           ) : (
             products.map((product) => (
-              <CarouselItem key={product.id} className="grid basis-1/2 sm:basis-1/3 md:basis-1/4 2xl:basis-1/5">
+              <CarouselItem key={product.id} className="grid basis-1/1 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 2xl:basis-1/5">
                 <ProductCard product={product}/>
               </CarouselItem>
             ))
