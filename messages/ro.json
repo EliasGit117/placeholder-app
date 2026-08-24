@@ -560,7 +560,8 @@
       "categories": {
         "eyebrow": "Categorii",
         "title_prefix": "Explorează după",
-        "title_highlight": "categorie."
+        "title_highlight": "categorie.",
+        "cta": "Vezi toate categoriile"
       },
       "arrivals": {
         "eyebrow": "Noutăți",

@@ -560,7 +560,8 @@
       "categories": {
         "eyebrow": "Категории",
         "title_prefix": "Ищите по",
-        "title_highlight": "категориям."
+        "title_highlight": "категориям.",
+        "cta": "Смотреть все категории"
       },
       "arrivals": {
         "eyebrow": "Новинки",
