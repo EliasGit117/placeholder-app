@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/sheet';
 import { m } from '@/paraglide/messages';
 import { ProductSearchPanel } from './index.tsx';
+import { cn } from '@/lib/utils';
 
 export const MobileSearchSheet: FC = () => {
   const activeCount = useSearch({
@@ -26,12 +27,12 @@ export const MobileSearchSheet: FC = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" className="shrink-0 font-normal lg:hidden">
+        <Button variant="outline" className={cn("shrink-0 font-normal lg:hidden", activeCount > 0 && "pr-1.5")}>
           <IconAdjustmentsHorizontal className="size-4"/>
           {m['components.shop.filters.title']()}
 
           {activeCount > 0 && (
-            <span className="flex size-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
+            <span className="flex size-5 items-center justify-center text-xs border border-border ml-auto">
               {activeCount}
             </span>
           )}

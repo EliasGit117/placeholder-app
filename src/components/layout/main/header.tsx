@@ -48,9 +48,9 @@ export const Header = ({ className, ...props }: IProps) => {
             )}
           </CartSheetTrigger>
 
-          <LocaleDropdown variant="outline" size="icon" align="end" className="rounded-full"/>
+          <LocaleDropdown variant="outline" size="icon" align="end" className="rounded-full hidden md:inline-flex"/>
 
-          <UserDropdown size="icon" align="end"/>
+          <UserDropdown size="icon" align="end" className="hidden md:inline-flex"/>
         </div>
       </nav>
     </header>

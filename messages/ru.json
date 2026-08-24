@@ -115,6 +115,7 @@
       "favorites_missing": "Товар недоступен",
       "favorites_missing_description": "Товар не найден, недоступен или был удалён.",
       "show_all": "Показать все",
+      "toggle_sidebar": "Переключить боковую панель",
       "admin": "Админ",
       "cart": "Корзина",
       "cart_description": "Товары, добавленные в корзину",
