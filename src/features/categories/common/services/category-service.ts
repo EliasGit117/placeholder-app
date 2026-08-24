@@ -4,6 +4,7 @@ import { prisma } from '@/lib/db';
 import { capitalizeFirst } from '@/lib/utils';
 import type { Locale } from '@/paraglide/runtime';
 import { PaginationResultDtoFactory } from '@/features/shared/dtos/pagination-result-dto.ts';
+import { MAX_CATEGORY_DEPTH } from '@/features/categories/common/consts.ts';
 import type { TCategoryBaseDto } from '@/features/categories/common/dtos/category-base.ts';
 import type { TSearchCategoriesRequestDto } from '@/features/categories/admin/dtos/search-categories.ts';
 import type { TUpdateCategoryDto } from '@/features/categories/admin/dtos/update-category.ts';
@@ -95,6 +96,11 @@ export class CategoryService {
     const parentPath = input.parentId ? await getParentPath(input.parentId) : null;
     const path = buildPath(slug, parentPath);
 
+    if (getPathDepth(path) > MAX_CATEGORY_DEPTH)
+      throw new ORPCError('BAD_REQUEST', {
+        message: `Category depth cannot exceed ${MAX_CATEGORY_DEPTH} levels.`,
+      });
+
     const entity = await prisma.category.create({
       data: {
         nameRo: input.nameRo,
@@ -128,6 +134,14 @@ export class CategoryService {
       const newParentId = parentIdChanged ? (input.parentId ?? null) : existing.parentId;
       const parentPath = newParentId ? await getParentPath(newParentId) : null;
       path = buildPath(slug, parentPath);
+    }
+
+    if (parentIdChanged) {
+      const maxDescendantDepth = await CategoryService.getMaxDescendantRelativeDepth(id);
+      if (getPathDepth(path) + maxDescendantDepth > MAX_CATEGORY_DEPTH)
+        throw new ORPCError('BAD_REQUEST', {
+          message: `Category depth cannot exceed ${MAX_CATEGORY_DEPTH} levels.`,
+        });
     }
 
     const entity = await prisma.category.update({
@@ -170,11 +184,25 @@ export class CategoryService {
       await CategoryService.updateDescendantPaths(child.id, newPath);
     }
   }
+
+  // Deepest descendant chain below `id`, relative to `id` itself (no children = 0).
+  private static async getMaxDescendantRelativeDepth(id: number): Promise<number> {
+    const children = await prisma.category.findMany({ where: { parentId: id }, select: { id: true } });
+    if (children.length === 0)
+      return 0;
+
+    const depths = await Promise.all(children.map((c) => CategoryService.getMaxDescendantRelativeDepth(c.id)));
+    return 1 + Math.max(...depths);
+  }
 }
 
 
 function buildPath(slug: string, parentPath: string | null): string {
   return parentPath ? `${parentPath}/${slug}` : `/${slug}`;
+}
+
+function getPathDepth(path: string): number {
+  return path.split('/').filter(Boolean).length;
 }
 
 async function getParentPath(parentId: number): Promise<string> {

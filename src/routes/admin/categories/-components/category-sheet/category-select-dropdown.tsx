@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
 import type { ICategoryTreeNodeDto } from '@/features/categories/admin/dtos/category-tree.ts';
+import { MAX_CATEGORY_DEPTH } from '@/features/categories/common/consts.ts';
 
 const locale = getLocale();
 
@@ -121,10 +122,11 @@ export const CategorySelectDropdown: FC<IProps> = ({
               {m['common.no_results']()}
             </p>
           ) : (
-            filtered.map(({ node, level }) => (
+            filtered.map(({ node, level, atMaxDepth }) => (
               <DropdownItem
                 key={node.id}
                 selected={node.id === value}
+                disabled={atMaxDepth}
                 onClick={() => select(node.id)}
                 style={{ paddingLeft: level * 16 + 8 }}
               >
@@ -141,22 +143,26 @@ export const CategorySelectDropdown: FC<IProps> = ({
 
 interface IDropdownItemProps {
   selected?: boolean;
+  disabled?: boolean;
   onClick: () => void;
   style?: CSSProperties;
   children: ReactNode;
 }
 
-const DropdownItem: FC<IDropdownItemProps> = ({ selected, onClick, style, children }) => (
+const DropdownItem: FC<IDropdownItemProps> = ({ selected, disabled, onClick, style, children }) => (
   <button
     type="button"
     role="option"
     aria-selected={selected}
+    aria-disabled={disabled}
+    disabled={disabled}
     onClick={onClick}
     style={style}
     className={cn(
       'flex w-full items-center gap-2 rounded-md py-1.5 pr-2 text-sm text-left cursor-default',
       'hover:bg-accent hover:text-accent-foreground focus:outline-none focus-visible:bg-accent',
       selected && 'bg-accent/50',
+      disabled && 'pointer-events-none opacity-40',
     )}
   >
     <span className="truncate">{children}</span>
@@ -170,6 +176,8 @@ const DropdownItem: FC<IDropdownItemProps> = ({ selected, onClick, style, childr
 interface FlatItem {
   node: ICategoryTreeNodeDto;
   level: number;
+  // Selecting this node as a parent would push a new child past MAX_CATEGORY_DEPTH.
+  atMaxDepth: boolean;
 }
 
 function flattenForest(
@@ -180,7 +188,7 @@ function flattenForest(
   const result: FlatItem[] = [];
   for (const node of nodes) {
     if (node.id === excludeId) continue; // skip self and its descendants
-    result.push({ node, level });
+    result.push({ node, level, atMaxDepth: level + 2 > MAX_CATEGORY_DEPTH });
     if (node.children.length) {
       result.push(...flattenForest(node.children, excludeId, level + 1));
     }
