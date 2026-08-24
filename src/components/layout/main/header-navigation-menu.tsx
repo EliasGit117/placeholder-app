@@ -33,6 +33,7 @@ import {
 } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 
 interface IProps extends ComponentPropsWithoutRef<typeof NavigationMenu> {
@@ -48,7 +49,7 @@ export const HeaderNavigationMenu: FC<IProps> = ({ className, ...props }) => {
     <NavigationMenu className={cn('[&>div:last-child]:mt-2', className)} {...props}>
       <NavigationMenuList className="gap-1">
         <NavigationMenuItem className="hidden md:flex">
-          <NavigationMenuTrigger className='uppercase font-normal'>
+          <NavigationMenuTrigger className="uppercase font-normal">
             {m['components.header.categories']()}
           </NavigationMenuTrigger>
 
@@ -134,45 +135,43 @@ const ShopFlyout: FC<IShopFlyoutProps> = ({ categories }) => {
 
   return (
     <div className="flex max-h-64">
-      <ul className="flex w-60 flex-col gap-0.5 p-2">
-        <li className="px-2 py-1.5 text-sm font-bold">
-          {m['components.header.categories']()}
-        </li>
+      <ScrollArea className='pr-0.5 mr-0.5' type='always'>
+        <ul className="flex w-60 flex-col gap-0.5 p-2">
+          {categories.map((category) => {
+            const isActive =
+              active?.slug === category.slug;
 
-        {categories.map((category) => {
-          const isActive =
-            active?.slug === category.slug;
+            return (
+              <li key={category.slug}>
+                <NavigationMenuLink onSelect={(e) => handleSelect(category, e)} asChild>
+                  <CategoryLink
+                    category={category}
+                    aria-expanded={isActive}
+                    onPointerDown={(e) => setPointerType(e.pointerType as | TPointerType)}
+                    onPointerEnter={(e) => handlePointerEnter(category, e)}
+                    onFocus={(e) => handleFocus(category, e)}
+                    onClick={(e) => handleClick(category, e)}
+                    className={cn(
+                      'relative w-full justify-between',
+                      isActive && 'bg-muted before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:rounded-full before:bg-primary'
+                    )}
+                  >
+                    <span className="brightness-110">
+                      {category.name}
+                    </span>
 
-          return (
-            <li key={category.slug}>
-              <NavigationMenuLink onSelect={(e) => handleSelect(category, e)} asChild>
-                <CategoryLink
-                  category={category}
-                  aria-expanded={isActive}
-                  onPointerDown={(e) => setPointerType(e.pointerType as | TPointerType)}
-                  onPointerEnter={(e) => handlePointerEnter(category, e)}
-                  onFocus={(e) => handleFocus(category, e)}
-                  onClick={(e) => handleClick(category, e)}
-                  className={cn(
-                    'relative w-full justify-between',
-                    isActive && 'bg-muted before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:rounded-full before:bg-primary'
-                  )}
-                >
-                  <span className="brightness-110">
-                    {category.name}
-                  </span>
-
-                  {category.children.length > 0 ? (
-                    <IconChevronRight className="size-4 text-muted-foreground/50"/>
-                  ) : (
-                    <IconArrowUpRight className="size-4 text-muted-foreground/50"/>
-                  )}
-                </CategoryLink>
-              </NavigationMenuLink>
-            </li>
-          );
-        })}
-      </ul>
+                    {category.children.length > 0 ? (
+                      <IconChevronRight className="size-4 text-muted-foreground/50"/>
+                    ) : (
+                      <IconArrowUpRight className="size-4 text-muted-foreground/50"/>
+                    )}
+                  </CategoryLink>
+                </NavigationMenuLink>
+              </li>
+            );
+          })}
+        </ul>
+      </ScrollArea>
 
       {!!active?.children.length && (
         <ul className="flex w-60 flex-col gap-0.5 border-l bg-muted p-2">
