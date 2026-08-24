@@ -11,7 +11,7 @@ import { m } from '@/paraglide/messages';
 import { Section, SectionHead } from '@/routes/_public/-components/shared';
 
 export const newArrivalsQuery = orpc.products.search.queryOptions({
-  input: { page: 1, limit: 8, sort: 'createdAt', dir: SortDirection.DESC },
+  input: { page: 1, limit: 12, sort: 'createdAt', dir: SortDirection.DESC },
 });
 
 export const Arrivals: FC = () => {
@@ -33,7 +33,7 @@ export const Arrivals: FC = () => {
       <Carousel opts={{ align: 'start', loop: true }}>
         <CarouselContent>
           {isPending ? (
-            Array.from({ length: 6 }).map((_, i) => (
+            Array.from({ length: 12 }).map((_, i) => (
               <CarouselItem key={i} className="basis-1/2 sm:basis-1/3 md:basis-1/4 2xl:basis-1/5">
                 <div className="overflow-hidden rounded-xl border border-border">
                   <Skeleton className="aspect-square w-full rounded-none"/>
