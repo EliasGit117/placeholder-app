@@ -70,7 +70,7 @@ export const ProductCard: FC<IProps> = ({ product }) => {
       >
 
         {hasDiscount && (
-          <Badge variant="secondary" className="absolute left-3 top-3 z-10 rounded-full border-secondary-foreground">
+          <Badge variant="secondary" className="absolute left-2 top-2 z-10 rounded-none border-secondary-foreground">
             -{discountPercent}%
           </Badge>
         )}
@@ -81,12 +81,12 @@ export const ProductCard: FC<IProps> = ({ product }) => {
             aria-label={m['components.shop.wishlist']()}
             onClick={() => toggle(product.id)}
             className={cn(
-              'absolute right-3 top-3 z-10 grid size-7 place-items-center rounded-full',
+              'absolute right-2 top-2 z-10 grid size-8 place-items-center rounded-full',
               'bg-white/10 text-muted-foreground/75 backdrop-blur-xl transition-colors',
               isFavorite && 'bg-red-500/10 backdrop-blur-sm'
             )}
           >
-            <IconHeart className={cn('size-4.5', isFavorite && 'text-red-500 fill-red-500')}/>
+            <IconHeart className={cn('size-5', isFavorite && 'text-red-500 fill-red-500')}/>
           </button>
         ) : (
           <Skeleton className="absolute right-3 top-3 z-10 size-8 rounded-full bg-muted opacity-10"/>

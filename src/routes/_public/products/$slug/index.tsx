@@ -190,7 +190,7 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
               </small>
 
               {hasDiscount && (
-                <Badge variant="secondary" className="rounded-full self-center ml-1">
+                <Badge variant="secondary" className="rounded-none self-center ml-1">
                   -{variant.discountPercent}%
                 </Badge>
               )}
