@@ -1,5 +1,7 @@
 import type { ComponentProps, CSSProperties, FC } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { Popover as PopoverPrimitive } from 'radix-ui';
+import { Link } from '@tanstack/react-router';
 import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from '@/components/ui/popover.tsx';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -100,49 +102,57 @@ export const FavoritesPopover: FC<IProps> = ({ contentClassName, ...props }) => 
                     <Button
                       size="icon"
                       variant="ghost"
-                      className="absolute right-1 top-1 text-muted-foreground opacity-50"
+                      className="absolute right-1 top-1 z-10 text-muted-foreground opacity-50"
                       aria-label={m['components.header.favorites_remove']()}
                       onClick={() => remove(product.id)}
                     >
                       <IconX/>
                     </Button>
 
-                    <div className="relative size-18 shrink-0 overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/10">
-                      {imageUrl ? (
-                        <img
-                          src={imageUrl}
-                          alt={`${product.name} ${product.variantName}`}
-                          style={imgStyles}
-                          className="size-full object-cover"
-                        />
-                      ) : (
-                        <IconPhotoOff className="absolute inset-0 m-auto size-5 text-muted-foreground opacity-25"/>
-                      )}
-                    </div>
-
-                    <div className="flex min-w-0 flex-1 flex-col pr-7">
-                      <p className="text-sm font-medium leading-tight">
-                        {product.name}
-                        <span className="block font-normal">{product.variantName}</span>
-                      </p>
-
-                      {product.category && (
-                        <p className="text-xs text-muted-foreground">{product.category}</p>
-                      )}
-
-                      {product.isAvailable ? (
-                        <p className="mt-auto flex items-baseline gap-1 text-sm text-primary">
-                          {!!product.discountPercent && (
-                            <s className="text-xs text-muted-foreground">{product.price}</s>
+                    <PopoverPrimitive.Close asChild>
+                      <Link
+                        to="/products/$slug"
+                        params={{ slug: product.slug }}
+                        className="flex min-w-0 flex-1 items-stretch gap-2"
+                      >
+                        <div className="relative size-18 shrink-0 overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/10">
+                          {imageUrl ? (
+                            <img
+                              src={imageUrl}
+                              alt={`${product.name} ${product.variantName}`}
+                              style={imgStyles}
+                              className="size-full object-cover"
+                            />
+                          ) : (
+                            <IconPhotoOff className="absolute inset-0 m-auto size-5 text-muted-foreground opacity-25"/>
                           )}
-                          <span>{product.finalPrice} {m['components.shop.currency']()}</span>
-                        </p>
-                      ) : (
-                        <p className="mt-auto text-sm text-muted-foreground">
-                          {m['components.shop.unavailable']()}
-                        </p>
-                      )}
-                    </div>
+                        </div>
+
+                        <div className="flex min-w-0 flex-1 flex-col pr-7">
+                          <p className="text-sm font-medium leading-tight hover:underline underline-offset-2">
+                            {product.name}
+                            <span className="block font-normal">{product.variantName}</span>
+                          </p>
+
+                          {product.category && (
+                            <p className="text-xs text-muted-foreground">{product.category}</p>
+                          )}
+
+                          {product.isAvailable ? (
+                            <p className="mt-auto flex items-baseline gap-1 text-sm text-primary">
+                              {!!product.discountPercent && (
+                                <s className="text-xs text-muted-foreground">{product.price}</s>
+                              )}
+                              <span>{product.finalPrice} {m['components.shop.currency']()}</span>
+                            </p>
+                          ) : (
+                            <p className="mt-auto text-sm text-muted-foreground">
+                              {m['components.shop.unavailable']()}
+                            </p>
+                          )}
+                        </div>
+                      </Link>
+                    </PopoverPrimitive.Close>
                   </li>
                 );
               })}

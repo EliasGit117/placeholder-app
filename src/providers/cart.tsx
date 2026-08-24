@@ -2,6 +2,7 @@ import { contextFactory } from '@/lib/utils/context-factory.ts';
 import { type ReactNode } from 'react';
 import { useMutation, useQuery, useQueryClient, type QueryKey } from '@tanstack/react-query';
 import { client, orpc } from '@/lib/orpc';
+import { MAX_ITEM_QUANTITY } from '@/features/checkout/common/consts.ts';
 
 interface ICartItem {
   id: number;
@@ -34,7 +35,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     (vars: { id: number; count: number }) => client.checkout.addToCart(vars),
     (current, vars) => {
       const existing = current.find((item) => item.id === vars.id);
-      const nextCount = (existing?.count ?? 0) + vars.count;
+      const nextCount = Math.min((existing?.count ?? 0) + vars.count, MAX_ITEM_QUANTITY);
 
       if (nextCount <= 0) return current.filter((item) => item.id !== vars.id);
 

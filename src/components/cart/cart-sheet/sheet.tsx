@@ -1,6 +1,6 @@
 import { type CSSProperties, type FC } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import {
   Sheet,
   SheetClose,
@@ -108,7 +108,12 @@ export const CartSheet: FC = () => {
                     key={item.id}
                     className={cn('flex items-start gap-3 rounded-lg p-2', !product.isAvailable && 'opacity-60')}
                   >
-                    <div className="relative size-24 shrink-0 overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/10">
+                    <Link
+                      to="/products/$slug"
+                      params={{ slug: product.slug }}
+                      onClick={close}
+                      className="relative size-24 shrink-0 overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/10"
+                    >
                       {imageUrl ? (
                         <img
                           src={imageUrl}
@@ -119,14 +124,21 @@ export const CartSheet: FC = () => {
                       ) : (
                         <IconPhotoOff className="absolute inset-0 m-auto size-6 text-muted-foreground opacity-25"/>
                       )}
-                    </div>
+                    </Link>
 
                     <div className="flex min-w-0 flex-1 flex-col justify-between self-stretch">
                       <div className="space-y-1.5">
                         <div className="space-y-1">
                           <p className="text-sm font-medium leading-tight">
-                            {product.name}
-                            <span className="block text-sm font-normal">{product.variantName}</span>
+                            <Link
+                              to="/products/$slug"
+                              params={{ slug: product.slug }}
+                              onClick={close}
+                              className="hover:underline underline-offset-2"
+                            >
+                              {product.name}
+                              <span className="block text-sm font-normal">{product.variantName}</span>
+                            </Link>
                           </p>
 
                           {product.category && (

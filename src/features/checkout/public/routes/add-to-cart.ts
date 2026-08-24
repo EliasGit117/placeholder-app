@@ -1,5 +1,5 @@
 import { checkoutBase, checkoutPath } from '@/features/checkout/public/routes/base.ts';
-import { MAX_CART_ITEMS, cartItemSchema, readCart, writeCart } from '@/features/checkout/common/lib/cart-cookie.ts';
+import { MAX_CART_ITEMS, MAX_ITEM_QUANTITY, cartItemSchema, readCart, writeCart } from '@/features/checkout/common/lib/cart-cookie.ts';
 import { z } from 'zod';
 
 export const addToCart = checkoutBase
@@ -18,7 +18,7 @@ export const addToCart = checkoutBase
   .handler(async ({ input, context: { headers, resHeaders } }) => {
     const current = readCart(headers);
     const existing = current.find((item) => item.id === input.id);
-    const nextCount = (existing?.count ?? 0) + input.count;
+    const nextCount = Math.min((existing?.count ?? 0) + input.count, MAX_ITEM_QUANTITY);
 
     const next = nextCount <= 0 ?
       current.filter((item) => item.id !== input.id) :

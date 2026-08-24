@@ -22,8 +22,9 @@ import { m } from '@/paraglide/messages';
 import { useFavoritesContext } from '@/providers/favorites.tsx';
 import { useCartContext } from '@/providers/cart.tsx';
 import { Skeleton } from '@/components/ui/skeleton';
+import { MAX_ITEM_QUANTITY } from '@/features/checkout/common/consts.ts';
 
-const CART_QUANTITY_OPTIONS = Array.from({ length: 10 }, (_, i) => i + 1);
+const CART_QUANTITY_OPTIONS = Array.from({ length: MAX_ITEM_QUANTITY }, (_, i) => i + 1);
 
 interface IProps {
   product: TBriefProductPublicDto;

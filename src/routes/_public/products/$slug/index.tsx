@@ -18,6 +18,7 @@ import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
 import { useCartContext } from '@/providers/cart.tsx';
+import { MAX_ITEM_QUANTITY } from '@/features/checkout/common/consts.ts';
 import { useFavoritesContext } from '@/providers/favorites.tsx';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -321,6 +322,7 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
                       size="icon"
                       className="rounded-l-none"
                       aria-label={m['components.shop.increase_quantity']()}
+                      disabled={cartItem.count >= MAX_ITEM_QUANTITY}
                       onClick={() => addToCart(variant.id, 1)}
                     >
                       <IconPlus className="size-3.5"/>
