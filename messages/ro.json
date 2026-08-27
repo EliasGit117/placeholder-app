@@ -125,7 +125,8 @@
       "cart_missing": "Produs indisponibil",
       "cart_missing_description": "Produsul nu a fost găsit, este indisponibil sau a fost eliminat.",
       "cart_checkout": "Finalizează comanda",
-      "cart_clear": "Golește coșul"
+      "cart_clear": "Golește coșul",
+      "contacts": "Contacte"
     },
     "user_dropdown": {
       "settings": "Setări",
@@ -695,6 +696,17 @@
         "status_label": "Stare comandă",
         "save_success": "Stare actualizată cu succes."
       }
+    },
+    "contacts": {
+      "title": "Contactează-ne",
+      "description": "Scrie-ne pe email sau sună-ne, luni-vineri, 9:00-18:00.",
+      "hours": "Luni-Vineri: 9:00 - 18:00",
+      "office": {
+        "name": "Chișinău",
+        "phone": "+373 22 123 456",
+        "address": "Str. Mihai Eminescu 12, Chișinău, Moldova"
+      },
+      "map_label": "Locație"
     }
   }
 }

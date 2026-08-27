@@ -30,6 +30,7 @@ import { Route as AdminOrdersIndexRouteImport } from './routes/admin/orders/inde
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as AdminBannersIndexRouteImport } from './routes/admin/banners/index'
 import { Route as PublicProductsIndexRouteImport } from './routes/_public/products/index'
+import { Route as PublicContactsIndexRouteImport } from './routes/_public/contacts/index'
 import { Route as PublicCheckoutIndexRouteImport } from './routes/_public/checkout/index'
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
@@ -147,6 +148,11 @@ const PublicProductsIndexRoute = PublicProductsIndexRouteImport.update({
   path: '/products/',
   getParentRoute: () => PublicRouteRoute,
 } as any)
+const PublicContactsIndexRoute = PublicContactsIndexRouteImport.update({
+  id: '/contacts/',
+  path: '/contacts/',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
 const PublicCheckoutIndexRoute = PublicCheckoutIndexRouteImport.update({
   id: '/checkout/',
   path: '/checkout/',
@@ -228,6 +234,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/checkout/': typeof PublicCheckoutIndexRoute
+  '/contacts/': typeof PublicContactsIndexRoute
   '/products/': typeof PublicProductsIndexRoute
   '/admin/banners/': typeof AdminBannersIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
@@ -256,6 +263,7 @@ export interface FileRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/checkout': typeof PublicCheckoutIndexRoute
+  '/contacts': typeof PublicContactsIndexRoute
   '/products': typeof PublicProductsIndexRoute
   '/admin/banners': typeof AdminBannersIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
@@ -292,6 +300,7 @@ export interface FileRoutesById {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/_public/checkout/': typeof PublicCheckoutIndexRoute
+  '/_public/contacts/': typeof PublicContactsIndexRoute
   '/_public/products/': typeof PublicProductsIndexRoute
   '/admin/banners/': typeof AdminBannersIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
@@ -328,6 +337,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/api/rpc/$'
     | '/checkout/'
+    | '/contacts/'
     | '/products/'
     | '/admin/banners/'
     | '/admin/categories/'
@@ -356,6 +366,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/api/rpc/$'
     | '/checkout'
+    | '/contacts'
     | '/products'
     | '/admin/banners'
     | '/admin/categories'
@@ -391,6 +402,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/api/rpc/$'
     | '/_public/checkout/'
+    | '/_public/contacts/'
     | '/_public/products/'
     | '/admin/banners/'
     | '/admin/categories/'
@@ -570,6 +582,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicProductsIndexRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    '/_public/contacts/': {
+      id: '/_public/contacts/'
+      path: '/contacts'
+      fullPath: '/contacts/'
+      preLoaderRoute: typeof PublicContactsIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
     '/_public/checkout/': {
       id: '/_public/checkout/'
       path: '/checkout'
@@ -660,6 +679,7 @@ declare module '@tanstack/react-router' {
 interface PublicRouteRouteChildren {
   PublicIndexRoute: typeof PublicIndexRoute
   PublicCheckoutIndexRoute: typeof PublicCheckoutIndexRoute
+  PublicContactsIndexRoute: typeof PublicContactsIndexRoute
   PublicProductsIndexRoute: typeof PublicProductsIndexRoute
   PublicOrdersUidIndexRoute: typeof PublicOrdersUidIndexRoute
   PublicProductsSlugIndexRoute: typeof PublicProductsSlugIndexRoute
@@ -668,6 +688,7 @@ interface PublicRouteRouteChildren {
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicIndexRoute: PublicIndexRoute,
   PublicCheckoutIndexRoute: PublicCheckoutIndexRoute,
+  PublicContactsIndexRoute: PublicContactsIndexRoute,
   PublicProductsIndexRoute: PublicProductsIndexRoute,
   PublicOrdersUidIndexRoute: PublicOrdersUidIndexRoute,
   PublicProductsSlugIndexRoute: PublicProductsSlugIndexRoute,
