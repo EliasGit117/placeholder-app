@@ -391,6 +391,7 @@ export const ModelName = {
   ImageVariant: 'ImageVariant',
   Order: 'Order',
   OrderProduct: 'OrderProduct',
+  OnlinePayment: 'OnlinePayment',
   Product: 'Product',
   ProductVariant: 'ProductVariant',
   Session: 'Session',
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "banner" | "category" | "image" | "imageVariant" | "order" | "orderProduct" | "product" | "productVariant" | "session" | "user" | "verification"
+    modelProps: "account" | "banner" | "category" | "image" | "imageVariant" | "order" | "orderProduct" | "onlinePayment" | "product" | "productVariant" | "session" | "user" | "verification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -930,6 +931,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.OrderProductCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.OrderProductCountAggregateOutputType> | number
+        }
+      }
+    }
+    OnlinePayment: {
+      payload: Prisma.$OnlinePaymentPayload<ExtArgs>
+      fields: Prisma.OnlinePaymentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OnlinePaymentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OnlinePaymentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OnlinePaymentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OnlinePaymentPayload>
+        }
+        findFirst: {
+          args: Prisma.OnlinePaymentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OnlinePaymentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OnlinePaymentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OnlinePaymentPayload>
+        }
+        findMany: {
+          args: Prisma.OnlinePaymentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OnlinePaymentPayload>[]
+        }
+        create: {
+          args: Prisma.OnlinePaymentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OnlinePaymentPayload>
+        }
+        createMany: {
+          args: Prisma.OnlinePaymentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OnlinePaymentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OnlinePaymentPayload>[]
+        }
+        delete: {
+          args: Prisma.OnlinePaymentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OnlinePaymentPayload>
+        }
+        update: {
+          args: Prisma.OnlinePaymentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OnlinePaymentPayload>
+        }
+        deleteMany: {
+          args: Prisma.OnlinePaymentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OnlinePaymentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OnlinePaymentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OnlinePaymentPayload>[]
+        }
+        upsert: {
+          args: Prisma.OnlinePaymentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OnlinePaymentPayload>
+        }
+        aggregate: {
+          args: Prisma.OnlinePaymentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOnlinePayment>
+        }
+        groupBy: {
+          args: Prisma.OnlinePaymentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OnlinePaymentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OnlinePaymentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OnlinePaymentCountAggregateOutputType> | number
         }
       }
     }
@@ -1467,6 +1542,28 @@ export const OrderProductScalarFieldEnum = {
 export type OrderProductScalarFieldEnum = (typeof OrderProductScalarFieldEnum)[keyof typeof OrderProductScalarFieldEnum]
 
 
+export const OnlinePaymentScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  provider: 'provider',
+  status: 'status',
+  checkoutId: 'checkoutId',
+  checkoutUrl: 'checkoutUrl',
+  callbackUrl: 'callbackUrl',
+  paymentId: 'paymentId',
+  expiresAt: 'expiresAt',
+  amount: 'amount',
+  currency: 'currency',
+  paymentMethod: 'paymentMethod',
+  referenceNumber: 'referenceNumber',
+  executedAt: 'executedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OnlinePaymentScalarFieldEnum = (typeof OnlinePaymentScalarFieldEnum)[keyof typeof OnlinePaymentScalarFieldEnum]
+
+
 export const ProductScalarFieldEnum = {
   id: 'id',
   nameRo: 'nameRo',
@@ -1737,6 +1834,34 @@ export type ListEnumDeliveryMethodFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
+ * Reference to a field of type 'OnlinePaymentProvider'
+ */
+export type EnumOnlinePaymentProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OnlinePaymentProvider'>
+    
+
+
+/**
+ * Reference to a field of type 'OnlinePaymentProvider[]'
+ */
+export type ListEnumOnlinePaymentProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OnlinePaymentProvider[]'>
+    
+
+
+/**
+ * Reference to a field of type 'OnlinePaymentStatus'
+ */
+export type EnumOnlinePaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OnlinePaymentStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'OnlinePaymentStatus[]'
+ */
+export type ListEnumOnlinePaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OnlinePaymentStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'ProductState'
  */
 export type EnumProductStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductState'>
@@ -1886,6 +2011,7 @@ export type GlobalOmitConfig = {
   imageVariant?: Prisma.ImageVariantOmit
   order?: Prisma.OrderOmit
   orderProduct?: Prisma.OrderProductOmit
+  onlinePayment?: Prisma.OnlinePaymentOmit
   product?: Prisma.ProductOmit
   productVariant?: Prisma.ProductVariantOmit
   session?: Prisma.SessionOmit

@@ -76,6 +76,27 @@ export const DeliveryMethod = {
 export type DeliveryMethod = (typeof DeliveryMethod)[keyof typeof DeliveryMethod]
 
 
+export const OnlinePaymentProvider = {
+  MAIB: 'MAIB'
+} as const
+
+export type OnlinePaymentProvider = (typeof OnlinePaymentProvider)[keyof typeof OnlinePaymentProvider]
+
+
+export const OnlinePaymentStatus = {
+  WAITING_FOR_INIT: 'WAITING_FOR_INIT',
+  INITIALIZED: 'INITIALIZED',
+  PAYMENT_METHOD_SELECTED: 'PAYMENT_METHOD_SELECTED',
+  COMPLETED: 'COMPLETED',
+  EXPIRED: 'EXPIRED',
+  ABANDONED: 'ABANDONED',
+  CANCELLED: 'CANCELLED',
+  FAILED: 'FAILED'
+} as const
+
+export type OnlinePaymentStatus = (typeof OnlinePaymentStatus)[keyof typeof OnlinePaymentStatus]
+
+
 export const ProductState = {
   ACTIVE: 'ACTIVE',
   NOT_AVAILABLE: 'NOT_AVAILABLE',

@@ -77,6 +77,11 @@ export type Order = Prisma.OrderModel
  */
 export type OrderProduct = Prisma.OrderProductModel
 /**
+ * Model OnlinePayment
+ * 
+ */
+export type OnlinePayment = Prisma.OnlinePaymentModel
+/**
  * Model Product
  * 
  */
