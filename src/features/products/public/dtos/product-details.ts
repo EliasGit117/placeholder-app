@@ -1,9 +1,11 @@
 import { z } from 'zod';
 import type { Category, Product, ProductVariant } from '~/prisma/generated/prisma/client.ts';
 import { ProductState } from '~/prisma/generated/prisma/enums.ts';
-import { optionsSchema, optionValuesSchema, type TOptions } from '@/features/products/common/dtos/option-schema.ts';
+import { optionsSchema, optionValuesSchema } from '@/features/products/common/dtos/option-schema.ts';
 import { productVariantImageDtoSchema, type TProductVariantImageDto } from '@/features/products/common/dtos/product-variant-image.ts';
 import { computeDiscountedPrice } from '@/features/products/common/lib/discount.ts';
+import { capitalizeFirst } from '@/lib/utils';
+import type { Locale } from '~/src/paraglide/runtime';
 
 // A single purchasable variant on the product detail page: bilingual name is already
 // resolved to the request locale, price is resolved to its discounted final price, and
@@ -48,30 +50,31 @@ export class ProductDetailsDtoFactory {
     category: Pick<Category, 'nameRo' | 'nameRu'> | null,
     variants: ProductVariant[],
     imagesByVariant: Map<number, TProductVariantImageDto[]>,
-    ru: boolean,
-    selectedVariantId: number
+    selectedVariantId: number,
+    locale: Locale
   ): TProductDetailsDto {
+
     return {
       id: product.id,
-      name: ru ? product.nameRu : product.nameRo,
+      name: product[`name${capitalizeFirst(locale)}`],
       slug: product.slug,
-      shortDescription: (ru ? product.shortDescriptionRu : product.shortDescriptionRo) ?? null,
-      description: (ru ? product.descriptionRu : product.descriptionRo) ?? null,
+      shortDescription: product[`shortDescription${capitalizeFirst(locale)}`],
+      description: product[`description${capitalizeFirst(locale)}`],
       categoryId: product.categoryId,
-      category: (ru ? category?.nameRu : category?.nameRo) ?? null,
-      options: product.options as TOptions,
+      category: category?.[`name${capitalizeFirst(locale)}`] ?? null,
+      options: optionsSchema.safeParse(product.options).data ?? {},
+      selectedVariantId: selectedVariantId,
       variants: variants.map((v) => ({
         id: v.id,
-        name: ru ? v.nameRu : v.nameRo,
+        name: v[`name${capitalizeFirst(locale)}`],
         slug: v.fullSlug,
-        optionValues: v.optionValues as Record<string, string>,
+        optionValues: optionValuesSchema.safeParse(v.optionValues).data ?? {},
         price: v.price,
         discountPercent: v.discountPercent,
         finalPrice: computeDiscountedPrice(v.price, v.discountPercent),
         isAvailable: v.state === ProductState.ACTIVE,
         images: imagesByVariant.get(v.id) ?? [],
       })),
-      selectedVariantId,
     };
   }
 }

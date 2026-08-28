@@ -94,7 +94,7 @@ export class ProductService {
   // on the shop grid) and returns the parent product with every sellable sibling
   // variant, so the detail page can switch color/size without a refetch.
   static async findDetailsByVariantSlug(fullSlug: string): Promise<TProductDetailsDto | null> {
-    const ru = getLocale() === 'ru';
+    const locale = getLocale();
     const sellableStates = [ProductState.ACTIVE, ProductState.NOT_AVAILABLE];
 
     const product = await prisma.product.findFirst({
@@ -122,8 +122,8 @@ export class ProductService {
       product.category,
       product.variants,
       imagesByVariant,
-      ru,
-      variant.id
+      variant.id,
+      locale
     );
   }
 
