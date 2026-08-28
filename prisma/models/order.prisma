@@ -26,9 +26,12 @@ model Order {
   deliveryMethod DeliveryMethod @map("delivery_method")
   address        String
   items          OrderProduct[]
+  onlinePayment  OnlinePayment?
   createdAt      DateTime       @default(now()) @map("created_at")
   updatedAt      DateTime       @updatedAt @map("updated_at")
 
+  @@index([status])
+  @@index([createdAt])
   @@map("orders")
 }
 

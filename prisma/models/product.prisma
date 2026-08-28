@@ -25,6 +25,8 @@ model Product {
   updatedAt     DateTime         @updatedAt @map("updated_at")
 
   @@index([categoryId])
+  @@index([state])
+  @@index([createdAt])
   @@map("products")
 }
 
@@ -47,6 +49,8 @@ model ProductVariant {
 
   @@unique([productId, slug])
   @@index([productId])
+  @@index([state])
+  @@index([createdAt])
   @@index([optionValues(ops: JsonbOps)], type: Gin)
   @@map("product_variants")
 }

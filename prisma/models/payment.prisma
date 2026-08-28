@@ -1,0 +1,40 @@
+enum OnlinePaymentProvider {
+  MAIB @map("maib")
+
+  @@map("online_payment_provider")
+}
+
+enum OnlinePaymentStatus {
+  WAITING_FOR_INIT        @map("waiting_for_init")
+  INITIALIZED              @map("initialized")
+  PAYMENT_METHOD_SELECTED  @map("payment_method_selected")
+  COMPLETED                @map("completed")
+  EXPIRED                  @map("expired")
+  ABANDONED                @map("abandoned")
+  CANCELLED                @map("cancelled")
+  FAILED                   @map("failed")
+
+  @@map("online_payment_status")
+}
+
+model OnlinePayment {
+  id              Int                   @id @default(autoincrement())
+  orderId         Int                   @unique @map("order_id")
+  order           Order                 @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  provider        OnlinePaymentProvider @default(MAIB)
+  status          OnlinePaymentStatus   @default(WAITING_FOR_INIT)
+  checkoutId      String?               @unique @map("checkout_id")
+  checkoutUrl     String?               @map("checkout_url")
+  callbackUrl     String?               @map("callback_url")
+  paymentId       String?               @unique @map("payment_id")
+  expiresAt       DateTime?             @map("expires_at")
+  amount          Int
+  currency        String                @default("MDL")
+  paymentMethod   String?               @map("payment_method")
+  referenceNumber String?               @map("reference_number")
+  executedAt      DateTime?             @map("executed_at")
+  createdAt       DateTime              @default(now()) @map("created_at")
+  updatedAt       DateTime              @updatedAt @map("updated_at")
+
+  @@map("online_payments")
+}

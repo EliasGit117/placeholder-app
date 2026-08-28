@@ -5,6 +5,8 @@ import { paginatedRequestDtoSchema } from '@/features/shared/schemas/pagination.
 import { paginationResultWithCountDtoSchema } from '@/features/shared/dtos/pagination-result-dto.ts';
 import { computeDiscountedPrice } from '@/features/products/common/lib/discount.ts';
 import { briefImageDtoSchema, type TBriefImageDto } from '@/features/products/common/dtos/brief-image.ts';
+import { capitalizeFirst } from '@/lib/utils';
+import type { Locale } from '~/src/paraglide/runtime';
 
 
 // A single sellable product on the public shop grid, already localized for the
@@ -63,16 +65,16 @@ export class BriefProductPublicDtoFactory {
 
   static fromVariant(
     variant: TBriefProductVariantRow,
-    ru: boolean,
-    image: TBriefImageDto | null
+    image: TBriefImageDto | null,
+    locale: Locale
   ): TBriefProductPublicDto {
-    const category = ru ? variant.product.category?.nameRu : variant.product.category?.nameRo;
-    const shortDescription = ru ? variant.product.shortDescriptionRu : variant.product.shortDescriptionRo;
+    const category = variant.product.category?.[`name${capitalizeFirst(locale)}`];
+    const shortDescription = variant.product[`shortDescription${capitalizeFirst(locale)}`];
 
     return {
       id: variant.id,
-      name: ru ? variant.product.nameRu : variant.product.nameRo,
-      variantName: ru ? variant.nameRu : variant.nameRo,
+      name: variant.product[`name${capitalizeFirst(locale)}`],
+      variantName: variant[`name${capitalizeFirst(locale)}`],
       shortDescription: shortDescription ?? null,
       price: variant.price,
       discountPercent: variant.discountPercent,

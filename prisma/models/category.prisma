@@ -20,5 +20,6 @@ model Category {
   updatedAt     DateTime      @updatedAt @map("updated_at")
 
   @@unique([slug, parentId])
+  @@index([parentId])
   @@map("categories")
 }

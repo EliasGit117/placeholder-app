@@ -18,17 +18,21 @@ import type { TSearchProductsRequestDto } from '@/features/products/admin/dtos/s
 import { BriefProductPublicDtoFactory, briefProductVariantInclude } from '@/features/products/public/dtos/search-public-products.ts';
 import type { TSearchPublicProductsRequestDto, TBriefProductPublicDto } from '@/features/products/public/dtos/search-public-products.ts';
 import { ProductDetailsDtoFactory, type TProductDetailsDto } from '@/features/products/public/dtos/product-details.ts';
+import { capitalizeFirst } from '@/lib/utils';
+
 
 export class ProductService {
 
   // Batch-fetch images for the given variants, grouped by variant id, preserving
   // each variant's image display order.
   private static async variantImagesMap(
-    variants: ProductVariant[]
+    variants: ProductVariant | ProductVariant[]
   ): Promise<Map<number, TProductVariantImageDto[]>> {
+    const list = Array.isArray(variants) ? variants : [variants];
+
     const images = await ImageService.findByResources(
       ImageResourceType.PRODUCT_VARIANT,
-      variants.map((v) => String(v.id))
+      list.map((v) => String(v.id))
     );
 
     const map = new Map<number, TProductVariantImageDto[]>();
@@ -95,18 +99,27 @@ export class ProductService {
   // variant, so the detail page can switch color/size without a refetch.
   static async findDetailsByVariantSlug(fullSlug: string): Promise<TProductDetailsDto | null> {
     const locale = getLocale();
-    const sellableStates = [ProductState.ACTIVE, ProductState.NOT_AVAILABLE];
+    const sellableStates: ProductState[] = [ProductState.ACTIVE, ProductState.NOT_AVAILABLE];
 
-    const product = await prisma.product.findFirst({
-      where: {
-        state: ProductState.ACTIVE,
-        variants: { some: { fullSlug, state: { in: sellableStates } } },
-      },
-      include: {
-        category: { select: { nameRo: true, nameRu: true } },
-        variants: { where: { state: { in: sellableStates } }, orderBy: { id: 'asc' } },
-      },
+    const targetVariant = await prisma.productVariant.findUnique({
+      where: { fullSlug: fullSlug },
+      select: { id: true, productId: true, state: true },
     });
+
+    if (!targetVariant || !sellableStates.includes(targetVariant.state))
+      return null;
+
+    const [product, images] = await Promise.all([
+      prisma.product.findUnique({
+        where: { id: targetVariant.productId, state: ProductState.ACTIVE },
+        include: {
+          category: { select: { nameRo: true, nameRu: true } },
+          variants: { where: { state: { in: sellableStates } }, orderBy: { id: 'asc' } },
+        },
+      }),
+
+      ImageService.findByResources(ImageResourceType.PRODUCT_VARIANT, [String(targetVariant.id)]),
+    ]);
 
     if (!product)
       return null;
@@ -115,7 +128,9 @@ export class ProductService {
     if (!variant)
       return null;
 
-    const imagesByVariant = await ProductService.variantImagesMap(product.variants);
+    const imagesByVariant = new Map<number, TProductVariantImageDto[]>([
+      [targetVariant.id, images.map(ProductVariantImageDtoFactory.fromImageDto)],
+    ]);
 
     return ProductDetailsDtoFactory.build(
       product,
@@ -133,7 +148,7 @@ export class ProductService {
 
 
   static async searchPublicProducts(input: TSearchPublicProductsRequestDto) {
-    const ru = getLocale() === 'ru';
+    const locale = getLocale();
 
     const productWhere: Prisma.ProductWhereInput = { state: ProductState.ACTIVE };
 
@@ -161,9 +176,10 @@ export class ProductService {
     if (input.name != null) {
       // Display name = product name + variant name, so match either part.
       const filter = { contains: input.name, mode: 'insensitive' as const };
-      where.OR = ru
-        ? [{ nameRu: filter }, { product: { nameRu: filter } }]
-        : [{ nameRo: filter }, { product: { nameRo: filter } }];
+      where.OR = [
+        { [`name${capitalizeFirst(locale)}`]: filter },
+        { product: { [`name${capitalizeFirst(locale)}`]: filter } }
+      ];
     }
 
     if (input.priceMin != null || input.priceMax != null) {
@@ -175,13 +191,21 @@ export class ProductService {
 
     // 'name' sorts by the localized variant name; other keys map to real columns.
     const dir = input.dir ?? (input.sort === 'name' ? 'asc' : 'desc');
+
+    let sortField: Prisma.ProductVariantOrderByWithRelationInput;
+    switch (input.sort) {
+      case 'name':
+        sortField = { [`name${capitalizeFirst(locale)}`]: dir };
+        break;
+      case 'price':
+        sortField = { price: dir };
+        break;
+      default:
+        sortField = { createdAt: dir };
+    }
+
     // 'state' sorts before the chosen key so NOT_AVAILABLE variants ('not_available' > 'active') always trail ACTIVE ones.
-    const orderBy: Prisma.ProductVariantOrderByWithRelationInput[] = [
-      { state: 'asc' },
-      input.sort === 'name' ? (ru ? { nameRu: dir } : { nameRo: dir })
-        : input.sort === 'price' ? { price: dir }
-          : { createdAt: dir },
-    ];
+    const orderBy: Prisma.ProductVariantOrderByWithRelationInput[] = [{ state: 'asc' }, sortField];
 
     const [items, meta] = await prisma.productVariant
       .paginate({
@@ -199,7 +223,7 @@ export class ProductService {
     const firstImageByVariant = await ProductService.firstImageByVariant(items.map((v) => v.id));
 
     const result = items.map((v) =>
-      BriefProductPublicDtoFactory.fromVariant(v, ru, firstImageByVariant.get(v.id) ?? null)
+      BriefProductPublicDtoFactory.fromVariant(v, firstImageByVariant.get(v.id) ?? null, locale)
     );
 
     return PaginationResultDtoFactory.getWithCount(result, meta);
@@ -211,7 +235,7 @@ export class ProductService {
     if (ids.length === 0)
       return {};
 
-    const ru = getLocale() === 'ru';
+    const locale = getLocale();
 
     const items = await prisma.productVariant.findMany({
       where: {
@@ -226,7 +250,7 @@ export class ProductService {
 
     const result: Record<number, TBriefProductPublicDto> = {};
     for (const v of items) {
-      result[v.id] = BriefProductPublicDtoFactory.fromVariant(v, ru, firstImageByVariant.get(v.id) ?? null);
+      result[v.id] = BriefProductPublicDtoFactory.fromVariant(v, firstImageByVariant.get(v.id) ?? null, locale);
     }
 
     return result;
