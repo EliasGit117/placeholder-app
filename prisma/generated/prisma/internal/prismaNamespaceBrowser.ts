@@ -222,6 +222,7 @@ export const OnlinePaymentScalarFieldEnum = {
   paymentMethod: 'paymentMethod',
   referenceNumber: 'referenceNumber',
   executedAt: 'executedAt',
+  attemptCount: 'attemptCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

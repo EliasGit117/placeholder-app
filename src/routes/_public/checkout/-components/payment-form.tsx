@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { useNavigate } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { IconBasketCheck, IconBuildingStore, IconCash, IconMapPin, IconSelector, IconTruckDelivery } from '@tabler/icons-react';
+import { IconBasketCheck, IconBuildingStore, IconCash, IconCreditCard, IconMapPin, IconSelector, IconTruckDelivery } from '@tabler/icons-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LoadingButton } from '@/components/ui/loading-button';
@@ -24,7 +24,7 @@ const pickupAddresses = [
 ];
 
 const schema = z.object({
-  paymentType: z.enum(['cash']),
+  paymentType: z.enum(['cash', 'maib']),
   fullName: z.string().min(1),
   phone: z.string().min(1),
   email: z.string().min(1).email(),
@@ -64,6 +64,7 @@ export const PaymentForm: FC = () => {
 
   const createOrderMutation = useMutation({
     mutationFn: (data: TSchema) => client.orders.create({
+      paymentType: data.paymentType,
       fullName: data.fullName,
       phone: data.phone,
       email: data.email,
@@ -76,6 +77,7 @@ export const PaymentForm: FC = () => {
     try {
       const order = await createOrderMutation.mutateAsync(data);
       clear();
+
       toast.success(m['pages.checkout.payment.success']());
       void navigate({ to: '/orders/$uid', params: { uid: order.uid } });
     } catch {
@@ -105,7 +107,10 @@ export const PaymentForm: FC = () => {
                     id="checkout-payment-type"
                     value={field.value}
                     onChange={field.onChange}
-                    options={[{ value: 'cash', label: m['pages.checkout.payment.payment_type_cash'](), icon: <IconCash/> }]}
+                    options={[
+                      { value: 'cash', label: m['pages.checkout.payment.payment_type_cash'](), icon: <IconCash/> },
+                      { value: 'maib', label: m['pages.checkout.payment.payment_type_maib'](), icon: <IconCreditCard/> },
+                    ]}
                   />
                 </Field>
               )}
@@ -181,7 +186,10 @@ export const PaymentForm: FC = () => {
                     <DropdownField
                       id="checkout-delivery-method"
                       value={field.value}
-                      onChange={field.onChange}
+                      onChange={(value) => {
+                        field.onChange(value);
+                        form.resetField(value === 'pickup' ? 'address' : 'pickupAddress');
+                      }}
                       options={[
                         { value: 'courier', label: m['pages.checkout.payment.delivery_courier'](), icon: <IconTruckDelivery/> },
                         { value: 'pickup', label: m['pages.checkout.payment.delivery_pickup'](), icon: <IconBuildingStore/> },
@@ -202,6 +210,7 @@ export const PaymentForm: FC = () => {
                         id="checkout-pickup-address"
                         value={field.value}
                         onChange={field.onChange}
+                        placeholder={m['pages.checkout.payment.pickup_address_placeholder']()}
                         options={pickupAddresses.map((address) => ({ value: address, label: address, icon: <IconMapPin/> }))}
                       />
                     </Field>
@@ -226,7 +235,7 @@ export const PaymentForm: FC = () => {
               )}
             </FieldGroup>
 
-            <LoadingButton type="submit" size="lg" loading={form.formState.isSubmitting} disabled={disabled}>
+            <LoadingButton type="submit" size="lg" className="sm:ml-auto sm:w-fit" loading={form.formState.isSubmitting} disabled={disabled}>
               <IconBasketCheck/>
               {m['pages.checkout.payment.submit']()}
             </LoadingButton>
@@ -242,9 +251,10 @@ interface IDropdownFieldProps {
   value: string | undefined;
   onChange: (value: string) => void;
   options: { value: string; label: string; icon?: ReactNode }[];
+  placeholder?: string;
 }
 
-const DropdownField: FC<IDropdownFieldProps> = ({ id, value, onChange, options }) => {
+const DropdownField: FC<IDropdownFieldProps> = ({ id, value, onChange, options, placeholder }) => {
   const selected = options.find((option) => option.value === value);
 
   return (
@@ -252,8 +262,14 @@ const DropdownField: FC<IDropdownFieldProps> = ({ id, value, onChange, options }
       <DropdownMenuTrigger asChild>
         <Button type="button" variant="outline" id={id} className="w-full justify-between font-normal">
           <span className="flex min-w-0 items-center gap-2 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted-foreground">
-            {selected?.icon}
-            <span className="truncate">{selected?.label}</span>
+            {selected ? (
+              <>
+                {selected.icon}
+                <span className="truncate">{selected.label}</span>
+              </>
+            ) : (
+              <span className="truncate text-muted-foreground">{placeholder}</span>
+            )}
           </span>
           <IconSelector className="size-4 shrink-0 text-muted-foreground"/>
         </Button>

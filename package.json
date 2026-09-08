@@ -8,6 +8,7 @@
     "serve": "bun --bun --bun-no-env vite preview",
     "test": "vitest run",
     "seed:admin": "bun run scripts/seed-admin.ts",
+    "reverify-payments": "bun run scripts/reverify-online-payments.ts",
     "machine-translate": "inlang machine translate --project project.inlang"
   },
   "dependencies": {

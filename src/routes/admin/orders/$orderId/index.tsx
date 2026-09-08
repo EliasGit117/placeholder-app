@@ -171,13 +171,11 @@ function RouteComponent() {
               {order.deliveryMethod === DeliveryMethod.PICKUP ? <IconBuildingStore className="size-4"/> :
                 <IconTruckDelivery className="size-4"/>}
               <span>
-                {order.deliveryMethod === DeliveryMethod.PICKUP
-                  ? m['pages.checkout.payment.delivery_pickup']()
-                  : m['pages.checkout.payment.delivery_courier']()}
+                {order.deliveryMethod === DeliveryMethod.PICKUP ? m['pages.checkout.payment.delivery_pickup']() : m['pages.checkout.payment.delivery_courier']()}
               </span>
             </div>
-            <div className="flex items-start gap-2">
-              <IconMapPin className="mt-0.5 size-4 shrink-0 text-muted-foreground"/>
+            <div className="flex items-start gap-2 text-muted-foreground">
+              <IconMapPin className="mt-0.5 size-4 shrink-0"/>
               <span>{order.address}</span>
             </div>
           </CardContent>

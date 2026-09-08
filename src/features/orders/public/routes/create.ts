@@ -21,6 +21,7 @@ export const createOrder = ordersBase
 
     const order = await OrderService.create({
       items: cart.map((item) => ({ variantId: item.id, count: item.count })),
+      paymentType: input.paymentType,
       fullName: input.fullName,
       phone: input.phone,
       email: input.email,

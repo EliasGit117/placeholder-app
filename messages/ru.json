@@ -68,6 +68,16 @@
       "shipped": "Отправлен",
       "completed": "Завершён",
       "cancelled": "Отменён"
+    },
+    "online_payment_status": {
+      "waiting_for_init": "В ожидании",
+      "initialized": "В обработке",
+      "payment_method_selected": "В обработке",
+      "completed": "Оплачено",
+      "expired": "Истекло",
+      "abandoned": "Не завершено",
+      "cancelled": "Отменено",
+      "failed": "Неудачно"
     }
   },
   "components": {
@@ -635,10 +645,13 @@
         "error": "Не удалось оформить заказ. Попробуйте снова.",
         "payment_type": "Способ оплаты",
         "payment_type_cash": "Наличными",
+        "payment_type_maib": "Банковская карта",
+        "redirecting_to_payment": "Перенаправление на страницу оплаты...",
         "contact_title": "Контактные данные",
         "phone": "Телефон",
         "delivery_title": "Доставка",
         "pickup_address": "Адрес самовывоза",
+        "pickup_address_placeholder": "Выберите адрес",
         "submit": "Заказать",
         "full_name_placeholder": "Думитру Вагин",
         "phone_placeholder": "+373 6X XXX XXX",
@@ -649,6 +662,18 @@
     "order_confirmation": {
       "breadcrumb_current": "Детали заказа",
       "summary_title": "Ваш заказ",
+      "online_payment_title": "Онлайн-оплата",
+      "online_payment_continue": "Продолжить оплату",
+      "online_payment_status": {
+        "waiting_for_init": "Завершите оплату картой, чтобы подтвердить заказ.",
+        "initialized": "Завершите оплату картой, чтобы подтвердить заказ.",
+        "payment_method_selected": "Завершите оплату картой, чтобы подтвердить заказ.",
+        "completed": "Оплата получена. Ваш заказ подтверждён.",
+        "expired": "Время на оплату истекло. Свяжитесь с нами, чтобы возобновить заказ.",
+        "abandoned": "Оплата не была завершена. Свяжитесь с нами, чтобы возобновить заказ.",
+        "cancelled": "Оплата отменена.",
+        "failed": "Оплата не прошла. Попробуйте снова или свяжитесь с нами."
+      },
       "contact_title": "Контактные данные и доставка",
       "not_found_title": "Заказ не найден",
       "not_found_description": "Проверьте ссылку или свяжитесь с нами, если нужна помощь.",

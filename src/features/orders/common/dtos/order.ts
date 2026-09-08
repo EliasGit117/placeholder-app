@@ -2,6 +2,7 @@ import { z } from 'zod';
 import type { Order, OrderProduct } from '~/prisma/generated/prisma/client.ts';
 import { DeliveryMethod, OrderStatus } from '~/prisma/generated/prisma/enums.ts';
 import { briefImageDtoSchema, type TBriefImageDto } from '@/features/products/common/dtos/brief-image.ts';
+import { onlinePaymentDtoSchema, type TOnlinePaymentDto } from '@/features/orders/common/dtos/online-payment.ts';
 
 export const orderProductDtoSchema = z.object({
   id: z.number(),
@@ -32,6 +33,7 @@ export const orderDtoSchema = z.object({
   deliveryMethod: z.enum(DeliveryMethod),
   address: z.string(),
   items: z.array(orderProductDtoSchema),
+  onlinePayment: onlinePaymentDtoSchema.nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
@@ -68,7 +70,8 @@ export class OrderDtoFactory {
   static fromEntity(
     entity: Order & { items: OrderProduct[] },
     imagesByVariant?: Map<number, TBriefImageDto>,
-    categoryByVariant?: Map<number, string>
+    categoryByVariant?: Map<number, string>,
+    onlinePayment: TOnlinePaymentDto | null = null
   ): TOrderDto {
     return {
       id: entity.id,
@@ -87,6 +90,7 @@ export class OrderDtoFactory {
           categoryByVariant?.get(i.variantId) ?? null
         )
       ),
+      onlinePayment,
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
     };

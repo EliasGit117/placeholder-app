@@ -8,6 +8,8 @@ import { OrderDtoFactory, type TOrderDto } from '@/features/orders/common/dtos/o
 import type { TSearchOrdersRequestDto } from '@/features/orders/admin/dtos/search-orders.ts';
 import { ImageService } from '@/features/images/common/services/image-service.ts';
 import { BriefImageDtoFactory, type TBriefImageDto } from '@/features/products/common/dtos/brief-image.ts';
+import { OnlinePaymentService } from '@/features/orders/common/services/online-payment-service.ts';
+import { OnlinePaymentDtoFactory, type TOnlinePaymentDto } from '@/features/orders/common/dtos/online-payment.ts';
 
 export interface ICreateOrderItem {
   variantId: number;
@@ -16,6 +18,7 @@ export interface ICreateOrderItem {
 
 export interface ICreateOrderInput {
   items: ICreateOrderItem[];
+  paymentType: 'cash' | 'maib';
   fullName: string;
   phone: string;
   email: string;
@@ -70,23 +73,36 @@ export class OrderService {
     return map;
   }
 
-  private static async withImages(entity: Order & { items: OrderProduct[] }): Promise<TOrderDto> {
+  private static async withImages(
+    entity: Order & { items: OrderProduct[] },
+    onlinePayment: TOnlinePaymentDto | null = null
+  ): Promise<TOrderDto> {
     const variantIds = entity.items.map((i) => i.variantId);
     const [imagesByVariant, categoryByVariant] = await Promise.all([
       OrderService.firstImageByVariant(variantIds),
       OrderService.categoryByVariant(variantIds),
     ]);
-    return OrderDtoFactory.fromEntity(entity, imagesByVariant, categoryByVariant);
+    return OrderDtoFactory.fromEntity(entity, imagesByVariant, categoryByVariant, onlinePayment);
   }
 
   static async findById(id: number): Promise<TOrderDto | null> {
     const entity = await prisma.order.findUnique({ where: { id }, include: { items: true } });
-    return entity ? OrderService.withImages(entity) : null;
+    if (!entity)
+      return null;
+
+    const onlinePayment = await OnlinePaymentService.findByOrderId(entity.id);
+    return OrderService.withImages(entity, onlinePayment);
   }
 
+  // Guest order confirmation page — synced live with maib since the payer can land
+  // here before the callback webhook arrives (or if it never arrives).
   static async findByUid(uid: string): Promise<TOrderDto | null> {
     const entity = await prisma.order.findUnique({ where: { uid }, include: { items: true } });
-    return entity ? OrderService.withImages(entity) : null;
+    if (!entity)
+      return null;
+
+    const onlinePayment = await OnlinePaymentService.findByOrderIdFresh(entity.id);
+    return OrderService.withImages(entity, onlinePayment);
   }
 
   static async search(input: TSearchOrdersRequestDto) {
@@ -120,13 +136,15 @@ export class OrderService {
       });
 
     const variantIds = items.flatMap((o) => o.items.map((i) => i.variantId));
-    const [imagesByVariant, categoryByVariant] = await Promise.all([
+    const [imagesByVariant, categoryByVariant, onlinePayments] = await Promise.all([
       OrderService.firstImageByVariant(variantIds),
       OrderService.categoryByVariant(variantIds),
+      prisma.onlinePayment.findMany({ where: { orderId: { in: items.map((o) => o.id) } } }),
     ]);
+    const onlinePaymentByOrderId = new Map(onlinePayments.map((p) => [p.orderId, OnlinePaymentDtoFactory.fromEntity(p)]));
 
     return PaginationResultDtoFactory.getWithCount(
-      items.map((e) => OrderDtoFactory.fromEntity(e, imagesByVariant, categoryByVariant)),
+      items.map((e) => OrderDtoFactory.fromEntity(e, imagesByVariant, categoryByVariant, onlinePaymentByOrderId.get(e.id) ?? null)),
       meta
     );
   }
@@ -142,7 +160,8 @@ export class OrderService {
       include: { items: true },
     });
 
-    return OrderService.withImages(entity);
+    const onlinePayment = await OnlinePaymentService.findByOrderId(entity.id);
+    return OrderService.withImages(entity, onlinePayment);
   }
 
   // Snapshots each variant's current name/price/discount onto the order line item, so the
@@ -198,7 +217,11 @@ export class OrderService {
       include: { items: true },
     });
 
-    return OrderService.withImages(entity);
+    const onlinePayment = input.paymentType === 'maib'
+      ? await OnlinePaymentService.createForOrder(entity.id)
+      : null;
+
+    return OrderService.withImages(entity, onlinePayment);
   }
 }
 

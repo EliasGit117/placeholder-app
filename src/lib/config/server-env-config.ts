@@ -5,7 +5,14 @@ const serverEnvSchema = z.object({
 
   DATABASE_URL: z.url(),
   BETTER_AUTH_SECRET: z.string().min(10),
-  UPLOADTHING_TOKEN: z.string().min(1)
+  UPLOADTHING_TOKEN: z.string().min(1),
+
+  MAIB_CLIENT_ID: z.string().min(1),
+  MAIB_CLIENT_SECRET: z.string().min(1),
+  MAIB_SIGNATURE_KEY: z.string().min(1),
+
+  REVERIFY_PAYMENTS_ENABLED: z.enum(['true', 'false']).default('false'),
+  REVERIFY_PAYMENTS_INTERVAL_MINUTES: z.coerce.number().int().positive().default(5)
 });
 
 const serverEnv = serverEnvSchema.parse(process.env);
@@ -15,4 +22,9 @@ export const serverEnvConfig = {
   uploadthingToken: serverEnv.UPLOADTHING_TOKEN,
   betterAuthSecret: serverEnv.BETTER_AUTH_SECRET,
   isProduction: serverEnv.NODE_ENV === 'production',
+  maibClientId: serverEnv.MAIB_CLIENT_ID,
+  maibClientSecret: serverEnv.MAIB_CLIENT_SECRET,
+  maibSignatureKey: serverEnv.MAIB_SIGNATURE_KEY,
+  reverifyPaymentsEnabled: serverEnv.REVERIFY_PAYMENTS_ENABLED === 'true',
+  reverifyPaymentsIntervalMinutes: serverEnv.REVERIFY_PAYMENTS_INTERVAL_MINUTES,
 } as const;

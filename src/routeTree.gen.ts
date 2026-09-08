@@ -33,6 +33,7 @@ import { Route as PublicProductsIndexRouteImport } from './routes/_public/produc
 import { Route as PublicContactsIndexRouteImport } from './routes/_public/contacts/index'
 import { Route as PublicCheckoutIndexRouteImport } from './routes/_public/checkout/index'
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
+import { Route as ApiOrdersOnlinePaymentCallbackRouteImport } from './routes/api/orders/online-payment-callback'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as AdminSettingsSecurityRouteImport } from './routes/admin/settings/security'
 import { Route as AdminSettingsProfileRouteImport } from './routes/admin/settings/profile'
@@ -163,6 +164,12 @@ const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   path: '/api/rpc/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiOrdersOnlinePaymentCallbackRoute =
+  ApiOrdersOnlinePaymentCallbackRouteImport.update({
+    id: '/api/orders/online-payment-callback',
+    path: '/api/orders/online-payment-callback',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -232,6 +239,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/orders/online-payment-callback': typeof ApiOrdersOnlinePaymentCallbackRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/checkout/': typeof PublicCheckoutIndexRoute
   '/contacts/': typeof PublicContactsIndexRoute
@@ -261,6 +269,7 @@ export interface FileRoutesByTo {
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/orders/online-payment-callback': typeof ApiOrdersOnlinePaymentCallbackRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/checkout': typeof PublicCheckoutIndexRoute
   '/contacts': typeof PublicContactsIndexRoute
@@ -298,6 +307,7 @@ export interface FileRoutesById {
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
   '/admin/settings/security': typeof AdminSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/orders/online-payment-callback': typeof ApiOrdersOnlinePaymentCallbackRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/_public/checkout/': typeof PublicCheckoutIndexRoute
   '/_public/contacts/': typeof PublicContactsIndexRoute
@@ -335,6 +345,7 @@ export interface FileRouteTypes {
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
+    | '/api/orders/online-payment-callback'
     | '/api/rpc/$'
     | '/checkout/'
     | '/contacts/'
@@ -364,6 +375,7 @@ export interface FileRouteTypes {
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
+    | '/api/orders/online-payment-callback'
     | '/api/rpc/$'
     | '/checkout'
     | '/contacts'
@@ -400,6 +412,7 @@ export interface FileRouteTypes {
     | '/admin/settings/profile'
     | '/admin/settings/security'
     | '/api/auth/$'
+    | '/api/orders/online-payment-callback'
     | '/api/rpc/$'
     | '/_public/checkout/'
     | '/_public/contacts/'
@@ -428,6 +441,7 @@ export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   ApiSplatRoute: typeof ApiSplatRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiOrdersOnlinePaymentCallbackRoute: typeof ApiOrdersOnlinePaymentCallbackRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
   ApiAdminBannersBannerIdImagesRoute: typeof ApiAdminBannersBannerIdImagesRoute
   ApiAdminProductsVariantsVariantIdImagesRoute: typeof ApiAdminProductsVariantsVariantIdImagesRoute
@@ -601,6 +615,13 @@ declare module '@tanstack/react-router' {
       path: '/api/rpc/$'
       fullPath: '/api/rpc/$'
       preLoaderRoute: typeof ApiRpcSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/orders/online-payment-callback': {
+      id: '/api/orders/online-payment-callback'
+      path: '/api/orders/online-payment-callback'
+      fullPath: '/api/orders/online-payment-callback'
+      preLoaderRoute: typeof ApiOrdersOnlinePaymentCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
@@ -800,6 +821,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
   ApiSplatRoute: ApiSplatRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiOrdersOnlinePaymentCallbackRoute: ApiOrdersOnlinePaymentCallbackRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
   ApiAdminBannersBannerIdImagesRoute: ApiAdminBannersBannerIdImagesRoute,
   ApiAdminProductsVariantsVariantIdImagesRoute:

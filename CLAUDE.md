@@ -9,6 +9,7 @@ bun dev          # Start dev server on port 3000
 bun build        # Production build
 bun test         # Run tests (Vitest)
 bun run machine-translate  # Auto-translate missing i18n messages
+bun run reverify-payments  # Re-verify stuck OnlinePayment rows against maib (fallback for missed webhooks)
 ```
 
 Prisma commands must be prefixed with `bun --bun run prisma`:
@@ -64,6 +65,16 @@ Schema is split across `prisma/models/*.prisma` files and merged by `prisma.conf
 ### UI Components
 
 Shadcn UI (`components.json` config). Components live in `src/components/ui/`. Add new shadcn components via the CLI per `components.json` settings. Data tables use TanStack Table wrappers in `src/components/data-table/`.
+
+### Online payments (maib)
+
+MAIB confirms payment completion via a signed webhook to `/api/orders/online-payment-callback`, verified in `src/features/orders/common/services/maib-client.ts`. That webhook can be missed (unreachable on localhost, or delayed/dropped in prod), so stuck `OnlinePayment` rows are re-verified against maib by `OnlinePaymentService.reverifyPending()`. Two ways to run it:
+
+- **In-process interval (default):** `OnlinePaymentService.startReverifyJob()` is called from `src/server.ts` at boot and runs `reverifyPending()` on a timer when `REVERIFY_PAYMENTS_ENABLED=true` (default `false`). Interval length is `REVERIFY_PAYMENTS_INTERVAL_MINUTES` (default `5`). Runs one pass immediately on boot, then every interval; skips a tick if the previous one is still running.
+- **External cron fallback:** `scripts/reverify-online-payments.ts` (`bun run reverify-payments`) runs one pass and exits — useful where the app process is short-lived or the in-process timer is disabled:
+```
+*/5 * * * * cd /path/to/app && bun run reverify-payments >> /var/log/reverify-payments.log 2>&1
+```
 
 ### Path Aliases
 

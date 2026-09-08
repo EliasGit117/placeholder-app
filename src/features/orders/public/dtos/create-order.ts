@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { DeliveryMethod } from '~/prisma/generated/prisma/enums.ts';
 
 export const createOrderDtoSchema = z.object({
+  paymentType: z.enum(['cash', 'maib']),
   fullName: z.string().min(1),
   phone: z.string().min(1),
   email: z.string().min(1).email(),

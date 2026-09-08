@@ -68,6 +68,16 @@
       "shipped": "Expediată",
       "completed": "Finalizată",
       "cancelled": "Anulată"
+    },
+    "online_payment_status": {
+      "waiting_for_init": "În așteptare",
+      "initialized": "În procesare",
+      "payment_method_selected": "În procesare",
+      "completed": "Achitată",
+      "expired": "Expirată",
+      "abandoned": "Neefectuată",
+      "cancelled": "Anulată",
+      "failed": "Eșuată"
     }
   },
   "components": {
@@ -635,10 +645,13 @@
         "error": "Nu am putut plasa comanda. Încearcă din nou.",
         "payment_type": "Metodă de plată",
         "payment_type_cash": "Numerar",
+        "payment_type_maib": "Card bancar",
+        "redirecting_to_payment": "Redirecționare către pagina de plată...",
         "contact_title": "Date de contact",
         "phone": "Telefon",
         "delivery_title": "Livrare",
         "pickup_address": "Adresă ridicare",
+        "pickup_address_placeholder": "Selectează adresa",
         "submit": "Comandă",
         "full_name_placeholder": "Ion Popescu",
         "phone_placeholder": "+373 6X XXX XXX",
@@ -649,6 +662,18 @@
     "order_confirmation": {
       "breadcrumb_current": "Detalii comandă",
       "summary_title": "Comanda ta",
+      "online_payment_title": "Plată online",
+      "online_payment_continue": "Continuă plata",
+      "online_payment_status": {
+        "waiting_for_init": "Finalizează plata cu cardul pentru a confirma comanda.",
+        "initialized": "Finalizează plata cu cardul pentru a confirma comanda.",
+        "payment_method_selected": "Finalizează plata cu cardul pentru a confirma comanda.",
+        "completed": "Plata a fost primită. Comanda ta este confirmată.",
+        "expired": "Timpul pentru plată a expirat. Contactează-ne pentru a relua comanda.",
+        "abandoned": "Plata nu a fost finalizată. Contactează-ne pentru a relua comanda.",
+        "cancelled": "Plata a fost anulată.",
+        "failed": "Plata nu a reușit. Încearcă din nou sau contactează-ne."
+      },
       "contact_title": "Date de contact și livrare",
       "not_found_title": "Comanda nu a fost găsită",
       "not_found_description": "Verifică linkul sau contactează-ne dacă ai nevoie de ajutor.",

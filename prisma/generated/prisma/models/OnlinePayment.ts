@@ -30,12 +30,14 @@ export type OnlinePaymentAvgAggregateOutputType = {
   id: number | null
   orderId: number | null
   amount: number | null
+  attemptCount: number | null
 }
 
 export type OnlinePaymentSumAggregateOutputType = {
   id: number | null
   orderId: number | null
   amount: number | null
+  attemptCount: number | null
 }
 
 export type OnlinePaymentMinAggregateOutputType = {
@@ -53,6 +55,7 @@ export type OnlinePaymentMinAggregateOutputType = {
   paymentMethod: string | null
   referenceNumber: string | null
   executedAt: Date | null
+  attemptCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -72,6 +75,7 @@ export type OnlinePaymentMaxAggregateOutputType = {
   paymentMethod: string | null
   referenceNumber: string | null
   executedAt: Date | null
+  attemptCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -91,6 +95,7 @@ export type OnlinePaymentCountAggregateOutputType = {
   paymentMethod: number
   referenceNumber: number
   executedAt: number
+  attemptCount: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -101,12 +106,14 @@ export type OnlinePaymentAvgAggregateInputType = {
   id?: true
   orderId?: true
   amount?: true
+  attemptCount?: true
 }
 
 export type OnlinePaymentSumAggregateInputType = {
   id?: true
   orderId?: true
   amount?: true
+  attemptCount?: true
 }
 
 export type OnlinePaymentMinAggregateInputType = {
@@ -124,6 +131,7 @@ export type OnlinePaymentMinAggregateInputType = {
   paymentMethod?: true
   referenceNumber?: true
   executedAt?: true
+  attemptCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -143,6 +151,7 @@ export type OnlinePaymentMaxAggregateInputType = {
   paymentMethod?: true
   referenceNumber?: true
   executedAt?: true
+  attemptCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -162,6 +171,7 @@ export type OnlinePaymentCountAggregateInputType = {
   paymentMethod?: true
   referenceNumber?: true
   executedAt?: true
+  attemptCount?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -268,6 +278,7 @@ export type OnlinePaymentGroupByOutputType = {
   paymentMethod: string | null
   referenceNumber: string | null
   executedAt: Date | null
+  attemptCount: number
   createdAt: Date
   updatedAt: Date
   _count: OnlinePaymentCountAggregateOutputType | null
@@ -310,6 +321,7 @@ export type OnlinePaymentWhereInput = {
   paymentMethod?: Prisma.StringNullableFilter<"OnlinePayment"> | string | null
   referenceNumber?: Prisma.StringNullableFilter<"OnlinePayment"> | string | null
   executedAt?: Prisma.DateTimeNullableFilter<"OnlinePayment"> | Date | string | null
+  attemptCount?: Prisma.IntFilter<"OnlinePayment"> | number
   createdAt?: Prisma.DateTimeFilter<"OnlinePayment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OnlinePayment"> | Date | string
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
@@ -330,6 +342,7 @@ export type OnlinePaymentOrderByWithRelationInput = {
   paymentMethod?: Prisma.SortOrderInput | Prisma.SortOrder
   referenceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   executedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   order?: Prisma.OrderOrderByWithRelationInput
@@ -353,6 +366,7 @@ export type OnlinePaymentWhereUniqueInput = Prisma.AtLeast<{
   paymentMethod?: Prisma.StringNullableFilter<"OnlinePayment"> | string | null
   referenceNumber?: Prisma.StringNullableFilter<"OnlinePayment"> | string | null
   executedAt?: Prisma.DateTimeNullableFilter<"OnlinePayment"> | Date | string | null
+  attemptCount?: Prisma.IntFilter<"OnlinePayment"> | number
   createdAt?: Prisma.DateTimeFilter<"OnlinePayment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OnlinePayment"> | Date | string
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
@@ -373,6 +387,7 @@ export type OnlinePaymentOrderByWithAggregationInput = {
   paymentMethod?: Prisma.SortOrderInput | Prisma.SortOrder
   referenceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   executedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.OnlinePaymentCountOrderByAggregateInput
@@ -400,6 +415,7 @@ export type OnlinePaymentScalarWhereWithAggregatesInput = {
   paymentMethod?: Prisma.StringNullableWithAggregatesFilter<"OnlinePayment"> | string | null
   referenceNumber?: Prisma.StringNullableWithAggregatesFilter<"OnlinePayment"> | string | null
   executedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OnlinePayment"> | Date | string | null
+  attemptCount?: Prisma.IntWithAggregatesFilter<"OnlinePayment"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"OnlinePayment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"OnlinePayment"> | Date | string
 }
@@ -417,6 +433,7 @@ export type OnlinePaymentCreateInput = {
   paymentMethod?: string | null
   referenceNumber?: string | null
   executedAt?: Date | string | null
+  attemptCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   order: Prisma.OrderCreateNestedOneWithoutOnlinePaymentInput
@@ -437,6 +454,7 @@ export type OnlinePaymentUncheckedCreateInput = {
   paymentMethod?: string | null
   referenceNumber?: string | null
   executedAt?: Date | string | null
+  attemptCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -454,6 +472,7 @@ export type OnlinePaymentUpdateInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   order?: Prisma.OrderUpdateOneRequiredWithoutOnlinePaymentNestedInput
@@ -474,6 +493,7 @@ export type OnlinePaymentUncheckedUpdateInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -493,6 +513,7 @@ export type OnlinePaymentCreateManyInput = {
   paymentMethod?: string | null
   referenceNumber?: string | null
   executedAt?: Date | string | null
+  attemptCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -510,6 +531,7 @@ export type OnlinePaymentUpdateManyMutationInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -529,6 +551,7 @@ export type OnlinePaymentUncheckedUpdateManyInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -553,6 +576,7 @@ export type OnlinePaymentCountOrderByAggregateInput = {
   paymentMethod?: Prisma.SortOrder
   referenceNumber?: Prisma.SortOrder
   executedAt?: Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -561,6 +585,7 @@ export type OnlinePaymentAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
 }
 
 export type OnlinePaymentMaxOrderByAggregateInput = {
@@ -578,6 +603,7 @@ export type OnlinePaymentMaxOrderByAggregateInput = {
   paymentMethod?: Prisma.SortOrder
   referenceNumber?: Prisma.SortOrder
   executedAt?: Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -597,6 +623,7 @@ export type OnlinePaymentMinOrderByAggregateInput = {
   paymentMethod?: Prisma.SortOrder
   referenceNumber?: Prisma.SortOrder
   executedAt?: Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -605,6 +632,7 @@ export type OnlinePaymentSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
 }
 
 export type OnlinePaymentCreateNestedOneWithoutOrderInput = {
@@ -660,6 +688,7 @@ export type OnlinePaymentCreateWithoutOrderInput = {
   paymentMethod?: string | null
   referenceNumber?: string | null
   executedAt?: Date | string | null
+  attemptCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -678,6 +707,7 @@ export type OnlinePaymentUncheckedCreateWithoutOrderInput = {
   paymentMethod?: string | null
   referenceNumber?: string | null
   executedAt?: Date | string | null
+  attemptCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -711,6 +741,7 @@ export type OnlinePaymentUpdateWithoutOrderInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -729,6 +760,7 @@ export type OnlinePaymentUncheckedUpdateWithoutOrderInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -750,6 +782,7 @@ export type OnlinePaymentSelect<ExtArgs extends runtime.Types.Extensions.Interna
   paymentMethod?: boolean
   referenceNumber?: boolean
   executedAt?: boolean
+  attemptCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
@@ -770,6 +803,7 @@ export type OnlinePaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   paymentMethod?: boolean
   referenceNumber?: boolean
   executedAt?: boolean
+  attemptCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
@@ -790,6 +824,7 @@ export type OnlinePaymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   paymentMethod?: boolean
   referenceNumber?: boolean
   executedAt?: boolean
+  attemptCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
@@ -810,11 +845,12 @@ export type OnlinePaymentSelectScalar = {
   paymentMethod?: boolean
   referenceNumber?: boolean
   executedAt?: boolean
+  attemptCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type OnlinePaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "provider" | "status" | "checkoutId" | "checkoutUrl" | "callbackUrl" | "paymentId" | "expiresAt" | "amount" | "currency" | "paymentMethod" | "referenceNumber" | "executedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["onlinePayment"]>
+export type OnlinePaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "provider" | "status" | "checkoutId" | "checkoutUrl" | "callbackUrl" | "paymentId" | "expiresAt" | "amount" | "currency" | "paymentMethod" | "referenceNumber" | "executedAt" | "attemptCount" | "createdAt" | "updatedAt", ExtArgs["result"]["onlinePayment"]>
 export type OnlinePaymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }
@@ -845,6 +881,7 @@ export type $OnlinePaymentPayload<ExtArgs extends runtime.Types.Extensions.Inter
     paymentMethod: string | null
     referenceNumber: string | null
     executedAt: Date | null
+    attemptCount: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["onlinePayment"]>
@@ -1285,6 +1322,7 @@ export interface OnlinePaymentFieldRefs {
   readonly paymentMethod: Prisma.FieldRef<"OnlinePayment", 'String'>
   readonly referenceNumber: Prisma.FieldRef<"OnlinePayment", 'String'>
   readonly executedAt: Prisma.FieldRef<"OnlinePayment", 'DateTime'>
+  readonly attemptCount: Prisma.FieldRef<"OnlinePayment", 'Int'>
   readonly createdAt: Prisma.FieldRef<"OnlinePayment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"OnlinePayment", 'DateTime'>
 }

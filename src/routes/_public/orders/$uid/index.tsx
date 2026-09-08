@@ -2,7 +2,17 @@ import { type CSSProperties } from 'react';
 import { createFileRoute, Link, notFound } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { ORPCError } from '@orpc/server';
-import { IconBuildingStore, IconCircleCheck, IconMapPin, IconPackageOff, IconPhotoOff, IconTruckDelivery } from '@tabler/icons-react';
+import {
+  IconBuildingStore,
+  IconCash,
+  IconCircleCheck,
+  IconCreditCard,
+  IconExternalLink,
+  IconMapPin,
+  IconPackageOff,
+  IconPhotoOff,
+  IconTruckDelivery
+} from '@tabler/icons-react';
 import { orpc } from '@/lib/orpc';
 import { getLocale } from '@/paraglide/runtime';
 import { m } from '@/paraglide/messages';
@@ -11,8 +21,12 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
-import { DeliveryMethod, OrderStatus } from '~/prisma/generated/prisma/enums.ts';
+import { DeliveryMethod, OnlinePaymentStatus, OrderStatus } from '~/prisma/generated/prisma/enums.ts';
 import type { TOrderDto } from '@/features/orders/common/dtos/order.ts';
+import type { TOnlinePaymentDto } from '@/features/orders/common/dtos/online-payment.ts';
+import { getOrderStatusOption } from '@/routes/admin/orders/-components/order-status.ts';
+import { OnlinePaymentStatusIcon } from '@/components/icons/online-payment-status-icon.tsx';
+
 
 export const Route = createFileRoute('/_public/orders/$uid/')({
   component: RouteComponent,
@@ -32,7 +46,7 @@ export const Route = createFileRoute('/_public/orders/$uid/')({
 
       throw error;
     }
-  },
+  }
 });
 
 function RouteComponent() {
@@ -68,31 +82,59 @@ const statusLabel: Record<OrderStatus, () => string> = {
   [OrderStatus.PROCESSING]: () => m['enums.order_status.processing'](),
   [OrderStatus.SHIPPED]: () => m['enums.order_status.shipped'](),
   [OrderStatus.COMPLETED]: () => m['enums.order_status.completed'](),
-  [OrderStatus.CANCELLED]: () => m['enums.order_status.cancelled'](),
+  [OrderStatus.CANCELLED]: () => m['enums.order_status.cancelled']()
 };
 
 const statusContent: Record<OrderStatus, { title: () => string; description: () => string }> = {
   [OrderStatus.PENDING]: {
     title: () => m['pages.order_confirmation.status.pending.title'](),
-    description: () => m['pages.order_confirmation.status.pending.description'](),
+    description: () => m['pages.order_confirmation.status.pending.description']()
   },
   [OrderStatus.PROCESSING]: {
     title: () => m['pages.order_confirmation.status.processing.title'](),
-    description: () => m['pages.order_confirmation.status.processing.description'](),
+    description: () => m['pages.order_confirmation.status.processing.description']()
   },
   [OrderStatus.SHIPPED]: {
     title: () => m['pages.order_confirmation.status.shipped.title'](),
-    description: () => m['pages.order_confirmation.status.shipped.description'](),
+    description: () => m['pages.order_confirmation.status.shipped.description']()
   },
   [OrderStatus.COMPLETED]: {
     title: () => m['pages.order_confirmation.status.completed.title'](),
-    description: () => m['pages.order_confirmation.status.completed.description'](),
+    description: () => m['pages.order_confirmation.status.completed.description']()
   },
   [OrderStatus.CANCELLED]: {
     title: () => m['pages.order_confirmation.status.cancelled.title'](),
-    description: () => m['pages.order_confirmation.status.cancelled.description'](),
-  },
+    description: () => m['pages.order_confirmation.status.cancelled.description']()
+  }
 };
+
+const onlinePaymentStatusLabel: Record<OnlinePaymentStatus, () => string> = {
+  [OnlinePaymentStatus.WAITING_FOR_INIT]: () => m['enums.online_payment_status.waiting_for_init'](),
+  [OnlinePaymentStatus.INITIALIZED]: () => m['enums.online_payment_status.initialized'](),
+  [OnlinePaymentStatus.PAYMENT_METHOD_SELECTED]: () => m['enums.online_payment_status.payment_method_selected'](),
+  [OnlinePaymentStatus.COMPLETED]: () => m['enums.online_payment_status.completed'](),
+  [OnlinePaymentStatus.EXPIRED]: () => m['enums.online_payment_status.expired'](),
+  [OnlinePaymentStatus.ABANDONED]: () => m['enums.online_payment_status.abandoned'](),
+  [OnlinePaymentStatus.CANCELLED]: () => m['enums.online_payment_status.cancelled'](),
+  [OnlinePaymentStatus.FAILED]: () => m['enums.online_payment_status.failed']()
+};
+
+const onlinePaymentStatusDescription: Record<OnlinePaymentStatus, () => string> = {
+  [OnlinePaymentStatus.WAITING_FOR_INIT]: () => m['pages.order_confirmation.online_payment_status.waiting_for_init'](),
+  [OnlinePaymentStatus.INITIALIZED]: () => m['pages.order_confirmation.online_payment_status.initialized'](),
+  [OnlinePaymentStatus.PAYMENT_METHOD_SELECTED]: () => m['pages.order_confirmation.online_payment_status.payment_method_selected'](),
+  [OnlinePaymentStatus.COMPLETED]: () => m['pages.order_confirmation.online_payment_status.completed'](),
+  [OnlinePaymentStatus.EXPIRED]: () => m['pages.order_confirmation.online_payment_status.expired'](),
+  [OnlinePaymentStatus.ABANDONED]: () => m['pages.order_confirmation.online_payment_status.abandoned'](),
+  [OnlinePaymentStatus.CANCELLED]: () => m['pages.order_confirmation.online_payment_status.cancelled'](),
+  [OnlinePaymentStatus.FAILED]: () => m['pages.order_confirmation.online_payment_status.failed'](),
+};
+
+const IN_FLIGHT_STATUSES: OnlinePaymentStatus[] = [
+  OnlinePaymentStatus.WAITING_FOR_INIT,
+  OnlinePaymentStatus.INITIALIZED,
+  OnlinePaymentStatus.PAYMENT_METHOD_SELECTED
+];
 
 function effectivePrice(price: number, discountPercent: number | null): number {
   if (!discountPercent) return price;
@@ -102,6 +144,7 @@ function effectivePrice(price: number, discountPercent: number | null): number {
 function OrderConfirmation({ order }: { order: TOrderDto }) {
   const ru = getLocale() === 'ru';
   const content = statusContent[order.status];
+  const OrderStatusIcon = getOrderStatusOption(order.status).icon;
 
   return (
     <main className="flex flex-1 flex-col bg-background min-h-safe-screen mt-2 mb-12">
@@ -128,7 +171,10 @@ function OrderConfirmation({ order }: { order: TOrderDto }) {
                 {new Date(order.createdAt).toLocaleDateString(ru ? 'ru-RU' : 'ro-RO')}
               </CardDescription>
             </div>
-            <Badge variant="secondary">{statusLabel[order.status]()}</Badge>
+            <Badge variant="secondary">
+              <OrderStatusIcon className="size-3.5"/>
+              {statusLabel[order.status]()}
+            </Badge>
           </CardHeader>
 
           <CardContent className="flex flex-col gap-4">
@@ -186,11 +232,14 @@ function OrderConfirmation({ order }: { order: TOrderDto }) {
             <div className="flex items-center justify-between">
               <span className="text-base font-semibold">{m['pages.checkout.summary.total']()}</span>
               <span className="font-heading text-2xl font-semibold">
-                {order.totalPrice} <span className="text-base font-normal text-muted-foreground">{m['components.shop.currency']()}</span>
+                {order.totalPrice} <span
+                className="text-base font-normal text-muted-foreground">{m['components.shop.currency']()}</span>
               </span>
             </div>
           </CardContent>
         </Card>
+
+        {order.onlinePayment && <OnlinePaymentCard onlinePayment={order.onlinePayment}/>}
 
         <Card>
           <CardHeader>
@@ -212,21 +261,77 @@ function OrderConfirmation({ order }: { order: TOrderDto }) {
 
             <div className="border-t border-dashed"/>
 
-            <div className="flex items-center gap-2 text-muted-foreground">
-              {order.deliveryMethod === DeliveryMethod.PICKUP ? <IconBuildingStore className="size-4"/> : <IconTruckDelivery className="size-4"/>}
-              <span>
-                {order.deliveryMethod === DeliveryMethod.PICKUP
-                  ? m['pages.checkout.payment.delivery_pickup']()
-                  : m['pages.checkout.payment.delivery_courier']()}
-              </span>
-            </div>
-            <div className="flex items-start gap-2">
-              <IconMapPin className="mt-0.5 size-4 shrink-0 text-muted-foreground"/>
-              <span>{order.address}</span>
+            <div className="@container">
+              <div className="flex flex-col gap-2 @lg:flex-row @lg:items-center @lg:justify-center @lg:gap-3">
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  {order.onlinePayment ? <IconCreditCard className="size-4"/> : <IconCash className="size-4"/>}
+                  <span>
+                    {order.onlinePayment
+                      ? m['pages.checkout.payment.payment_type_maib']()
+                      : m['pages.checkout.payment.payment_type_cash']()}
+                  </span>
+                </div>
+
+                <span className="hidden text-muted-foreground @lg:inline" aria-hidden="true">•</span>
+
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  {order.deliveryMethod === DeliveryMethod.PICKUP ? <IconBuildingStore className="size-4"/> :
+                    <IconTruckDelivery className="size-4"/>}
+                  <span>
+                    {order.deliveryMethod === DeliveryMethod.PICKUP
+                      ? m['pages.checkout.payment.delivery_pickup']()
+                      : m['pages.checkout.payment.delivery_courier']()}
+                  </span>
+                </div>
+
+                <span className="hidden text-muted-foreground @lg:inline" aria-hidden="true">•</span>
+
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <IconMapPin className="size-4 shrink-0"/>
+                  <span>{order.address}</span>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
     </main>
+  );
+}
+
+function OnlinePaymentCard({ onlinePayment }: { onlinePayment: TOnlinePaymentDto }) {
+  const canContinue = IN_FLIGHT_STATUSES.includes(onlinePayment.status) && onlinePayment.checkoutUrl;
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2">
+            <IconCreditCard className="size-4 text-muted-foreground"/>
+            <CardTitle>{m['pages.order_confirmation.online_payment_title']()}</CardTitle>
+          </div>
+          <CardDescription>{onlinePaymentStatusDescription[onlinePayment.status]()}</CardDescription>
+        </div>
+        <Badge variant="secondary">
+          <OnlinePaymentStatusIcon status={onlinePayment.status} className="size-3.5"/>
+          {onlinePaymentStatusLabel[onlinePayment.status]()}
+        </Badge>
+      </CardHeader>
+
+      {canContinue && (
+        <CardContent className="flex flex-col gap-4">
+          <div className="border-t border-dashed"/>
+
+          <div className="flex justify-end">
+            <Button asChild variant="outline">
+              <a href={onlinePayment.checkoutUrl!}>
+                {m['pages.order_confirmation.online_payment_continue']()}
+                <IconExternalLink/>
+              </a>
+            </Button>
+          </div>
+        </CardContent>
+      )}
+    </Card>
   );
 }
