@@ -1,8 +1,12 @@
 import { serverEnvConfig } from '@/lib/config/server-env-config.ts';
 
-const MAIB_BASE_URL = serverEnvConfig.isProduction
-  ? 'https://api.maibmerchants.md'
-  : 'https://sandbox.maibmerchants.md';
+// Whether to hit maib's sandbox or live API is independent of NODE_ENV — a
+// staging deployment is still a production build (NODE_ENV=production) but
+// should keep using sandbox credentials/endpoint. Controlled explicitly via
+// MAIB_USE_SANDBOX (defaults to sandbox, the safe choice).
+const MAIB_BASE_URL = serverEnvConfig.maibUseSandbox
+  ? 'https://sandbox.maibmerchants.md'
+  : 'https://api.maibmerchants.md';
 
 interface IMaibEnvelope<T> {
   result: T;

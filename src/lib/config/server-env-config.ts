@@ -10,6 +10,7 @@ const serverEnvSchema = z.object({
   MAIB_CLIENT_ID: z.string().min(1),
   MAIB_CLIENT_SECRET: z.string().min(1),
   MAIB_SIGNATURE_KEY: z.string().min(1),
+  MAIB_USE_SANDBOX: z.enum(['true', 'false']).default('true'),
 
   REVERIFY_PAYMENTS_ENABLED: z.enum(['true', 'false']).default('false'),
   REVERIFY_PAYMENTS_INTERVAL_MINUTES: z.coerce.number().int().positive().default(5)
@@ -25,6 +26,7 @@ export const serverEnvConfig = {
   maibClientId: serverEnv.MAIB_CLIENT_ID,
   maibClientSecret: serverEnv.MAIB_CLIENT_SECRET,
   maibSignatureKey: serverEnv.MAIB_SIGNATURE_KEY,
+  maibUseSandbox: serverEnv.MAIB_USE_SANDBOX === 'true',
   reverifyPaymentsEnabled: serverEnv.REVERIFY_PAYMENTS_ENABLED === 'true',
   reverifyPaymentsIntervalMinutes: serverEnv.REVERIFY_PAYMENTS_INTERVAL_MINUTES,
 } as const;

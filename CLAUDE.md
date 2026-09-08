@@ -70,6 +70,8 @@ Shadcn UI (`components.json` config). Components live in `src/components/ui/`. A
 
 MAIB confirms payment completion via a signed webhook to `/api/orders/online-payment-callback`, verified in `src/features/orders/common/services/maib-client.ts`. That webhook can be missed (unreachable on localhost, or delayed/dropped in prod), so stuck `OnlinePayment` rows are re-verified against maib by `OnlinePaymentService.reverifyPending()`. Two ways to run it:
 
+`MAIB_USE_SANDBOX` (default `true`) picks maib's sandbox vs live API — independent of `NODE_ENV`, since a staging deployment is still a production build but should keep using sandbox credentials. Set `MAIB_USE_SANDBOX=false` only for a real production deployment with live maib credentials.
+
 - **In-process interval (default):** `OnlinePaymentService.startReverifyJob()` is called from `src/server.ts` at boot and runs `reverifyPending()` on a timer when `REVERIFY_PAYMENTS_ENABLED=true` (default `false`). Interval length is `REVERIFY_PAYMENTS_INTERVAL_MINUTES` (default `5`). Runs one pass immediately on boot, then every interval; skips a tick if the previous one is still running.
 - **External cron fallback:** `scripts/reverify-online-payments.ts` (`bun run reverify-payments`) runs one pass and exits — useful where the app process is short-lived or the in-process timer is disabled:
 ```
