@@ -73,16 +73,32 @@ export class OrderService {
     return map;
   }
 
+  // Variant may have been renamed/removed since the order was placed, so this
+  // is a best-effort link — falls back to no link (null) rather than a slug
+  // that no longer resolves.
+  private static async slugByVariant(variantIds: number[]): Promise<Map<number, string>> {
+    if (variantIds.length === 0)
+      return new Map();
+
+    const variants = await prisma.productVariant.findMany({
+      where: { id: { in: variantIds } },
+      select: { id: true, fullSlug: true },
+    });
+
+    return new Map(variants.map((v) => [v.id, v.fullSlug]));
+  }
+
   private static async withImages(
     entity: Order & { items: OrderProduct[] },
     onlinePayment: TOnlinePaymentDto | null = null
   ): Promise<TOrderDto> {
     const variantIds = entity.items.map((i) => i.variantId);
-    const [imagesByVariant, categoryByVariant] = await Promise.all([
+    const [imagesByVariant, categoryByVariant, slugByVariant] = await Promise.all([
       OrderService.firstImageByVariant(variantIds),
       OrderService.categoryByVariant(variantIds),
+      OrderService.slugByVariant(variantIds),
     ]);
-    return OrderDtoFactory.fromEntity(entity, imagesByVariant, categoryByVariant, onlinePayment);
+    return OrderDtoFactory.fromEntity(entity, imagesByVariant, categoryByVariant, onlinePayment, slugByVariant);
   }
 
   static async findById(id: number): Promise<TOrderDto | null> {

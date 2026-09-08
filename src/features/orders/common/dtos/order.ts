@@ -17,6 +17,7 @@ export const orderProductDtoSchema = z.object({
   discountPercent: z.number().int().nullable(),
   category: z.string().nullable(),
   image: briefImageDtoSchema.nullable(),
+  slug: z.string().nullable(),
   createdAt: z.string(),
 });
 
@@ -45,7 +46,8 @@ export class OrderProductDtoFactory {
   static fromEntity(
     entity: OrderProduct,
     image: TBriefImageDto | null = null,
-    category: string | null = null
+    category: string | null = null,
+    slug: string | null = null
   ): TOrderProductDto {
     return {
       id: entity.id,
@@ -60,6 +62,7 @@ export class OrderProductDtoFactory {
       discountPercent: entity.discountPercent,
       category,
       image,
+      slug,
       createdAt: entity.createdAt.toISOString(),
     };
   }
@@ -71,7 +74,8 @@ export class OrderDtoFactory {
     entity: Order & { items: OrderProduct[] },
     imagesByVariant?: Map<number, TBriefImageDto>,
     categoryByVariant?: Map<number, string>,
-    onlinePayment: TOnlinePaymentDto | null = null
+    onlinePayment: TOnlinePaymentDto | null = null,
+    slugByVariant?: Map<number, string>
   ): TOrderDto {
     return {
       id: entity.id,
@@ -87,7 +91,8 @@ export class OrderDtoFactory {
         OrderProductDtoFactory.fromEntity(
           i,
           imagesByVariant?.get(i.variantId) ?? null,
-          categoryByVariant?.get(i.variantId) ?? null
+          categoryByVariant?.get(i.variantId) ?? null,
+          slugByVariant?.get(i.variantId) ?? null
         )
       ),
       onlinePayment,

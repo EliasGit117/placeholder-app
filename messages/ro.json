@@ -672,7 +672,8 @@
         "expired": "Timpul pentru plată a expirat. Contactează-ne pentru a relua comanda.",
         "abandoned": "Plata nu a fost finalizată. Contactează-ne pentru a relua comanda.",
         "cancelled": "Plata a fost anulată.",
-        "failed": "Plata nu a reușit. Încearcă din nou sau contactează-ne."
+        "failed": "Plata nu a reușit. Încearcă din nou sau contactează-ne.",
+        "confirming": "Confirmăm plata cu banca. Aceasta poate dura câteva secunde."
       },
       "contact_title": "Date de contact și livrare",
       "not_found_title": "Comanda nu a fost găsită",

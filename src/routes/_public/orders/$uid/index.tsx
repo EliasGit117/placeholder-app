@@ -1,36 +1,34 @@
 import { type CSSProperties } from 'react';
+import { z } from 'zod';
 import { createFileRoute, Link, notFound } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { ORPCError } from '@orpc/server';
-import {
-  IconBuildingStore,
-  IconCash,
-  IconCircleCheck,
-  IconCreditCard,
-  IconExternalLink,
-  IconMapPin,
-  IconPackageOff,
-  IconPhotoOff,
-  IconTruckDelivery
-} from '@tabler/icons-react';
+import { IconCircleCheck, IconPackageOff, IconPhotoOff } from '@tabler/icons-react';
 import { orpc } from '@/lib/orpc';
 import { getLocale } from '@/paraglide/runtime';
 import { m } from '@/paraglide/messages';
-import { thumbhashToDataUrl } from '@/lib/utils';
+import { capitalizeFirst, thumbhashToDataUrl } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
-import { DeliveryMethod, OnlinePaymentStatus, OrderStatus } from '~/prisma/generated/prisma/enums.ts';
-import type { TOrderDto } from '@/features/orders/common/dtos/order.ts';
-import type { TOnlinePaymentDto } from '@/features/orders/common/dtos/online-payment.ts';
+import { DeliveryMethod } from '~/prisma/generated/prisma/enums.ts';
 import { getOrderStatusOption } from '@/routes/admin/orders/-components/order-status.ts';
-import { OnlinePaymentStatusIcon } from '@/components/icons/online-payment-status-icon.tsx';
+import { statusLabel, statusContent } from './-consts/order-status.ts';
+import { IN_FLIGHT_STATUSES } from './-consts/online-payment-status.ts';
+import { OnlinePaymentCard } from './-components/online-payment-card.tsx';
 
+// maib's redirect query params — a UI hint only, never trusted as truth.
+const orderSearchSchema = z.object({
+  checkoutId: z.string().optional(),
+  checkoutStatus: z.string().optional(),
+  orderId: z.string().optional()
+});
 
 export const Route = createFileRoute('/_public/orders/$uid/')({
   component: RouteComponent,
   notFoundComponent: NotFound,
+  validateSearch: orderSearchSchema,
   staticData: {
     crumbs: [
       { title: () => m['components.header.products'](), link: { to: '/products' } },
@@ -51,98 +49,20 @@ export const Route = createFileRoute('/_public/orders/$uid/')({
 
 function RouteComponent() {
   const { uid } = Route.useParams();
-  const { data: order } = useSuspenseQuery(orpc.orders.get.queryOptions({ input: { uid } }));
+  const { checkoutStatus } = Route.useSearch();
+  // Poll while payment is in-flight — a single check can still race maib
+  // finalizing the payment even after the server's own live re-sync.
+  const { data: order } = useSuspenseQuery({
+    ...orpc.orders.get.queryOptions({ input: { uid } }),
+    refetchInterval: (query) => {
+      const payment = query.state.data?.onlinePayment;
+      return payment && IN_FLIGHT_STATUSES.includes(payment.status) ? 2000 : false;
+    }
+  });
+  const confirmingRedirect = checkoutStatus === 'Completed';
 
-  return <OrderConfirmation order={order}/>;
-}
-
-function NotFound() {
-  return (
-    <main className="flex flex-1 items-center justify-center px-4 min-h-safe-screen">
-      <Empty className="py-12">
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <IconPackageOff/>
-          </EmptyMedia>
-          <EmptyTitle>{m['pages.order_confirmation.not_found_title']()}</EmptyTitle>
-          <EmptyDescription>{m['pages.order_confirmation.not_found_description']()}</EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <Button asChild variant="outline">
-            <Link to="/products">{m['components.shop.back_to_shop']()}</Link>
-          </Button>
-        </EmptyContent>
-      </Empty>
-    </main>
-  );
-}
-
-const statusLabel: Record<OrderStatus, () => string> = {
-  [OrderStatus.PENDING]: () => m['enums.order_status.pending'](),
-  [OrderStatus.PROCESSING]: () => m['enums.order_status.processing'](),
-  [OrderStatus.SHIPPED]: () => m['enums.order_status.shipped'](),
-  [OrderStatus.COMPLETED]: () => m['enums.order_status.completed'](),
-  [OrderStatus.CANCELLED]: () => m['enums.order_status.cancelled']()
-};
-
-const statusContent: Record<OrderStatus, { title: () => string; description: () => string }> = {
-  [OrderStatus.PENDING]: {
-    title: () => m['pages.order_confirmation.status.pending.title'](),
-    description: () => m['pages.order_confirmation.status.pending.description']()
-  },
-  [OrderStatus.PROCESSING]: {
-    title: () => m['pages.order_confirmation.status.processing.title'](),
-    description: () => m['pages.order_confirmation.status.processing.description']()
-  },
-  [OrderStatus.SHIPPED]: {
-    title: () => m['pages.order_confirmation.status.shipped.title'](),
-    description: () => m['pages.order_confirmation.status.shipped.description']()
-  },
-  [OrderStatus.COMPLETED]: {
-    title: () => m['pages.order_confirmation.status.completed.title'](),
-    description: () => m['pages.order_confirmation.status.completed.description']()
-  },
-  [OrderStatus.CANCELLED]: {
-    title: () => m['pages.order_confirmation.status.cancelled.title'](),
-    description: () => m['pages.order_confirmation.status.cancelled.description']()
-  }
-};
-
-const onlinePaymentStatusLabel: Record<OnlinePaymentStatus, () => string> = {
-  [OnlinePaymentStatus.WAITING_FOR_INIT]: () => m['enums.online_payment_status.waiting_for_init'](),
-  [OnlinePaymentStatus.INITIALIZED]: () => m['enums.online_payment_status.initialized'](),
-  [OnlinePaymentStatus.PAYMENT_METHOD_SELECTED]: () => m['enums.online_payment_status.payment_method_selected'](),
-  [OnlinePaymentStatus.COMPLETED]: () => m['enums.online_payment_status.completed'](),
-  [OnlinePaymentStatus.EXPIRED]: () => m['enums.online_payment_status.expired'](),
-  [OnlinePaymentStatus.ABANDONED]: () => m['enums.online_payment_status.abandoned'](),
-  [OnlinePaymentStatus.CANCELLED]: () => m['enums.online_payment_status.cancelled'](),
-  [OnlinePaymentStatus.FAILED]: () => m['enums.online_payment_status.failed']()
-};
-
-const onlinePaymentStatusDescription: Record<OnlinePaymentStatus, () => string> = {
-  [OnlinePaymentStatus.WAITING_FOR_INIT]: () => m['pages.order_confirmation.online_payment_status.waiting_for_init'](),
-  [OnlinePaymentStatus.INITIALIZED]: () => m['pages.order_confirmation.online_payment_status.initialized'](),
-  [OnlinePaymentStatus.PAYMENT_METHOD_SELECTED]: () => m['pages.order_confirmation.online_payment_status.payment_method_selected'](),
-  [OnlinePaymentStatus.COMPLETED]: () => m['pages.order_confirmation.online_payment_status.completed'](),
-  [OnlinePaymentStatus.EXPIRED]: () => m['pages.order_confirmation.online_payment_status.expired'](),
-  [OnlinePaymentStatus.ABANDONED]: () => m['pages.order_confirmation.online_payment_status.abandoned'](),
-  [OnlinePaymentStatus.CANCELLED]: () => m['pages.order_confirmation.online_payment_status.cancelled'](),
-  [OnlinePaymentStatus.FAILED]: () => m['pages.order_confirmation.online_payment_status.failed'](),
-};
-
-const IN_FLIGHT_STATUSES: OnlinePaymentStatus[] = [
-  OnlinePaymentStatus.WAITING_FOR_INIT,
-  OnlinePaymentStatus.INITIALIZED,
-  OnlinePaymentStatus.PAYMENT_METHOD_SELECTED
-];
-
-function effectivePrice(price: number, discountPercent: number | null): number {
-  if (!discountPercent) return price;
-  return Math.round(price * (1 - discountPercent / 100));
-}
-
-function OrderConfirmation({ order }: { order: TOrderDto }) {
-  const ru = getLocale() === 'ru';
+  const locale = getLocale();
+  const ru = locale === 'ru';
   const content = statusContent[order.status];
   const OrderStatusIcon = getOrderStatusOption(order.status).icon;
 
@@ -180,8 +100,8 @@ function OrderConfirmation({ order }: { order: TOrderDto }) {
           <CardContent className="flex flex-col gap-4">
             <ul className="flex flex-col gap-3">
               {order.items.map((item) => {
-                const productName = ru ? item.productNameRu : item.productNameRo;
-                const variantName = ru ? item.variantNameRu : item.variantNameRo;
+                const productName = item[`productName${capitalizeFirst(locale)}`];
+                const variantName = item[`variantName${capitalizeFirst(locale)}`];
                 const category = item.category;
                 const unitPrice = effectivePrice(item.price, item.discountPercent);
 
@@ -193,8 +113,8 @@ function OrderConfirmation({ order }: { order: TOrderDto }) {
                 }
                 const imageUrl = item.image?.variants.thumb256?.url ?? item.image?.url;
 
-                return (
-                  <li key={item.id} className="flex items-center gap-3 text-sm">
+                const itemContent = (
+                  <>
                     <div
                       style={imgStyles}
                       className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-muted bg-cover bg-center ring-1 ring-foreground/10"
@@ -209,17 +129,45 @@ function OrderConfirmation({ order }: { order: TOrderDto }) {
                     <span className="min-w-0 flex-1">
                       <span className="text-sm font-medium leading-tight">
                         {productName}
+                        {item.discountPercent && (
+                          <Badge variant="outline" className="rounded-none ml-1.5 px-1 h-3.5 text-[0.65rem]">
+                            -{item.discountPercent}%
+                          </Badge>
+                        )}
                         <span className="block text-sm font-normal">{variantName}</span>
                       </span>
                       {category && (
                         <span className="block text-xs text-muted-foreground">{category}</span>
                       )}
                     </span>
+                  </>
+                );
+
+                return (
+                  <li key={item.id} className="flex items-center gap-3 text-sm">
+                    {item.slug ? (
+                      <Link
+                        to="/products/$slug"
+                        params={{ slug: item.slug }}
+                        className="flex min-w-0 flex-1 items-center gap-3"
+                      >
+                        {itemContent}
+                      </Link>
+                    ) : (
+                      <span className="flex min-w-0 flex-1 items-center gap-3">{itemContent}</span>
+                    )}
 
                     <span className="flex shrink-0 flex-col items-end gap-0.5">
                       <span className="text-xs text-muted-foreground">× {item.count}</span>
-                      <span className="font-medium">
-                        {unitPrice * item.count} {m['components.shop.currency']()}
+                      <span className="flex items-baseline gap-1.5">
+                        {item.discountPercent && (
+                          <s className="text-xs text-muted-foreground">
+                            {item.price * item.count}
+                          </s>
+                        )}
+                        <span className="font-medium">
+                          {unitPrice * item.count} {m['components.shop.currency']()}
+                        </span>
                       </span>
                     </span>
                   </li>
@@ -239,7 +187,9 @@ function OrderConfirmation({ order }: { order: TOrderDto }) {
           </CardContent>
         </Card>
 
-        {order.onlinePayment && <OnlinePaymentCard onlinePayment={order.onlinePayment}/>}
+        {order.onlinePayment && (
+          <OnlinePaymentCard onlinePayment={order.onlinePayment} confirmingRedirect={confirmingRedirect}/>
+        )}
 
         <Card>
           <CardHeader>
@@ -261,36 +211,31 @@ function OrderConfirmation({ order }: { order: TOrderDto }) {
 
             <div className="border-t border-dashed"/>
 
-            <div className="@container">
-              <div className="flex flex-col gap-2 @lg:flex-row @lg:items-center @lg:justify-center @lg:gap-3">
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  {order.onlinePayment ? <IconCreditCard className="size-4"/> : <IconCash className="size-4"/>}
-                  <span>
-                    {order.onlinePayment
-                      ? m['pages.checkout.payment.payment_type_maib']()
-                      : m['pages.checkout.payment.payment_type_cash']()}
-                  </span>
-                </div>
+            <div className="flex justify-between gap-3">
+              <span className="text-muted-foreground">{m['pages.checkout.payment.payment_type']()}</span>
+              <span className="font-medium">
+                {order.onlinePayment ? (
+                  m['pages.checkout.payment.payment_type_maib']()
+                ) : (
+                  m['pages.checkout.payment.payment_type_cash']()
+                )}
+              </span>
+            </div>
 
-                <span className="hidden text-muted-foreground @lg:inline" aria-hidden="true">•</span>
+            <div className="flex justify-between gap-3">
+              <span className="text-muted-foreground">{m['pages.checkout.payment.delivery_method']()}</span>
+              <span className="font-medium">
+                {order.deliveryMethod === DeliveryMethod.PICKUP ? (
+                  m['pages.checkout.payment.delivery_pickup']()
+                ) : (
+                  m['pages.checkout.payment.delivery_courier']()
+                )}
+              </span>
+            </div>
 
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  {order.deliveryMethod === DeliveryMethod.PICKUP ? <IconBuildingStore className="size-4"/> :
-                    <IconTruckDelivery className="size-4"/>}
-                  <span>
-                    {order.deliveryMethod === DeliveryMethod.PICKUP
-                      ? m['pages.checkout.payment.delivery_pickup']()
-                      : m['pages.checkout.payment.delivery_courier']()}
-                  </span>
-                </div>
-
-                <span className="hidden text-muted-foreground @lg:inline" aria-hidden="true">•</span>
-
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <IconMapPin className="size-4 shrink-0"/>
-                  <span>{order.address}</span>
-                </div>
-              </div>
+            <div className="flex justify-between gap-3">
+              <span className="text-muted-foreground">{m['pages.checkout.payment.address']()}</span>
+              <span className="font-medium">{order.address}</span>
             </div>
           </CardContent>
         </Card>
@@ -299,39 +244,28 @@ function OrderConfirmation({ order }: { order: TOrderDto }) {
   );
 }
 
-function OnlinePaymentCard({ onlinePayment }: { onlinePayment: TOnlinePaymentDto }) {
-  const canContinue = IN_FLIGHT_STATUSES.includes(onlinePayment.status) && onlinePayment.checkoutUrl;
-
+function NotFound() {
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <IconCreditCard className="size-4 text-muted-foreground"/>
-            <CardTitle>{m['pages.order_confirmation.online_payment_title']()}</CardTitle>
-          </div>
-          <CardDescription>{onlinePaymentStatusDescription[onlinePayment.status]()}</CardDescription>
-        </div>
-        <Badge variant="secondary">
-          <OnlinePaymentStatusIcon status={onlinePayment.status} className="size-3.5"/>
-          {onlinePaymentStatusLabel[onlinePayment.status]()}
-        </Badge>
-      </CardHeader>
-
-      {canContinue && (
-        <CardContent className="flex flex-col gap-4">
-          <div className="border-t border-dashed"/>
-
-          <div className="flex justify-end">
-            <Button asChild variant="outline">
-              <a href={onlinePayment.checkoutUrl!}>
-                {m['pages.order_confirmation.online_payment_continue']()}
-                <IconExternalLink/>
-              </a>
-            </Button>
-          </div>
-        </CardContent>
-      )}
-    </Card>
+    <main className="flex flex-1 items-center justify-center px-4 min-h-safe-screen">
+      <Empty className="py-12">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <IconPackageOff/>
+          </EmptyMedia>
+          <EmptyTitle>{m['pages.order_confirmation.not_found_title']()}</EmptyTitle>
+          <EmptyDescription>{m['pages.order_confirmation.not_found_description']()}</EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button asChild variant="outline">
+            <Link to="/products">{m['components.shop.back_to_shop']()}</Link>
+          </Button>
+        </EmptyContent>
+      </Empty>
+    </main>
   );
+}
+
+function effectivePrice(price: number, discountPercent: number | null): number {
+  if (!discountPercent) return price;
+  return Math.round(price * (1 - discountPercent / 100));
 }
