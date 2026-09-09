@@ -47,14 +47,14 @@ export function TermsToc({ sections, sectionRefs }: IProps) {
 
   return (
     <nav className="order-1 hidden lg:order-2 lg:block">
-      <div className="top-24 flex flex-col gap-1 lg:sticky">
+      <div className="top-24 flex flex-col gap-0.5 lg:sticky">
         {sections.map((section, index) => (
           <button
             key={index}
             type="button"
             onClick={() => scrollToSection(index)}
             className={cn(
-              'rounded-md px-3 py-2 text-left text-[13px] leading-snug transition-colors',
+              'rounded-md px-3 py-2 text-left text-sm leading-snug transition-colors',
               activeIndex === index ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
             )}
           >
