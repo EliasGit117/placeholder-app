@@ -13,9 +13,6 @@ import { cn } from '@/lib/utils';
 import { LogoButton } from '@/components/layout/common/logo-button.tsx';
 import { Skeleton } from '@/components/ui/skeleton';
 import { m } from '@/paraglide/messages';
-import VisaIcon from '@/assets/icons/payment/visa.svg?react';
-import MastercardIcon from '@/assets/icons/payment/mastercard.svg?react';
-import ApplePayIcon from '@/assets/icons/payment/apple-pay.svg?react';
 
 
 const socials: { Icon: TablerIcon; label: string }[] = [
@@ -28,11 +25,12 @@ const socials: { Icon: TablerIcon; label: string }[] = [
 
 const navLinks: { to: LinkOptions['to']; label: () => string }[] = [
   { to: '/', label: () => m['common.home']() },
-  { to: '/products', label: () => m['pages.products.title']() }
+  { to: '/products', label: () => m['pages.products.title']() },
+  { to: '/terms', label: () => m['components.footer.legal']() }
 ];
 
 const Eyebrow: FC<{ children: ReactNode }> = ({ children }) => (
-  <div className="text-xs font-medium uppercase tracking-[0.28em] text-primary">{children}</div>
+  <div className="text-xs font-medium whitespace-nowrap uppercase tracking-[0.28em] text-primary">{children}</div>
 );
 
 export const SiteFooter: FC<ComponentProps<'footer'>> = ({ className, ...props }) => {
@@ -41,11 +39,11 @@ export const SiteFooter: FC<ComponentProps<'footer'>> = ({ className, ...props }
   );
 
   return (
-    <footer className={cn('mt-auto border-t border-border bg-muted/40', className)} {...props}>
-      <div className="container mx-auto flex flex-col gap-12 px-4 py-16 lg:flex-row lg:justify-between lg:gap-10">
+    <footer className={cn('@container mt-auto border-t border-border bg-muted/40', className)} {...props}>
+      <div className="container mx-auto grid grid-cols-2 gap-x-6 gap-y-12 px-4 py-16 @2xl:grid-cols-3 @4xl:flex @4xl:flex-row @4xl:justify-between @4xl:gap-10">
 
         {/* Categories */}
-        <nav className="flex flex-col gap-4">
+        <nav className="flex flex-col items-center gap-4 text-center @4xl:items-start @4xl:text-left">
           <Eyebrow>{m['components.header.categories']()}</Eyebrow>
           <ul className="flex flex-col gap-3.5">
             {isPending ? (
@@ -70,9 +68,9 @@ export const SiteFooter: FC<ComponentProps<'footer'>> = ({ className, ...props }
         </nav>
 
         {/* Navigation */}
-        <nav className="flex flex-col gap-4">
+        <nav className="flex flex-col items-center gap-4 text-center @4xl:items-start @4xl:text-left">
           <Eyebrow>{m['components.footer.navigation']()}</Eyebrow>
-          <ul className="flex flex-col gap-3.5">
+          <ul className="flex max-w-28 flex-col gap-3.5">
             {navLinks.map(({ to, label }) => (
               <li key={to}>
                 <Link
@@ -87,7 +85,7 @@ export const SiteFooter: FC<ComponentProps<'footer'>> = ({ className, ...props }
         </nav>
 
         {/* Contact */}
-        <div className="flex flex-col gap-4">
+        <div className="col-span-2 flex flex-col items-center gap-4 text-center @2xl:col-span-1 @4xl:items-start @4xl:text-left">
           <Eyebrow>{m['components.footer.contact']()}</Eyebrow>
           <ul className="flex flex-col gap-3.5 text-[15px] text-muted-foreground">
             <li>
@@ -103,12 +101,12 @@ export const SiteFooter: FC<ComponentProps<'footer'>> = ({ className, ...props }
           </ul>
         </div>
 
-        <div className="lg:max-w-xs">
+        <div className="col-span-2 flex flex-col items-center text-center @2xl:col-span-3 @4xl:max-w-xs @4xl:items-start @4xl:text-left">
           <LogoButton/>
           <p className="mt-6 max-w-xs text-sm leading-relaxed text-muted-foreground">
             {m['components.footer.description']()}
           </p>
-          <div className="mt-7 flex gap-3">
+          <div className="mt-7 flex justify-center gap-3 @4xl:justify-start">
             {socials.map(({ Icon, label }) => (
               <a
                 key={label}
@@ -126,27 +124,37 @@ export const SiteFooter: FC<ComponentProps<'footer'>> = ({ className, ...props }
         </div>
       </div>
 
-      <div className="border-t border-border">
+      <div className="@container border-t border-border">
         <div
-          className="container mx-auto flex flex-col items-start justify-between gap-4 px-4 py-6 sm:flex-row sm:items-center">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-            <p className="text-sm text-muted-foreground">
-              {m['components.footer.copyright']({ year: new Date().getFullYear(), app: 'SKINERY SRL' })}
-            </p>
-            <Link
-              to="/terms"
-              className="text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
-            >
-              {m['components.footer.legal']()}
-            </Link>
-          </div>
-          <div className="flex flex-wrap gap-2 text-foreground">
-            <VisaIcon className="h-12 w-14"/>
-            <MastercardIcon className="h-12 w-14"/>
-            <ApplePayIcon className="h-12 w-14"/>
+          className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 py-6 @sm:flex-row">
+          <p className="text-sm text-muted-foreground">
+            {m['components.footer.copyright']({ year: new Date().getFullYear(), app: 'SKINERY SRL' })}
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-2 text-white">
+            {paymentLogos.map((logo) => (
+              <PaymentCard key={logo} logo={logo} className="h-8.25 w-12"/>
+            ))}
           </div>
         </div>
       </div>
     </footer>
   );
 };
+
+const paymentLogos = ['visa', 'mastercard', 'maib', 'amex'] as const;
+
+const PaymentCard: FC<ComponentProps<'div'> & { logo: (typeof paymentLogos)[number] }> = ({
+  logo,
+  className,
+  ...props
+}) => (
+  <div
+    className={cn(
+      'flex items-center justify-center gap-0.5 bg-white rounded-[0.15rem] overflow-hidden p-0.5',
+      className
+    )}
+    {...props}
+  >
+    <img src={`/images/logos/${logo}.png`} className="h-full w-fit object-contain"/>
+  </div>
+);
