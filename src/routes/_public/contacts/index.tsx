@@ -10,13 +10,13 @@ export const Route = createFileRoute('/_public/contacts/')({
 
 const office: IOffice = {
   name: m['pages.contacts.office.name'](),
-  email: 'hello@skinery.md',
+  email: 'pielmoldova@gmail.com',
   phone: m['pages.contacts.office.phone'](),
   address: m['pages.contacts.office.address'](),
   hours: m['pages.contacts.hours'](),
-  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=47.0257,28.8323',
-  longitude: 28.8323,
-  latitude: 47.0257,
+  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=47.014922,28.855926',
+  longitude: 28.855926,
+  latitude: 47.014922,
 };
 
 function RouteComponent() {

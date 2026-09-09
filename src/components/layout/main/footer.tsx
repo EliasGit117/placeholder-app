@@ -91,13 +91,13 @@ export const SiteFooter: FC<ComponentProps<'footer'>> = ({ className, ...props }
           <Eyebrow>{m['components.footer.contact']()}</Eyebrow>
           <ul className="flex flex-col gap-3.5 text-[15px] text-muted-foreground">
             <li>
-              <a href="tel:+37322123456" className="transition-colors hover:text-foreground">
-                +373 22 123 456
+              <a href="tel:+37367432561" className="transition-colors hover:text-foreground">
+                +373 67 432 561
               </a>
             </li>
             <li>
-              <a href="mailto:hello@skinery.md" className="transition-colors hover:text-foreground">
-                hello@skinery.md
+              <a href="mailto:pielmoldova@gmail.com" className="transition-colors hover:text-foreground">
+                pielmoldova@gmail.com
               </a>
             </li>
           </ul>
@@ -129,9 +129,17 @@ export const SiteFooter: FC<ComponentProps<'footer'>> = ({ className, ...props }
       <div className="border-t border-border">
         <div
           className="container mx-auto flex flex-col items-start justify-between gap-4 px-4 py-6 sm:flex-row sm:items-center">
-          <p className="text-sm text-muted-foreground">
-            {m['components.footer.copyright']({ year: new Date().getFullYear(), app: 'SKINERY SRL' })}
-          </p>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+            <p className="text-sm text-muted-foreground">
+              {m['components.footer.copyright']({ year: new Date().getFullYear(), app: 'SKINERY SRL' })}
+            </p>
+            <Link
+              to="/terms"
+              className="text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+            >
+              {m['components.footer.legal']()}
+            </Link>
+          </div>
           <div className="flex flex-wrap gap-2 text-foreground">
             <VisaIcon className="h-12 w-14"/>
             <MastercardIcon className="h-12 w-14"/>

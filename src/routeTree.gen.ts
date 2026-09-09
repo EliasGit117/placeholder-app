@@ -29,6 +29,7 @@ import { Route as AdminProductsIndexRouteImport } from './routes/admin/products/
 import { Route as AdminOrdersIndexRouteImport } from './routes/admin/orders/index'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
 import { Route as AdminBannersIndexRouteImport } from './routes/admin/banners/index'
+import { Route as PublicTermsIndexRouteImport } from './routes/_public/terms/index'
 import { Route as PublicProductsIndexRouteImport } from './routes/_public/products/index'
 import { Route as PublicContactsIndexRouteImport } from './routes/_public/contacts/index'
 import { Route as PublicCheckoutIndexRouteImport } from './routes/_public/checkout/index'
@@ -144,6 +145,11 @@ const AdminBannersIndexRoute = AdminBannersIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminBannersRouteRoute,
 } as any)
+const PublicTermsIndexRoute = PublicTermsIndexRouteImport.update({
+  id: '/terms/',
+  path: '/terms/',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
 const PublicProductsIndexRoute = PublicProductsIndexRouteImport.update({
   id: '/products/',
   path: '/products/',
@@ -244,6 +250,7 @@ export interface FileRoutesByFullPath {
   '/checkout/': typeof PublicCheckoutIndexRoute
   '/contacts/': typeof PublicContactsIndexRoute
   '/products/': typeof PublicProductsIndexRoute
+  '/terms/': typeof PublicTermsIndexRoute
   '/admin/banners/': typeof AdminBannersIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/orders/': typeof AdminOrdersIndexRoute
@@ -274,6 +281,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof PublicCheckoutIndexRoute
   '/contacts': typeof PublicContactsIndexRoute
   '/products': typeof PublicProductsIndexRoute
+  '/terms': typeof PublicTermsIndexRoute
   '/admin/banners': typeof AdminBannersIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/orders': typeof AdminOrdersIndexRoute
@@ -312,6 +320,7 @@ export interface FileRoutesById {
   '/_public/checkout/': typeof PublicCheckoutIndexRoute
   '/_public/contacts/': typeof PublicContactsIndexRoute
   '/_public/products/': typeof PublicProductsIndexRoute
+  '/_public/terms/': typeof PublicTermsIndexRoute
   '/admin/banners/': typeof AdminBannersIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/orders/': typeof AdminOrdersIndexRoute
@@ -350,6 +359,7 @@ export interface FileRouteTypes {
     | '/checkout/'
     | '/contacts/'
     | '/products/'
+    | '/terms/'
     | '/admin/banners/'
     | '/admin/categories/'
     | '/admin/orders/'
@@ -380,6 +390,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/contacts'
     | '/products'
+    | '/terms'
     | '/admin/banners'
     | '/admin/categories'
     | '/admin/orders'
@@ -417,6 +428,7 @@ export interface FileRouteTypes {
     | '/_public/checkout/'
     | '/_public/contacts/'
     | '/_public/products/'
+    | '/_public/terms/'
     | '/admin/banners/'
     | '/admin/categories/'
     | '/admin/orders/'
@@ -589,6 +601,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBannersIndexRouteImport
       parentRoute: typeof AdminBannersRouteRoute
     }
+    '/_public/terms/': {
+      id: '/_public/terms/'
+      path: '/terms'
+      fullPath: '/terms/'
+      preLoaderRoute: typeof PublicTermsIndexRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
     '/_public/products/': {
       id: '/_public/products/'
       path: '/products'
@@ -702,6 +721,7 @@ interface PublicRouteRouteChildren {
   PublicCheckoutIndexRoute: typeof PublicCheckoutIndexRoute
   PublicContactsIndexRoute: typeof PublicContactsIndexRoute
   PublicProductsIndexRoute: typeof PublicProductsIndexRoute
+  PublicTermsIndexRoute: typeof PublicTermsIndexRoute
   PublicOrdersUidIndexRoute: typeof PublicOrdersUidIndexRoute
   PublicProductsSlugIndexRoute: typeof PublicProductsSlugIndexRoute
 }
@@ -711,6 +731,7 @@ const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicCheckoutIndexRoute: PublicCheckoutIndexRoute,
   PublicContactsIndexRoute: PublicContactsIndexRoute,
   PublicProductsIndexRoute: PublicProductsIndexRoute,
+  PublicTermsIndexRoute: PublicTermsIndexRoute,
   PublicOrdersUidIndexRoute: PublicOrdersUidIndexRoute,
   PublicProductsSlugIndexRoute: PublicProductsSlugIndexRoute,
 }
