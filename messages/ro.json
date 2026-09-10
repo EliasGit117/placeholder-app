@@ -632,7 +632,9 @@
         "description": "Verifică produsele înainte de plată.",
         "total": "Total",
         "empty_title": "Coșul tău este gol",
-        "empty_description": "Adaugă produse în coș pentru a continua spre finalizare."
+        "empty_description": "Adaugă produse în coș pentru a continua spre finalizare.",
+        "small_order_fee": "Taxă de livrare",
+        "free_delivery_hint": "Mai adaugă produse de {amount} lei pentru livrare gratuită"
       },
       "payment": {
         "title": "Detalii plată",

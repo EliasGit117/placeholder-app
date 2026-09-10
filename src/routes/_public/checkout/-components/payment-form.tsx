@@ -1,6 +1,5 @@
 import { type FC, type ReactNode } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 import { useNavigate } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';
@@ -16,6 +15,7 @@ import { m } from '@/paraglide/messages';
 import { client } from '@/lib/orpc';
 import { useCartContext } from '@/providers/cart.tsx';
 import { DeliveryMethod } from '~/prisma/generated/prisma/enums.ts';
+import { PaymentType } from '@/features/orders/common/constants.ts';
 
 const pickupAddresses = [
   'Bulevardul Ștefan cel Mare 1, Chișinău',
@@ -23,53 +23,52 @@ const pickupAddresses = [
   'Bulevardul Dacia 55, Chișinău',
 ];
 
-const schema = z.object({
-  paymentType: z.enum(['cash', 'maib']),
+export const checkoutFormSchema = z.object({
+  paymentType: z.enum(PaymentType),
   fullName: z.string().min(1),
   phone: z.string().min(1),
   email: z.string().min(1).email(),
-  deliveryMethod: z.enum(['courier', 'pickup']),
+  deliveryMethod: z.enum(DeliveryMethod),
   pickupAddress: z.string().optional(),
   address: z.string().optional(),
 }).superRefine((data, ctx) => {
-  if (data.deliveryMethod === 'pickup' && !data.pickupAddress) {
+  if (data.deliveryMethod === DeliveryMethod.PICKUP && !data.pickupAddress) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'REQUIRED', path: ['pickupAddress'] });
   }
 
-  if (data.deliveryMethod === 'courier' && !data.address) {
+  if (data.deliveryMethod === DeliveryMethod.COURIER && !data.address) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'REQUIRED', path: ['address'] });
   }
 });
 
-type TSchema = z.infer<typeof schema>;
+export type TCheckoutFormSchema = z.infer<typeof checkoutFormSchema>;
+export type TDeliveryMethod = TCheckoutFormSchema['deliveryMethod'];
+
+export const checkoutFormDefaultValues: TCheckoutFormSchema = {
+  paymentType: PaymentType.CASH,
+  fullName: '',
+  phone: '',
+  email: '',
+  deliveryMethod: DeliveryMethod.COURIER,
+  pickupAddress: '',
+  address: '',
+};
 
 export const PaymentForm: FC = () => {
   const navigate = useNavigate();
   const { items, clear } = useCartContext();
-
-  const form = useForm<TSchema>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      paymentType: 'cash',
-      fullName: '',
-      phone: '',
-      email: '',
-      deliveryMethod: 'courier',
-      pickupAddress: '',
-      address: '',
-    },
-  });
+  const form = useFormContext<TCheckoutFormSchema>();
 
   const deliveryMethod = form.watch('deliveryMethod');
 
   const createOrderMutation = useMutation({
-    mutationFn: (data: TSchema) => client.orders.create({
+    mutationFn: (data: TCheckoutFormSchema) => client.orders.create({
       paymentType: data.paymentType,
       fullName: data.fullName,
       phone: data.phone,
       email: data.email,
-      deliveryMethod: data.deliveryMethod === 'pickup' ? DeliveryMethod.PICKUP : DeliveryMethod.COURIER,
-      address: (data.deliveryMethod === 'pickup' ? data.pickupAddress : data.address)!,
+      deliveryMethod: data.deliveryMethod,
+      address: (data.deliveryMethod === DeliveryMethod.PICKUP ? data.pickupAddress : data.address)!,
     }),
   });
 
@@ -108,8 +107,8 @@ export const PaymentForm: FC = () => {
                     value={field.value}
                     onChange={field.onChange}
                     options={[
-                      { value: 'cash', label: m['pages.checkout.payment.payment_type_cash'](), icon: <IconCash/> },
-                      { value: 'maib', label: m['pages.checkout.payment.payment_type_maib'](), icon: <IconCreditCard/> },
+                      { value: PaymentType.CASH, label: m['pages.checkout.payment.payment_type_cash'](), icon: <IconCash/> },
+                      { value: PaymentType.MAIB, label: m['pages.checkout.payment.payment_type_maib'](), icon: <IconCreditCard/> },
                     ]}
                   />
                 </Field>
@@ -188,18 +187,18 @@ export const PaymentForm: FC = () => {
                       value={field.value}
                       onChange={(value) => {
                         field.onChange(value);
-                        form.resetField(value === 'pickup' ? 'address' : 'pickupAddress');
+                        form.resetField(value === DeliveryMethod.PICKUP ? 'address' : 'pickupAddress');
                       }}
                       options={[
-                        { value: 'courier', label: m['pages.checkout.payment.delivery_courier'](), icon: <IconTruckDelivery/> },
-                        { value: 'pickup', label: m['pages.checkout.payment.delivery_pickup'](), icon: <IconBuildingStore/> },
+                        { value: DeliveryMethod.COURIER, label: m['pages.checkout.payment.delivery_courier'](), icon: <IconTruckDelivery/> },
+                        { value: DeliveryMethod.PICKUP, label: m['pages.checkout.payment.delivery_pickup'](), icon: <IconBuildingStore/> },
                       ]}
                     />
                   </Field>
                 )}
               />
 
-              {deliveryMethod === 'pickup' ? (
+              {deliveryMethod === DeliveryMethod.PICKUP ? (
                 <Controller
                   name="pickupAddress"
                   control={form.control}

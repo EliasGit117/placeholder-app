@@ -1,8 +1,10 @@
+import { FormProvider, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { createFileRoute } from '@tanstack/react-router';
 import { orpc } from '@/lib/orpc';
 import { m } from '@/paraglide/messages';
 import { OrderSummary } from './-components/order-summary.tsx';
-import { PaymentForm } from './-components/payment-form.tsx';
+import { checkoutFormDefaultValues, checkoutFormSchema, PaymentForm, type TCheckoutFormSchema } from './-components/payment-form.tsx';
 
 export const Route = createFileRoute('/_public/checkout/')({
   component: RouteComponent,
@@ -23,6 +25,11 @@ export const Route = createFileRoute('/_public/checkout/')({
 });
 
 function RouteComponent() {
+  const form = useForm<TCheckoutFormSchema>({
+    resolver: zodResolver(checkoutFormSchema),
+    defaultValues: checkoutFormDefaultValues,
+  });
+
   return (
     <main className="flex flex-1 flex-col bg-background min-h-safe-screen mt-2 mb-12">
       <div className="container mx-auto flex flex-col gap-6 p-4">
@@ -31,10 +38,12 @@ function RouteComponent() {
           <p className="text-sm text-muted-foreground">{m['pages.checkout.description']()}</p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
-          <OrderSummary/>
-          <PaymentForm/>
-        </div>
+        <FormProvider {...form}>
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
+            <OrderSummary/>
+            <PaymentForm/>
+          </div>
+        </FormProvider>
       </div>
     </main>
   );

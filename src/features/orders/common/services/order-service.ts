@@ -10,6 +10,7 @@ import { ImageService } from '@/features/images/common/services/image-service.ts
 import { BriefImageDtoFactory, type TBriefImageDto } from '@/features/products/common/dtos/brief-image.ts';
 import { OnlinePaymentService } from '@/features/orders/common/services/online-payment-service.ts';
 import { OnlinePaymentDtoFactory, type TOnlinePaymentDto } from '@/features/orders/common/dtos/online-payment.ts';
+import { PaymentType, smallDeliveryOrderSurcharge, smallDeliveryOrderThreshold, type TPaymentType } from '@/features/orders/common/constants.ts';
 
 export interface ICreateOrderItem {
   variantId: number;
@@ -18,7 +19,7 @@ export interface ICreateOrderItem {
 
 export interface ICreateOrderInput {
   items: ICreateOrderItem[];
-  paymentType: 'cash' | 'maib';
+  paymentType: TPaymentType;
   fullName: string;
   phone: string;
   email: string;
@@ -199,11 +200,14 @@ export class OrderService {
         throw new ORPCError('NOT_FOUND', { message: `Variant '${item.variantId}' not found` });
     }
 
-    const totalPrice = rawItems.reduce((sum, item) => {
+    const subtotal = rawItems.reduce((sum, item) => {
       const variant = variantById.get(item.variantId)!;
       const unitPrice = effectivePrice(variant.price, variant.discountPercent);
       return sum + unitPrice * item.count;
     }, 0);
+    
+    const isSmallDeliveryOrder = input.deliveryMethod === DeliveryMethod.COURIER && subtotal < smallDeliveryOrderThreshold;
+    const totalPrice = isSmallDeliveryOrder ? subtotal + smallDeliveryOrderSurcharge : subtotal;
 
     const entity = await prisma.order.create({
       data: {
@@ -233,7 +237,7 @@ export class OrderService {
       include: { items: true },
     });
 
-    const onlinePayment = input.paymentType === 'maib'
+    const onlinePayment = input.paymentType === PaymentType.MAIB
       ? await OnlinePaymentService.createForOrder(entity.id)
       : null;
 
@@ -244,5 +248,6 @@ export class OrderService {
 function effectivePrice(price: number, discountPercent: number | null): number {
   if (!discountPercent)
     return price;
+
   return Math.round(price * (1 - discountPercent / 100));
 }

@@ -25,6 +25,7 @@ import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
 import { orpc } from '@/lib/orpc';
 import { useCartContext } from '@/providers/cart.tsx';
+import { smallDeliveryOrderSurcharge, smallDeliveryOrderThreshold } from '@/features/orders/common/constants.ts';
 import { useCartSheet } from './provider.tsx';
 
 const cartQuantityOptions = Array.from({ length: 10 }, (_, i) => i + 1);
@@ -52,6 +53,8 @@ export const CartSheet: FC = () => {
   }, 0);
 
   const hasTotalDiscount = originalTotal > total;
+  const surcharge = total > 0 && total < smallDeliveryOrderThreshold ? smallDeliveryOrderSurcharge : 0;
+  const grandTotal = total + surcharge;
 
   const onOpenChange = (v: boolean) => {
     if (v) return;
@@ -238,6 +241,18 @@ export const CartSheet: FC = () => {
         <SheetFooter className="flex flex-col gap-4 border-t pt-3.5">
           {items.length > 0 && (
             <>
+              {surcharge > 0 && (
+                <>
+                  <div className="flex items-center justify-between text-sm">
+                    <span>{m['pages.checkout.summary.small_order_fee']()}</span>
+                    <span>{surcharge} {m['components.shop.currency']()}</span>
+                  </div>
+                  <p className="-mt-2 text-xs text-muted-foreground">
+                    {m['pages.checkout.summary.free_delivery_hint']({ amount: smallDeliveryOrderThreshold - total })}
+                  </p>
+                </>
+              )}
+
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">
                   {m['components.header.cart_total']()}
@@ -249,7 +264,7 @@ export const CartSheet: FC = () => {
                     <s className="text-xs text-muted-foreground">{originalTotal}</s>
                   )}
                   <span className="font-heading text-lg font-semibold">
-                    {total} {m['components.shop.currency']()}
+                    {grandTotal} {m['components.shop.currency']()}
                   </span>
                 </span>
               </div>

@@ -1,28 +1,38 @@
 import { type CSSProperties, type FC } from 'react';
+import { useWatch } from 'react-hook-form';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group.tsx';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu.tsx';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu.tsx';
 import { IconMinus, IconPackageOff, IconPhotoOff, IconPlus, IconTrash } from '@tabler/icons-react';
 import { Link } from '@tanstack/react-router';
 import { cn, thumbhashToDataUrl } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
 import { orpc } from '@/lib/orpc';
 import { useCartContext } from '@/providers/cart.tsx';
+import { smallDeliveryOrderSurcharge, smallDeliveryOrderThreshold } from '@/features/orders/common/constants.ts';
+import { DeliveryMethod } from '~/prisma/generated/prisma/enums.ts';
+import type { TCheckoutFormSchema } from './payment-form.tsx';
 
 const cartQuantityOptions = Array.from({ length: 10 }, (_, i) => i + 1);
 
 export const OrderSummary: FC = () => {
   const { items, add, remove } = useCartContext();
+  const deliveryMethod = useWatch<TCheckoutFormSchema, 'deliveryMethod'>({ name: 'deliveryMethod' });
   const ids = items.map((item) => item.id);
 
   const { data: products, isPending: productsPending } = useQuery({
     ...orpc.products.getProductsById.queryOptions({ input: { ids } }),
     placeholderData: keepPreviousData,
-    enabled: ids.length > 0,
+    enabled: ids.length > 0
   });
 
   const total = items.reduce((sum, item) => {
@@ -36,6 +46,8 @@ export const OrderSummary: FC = () => {
   }, 0);
 
   const hasTotalDiscount = originalTotal > total;
+  const surcharge = deliveryMethod === DeliveryMethod.COURIER && total > 0 && total < smallDeliveryOrderThreshold ? smallDeliveryOrderSurcharge : 0;
+  const grandTotal = total + surcharge;
 
   if (items.length === 0) {
     return (
@@ -88,7 +100,8 @@ export const OrderSummary: FC = () => {
 
             return (
               <li key={item.id} className={cn('flex items-start gap-3', !product.isAvailable && 'opacity-60')}>
-                <div className="relative size-24 shrink-0 overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/10">
+                <div
+                  className="relative size-24 shrink-0 overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/10">
                   {imageUrl ? (
                     <img
                       src={imageUrl}
@@ -199,6 +212,18 @@ export const OrderSummary: FC = () => {
 
         <div className="border-t border-dashed"/>
 
+        {surcharge > 0 && (
+          <div className="flex flex-col gap-0.5">
+            <div className="flex items-center justify-between text-sm">
+              <span>{m['pages.checkout.summary.small_order_fee']()}</span>
+              <span>{surcharge} {m['components.shop.currency']()}</span>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {m['pages.checkout.summary.free_delivery_hint']({ amount: smallDeliveryOrderThreshold - total })}
+            </p>
+          </div>
+        )}
+
         <div className="flex items-center justify-between">
           <span className="text-base font-semibold">
             {m['pages.checkout.summary.total']()}
@@ -212,7 +237,8 @@ export const OrderSummary: FC = () => {
               <s className="text-sm text-muted-foreground">{originalTotal}</s>
             )}
             <span className="font-heading text-2xl font-semibold">
-              {total} <span className="text-base font-normal text-muted-foreground">{m['components.shop.currency']()}</span>
+              {grandTotal} <span
+              className="text-base font-normal text-muted-foreground">{m['components.shop.currency']()}</span>
             </span>
           </span>
         </div>
