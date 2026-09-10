@@ -1,6 +1,5 @@
 import { ORPCError } from '@orpc/server';
 import { prisma } from '@/lib/db';
-import { envConfig } from '@/lib/config';
 import { logger } from '@/lib/logger.ts';
 import { serverEnvConfig } from '@/lib/config/server-env-config.ts';
 import { OnlinePaymentStatus } from '~/prisma/generated/prisma/enums.ts';
@@ -70,7 +69,7 @@ export class OnlinePaymentService {
     if (!order)
       throw new ORPCError('NOT_FOUND', { message: `Order '${orderId}' not found` });
 
-    const callbackUrl = `${envConfig.appBaseUrl}/api/orders/online-payment-callback`;
+    const callbackUrl = `${serverEnvConfig.appUrl}/api/orders/online-payment-callback`;
 
     const checkout = await MaibClient.createCheckout({
       amount: order.totalPrice,
@@ -78,8 +77,8 @@ export class OnlinePaymentService {
       orderInfo: { id: order.uid, description: `Order ${order.uid}` },
       payerInfo: { name: order.fullName, email: order.email, phone: order.phone },
       callbackUrl,
-      successUrl: `${envConfig.appBaseUrl}/orders/${order.uid}`,
-      failUrl: `${envConfig.appBaseUrl}/orders/${order.uid}`,
+      successUrl: `${serverEnvConfig.appUrl}/orders/${order.uid}`,
+      failUrl: `${serverEnvConfig.appUrl}/orders/${order.uid}`,
     });
 
     const entity = await prisma.onlinePayment.upsert({

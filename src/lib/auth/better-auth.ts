@@ -1,4 +1,3 @@
-import { envConfig } from '@/lib/config';
 import { betterAuth } from 'better-auth';
 import { prisma } from '@/lib/db';
 import { serverEnvConfig } from '@/lib/config/server-env-config.ts';
@@ -11,8 +10,8 @@ import { accessControl, roles } from './permissions';
 export const auth = betterAuth({
   experimental: { joins: true },
   database: prismaAdapter(prisma, { provider: 'postgresql' }),
-  baseURL: envConfig.appBaseUrl,
-  trustedOrigins: [envConfig.appBaseUrl],
+  baseURL: serverEnvConfig.appUrl,
+  trustedOrigins: [serverEnvConfig.appUrl],
   secret: serverEnvConfig.betterAuthSecret,
   emailAndPassword: { enabled: true },
   user: {

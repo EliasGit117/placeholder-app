@@ -6,7 +6,7 @@ import { onError } from '@orpc/server';
 import { OpenAPIReferencePlugin } from '@orpc/openapi/plugins';
 import { orpcRouter } from '@/features/shared/orpc/router.ts';
 import { getRequestHeaders } from '@tanstack/react-start/server';
-import { envConfig } from '@/lib/config';
+import { serverEnvConfig } from '@/lib/config/server-env-config.ts';
 import { ResponseHeadersPlugin } from '@orpc/server/plugins'
 
 
@@ -24,7 +24,7 @@ const handler = new OpenAPIHandler(orpcRouter, {
       renderDocsHtml: (specUrl, title, head, scriptUrl, config) =>
         renderScalarDocsHtml(specUrl, title, head, scriptUrl, config),
       specGenerateOptions: {
-        servers: [{ url: `${envConfig.appBaseUrl}/api` }],
+        servers: [{ url: `${serverEnvConfig.appUrl}/api` }],
         info: {
           title: 'API',
           version: '1.0.0'

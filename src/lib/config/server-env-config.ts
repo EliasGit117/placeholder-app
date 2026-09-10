@@ -5,6 +5,7 @@ const serverEnvSchema = z.object({
 
   DATABASE_URL: z.url(),
   BETTER_AUTH_SECRET: z.string().min(10),
+  BETTER_AUTH_URL: z.url(),
   UPLOADTHING_TOKEN: z.string().min(1),
 
   MAIB_CLIENT_ID: z.string().min(1),
@@ -22,6 +23,7 @@ export const serverEnvConfig = {
   dbUrl: serverEnv.DATABASE_URL,
   uploadthingToken: serverEnv.UPLOADTHING_TOKEN,
   betterAuthSecret: serverEnv.BETTER_AUTH_SECRET,
+  appUrl: serverEnv.BETTER_AUTH_URL,
   isProduction: serverEnv.NODE_ENV === 'production',
   maibClientId: serverEnv.MAIB_CLIENT_ID,
   maibClientSecret: serverEnv.MAIB_CLIENT_SECRET,
