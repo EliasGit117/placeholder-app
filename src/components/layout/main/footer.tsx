@@ -70,7 +70,7 @@ export const SiteFooter: FC<ComponentProps<'footer'>> = ({ className, ...props }
         {/* Navigation */}
         <nav className="flex flex-col items-center gap-4 text-center @4xl:items-start @4xl:text-left">
           <Eyebrow>{m['components.footer.navigation']()}</Eyebrow>
-          <ul className="flex max-w-28 flex-col gap-3.5">
+          <ul className="flex w-28 flex-col gap-3.5">
             {navLinks.map(({ to, label }) => (
               <li key={to}>
                 <Link
