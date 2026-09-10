@@ -1,5 +1,5 @@
-export const smallDeliveryOrderThreshold = 500;
-export const smallDeliveryOrderSurcharge = 100;
+export const smallDeliveryOrderThreshold = 1000;
+export const smallDeliveryOrderSurcharge = 50;
 
 // Not backed by a DB enum: cash orders never create an OnlinePayment row,
 // so this only distinguishes the checkout flow, not persisted order state.
