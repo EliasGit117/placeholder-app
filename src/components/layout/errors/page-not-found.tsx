@@ -20,7 +20,7 @@ interface IProps extends ComponentProps<typeof Empty> {
 export const PageNotFound: FC<IProps> = ({ className, homeLinkOptions = { to: '/' }, ...props }) => {
 
   return (
-    <Empty className={cn(className)} {...props}>
+    <Empty className={cn('min-h-safe-screen', className)} {...props}>
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <IconSearchOff/>

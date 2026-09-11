@@ -28,7 +28,7 @@ export const SomethingWentWrong: FC<IProps> = ({
 }) => {
 
   return (
-    <Empty className={cn(className)} {...props}>
+    <Empty className={cn('min-h-safe-screen', className)} {...props}>
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <IconAlertTriangle/>
