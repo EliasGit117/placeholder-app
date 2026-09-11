@@ -256,7 +256,9 @@
   },
   "pages": {
     "dashboard": {
-      "title": "Дэшборд"
+      "title": "Дэшборд",
+      "not_developed_title": "Эта страница ещё не готова",
+      "not_developed_description": "Загляните позже — этот раздел панели пока в разработке."
     },
     "products": {
       "title": "Товары",

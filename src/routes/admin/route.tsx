@@ -8,7 +8,7 @@ export const Route = createFileRoute('/admin')({
   component: RouteComponent,
   beforeLoad: ({ context: { user } }) => {
     if (!user)
-      throw redirect({ to: '/', replace: true })
+      throw redirect({ to: '/auth/sign-in', replace: true })
   },
   head: () => ({
     links: [{ rel: 'stylesheet', href: adminCss }]

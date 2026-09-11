@@ -256,7 +256,9 @@
   },
   "pages": {
     "dashboard": {
-      "title": "Dashboard"
+      "title": "Dashboard",
+      "not_developed_title": "Această pagină nu este dezvoltată încă",
+      "not_developed_description": "Reveniți mai târziu — această secțiune a panoului este încă în lucru."
     },
     "products": {
       "title": "Produse",

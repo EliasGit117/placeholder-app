@@ -24,9 +24,11 @@ import { Button } from '@/components/ui/button.tsx';
 
 interface IProps extends Omit<ComponentProps<typeof Button>, 'children' | 'onClick'> {
   align?: 'start' | 'center' | 'end';
+  hideIfSignedOut?: boolean;
 }
 
-export const UserDropdown: FC<IProps> = ({ className, align, variant = 'outline', size = 'icon', ...props }) => {
+export const UserDropdown: FC<IProps> = (props) => {
+  const { className, align, variant = 'outline', size = 'icon', hideIfSignedOut, ...btnProps } = props;
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const placeholder = thumbhashToDataUrl(user?.imageThumbhash ?? null);
@@ -39,11 +41,13 @@ export const UserDropdown: FC<IProps> = ({ className, align, variant = 'outline'
     }
   });
 
+  if (hideIfSignedOut && !user)
+    return null;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className={cn('rounded-full', className)} size={size} variant={variant} {...props}>
+        <Button className={cn('rounded-full', className)} size={size} variant={variant} {...btnProps}>
           <Avatar
             className={cn(placeholder && 'bg-transparent')}
             style={placeholder ? { backgroundImage: `url(${placeholder})`, backgroundSize: 'cover' } : undefined}

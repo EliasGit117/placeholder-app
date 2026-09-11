@@ -20,7 +20,7 @@ export const Arrivals: FC = () => {
   const products = data?.items ?? [];
 
   return (
-    <Section className="bg-background">
+    <Section className="bg-muted/40">
       <SectionHead
         eyebrow={m['pages.home.arrivals.eyebrow']()}
         title={<>{m['pages.home.arrivals.title']()}</>}

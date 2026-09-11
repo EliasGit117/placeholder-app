@@ -24,7 +24,8 @@ export const Categories: FC = () => {
         eyebrow={m['pages.home.categories.eyebrow']()}
         title={
           <>
-            {m['pages.home.categories.title_prefix']()}{' '}
+            <span>{m['pages.home.categories.title_prefix']()}</span>
+            {' '}
             <span className="italic text-primary">{m['pages.home.categories.title_highlight']()}</span>
           </>
         }
@@ -51,7 +52,10 @@ export const Categories: FC = () => {
             ))
           ) : (
             categories.map((category) => (
-              <CarouselItem key={category.id} className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 2xl:basis-1/6">
+              <CarouselItem
+                className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 2xl:basis-1/6"
+                key={category.id}
+              >
                 <CategoryCard category={category}/>
               </CarouselItem>
             ))
@@ -89,7 +93,7 @@ const CategoryCard: FC<{ category: ICategoryNodeDto }> = ({ category }) => {
         )}
       </div>
       <div>
-        <div className="text-lg font-medium group-hover:text-primary">
+        <div className="text-lg font-medium group-hover:text-primary font-heading">
           {category.name}
         </div>
         {category.description && (

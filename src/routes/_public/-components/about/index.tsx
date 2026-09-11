@@ -1,25 +1,32 @@
-import type { FC, SVGProps } from 'react';
+import type { FC } from 'react';
 import { m } from '@/paraglide/messages';
-import { Eyebrow, Section } from '@/routes/_public/-components/shared';
+import { BotanicalAccent, Eyebrow, Section } from '@/routes/_public/-components/shared';
+import { IconClipboardData, IconClock, IconDroplet, IconEye, IconLeaf, IconStar } from '@tabler/icons-react';
+
 
 export const About: FC = () => {
   const credentials = [
     { num: '100%', lab: m['pages.home.about.credential_cruelty_free']() },
     { num: '0', lab: m['pages.home.about.credential_synthetic_fragrances']() },
-    { num: '42', lab: m['pages.home.about.credential_active_ingredients']() },
+    { num: '42', lab: m['pages.home.about.credential_active_ingredients']() }
   ];
 
   const benefits = [
-    { Icon: LeafIcon, title: m['pages.home.about.benefit_1_title'](), text: m['pages.home.about.benefit_1_text']() },
-    { Icon: ClockIcon, title: m['pages.home.about.benefit_2_title'](), text: m['pages.home.about.benefit_2_text']() },
-    { Icon: EyeIcon, title: m['pages.home.about.benefit_3_title'](), text: m['pages.home.about.benefit_3_text']() },
-    { Icon: StarIcon, title: m['pages.home.about.benefit_4_title'](), text: m['pages.home.about.benefit_4_text']() },
-    { Icon: DocIcon, title: m['pages.home.about.benefit_5_title'](), text: m['pages.home.about.benefit_5_text']() },
-    { Icon: DropIcon, title: m['pages.home.about.benefit_6_title'](), text: m['pages.home.about.benefit_6_text']() },
+    { Icon: IconLeaf, title: m['pages.home.about.benefit_1_title'](), text: m['pages.home.about.benefit_1_text']() },
+    { Icon: IconClock, title: m['pages.home.about.benefit_2_title'](), text: m['pages.home.about.benefit_2_text']() },
+    { Icon: IconEye, title: m['pages.home.about.benefit_3_title'](), text: m['pages.home.about.benefit_3_text']() },
+    { Icon: IconStar, title: m['pages.home.about.benefit_4_title'](), text: m['pages.home.about.benefit_4_text']() },
+    {
+      Icon: IconClipboardData,
+      title: m['pages.home.about.benefit_5_title'](),
+      text: m['pages.home.about.benefit_5_text']()
+    },
+    { Icon: IconDroplet, title: m['pages.home.about.benefit_6_title'](), text: m['pages.home.about.benefit_6_text']() }
   ];
 
   return (
     <Section className="bg-muted/40">
+      <BotanicalAccent/>
       <div className="grid items-start gap-16 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
         <div>
           <Eyebrow>{m['pages.home.about.eyebrow']()}</Eyebrow>
@@ -47,7 +54,7 @@ export const About: FC = () => {
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
           {benefits.map((b) => (
             <div
               key={b.title}
@@ -59,11 +66,12 @@ export const About: FC = () => {
                 className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-primary/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"/>
 
               <div className="flex items-start justify-between gap-4">
-                <h4 className="font-heading text-xl font-medium transition-colors duration-300 group-hover:text-primary">
+                <h4
+                  className="font-heading text-xl font-medium transition-colors duration-300 group-hover:text-primary">
                   {b.title}
                 </h4>
                 <div className="size-10 bg-muted rounded-full flex items-center justify-center p-2 shrink-0">
-                  <b.Icon className="text-primary"/>
+                  <b.Icon className="text-primary" strokeWidth={1.4}/>
                 </div>
               </div>
               <p className="text-[13px] leading-relaxed text-muted-foreground">{b.text}</p>
@@ -75,52 +83,3 @@ export const About: FC = () => {
   );
 };
 
-
-// ─── Icons (inline, inherit currentColor) ────────────────────────────────────
-
-type IcProps = SVGProps<SVGSVGElement>;
-const stroke = (p: IcProps) => ({ fill: 'none', stroke: 'currentColor', strokeWidth: 1.4, ...p });
-
-function LeafIcon(p: IcProps) {
-  return <svg viewBox="0 0 44 44" {...stroke(p)}>
-    <path d="M22 6 C 14 14, 12 22, 16 30 C 20 38, 28 36, 30 28 C 32 18, 28 10, 22 6 z"/>
-    <path d="M22 14 V 32"/>
-  </svg>;
-}
-
-function ClockIcon(p: IcProps) {
-  return <svg viewBox="0 0 44 44" {...stroke(p)}>
-    <circle cx="22" cy="22" r="14"/>
-    <path d="M22 8 V 22 L 30 30"/>
-    <circle cx="22" cy="22" r="2" fill="currentColor"/>
-  </svg>;
-}
-
-function EyeIcon(p: IcProps) {
-  return <svg viewBox="0 0 44 44" {...stroke(p)}>
-    <path d="M8 22 C 14 14, 30 14, 36 22 C 30 30, 14 30, 8 22 z"/>
-    <circle cx="22" cy="22" r="5"/>
-    <circle cx="22" cy="22" r="2" fill="currentColor"/>
-  </svg>;
-}
-
-function StarIcon(p: IcProps) {
-  return <svg viewBox="0 0 44 44" {...stroke(p)}>
-    <path d="M22 6 L 28 18 L 40 20 L 30 28 L 32 40 L 22 34 L 12 40 L 14 28 L 4 20 L 16 18 z"/>
-  </svg>;
-}
-
-function DocIcon(p: IcProps) {
-  return <svg viewBox="0 0 44 44" {...stroke(p)}>
-    <rect x="10" y="14" width="24" height="22" rx="1"/>
-    <path d="M14 14 V 10 H 30 V 14"/>
-    <path d="M16 22 H 28 M 16 28 H 28 M 16 34 H 24"/>
-  </svg>;
-}
-
-function DropIcon(p: IcProps) {
-  return <svg viewBox="0 0 44 44" {...stroke(p)}>
-    <path d="M22 8 C 28 14, 30 22, 22 36 C 14 22, 16 14, 22 8 z"/>
-    <path d="M22 20 V 30"/>
-  </svg>;
-}

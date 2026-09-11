@@ -12,7 +12,7 @@ export const Footer: FC<IProps> = ({ className, ...props }) => {
   return (
     <footer className={cn("p-4", className)} {...props}>
       <div className="flex flex-col gap-2">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs text-muted-foreground">
           {m['components.footer.copyright']({ year: currentYear, app: envConfig.appName })}
         </p>
       </div>

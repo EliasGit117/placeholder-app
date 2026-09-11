@@ -14,7 +14,7 @@ import {
   IconHeart,
   IconPhotoOff,
   IconShoppingBagMinus,
-  IconShoppingBagPlus,
+  IconShoppingBagPlus, IconShoppingBagX,
   IconTag
 } from '@tabler/icons-react';
 import type { TBriefProductPublicDto } from '@/features/products/public/dtos/search-public-products';
@@ -58,7 +58,7 @@ export const ProductCard: FC<IProps> = ({ product }) => {
       itemScope
       itemType="https://schema.org/Product"
       className={cn(
-        'group row-span-3 grid grid-rows-subgrid gap-y-0 overflow-hidden rounded-2xl bg-card ring-1 ring-foreground/10 transition-shadow hover:shadow-lg',
+        'group row-span-3 grid grid-rows-subgrid gap-y-0 overflow-hidden rounded-2xl border border-foreground/10 bg-card transition-shadow hover:shadow-lg',
         !isAvailable && 'opacity-70'
       )}
     >
@@ -163,7 +163,8 @@ export const ProductCard: FC<IProps> = ({ product }) => {
           {cartItem && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="aspect-square px-0 -mr-1" aria-label={m['components.shop.cart_options']()}>
+                <Button variant="ghost" className="aspect-square px-0 -mr-1"
+                        aria-label={m['components.shop.cart_options']()}>
                   <span>x{cartItem.count}</span>
                 </Button>
               </DropdownMenuTrigger>
@@ -201,7 +202,7 @@ export const ProductCard: FC<IProps> = ({ product }) => {
             disabled={!isAvailable}
             onClick={() => addToCart(product.id)}
           >
-            <IconShoppingBagPlus/>
+            {isAvailable ? <IconShoppingBagPlus/> : <IconShoppingBagX/>}
             <span>
               {isAvailable ? m['components.shop.add_to_cart']() : m['components.shop.unavailable']()}
             </span>

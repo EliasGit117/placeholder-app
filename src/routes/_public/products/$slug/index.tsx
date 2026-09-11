@@ -199,10 +199,25 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
                 </div>
               )}
 
-              <h1 className="font-heading text-2xl font-semibold leading-tight lg:text-3xl">
-                {product.name}
-                <span className="block text-base font-normal">{variant.name}</span>
-              </h1>
+              <div className="flex items-baseline gap-4">
+                <h1 className="font-heading text-2xl font-semibold leading-tight lg:text-3xl">
+                  {product.name}
+                  <span className="block text-base font-normal">{variant.name}</span>
+                </h1>
+
+                {!isPendingFavorites && (
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="outline"
+                    className="shrink-0 rounded-full"
+                    aria-label={m['components.shop.wishlist']()}
+                    onClick={() => toggleFavorite(variant.id)}
+                  >
+                    <IconHeart className={cn('size-4.5', isFavorite && 'text-rose-400 fill-rose-400')}/>
+                  </Button>
+                )}
+              </div>
             </div>
 
             <div className="flex items-baseline gap-1.5">
@@ -279,28 +294,14 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
 
             {cartItem ? (
               <div className="flex flex-col gap-3">
-                <div className="flex items-stretch gap-2">
-                  <Button
-                    type="button"
-                    className="w-full max-w-xs"
-                    onClick={() => removeFromCart(variant.id)}
-                  >
-                    <IconShoppingBagMinus/>
-                    <span>{m['components.shop.remove_from_cart_full']()}</span>
-                  </Button>
-
-                  {!isPendingFavorites && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      aria-label={m['components.shop.wishlist']()}
-                      onClick={() => toggleFavorite(variant.id)}
-                    >
-                      <IconHeart className={cn('size-4.5', isFavorite && 'text-primary fill-primary')}/>
-                    </Button>
-                  )}
-                </div>
+                <Button
+                  type="button"
+                  className="w-full max-w-xs"
+                  onClick={() => removeFromCart(variant.id)}
+                >
+                  <IconShoppingBagMinus/>
+                  <span>{m['components.shop.remove_from_cart_full']()}</span>
+                </Button>
 
                 <div className="flex flex-col gap-2">
                   <span className="text-sm font-medium">{m['components.shop.quantity']()}</span>
@@ -331,29 +332,15 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
                 </div>
               </div>
             ) : (
-              <div className="flex items-stretch gap-2">
-                <Button
-                  className="w-full max-w-xs"
-                  variant="outline-primary"
-                  disabled={!variant.isAvailable}
-                  onClick={() => addToCart(variant.id, 1)}
-                >
-                  <IconShoppingBagPlus/>
-                  <span>{m['components.shop.add_to_cart']()}</span>
-                </Button>
-
-                {!isPendingFavorites && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    aria-label={m['components.shop.wishlist']()}
-                    onClick={() => toggleFavorite(variant.id)}
-                  >
-                    <IconHeart className={cn('size-4.5', isFavorite && 'text-primary fill-primary')}/>
-                  </Button>
-                )}
-              </div>
+              <Button
+                className="w-full max-w-xs"
+                variant="outline-primary"
+                disabled={!variant.isAvailable}
+                onClick={() => addToCart(variant.id, 1)}
+              >
+                <IconShoppingBagPlus/>
+                <span>{m['components.shop.add_to_cart']()}</span>
+              </Button>
             )}
           </div>
         </div>

@@ -50,7 +50,7 @@ export const Header = ({ className, ...props }: IProps) => {
 
           <LocaleDropdown variant="outline" size="icon" align="end" className="rounded-full hidden md:inline-flex"/>
 
-          <UserDropdown size="icon" align="end" className="hidden md:inline-flex"/>
+          <UserDropdown size="icon" align="end" className="hidden md:inline-flex" hideIfSignedOut/>
         </div>
       </nav>
     </header>
