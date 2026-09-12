@@ -115,9 +115,9 @@ const PageLimitSelect: FC<IPageLimitSelectProps> = ({ value, search, variants = 
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="min-w-20">
+          <Button variant="outline" size="sm" className="w-12">
             <span>{value.toString()}</span>
-            <IconSelector className="ml-auto"/>
+            <IconSelector className="ml-auto -mr-1.5"/>
           </Button>
         </DropdownMenuTrigger>
 
