@@ -1,7 +1,9 @@
 import type { FC } from 'react';
 import { m } from '@/paraglide/messages';
-import { BotanicalAccent, Eyebrow, Section } from '@/routes/_public/-components/shared';
+import { Eyebrow, Section } from '@/routes/_public/-components/shared';
 import { IconClipboardData, IconClock, IconDroplet, IconEye, IconLeaf, IconStar } from '@tabler/icons-react';
+import { IconBotanicalBranch } from '@/components/icons/botanical-branch';
+import { IconBotanicalWaves } from '@/components/icons/botanical-waves';
 
 
 export const About: FC = () => {
@@ -25,8 +27,19 @@ export const About: FC = () => {
   ];
 
   return (
-    <Section className="bg-muted/40">
-      <BotanicalAccent/>
+    <Section
+      className="bg-muted/40"
+      decorations={
+        <>
+          <IconBotanicalBranch
+            className="pointer-events-none absolute left-[-60px] top-10 hidden w-[280px] rotate-[-12deg] text-primary opacity-[0.18] lg:block"
+          />
+          <IconBotanicalWaves
+            className="pointer-events-none absolute bottom-[-160px] right-0 hidden w-[380px] rotate-[20deg] text-primary opacity-[0.12] lg:block"
+          />
+        </>
+      }
+    >
       <div className="grid items-start gap-16 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
         <div>
           <Eyebrow>{m['pages.home.about.eyebrow']()}</Eyebrow>
@@ -65,7 +78,7 @@ export const About: FC = () => {
               <div
                 className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-primary/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"/>
 
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-center justify-between gap-4">
                 <h4
                   className="font-heading text-xl font-medium transition-colors duration-300 group-hover:text-primary">
                   {b.title}

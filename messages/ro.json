@@ -82,9 +82,9 @@
   },
   "components": {
     "announcement_bar": {
-      "free_shipping": "Livrare gratuită la comenzi peste 500 lei",
+      "free_shipping": "Livrare gratuită la comenzi peste 1000 lei",
       "botanical": "Cosmetică botanică, formule curate",
-      "new_serum": "Nou: ser cu acid hialuronic"
+      "working_hours": "Luni-Vineri: 9:00 - 18:00"
     },
     "data_table": {
       "clear": "Golire",

@@ -10,6 +10,8 @@ import { SortDirection } from '@/features/shared/schemas/pagination.ts';
 import { m } from '@/paraglide/messages';
 import { Section, SectionHead } from '@/routes/_public/-components/shared';
 import { IconArrowRight } from '@tabler/icons-react';
+import { IconBotanicalLotus } from '@/components/icons/botanical-lotus';
+import { IconBotanicalBloom } from '@/components/icons/botanical-bloom';
 
 export const newArrivalsQuery = orpc.products.search.queryOptions({
   input: { page: 1, limit: 12, sort: 'createdAt', dir: SortDirection.DESC },
@@ -20,7 +22,19 @@ export const Arrivals: FC = () => {
   const products = data?.items ?? [];
 
   return (
-    <Section className="bg-muted/40">
+    <Section
+      className="bg-muted/40"
+      decorations={
+        <>
+          <IconBotanicalLotus
+            className="pointer-events-none absolute right-[-90px] top-[240px] hidden w-[300px] rotate-[-30deg] text-primary opacity-[0.12] lg:block -scale-x-120"
+          />
+          <IconBotanicalBloom
+            className="pointer-events-none absolute bottom-[-110px] left-[-80px] hidden w-[320px] rotate-[-10deg] text-primary opacity-[0.1] lg:block"
+          />
+        </>
+      }
+    >
       <SectionHead
         eyebrow={m['pages.home.arrivals.eyebrow']()}
         title={<>{m['pages.home.arrivals.title']()}</>}

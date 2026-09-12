@@ -14,7 +14,6 @@ import { LogoButton } from '@/components/layout/common';
 import { NavUser } from '@/components/layout/main/nav-user.tsx';
 import { NavPreferences } from '@/components/layout/main/nav-preferences.tsx';
 import { orpc } from '@/lib/orpc';
-import { useAuth } from '@/hooks/use-auth.ts';
 import { Link, type LinkOptions, useLocation } from '@tanstack/react-router';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible.tsx';
 import { m } from '@/paraglide/messages';
@@ -35,7 +34,6 @@ export const AppSidebar = () => {
     })
   });
   const { setOpenMobile } = useSidebar();
-  const { user } = useAuth();
   const close = () => setOpenMobile(false);
 
   const { data: categories, isPending: isCategoriesPending } = useQuery(
@@ -81,21 +79,6 @@ export const AppSidebar = () => {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-
-              {user?.role === 'admin' && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    onClick={close}
-                    className="text-base font-normal"
-                    isActive={isLinkActive(pathname, categoryId, { to: '/admin' })}
-                    asChild
-                  >
-                    <Link to="/admin">
-                      <span>{m['components.header.admin']()}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

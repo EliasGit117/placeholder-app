@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu.tsx';
-import { IconLogin, IconLogout, IconSelector, IconUserPlus } from '@tabler/icons-react';
+import { IconDashboard, IconLogin, IconLogout, IconSelector, IconUserPlus } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authClient } from '@/lib/auth/better-auth-client.ts';
 import { orpc } from '@/lib/orpc';
@@ -68,6 +68,18 @@ export const NavUser: FC = () => {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator/>
+
+                {user.role === 'admin' && (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin">
+                        <IconDashboard/>
+                        <span>{m['components.header.admin']()}</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator/>
+                  </>
+                )}
 
                 <DropdownMenuItem variant="destructive" disabled={isPending} onClick={() => signOut()}>
                   <IconLogout/>

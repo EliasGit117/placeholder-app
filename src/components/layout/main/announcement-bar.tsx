@@ -14,7 +14,7 @@ export const AnnouncementBar: FC<ComponentProps<'div'>> = ({ className, ...props
   const messages = [
     m['components.announcement_bar.free_shipping'](),
     m['components.announcement_bar.botanical'](),
-    m['components.announcement_bar.new_serum']()
+    m['components.announcement_bar.working_hours']()
   ];
 
   return (

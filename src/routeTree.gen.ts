@@ -15,6 +15,7 @@ import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
+import { Route as DevIconsRouteImport } from './routes/dev.icons'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as AdminSettingsRouteRouteImport } from './routes/admin/settings/route'
 import { Route as AdminProductsRouteRouteImport } from './routes/admin/products/route'
@@ -74,6 +75,11 @@ const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => PublicRouteRoute,
+} as any)
+const DevIconsRoute = DevIconsRouteImport.update({
+  id: '/dev/icons',
+  path: '/dev/icons',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSplatRoute = ApiSplatRouteImport.update({
   id: '/api/$',
@@ -240,6 +246,7 @@ export interface FileRoutesByFullPath {
   '/admin/products': typeof AdminProductsRouteRouteWithChildren
   '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
+  '/dev/icons': typeof DevIconsRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
   '/admin/settings/profile': typeof AdminSettingsProfileRoute
@@ -270,6 +277,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/api/$': typeof ApiSplatRoute
+  '/dev/icons': typeof DevIconsRoute
   '/': typeof PublicIndexRoute
   '/admin': typeof AdminIndexRoute
   '/auth': typeof AuthIndexRoute
@@ -309,6 +317,7 @@ export interface FileRoutesById {
   '/admin/products': typeof AdminProductsRouteRouteWithChildren
   '/admin/settings': typeof AdminSettingsRouteRouteWithChildren
   '/api/$': typeof ApiSplatRoute
+  '/dev/icons': typeof DevIconsRoute
   '/_public/': typeof PublicIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/auth/': typeof AuthIndexRoute
@@ -349,6 +358,7 @@ export interface FileRouteTypes {
     | '/admin/products'
     | '/admin/settings'
     | '/api/$'
+    | '/dev/icons'
     | '/admin/'
     | '/auth/'
     | '/admin/settings/profile'
@@ -379,6 +389,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/api/$'
+    | '/dev/icons'
     | '/'
     | '/admin'
     | '/auth'
@@ -417,6 +428,7 @@ export interface FileRouteTypes {
     | '/admin/products'
     | '/admin/settings'
     | '/api/$'
+    | '/dev/icons'
     | '/_public/'
     | '/admin/'
     | '/auth/'
@@ -452,6 +464,7 @@ export interface RootRouteChildren {
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   ApiSplatRoute: typeof ApiSplatRoute
+  DevIconsRoute: typeof DevIconsRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiOrdersOnlinePaymentCallbackRoute: typeof ApiOrdersOnlinePaymentCallbackRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
@@ -502,6 +515,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof PublicIndexRouteImport
       parentRoute: typeof PublicRouteRoute
+    }
+    '/dev/icons': {
+      id: '/dev/icons'
+      path: '/dev/icons'
+      fullPath: '/dev/icons'
+      preLoaderRoute: typeof DevIconsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/$': {
       id: '/api/$'
@@ -841,6 +861,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRouteRoute: AdminRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   ApiSplatRoute: ApiSplatRoute,
+  DevIconsRoute: DevIconsRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiOrdersOnlinePaymentCallbackRoute: ApiOrdersOnlinePaymentCallbackRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
