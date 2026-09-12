@@ -58,7 +58,7 @@ export const ProductCard: FC<IProps> = ({ product }) => {
       itemScope
       itemType="https://schema.org/Product"
       className={cn(
-        'group row-span-3 grid grid-rows-subgrid gap-y-0 overflow-hidden rounded-2xl border border-foreground/10 bg-card transition-shadow hover:shadow-lg',
+        'group row-span-3 grid min-w-0 grid-rows-subgrid gap-y-0 overflow-hidden rounded-2xl border border-foreground/10 bg-card transition-shadow hover:shadow-lg',
         !isAvailable && 'opacity-70'
       )}
     >
@@ -114,7 +114,7 @@ export const ProductCard: FC<IProps> = ({ product }) => {
         </Link>
       </div>
 
-      <CardContent className="flex flex-col gap-1.5 p-4">
+      <CardContent className="flex min-w-0 flex-col gap-1.5 p-4">
         {category && (
           categoryId != null ? (
             <Link
@@ -134,7 +134,7 @@ export const ProductCard: FC<IProps> = ({ product }) => {
           )
         )}
 
-        <h3 className="font-heading text-base font-semibold leading-tight" itemProp="name">
+        <h3 className="font-heading text-base font-semibold leading-tight wrap-break-word" itemProp="name">
           <Link to="/products/$slug" params={{ slug: product.slug }} className="hover:underline underline-offset-2">
             {name}
             <span className="block text-sm font-normal">{variantName}</span>
@@ -142,14 +142,14 @@ export const ProductCard: FC<IProps> = ({ product }) => {
         </h3>
 
         {shortDescription && (
-          <p className="line-clamp-2 text-[13px] text-muted-foreground">
+          <p className="line-clamp-2 wrap-break-word text-[13px] text-muted-foreground">
             {shortDescription}
           </p>
         )}
       </CardContent>
 
       <CardFooter
-        className="flex flex-col items-stretch gap-3 self-end border-t border-dashed bg-transparent p-4 pt-3.5">
+        className="flex min-w-0 flex-col items-stretch gap-3 self-end border-t border-dashed bg-transparent p-4 pt-3.5">
         <div className="flex items-center justify-between gap-2 min-h-8">
           <div itemProp="offers" itemType="https://schema.org/Offer" className="flex items-baseline gap-1.5" itemScope>
             <meta itemProp="priceCurrency" content="MDL"/>
