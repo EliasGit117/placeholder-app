@@ -9,7 +9,6 @@
     "test": "vitest run",
     "seed:admin": "bun run scripts/seed-admin.ts",
     "reverify-payments": "bun run scripts/reverify-online-payments.ts",
-    "benchmark-product-query": "bun run scripts/benchmark-product-detail-query.ts",
     "machine-translate": "inlang machine translate --project project.inlang"
   },
   "dependencies": {

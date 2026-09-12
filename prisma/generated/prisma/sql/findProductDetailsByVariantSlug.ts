@@ -7,25 +7,22 @@ import * as $runtime from "@prisma/client/runtime/client"
 
 /**
  * @param text
+ * @param text
  */
-export const findProductDetailsByVariantSlug = $runtime.makeTypedQueryFactory("WITH target_variant AS (\nSELECT id, product_id, state\nFROM product_variants\nWHERE full_slug = $1\nLIMIT 1\n)\nSELECT\ntv.id AS \"variantId\",\np.id AS \"productId\",\np.name_ro AS \"nameRo\",\np.name_ru AS \"nameRu\",\np.slug AS \"slug\",\np.short_description_ro AS \"shortDescriptionRo\",\np.short_description_ru AS \"shortDescriptionRu\",\np.description_ro AS \"descriptionRo\",\np.description_ru AS \"descriptionRu\",\np.category_id AS \"categoryId\",\np.option_schema::json AS \"options\",\nc.name_ro AS \"categoryNameRo\",\nc.name_ru AS \"categoryNameRu\",\nCOALESCE((\nSELECT json_agg(json_build_object(\n'id', v.id,\n'nameRo', v.name_ro,\n'nameRu', v.name_ru,\n'fullSlug', v.full_slug,\n'optionValues', v.option_values::json,\n'price', v.price,\n'discountPercent', v.discount_percent,\n'state', v.state\n) ORDER BY v.id)\nFROM product_variants v\nWHERE v.product_id = p.id AND v.state IN ('active', 'not_available')\n), '[]'::json) AS \"variants\",\nCOALESCE((\nSELECT json_agg(json_build_object(\n'id', img.id,\n'url', img.url,\n'width', img.width,\n'height', img.height,\n'thumbhash', img.thumbhash,\n'order', img.\"order\",\n'variants', COALESCE((\nSELECT json_agg(json_build_object('kind', iv.kind, 'url', iv.url, 'width', iv.width, 'height', iv.height))\nFROM image_variants iv\nWHERE iv.image_id = img.id\n), '[]'::json)\n) ORDER BY img.\"order\")\nFROM images img\nWHERE img.resource_type = 'PRODUCT_VARIANT' AND img.resource_id = tv.id::text\n), '[]'::json) AS \"images\"\nFROM target_variant tv\nJOIN products p ON p.id = tv.product_id AND p.state = 'active'\nLEFT JOIN categories c ON c.id = p.category_id\nWHERE tv.state IN ('active', 'not_available')") as (text: string) => $runtime.TypedSql<findProductDetailsByVariantSlug.Parameters, findProductDetailsByVariantSlug.Result>
+export const findProductDetailsByVariantSlug = $runtime.makeTypedQueryFactory("\nWITH target_variant AS (\nSELECT id, product_id, state\nFROM product_variants\nWHERE full_slug = $1\nLIMIT 1\n),\n\nsibling_variants AS (\nSELECT json_agg(\njson_build_object(\n'id', v.id,\n'name', CASE WHEN $2 = 'ru' THEN v.name_ru ELSE v.name_ro END,\n'fullSlug', v.full_slug,\n'optionValues', v.option_values::json,\n'price', v.price,\n'discountPercent', v.discount_percent,\n'state', v.state\n)\nORDER BY v.id\n) AS variants\nFROM product_variants v\nJOIN target_variant tv ON v.product_id = tv.product_id\nWHERE v.state IN ('active', 'not_available')\n),\n\ntarget_images AS (\nSELECT json_agg(\njson_build_object(\n'id', img.id,\n'url', img.url,\n'width', img.width,\n'height', img.height,\n'thumbhash', img.thumbhash,\n'order', img.\"order\",\n'variants', (\nSELECT COALESCE(json_agg(\njson_build_object('kind', iv.kind, 'url', iv.url, 'width', iv.width, 'height', iv.height)\n), '[]'::json)\nFROM image_variants iv\nWHERE iv.image_id = img.id\n)\n)\nORDER BY img.\"order\"\n) AS images\nFROM images img\nJOIN target_variant tv ON img.resource_id = tv.id::text\nWHERE img.resource_type = 'PRODUCT_VARIANT'\n)\n\nSELECT\ntv.id AS \"variantId\",\np.id AS \"productId\",\nCASE WHEN $2 = 'ru' THEN p.name_ru ELSE p.name_ro END AS \"name\",\np.slug AS \"slug\",\nCASE WHEN $2 = 'ru' THEN p.short_description_ru ELSE p.short_description_ro END AS \"shortDescription\",\nCASE WHEN $2 = 'ru' THEN p.description_ru ELSE p.description_ro END AS \"description\",\np.category_id AS \"categoryId\",\np.option_schema::json AS \"options\",\nCASE WHEN $2 = 'ru' THEN c.name_ru ELSE c.name_ro END AS \"categoryName\",\nCOALESCE(sv.variants, '[]'::json) AS \"variants\",\nCOALESCE(ti.images, '[]'::json) AS \"images\"\nFROM target_variant tv\nJOIN products p ON p.id = tv.product_id AND p.state = 'active'\nLEFT JOIN categories c ON c.id = p.category_id\nCROSS JOIN sibling_variants sv\nCROSS JOIN target_images ti\nWHERE tv.state IN ('active', 'not_available')") as (text: string, text: string) => $runtime.TypedSql<findProductDetailsByVariantSlug.Parameters, findProductDetailsByVariantSlug.Result>
 
 export namespace findProductDetailsByVariantSlug {
-  export type Parameters = [text: string]
+  export type Parameters = [text: string, text: string]
   export type Result = {
-    variantId: number | null
-    productId: number | null
-    nameRo: string | null
-    nameRu: string | null
-    slug: string | null
-    shortDescriptionRo: string | null
-    shortDescriptionRu: string | null
-    descriptionRo: string | null
-    descriptionRu: string | null
+    variantId: number
+    productId: number
+    name: string | null
+    slug: string
+    shortDescription: string | null
+    description: string | null
     categoryId: number | null
     options: $runtime.JsonValue | null
-    categoryNameRo: string
-    categoryNameRu: string
+    categoryName: string | null
     variants: $runtime.JsonValue | null
     images: $runtime.JsonValue | null
   }

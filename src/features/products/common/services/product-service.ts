@@ -26,8 +26,7 @@ import { findProductDetailsByVariantSlug } from '~/prisma/generated/prisma/sql.t
 // describe the shape our own query actually produces.
 interface TRawDetailVariant {
   id: number;
-  nameRo: string;
-  nameRu: string;
+  name: string;
   fullSlug: string;
   optionValues: Prisma.JsonValue;
   price: number;
@@ -128,30 +127,27 @@ export class ProductService {
   static async findDetailsByVariantSlug(fullSlug: string): Promise<TProductDetailsDto | null> {
     const locale = getLocale();
 
-    const rows = await prisma.$queryRawTyped(findProductDetailsByVariantSlug(fullSlug));
+    const rows = await prisma.$queryRawTyped(findProductDetailsByVariantSlug(fullSlug, locale));
     const row = rows[0];
     if (!row || row.variantId == null || row.productId == null)
       return null;
 
-    if (row.nameRo == null || row.nameRu == null || row.slug == null)
+    if (row.name == null || row.slug == null)
       return null;
 
-    const product: Pick<Product, 'id' | 'nameRo' | 'nameRu' | 'slug' | 'shortDescriptionRo' | 'shortDescriptionRu' | 'descriptionRo' | 'descriptionRu' | 'categoryId' | 'options'> = {
+    const product: Pick<Product, 'id' | 'slug' | 'categoryId' | 'options'> & {
+      name: string;
+      shortDescription: string | null;
+      description: string | null;
+    } = {
       id: row.productId,
-      nameRo: row.nameRo,
-      nameRu: row.nameRu,
+      name: row.name,
       slug: row.slug,
-      shortDescriptionRo: row.shortDescriptionRo,
-      shortDescriptionRu: row.shortDescriptionRu,
-      descriptionRo: row.descriptionRo,
-      descriptionRu: row.descriptionRu,
+      shortDescription: row.shortDescription,
+      description: row.description,
       categoryId: row.categoryId,
       options: row.options,
     };
-
-    const category = row.categoryNameRo == null && row.categoryNameRu == null ?
-      null :
-      { nameRo: row.categoryNameRo ?? '', nameRu: row.categoryNameRu ?? '' };
 
     const variants = jsonArray<TRawDetailVariant>(row.variants);
     const variant = variants.find((v) => v.fullSlug === fullSlug);
@@ -178,11 +174,10 @@ export class ProductService {
 
     return ProductDetailsDtoFactory.build(
       product,
-      category,
+      row.categoryName,
       variants,
       imagesByVariant,
-      variant.id,
-      locale
+      variant.id
     );
   }
 
