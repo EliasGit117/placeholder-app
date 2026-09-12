@@ -12,6 +12,9 @@ const config = defineConfig({
   server: {
     host: true,
   },
+  optimizeDeps: {
+    exclude: ['maplibre-gl'],
+  },
   plugins: [
     devtools(),
     tsconfigPaths({ projects: ['./tsconfig.json'] }),

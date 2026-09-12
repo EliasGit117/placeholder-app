@@ -14,7 +14,7 @@ import {
   IconTag
 } from '@tabler/icons-react';
 import { orpc } from '@/lib/orpc';
-import { cn, thumbhashToDataUrl } from '@/lib/utils';
+import { capitalizeFirst, cn, thumbhashToDataUrl } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
 import { useCartContext } from '@/providers/cart.tsx';
@@ -105,7 +105,6 @@ function NotFound() {
 
 function ProductDetail({ product }: { product: TProductDetailsDto }) {
   const locale = getLocale();
-  const ru = locale === 'ru';
 
   const [activeImage, setActiveImage] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
@@ -122,7 +121,8 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
   const images = variant.images;
 
   useEffect(() => {
-    if (!api) return;
+    if (!api)
+      return;
 
     setActiveImage(api.selectedScrollSnap());
     api.on('select', () => setActiveImage(api.selectedScrollSnap()));
@@ -132,7 +132,7 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
     <main className="flex flex-col flex-1 bg-background min-h-safe-screen mb-12">
       <div className="container mx-auto flex flex-col gap-8 p-4">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12">
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 max-w-lg">
             {images.length > 0 ? (
               <Carousel setApi={setApi} opts={{ loop: images.length > 1 }}>
                 <CarouselContent>
@@ -239,7 +239,7 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
             {product.shortDescription && <p className="text-sm">{product.shortDescription}</p>}
 
             {Object.entries(product.options).map(([key, option]) => {
-              const optionName = ru ? option.nameRu : option.nameRo;
+              const optionName = option[`name${capitalizeFirst(locale)}`];
 
               return (
                 <div key={key} className="flex flex-col gap-2">
@@ -254,7 +254,7 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
                       ) ?? product.variants.find((v) => v.optionValues[key] === value.value);
 
                       const isSelected = variant.optionValues[key] === value.value;
-                      const label = ru ? value.nameRu : value.nameRo;
+                      const label = value[`name${capitalizeFirst(locale)}`];
 
                       if (!match || isSelected) {
                         return (

@@ -67,7 +67,7 @@ function RootDocument({ children }: { children: ReactNode }) {
       <HeadContent/>
     </head>
 
-    <body className="bg-background antialiased wrap-anywhere min-h-svh flex flex-col dark">
+    <body className="bg-background antialiased min-h-svh flex flex-col dark">
     <RouteProgressProvider>
       <ConfirmDialogProvider>
         {children}

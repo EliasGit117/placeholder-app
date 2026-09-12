@@ -43,12 +43,22 @@ export const productDetailsDtoSchema = z.object({
 
 export type TProductDetailsDto = z.infer<typeof productDetailsDtoSchema>;
 
+type TProductDetailsSource = Pick<
+  Product,
+  'id' | 'nameRo' | 'nameRu' | 'slug' | 'shortDescriptionRo' | 'shortDescriptionRu' | 'descriptionRo' | 'descriptionRu' | 'categoryId' | 'options'
+>;
+
+type TProductVariantDetailsSource = Pick<
+  ProductVariant,
+  'id' | 'nameRo' | 'nameRu' | 'fullSlug' | 'optionValues' | 'price' | 'discountPercent' | 'state'
+>;
+
 export class ProductDetailsDtoFactory {
 
   static build(
-    product: Product,
+    product: TProductDetailsSource,
     category: Pick<Category, 'nameRo' | 'nameRu'> | null,
-    variants: ProductVariant[],
+    variants: TProductVariantDetailsSource[],
     imagesByVariant: Map<number, TProductVariantImageDto[]>,
     selectedVariantId: number,
     locale: Locale

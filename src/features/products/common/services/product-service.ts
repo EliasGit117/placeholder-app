@@ -1,6 +1,6 @@
 import { ORPCError } from '@orpc/server';
-import { type Prisma, type ProductVariant } from '~/prisma/generated/prisma/client.ts';
-import { ImageResourceType, ProductState } from '~/prisma/generated/prisma/enums.ts';
+import { type Prisma, type Product, type ProductVariant } from '~/prisma/generated/prisma/client.ts';
+import { ImageResourceType, ImageVariantKind, ProductState } from '~/prisma/generated/prisma/enums.ts';
 import { prisma } from '@/lib/db';
 import { getLocale } from '@/paraglide/runtime';
 import { buildFullSlug } from '@/features/products/common/lib/slug.ts';
@@ -19,7 +19,35 @@ import { BriefProductPublicDtoFactory, briefProductVariantInclude } from '@/feat
 import type { TSearchPublicProductsRequestDto, TBriefProductPublicDto } from '@/features/products/public/dtos/search-public-products.ts';
 import { ProductDetailsDtoFactory, type TProductDetailsDto } from '@/features/products/public/dtos/product-details.ts';
 import { capitalizeFirst } from '@/lib/utils';
+import { findProductDetailsByVariantSlug } from '~/prisma/generated/prisma/sql.ts';
 
+
+// The `variants`/`images` json_agg columns come back as untyped JSON — these
+// describe the shape our own query actually produces.
+interface TRawDetailVariant {
+  id: number;
+  nameRo: string;
+  nameRu: string;
+  fullSlug: string;
+  optionValues: Prisma.JsonValue;
+  price: number;
+  discountPercent: number | null;
+  state: ProductState;
+}
+
+interface TRawDetailImage {
+  id: number;
+  url: string;
+  width: number;
+  height: number;
+  thumbhash: string | null;
+  order: number;
+  variants: { kind: ImageVariantKind; url: string; width: number; height: number }[];
+}
+
+function jsonArray<T>(value: unknown): T[] {
+  return Array.isArray(value) ? value : [];
+}
 
 export class ProductService {
 
@@ -94,48 +122,64 @@ export class ProductService {
     return entity ? ProductDtoFactory.withVariants(entity, entity.variants) : null;
   }
 
-  // Public product-detail lookup: resolves by a variant's `fullSlug` (the URL shown
-  // on the shop grid) and returns the parent product with every sellable sibling
-  // variant, so the detail page can switch color/size without a refetch.
+  // Public product-detail lookup by variant `fullSlug`: product + category +
+  // sellable siblings + the target variant's images, fused into one raw query
+  // (one round trip instead of two).
   static async findDetailsByVariantSlug(fullSlug: string): Promise<TProductDetailsDto | null> {
     const locale = getLocale();
-    const sellableStates: ProductState[] = [ProductState.ACTIVE, ProductState.NOT_AVAILABLE];
 
-    const targetVariant = await prisma.productVariant.findUnique({
-      where: { fullSlug: fullSlug },
-      select: { id: true, productId: true, state: true },
-    });
-
-    if (!targetVariant || !sellableStates.includes(targetVariant.state))
+    const rows = await prisma.$queryRawTyped(findProductDetailsByVariantSlug(fullSlug));
+    const row = rows[0];
+    if (!row || row.variantId == null || row.productId == null)
       return null;
 
-    const [product, images] = await Promise.all([
-      prisma.product.findUnique({
-        where: { id: targetVariant.productId, state: ProductState.ACTIVE },
-        include: {
-          category: { select: { nameRo: true, nameRu: true } },
-          variants: { where: { state: { in: sellableStates } }, orderBy: { id: 'asc' } },
-        },
-      }),
-
-      ImageService.findByResources(ImageResourceType.PRODUCT_VARIANT, [String(targetVariant.id)]),
-    ]);
-
-    if (!product)
+    if (row.nameRo == null || row.nameRu == null || row.slug == null)
       return null;
 
-    const variant = product.variants.find((v) => v.fullSlug === fullSlug);
+    const product: Pick<Product, 'id' | 'nameRo' | 'nameRu' | 'slug' | 'shortDescriptionRo' | 'shortDescriptionRu' | 'descriptionRo' | 'descriptionRu' | 'categoryId' | 'options'> = {
+      id: row.productId,
+      nameRo: row.nameRo,
+      nameRu: row.nameRu,
+      slug: row.slug,
+      shortDescriptionRo: row.shortDescriptionRo,
+      shortDescriptionRu: row.shortDescriptionRu,
+      descriptionRo: row.descriptionRo,
+      descriptionRu: row.descriptionRu,
+      categoryId: row.categoryId,
+      options: row.options,
+    };
+
+    const category = row.categoryNameRo == null && row.categoryNameRu == null ?
+      null :
+      { nameRo: row.categoryNameRo ?? '', nameRu: row.categoryNameRu ?? '' };
+
+    const variants = jsonArray<TRawDetailVariant>(row.variants);
+    const variant = variants.find((v) => v.fullSlug === fullSlug);
     if (!variant)
       return null;
 
+    const targetImages: TProductVariantImageDto[] = jsonArray<TRawDetailImage>(row.images).map((img) => ({
+      id: img.id,
+      url: img.url,
+      width: img.width,
+      height: img.height,
+      thumbhash: img.thumbhash,
+      order: img.order,
+      variants: {
+        thumb256: img.variants.find((v) => v.kind === ImageVariantKind.THUMB_256x256),
+        thumb512: img.variants.find((v) => v.kind === ImageVariantKind.THUMB_512x512),
+        thumb1024: img.variants.find((v) => v.kind === ImageVariantKind.THUMB_1024x1024),
+      },
+    }));
+
     const imagesByVariant = new Map<number, TProductVariantImageDto[]>([
-      [targetVariant.id, images.map(ProductVariantImageDtoFactory.fromImageDto)],
+      [row.variantId, targetImages],
     ]);
 
     return ProductDetailsDtoFactory.build(
       product,
-      product.category,
-      product.variants,
+      category,
+      variants,
       imagesByVariant,
       variant.id,
       locale

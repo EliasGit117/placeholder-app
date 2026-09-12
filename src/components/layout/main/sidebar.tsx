@@ -70,17 +70,14 @@ export const AppSidebar = () => {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={close} className="text-base font-normal" asChild>
-                  <Link to="/">
+                <SidebarMenuButton
+                  onClick={close}
+                  className="text-base font-normal"
+                  isActive={isLinkActive(pathname, categoryId, { to: '/contacts' })}
+                  asChild
+                >
+                  <Link to="/contacts">
                     <span>{m['components.footer.contact']()}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton onClick={close} className="text-base font-normal" asChild>
-                  <Link to="/">
-                    <span>{m['pages.home.about.eyebrow']()}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
