@@ -1,8 +1,8 @@
 enum ProductState {
-  ACTIVE       @map("active")
-  NOT_AVAILABLE @map("not_available")
-  HIDDEN       @map("hidden")
-  ARCHIVED     @map("archived")
+  ACTIVE
+  NOT_AVAILABLE
+  HIDDEN
+  ARCHIVED
 
   @@map("product_state")
 }

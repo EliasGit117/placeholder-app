@@ -1,16 +1,16 @@
 enum OrderStatus {
-  PENDING    @map("pending")
-  PROCESSING @map("processing")
-  SHIPPED    @map("shipped")
-  COMPLETED  @map("completed")
-  CANCELLED  @map("cancelled")
+  PENDING
+  PROCESSING
+  SHIPPED
+  COMPLETED
+  CANCELLED
 
   @@map("order_status")
 }
 
 enum DeliveryMethod {
-  COURIER @map("courier")
-  PICKUP  @map("pickup")
+  COURIER
+  PICKUP
 
   @@map("delivery_method")
 }

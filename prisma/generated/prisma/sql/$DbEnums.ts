@@ -5,13 +5,13 @@
 // @ts-nocheck 
 export interface $DbEnums {
   banner_state: "ACTIVE" | "HIDDEN"
-  CategoryState: "active" | "hidden"
+  CategoryState: "ACTIVE" | "HIDDEN"
   image_resource_type: "AVATAR" | "PRODUCT_VARIANT" | "BANNER" | "CATEGORY"
   image_purpose: "AVATAR_IMAGE" | "PRODUCT_VARIANT_IMAGE" | "BANNER_IMAGE_RO" | "BANNER_IMAGE_MOBILE_RO" | "BANNER_IMAGE_RU" | "BANNER_IMAGE_MOBILE_RU" | "CATEGORY_IMAGE"
   image_variant_kind: "THUMB_1024x1024" | "THUMB_512x512" | "THUMB_256x256"
-  order_status: "pending" | "processing" | "shipped" | "completed" | "cancelled"
-  delivery_method: "courier" | "pickup"
-  online_payment_provider: "maib"
-  online_payment_status: "waiting_for_init" | "initialized" | "payment_method_selected" | "completed" | "expired" | "abandoned" | "cancelled" | "failed"
-  product_state: "active" | "not_available" | "hidden" | "archived"
+  order_status: "PENDING" | "PROCESSING" | "SHIPPED" | "COMPLETED" | "CANCELLED"
+  delivery_method: "COURIER" | "PICKUP"
+  online_payment_provider: "MAIB"
+  online_payment_status: "WAITING_FOR_INIT" | "INITIALIZED" | "PAYMENT_METHOD_SELECTED" | "COMPLETED" | "EXPIRED" | "ABANDONED" | "CANCELLED" | "FAILED"
+  product_state: "ACTIVE" | "NOT_AVAILABLE" | "HIDDEN" | "ARCHIVED"
 }

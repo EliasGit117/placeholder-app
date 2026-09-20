@@ -1,6 +1,6 @@
 enum CategoryState {
-  ACTIVE @map("active")
-  HIDDEN @map("hidden")
+  ACTIVE
+  HIDDEN
 }
 
 model Category {

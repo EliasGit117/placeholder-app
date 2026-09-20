@@ -32,7 +32,7 @@ sibling_variants AS (
   ) AS variants
   FROM product_variants v
   JOIN target_variant tv ON v.product_id = tv.product_id
-  WHERE v.state IN ('active', 'not_available')
+  WHERE v.state IN ('ACTIVE', 'NOT_AVAILABLE')
 ),
 
 -- Step 3: the target variant's own images, each with its thumbnail set.
@@ -75,8 +75,8 @@ SELECT
   COALESCE(sv.variants, '[]'::json) AS "variants",
   COALESCE(ti.images, '[]'::json) AS "images"
 FROM target_variant tv
-JOIN products p ON p.id = tv.product_id AND p.state = 'active'
+JOIN products p ON p.id = tv.product_id AND p.state = 'ACTIVE'
 LEFT JOIN categories c ON c.id = p.category_id
 CROSS JOIN sibling_variants sv
 CROSS JOIN target_images ti
-WHERE tv.state IN ('active', 'not_available')
+WHERE tv.state IN ('ACTIVE', 'NOT_AVAILABLE')
