@@ -189,8 +189,8 @@
       "copyright": "© {year} {app}. Toate drepturile rezervate.",
       "navigation": "Navigare",
       "contact": "Contact",
-      "description": "Cosmetică botanică formulată în Chișinău. Pentru ritualuri zilnice și piele care respiră.",
-      "address": "Atelier · str. Albișoara 4, CC. Atrium, Chișinău",
+      "description": "Cele mai funcționale branduri de cosmetică profesională, într-un singur magazin.",
+      "address": "Magazin · str. Albișoara 4, CC Atrium, etajul 1, Chișinău",
       "legal": "Termeni și Condiții"
     },
     "rich_editor": {
@@ -585,44 +585,41 @@
       },
       "about": {
         "eyebrow": "Despre noi",
-        "title_prefix": "Frumusețea cultivată cu",
-        "title_highlight": "răbdare.",
-        "paragraph_1": "Skinery s-a născut dintr-o convingere simplă: pielea și părul nostru merită mai mult decât compromisuri. Începând din 2018, formulăm produse într-un atelier din Chișinău, alături de farmaciști și cosmetologi care cred în puterea botanicii și a științei aplicate cu grijă.",
-        "paragraph_2": "Fiecare flacon trece prin patruzeci de verificări înainte să ajungă la tine. Niciodată mai puțin.",
-        "founder": "— Veronica Țurcanu, fondator",
+        "title_prefix": "Cosmetică profesională. Acum,",
+        "title_highlight": "accesibilă tuturor.",
+        "paragraph_1": "Skinery este primul magazin de cosmetică profesională din Moldova cu acces liber pentru toți — fără programare, fără recomandare obligatorie și fără bariere între client și specialist.",
+        "paragraph_2": "Credem că fiecare persoană are dreptul la produse profesionale și, mai ales, la informația corectă pentru a le alege.",
         "credential_cruelty_free": "Cruelty-free",
         "credential_synthetic_fragrances": "Parfumuri sintetice",
         "credential_active_ingredients": "Ingrediente active",
-        "benefit_1_title": "Creștere capilară",
-        "benefit_1_text": "Stimulează foliculii cu extract de rozmarin și peptide vegetale clinic testate.",
-        "benefit_2_title": "Scalp echilibrat",
-        "benefit_2_text": "Reglează producția de sebum și calmează scalpul sensibil în 14 zile.",
-        "benefit_3_title": "Strălucire vizibilă",
-        "benefit_3_text": "Activează luminozitatea naturală a tenului cu acizi blânzi și vitamina C botanică.",
-        "benefit_4_title": "Premiată internațional",
-        "benefit_4_text": "Trei distincții la Clean Beauty Awards și Pure Beauty Global, 2023–2025.",
-        "benefit_5_title": "Formule trasabile",
-        "benefit_5_text": "Fiecare ingredient activ are origine documentată și certificat de proveniență.",
-        "benefit_6_title": "Hidratare profundă",
-        "benefit_6_text": "Acid hialuronic în trei greutăți moleculare pentru hidratare la toate nivelurile."
+        "benefit_1_title": "Acnee & impurități",
+        "benefit_1_text": "Coșuri, puncte negre, pori dilatați, exces de sebum și erupții recurente.",
+        "benefit_2_title": "Pigmentare",
+        "benefit_2_text": "Pete pigmentare, urme post-acnee, ten neuniform și pierderea luminozității pielii.",
+        "benefit_3_title": "Deshidratare & barieră afectată",
+        "benefit_3_text": "Piele uscată, care „ține”, descuamează, ustură sau reacționează ușor la produse.",
+        "benefit_4_title": "Sensibilitate & roșeață",
+        "benefit_4_text": "Piele reactivă, roșeață, senzație de disconfort și tendință de iritare.",
+        "benefit_5_title": "Îmbătrânire cutanată",
+        "benefit_5_text": "Riduri fine, pierderea fermității și elasticității, textură neuniformă și fotoîmbătrânire.",
+        "benefit_6_title": "Sebum & textură",
+        "benefit_6_text": "Ten gras sau mixt, luciu excesiv, pori vizibili și textură neuniformă."
       },
       "faq": {
         "eyebrow": "FAQ",
         "title_prefix": "Întrebări",
         "title_highlight": "frecvente.",
-        "description": "Nu ai găsit răspunsul? Scrie-ne pe formularul de mai sus și revenim în câteva ore.",
+        "description": "Nu ai găsit răspunsul? Scrie-ne în formularul de mai sus și revenim în câteva ore.",
         "q1": "În cât timp livrați comenzile în Chișinău?",
-        "a1": "Comenzile plasate până la 14:00 se livrează în aceeași zi în Chișinău. Restul Moldovei: 24–48h prin curier Nova Poshta sau Posta Moldovei.",
+        "a1": "Comenzile plasate până la ora 14:00 se livrează în aceeași zi în Chișinău. În restul Moldovei, livrarea se face în 24–48 de ore, prin curier Nova Poshta sau Poșta Moldovei.",
         "q2": "Pot returna un produs deschis?",
-        "a2": "Da, în termen de 14 zile, dacă produsul a fost folosit rezonabil pentru testare. Rambursăm integral valoarea comenzii.",
+        "a2": "Produsele cosmetice comercializate de Skinery nu se returnează sau înlocuiesc dacă sunt conforme și au fost achiziționate din proprie inițiativă. Produsele desigilate sau deschise nu pot fi returnate, deoarece, odată întreruptă etanșeitatea ambalajului, nu mai poate fi garantată integritatea, igiena și siguranța produsului. Înainte de achiziție, echipa Skinery vă poate ajuta să alegeți produsul potrivit, în funcție de nevoile și particularitățile pielii dumneavoastră. În cazul în care produsul prezintă un defect, o neconformitate sau există suspiciuni privind calitatea acestuia, vă rugăm să ne contactați pentru soluționarea situației conform drepturilor consumatorului.",
         "q3": "Cum funcționează consultația cu cosmetologul?",
-        "a3": "Programezi o sesiune online gratuită de 20 de minute, în care analizăm tipul de piele și îți recomandăm un ritual personalizat.",
-        "q4": "Faceți livrări în România?",
-        "a4": "Da, livrăm în toată România prin curier, în 3–5 zile lucrătoare. Taxele vamale sunt incluse în prețul afișat.",
+        "a3": "Programezi o sesiune online gratuită de 20 de minute, în cadrul căreia analizăm tipul de piele și îți recomandăm un ritual personalizat.",
         "q5": "Produsele sunt testate pe animale?",
-        "a5": "Niciodată. Toate formulele sunt 100% cruelty-free și certificate, testate exclusiv dermatologic pe voluntari.",
+        "a5": "Niciodată. Toate formulele sunt 100% cruelty-free și certificate, fiind testate exclusiv dermatologic pe voluntari.",
         "q6": "Aveți eșantioane gratuite?",
-        "a6": "Adăugăm câte două eșantioane la fiecare comandă, alese în funcție de tipul tău de piele indicat la checkout."
+        "a6": "Da. Adăugăm eșantioane la fiecare comandă, alese în funcție de tipul tău de piele, indicat la checkout."
       }
     },
     "checkout": {
@@ -735,7 +732,7 @@
       "office": {
         "name": "Chișinău",
         "phone": "+373 67 432 561",
-        "address": "Str. Albișoara 4, CC. Atrium, Chișinău, Moldova"
+        "address": "Str. Albișoara 4, CC Atrium, etajul 1, Chișinău, Moldova"
       },
       "map_label": "Locație"
     },

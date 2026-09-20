@@ -9,7 +9,6 @@ import { PageNotFound } from '@/components/layout/errors/page-not-found.tsx';
 import { SomethingWentWrong } from '@/components/layout/errors/something-went-wrong.tsx';
 
 
-
 export function getRouter() {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -33,8 +32,12 @@ export function getRouter() {
     scrollRestoration: true,
     defaultPreload: 'intent',
     defaultPreloadStaleTime: 0,
-    defaultNotFoundComponent:  () => <PageNotFound className='-mt-12'/>,
-    defaultErrorComponent: (props) => <SomethingWentWrong className="-mt-12" {...props}/>,
+    defaultNotFoundComponent: () => <PageNotFound className="-mt-12"/>,
+    defaultErrorComponent: (props) => (
+      <div className='min-h-safe-screen flex flex-col'>
+        <SomethingWentWrong className="-mt-12" {...props}/>
+      </div>
+    ),
     Wrap: ({ children }) => (
       <RootProvider>
         {children}

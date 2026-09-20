@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { m } from '@/paraglide/messages';
 import { Eyebrow, Section } from '@/routes/_public/-components/shared';
-import { IconClipboardData, IconClock, IconDroplet, IconEye, IconLeaf, IconStar } from '@tabler/icons-react';
+import { IconClock, IconDroplet, IconDropletOff, IconFlame, IconSun, IconVirus } from '@tabler/icons-react';
 import { IconBotanicalBranch } from '@/components/icons/botanical-branch';
 import { IconBotanicalWaves } from '@/components/icons/botanical-waves';
 
@@ -14,15 +14,15 @@ export const About: FC = () => {
   ];
 
   const benefits = [
-    { Icon: IconLeaf, title: m['pages.home.about.benefit_1_title'](), text: m['pages.home.about.benefit_1_text']() },
-    { Icon: IconClock, title: m['pages.home.about.benefit_2_title'](), text: m['pages.home.about.benefit_2_text']() },
-    { Icon: IconEye, title: m['pages.home.about.benefit_3_title'](), text: m['pages.home.about.benefit_3_text']() },
-    { Icon: IconStar, title: m['pages.home.about.benefit_4_title'](), text: m['pages.home.about.benefit_4_text']() },
+    { Icon: IconVirus, title: m['pages.home.about.benefit_1_title'](), text: m['pages.home.about.benefit_1_text']() },
+    { Icon: IconSun, title: m['pages.home.about.benefit_2_title'](), text: m['pages.home.about.benefit_2_text']() },
     {
-      Icon: IconClipboardData,
-      title: m['pages.home.about.benefit_5_title'](),
-      text: m['pages.home.about.benefit_5_text']()
+      Icon: IconDropletOff,
+      title: m['pages.home.about.benefit_3_title'](),
+      text: m['pages.home.about.benefit_3_text']()
     },
+    { Icon: IconFlame, title: m['pages.home.about.benefit_4_title'](), text: m['pages.home.about.benefit_4_text']() },
+    { Icon: IconClock, title: m['pages.home.about.benefit_5_title'](), text: m['pages.home.about.benefit_5_text']() },
     { Icon: IconDroplet, title: m['pages.home.about.benefit_6_title'](), text: m['pages.home.about.benefit_6_text']() }
   ];
 
@@ -53,10 +53,6 @@ export const About: FC = () => {
           <p className="mt-4 max-w-lg text-[15px] leading-relaxed text-muted-foreground">
             {m['pages.home.about.paragraph_2']()}
           </p>
-          <div className="mt-9 font-heading text-3xl italic text-primary">
-            {m['pages.home.about.founder']()}
-          </div>
-
           <div className="mt-10 flex gap-10 border-t border-border pt-7">
             {credentials.map((c) => (
               <div key={c.lab}>

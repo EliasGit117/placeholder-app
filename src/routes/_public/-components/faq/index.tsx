@@ -9,7 +9,6 @@ export const Faq: FC = () => {
     { q: m['pages.home.faq.q1'](), a: m['pages.home.faq.a1']() },
     { q: m['pages.home.faq.q2'](), a: m['pages.home.faq.a2']() },
     { q: m['pages.home.faq.q3'](), a: m['pages.home.faq.a3']() },
-    { q: m['pages.home.faq.q4'](), a: m['pages.home.faq.a4']() },
     { q: m['pages.home.faq.q5'](), a: m['pages.home.faq.a5']() },
     { q: m['pages.home.faq.q6'](), a: m['pages.home.faq.a6']() },
   ];
@@ -28,9 +27,13 @@ export const Faq: FC = () => {
           </p>
         </div>
 
-        <AccordionPrimitive.Root type="single" collapsible defaultValue="faq-0" className="border-t border-border">
+        <AccordionPrimitive.Root type="single" collapsible defaultValue="faq-0">
           {faqs.map((f, i) => (
-            <AccordionPrimitive.Item key={f.q} value={`faq-${i}`} className="border-b border-border">
+            <AccordionPrimitive.Item
+              key={f.q}
+              value={`faq-${i}`}
+              className={i < faqs.length - 1 ? 'border-b border-border' : ''}
+            >
               <AccordionPrimitive.Header className="flex">
                 <AccordionPrimitive.Trigger className="group flex flex-1 items-center justify-between gap-6 py-6 text-left outline-none">
                   <span className="font-heading text-xl leading-snug transition-colors group-aria-expanded:text-primary sm:text-2xl">
