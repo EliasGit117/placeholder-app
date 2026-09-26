@@ -8,18 +8,18 @@ export const Route = createFileRoute('/_public/contacts/')({
   component: RouteComponent,
 });
 
-const office: IOffice = {
-  name: m['pages.contacts.office.name'](),
-  email: 'pielmoldova@gmail.com',
-  phone: m['pages.contacts.office.phone'](),
-  address: m['pages.contacts.office.address'](),
-  hours: m['pages.contacts.hours'](),
-  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=47.014922,28.855926',
-  longitude: 28.855926,
-  latitude: 47.014922,
-};
-
 function RouteComponent() {
+  const office: IOffice = {
+    name: m['pages.contacts.office.name'](),
+    email: 'pielmoldova@gmail.com',
+    phone: m['pages.contacts.office.phone'](),
+    address: m['pages.contacts.office.address'](),
+    hours: m['pages.contacts.hours'](),
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=47.014922,28.855926',
+    longitude: 28.855926,
+    latitude: 47.014922,
+  };
+
   return (
     <section className="bg-background @container">
       <div className="container mx-auto px-4 pt-8 pb-20 md:pb-28">
