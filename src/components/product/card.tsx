@@ -63,15 +63,21 @@ export const ProductCard: FC<IProps> = ({ product }) => {
       )}
     >
       <div
-        style={imgPlaceholder ? { backgroundImage: `url(${imgPlaceholder})` } : undefined}
         className={cn(
-          'ph-stripes relative grid aspect-square place-items-center overflow-hidden bg-muted bg-cover bg-center',
+          'ph-stripes relative grid aspect-square place-items-center overflow-hidden bg-muted',
           'uppercase tracking-[0.15em] font-semibold text-muted-foreground'
         )}
       >
+        {imgPlaceholder && (
+          <div
+            aria-hidden
+            style={{ backgroundImage: `url(${imgPlaceholder})` }}
+            className="absolute inset-0 scale-110 bg-cover bg-center blur-2xl"
+          />
+        )}
 
         {hasDiscount && (
-          <Badge variant="secondary" className="absolute left-2 top-2 z-10 rounded-none border-secondary-foreground">
+          <Badge variant="secondary" className="absolute left-2 top-2 z-10 rounded-none border-border">
             -{discountPercent}%
           </Badge>
         )}

@@ -141,14 +141,18 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
 
                     return (
                       <CarouselItem key={img.id}>
-                        <div
-                          style={placeholder ? { backgroundImage: `url(${placeholder})` } : undefined}
-                          className="ph-stripes relative aspect-square overflow-hidden rounded-2xl bg-muted bg-cover bg-center"
-                        >
+                        <div className="ph-stripes relative aspect-square overflow-hidden bg-muted">
+                          {placeholder && (
+                            <div
+                              aria-hidden
+                              style={{ backgroundImage: `url(${placeholder})` }}
+                              className="absolute inset-0 scale-110 bg-cover bg-center blur-2xl"
+                            />
+                          )}
                           <img
                             src={img.variants.thumb1024?.url ?? img.variants.thumb512?.url ?? img.url}
                             alt={`${product.name} ${variant.name}`}
-                            className="size-full object-cover"
+                            className="relative size-full object-cover"
                           />
                         </div>
                       </CarouselItem>
@@ -172,16 +176,22 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
                       key={img.id}
                       type="button"
                       onClick={() => api?.scrollTo(i)}
-                      style={thumbPlaceholder ? { backgroundImage: `url(${thumbPlaceholder})` } : undefined}
                       className={cn(
-                        'aspect-square overflow-hidden rounded-lg bg-muted bg-cover bg-center ring-1 ring-foreground/10 transition-shadow',
+                        'relative aspect-square overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/10 transition-shadow',
                         i === activeImage && 'ring-2 ring-primary'
                       )}
                     >
+                      {thumbPlaceholder && (
+                        <div
+                          aria-hidden
+                          style={{ backgroundImage: `url(${thumbPlaceholder})` }}
+                          className="absolute inset-0 scale-110 bg-cover bg-center blur-lg"
+                        />
+                      )}
                       <img
                         src={img.variants.thumb256?.url ?? img.url}
                         alt=""
-                        className="size-full object-cover"
+                        className="relative size-full object-cover"
                       />
                     </button>
                   );
