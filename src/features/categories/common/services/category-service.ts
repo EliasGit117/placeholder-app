@@ -12,6 +12,12 @@ import type { TCreateCategoryDto } from '@/features/categories/admin/dtos/create
 import type { TCategoryAncestorDto, TCategoryDetailsDto } from '@/features/categories/public/dtos/category-details.ts';
 
 
+const CATEGORY_ORDER_BY: Prisma.CategoryOrderByWithRelationInput[] = [
+  { priority: { sort: 'desc', nulls: 'last' } },
+  { nameRo: 'asc' },
+];
+
+
 export class CategoryService {
 
   static fromEntity(entity: Category): TCategoryBaseDto {
@@ -22,6 +28,7 @@ export class CategoryService {
       descriptionRo: entity.descriptionRo,
       descriptionRu: entity.descriptionRu,
       state: entity.state,
+      priority: entity.priority,
       slug: entity.slug,
       path: entity.path,
       parentId: entity.parentId,
@@ -33,7 +40,7 @@ export class CategoryService {
   static async findAllActive(): Promise<Category[]> {
     return prisma.category.findMany({
       where: { state: 'ACTIVE' },
-      orderBy: { nameRo: 'asc' },
+      orderBy: CATEGORY_ORDER_BY,
     });
   }
 
@@ -42,7 +49,7 @@ export class CategoryService {
     if (opts?.parentId !== undefined)
       where.parentId = opts.parentId;
 
-    const entities = await prisma.category.findMany({ where, orderBy: { nameRo: 'asc' } });
+    const entities = await prisma.category.findMany({ where, orderBy: CATEGORY_ORDER_BY });
     return entities.map(CategoryService.fromEntity);
   }
 
@@ -108,6 +115,7 @@ export class CategoryService {
         descriptionRo: input.descriptionRo ?? null,
         descriptionRu: input.descriptionRu ?? null,
         state: input.state,
+        priority: input.priority ?? null,
         slug: slug,
         path: path,
         parentId: input.parentId ?? null,
@@ -152,6 +160,7 @@ export class CategoryService {
         ...(input.descriptionRo !== undefined && { descriptionRo: input.descriptionRo }),
         ...(input.descriptionRu !== undefined && { descriptionRu: input.descriptionRu }),
         ...(input.state !== undefined && { state: input.state }),
+        ...(input.priority !== undefined && { priority: input.priority }),
         ...(input.parentId !== undefined && { parentId: input.parentId }),
         slug,
         path,

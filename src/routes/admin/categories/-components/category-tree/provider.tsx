@@ -28,6 +28,7 @@ const fallbackNode = (_id: string): ICategoryTreeNodeDto => ({
   descriptionRo: null,
   descriptionRu: null,
   state: 'ACTIVE' as ICategoryTreeNodeDto['state'],
+  priority: null,
   slug: '',
   path: '/',
   parentId: null,

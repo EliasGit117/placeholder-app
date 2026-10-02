@@ -28,11 +28,13 @@ export type AggregateCategory = {
 
 export type CategoryAvgAggregateOutputType = {
   id: number | null
+  priority: number | null
   parentId: number | null
 }
 
 export type CategorySumAggregateOutputType = {
   id: number | null
+  priority: number | null
   parentId: number | null
 }
 
@@ -43,6 +45,7 @@ export type CategoryMinAggregateOutputType = {
   descriptionRo: string | null
   descriptionRu: string | null
   state: $Enums.CategoryState | null
+  priority: number | null
   slug: string | null
   path: string | null
   parentId: number | null
@@ -57,6 +60,7 @@ export type CategoryMaxAggregateOutputType = {
   descriptionRo: string | null
   descriptionRu: string | null
   state: $Enums.CategoryState | null
+  priority: number | null
   slug: string | null
   path: string | null
   parentId: number | null
@@ -71,6 +75,7 @@ export type CategoryCountAggregateOutputType = {
   descriptionRo: number
   descriptionRu: number
   state: number
+  priority: number
   slug: number
   path: number
   parentId: number
@@ -82,11 +87,13 @@ export type CategoryCountAggregateOutputType = {
 
 export type CategoryAvgAggregateInputType = {
   id?: true
+  priority?: true
   parentId?: true
 }
 
 export type CategorySumAggregateInputType = {
   id?: true
+  priority?: true
   parentId?: true
 }
 
@@ -97,6 +104,7 @@ export type CategoryMinAggregateInputType = {
   descriptionRo?: true
   descriptionRu?: true
   state?: true
+  priority?: true
   slug?: true
   path?: true
   parentId?: true
@@ -111,6 +119,7 @@ export type CategoryMaxAggregateInputType = {
   descriptionRo?: true
   descriptionRu?: true
   state?: true
+  priority?: true
   slug?: true
   path?: true
   parentId?: true
@@ -125,6 +134,7 @@ export type CategoryCountAggregateInputType = {
   descriptionRo?: true
   descriptionRu?: true
   state?: true
+  priority?: true
   slug?: true
   path?: true
   parentId?: true
@@ -226,6 +236,7 @@ export type CategoryGroupByOutputType = {
   descriptionRo: string | null
   descriptionRu: string | null
   state: $Enums.CategoryState
+  priority: number | null
   slug: string
   path: string
   parentId: number | null
@@ -263,6 +274,7 @@ export type CategoryWhereInput = {
   descriptionRo?: Prisma.StringNullableFilter<"Category"> | string | null
   descriptionRu?: Prisma.StringNullableFilter<"Category"> | string | null
   state?: Prisma.EnumCategoryStateFilter<"Category"> | $Enums.CategoryState
+  priority?: Prisma.IntNullableFilter<"Category"> | number | null
   slug?: Prisma.StringFilter<"Category"> | string
   path?: Prisma.StringFilter<"Category"> | string
   parentId?: Prisma.IntNullableFilter<"Category"> | number | null
@@ -280,6 +292,7 @@ export type CategoryOrderByWithRelationInput = {
   descriptionRo?: Prisma.SortOrderInput | Prisma.SortOrder
   descriptionRu?: Prisma.SortOrderInput | Prisma.SortOrder
   state?: Prisma.SortOrder
+  priority?: Prisma.SortOrderInput | Prisma.SortOrder
   slug?: Prisma.SortOrder
   path?: Prisma.SortOrder
   parentId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -302,6 +315,7 @@ export type CategoryWhereUniqueInput = Prisma.AtLeast<{
   descriptionRo?: Prisma.StringNullableFilter<"Category"> | string | null
   descriptionRu?: Prisma.StringNullableFilter<"Category"> | string | null
   state?: Prisma.EnumCategoryStateFilter<"Category"> | $Enums.CategoryState
+  priority?: Prisma.IntNullableFilter<"Category"> | number | null
   slug?: Prisma.StringFilter<"Category"> | string
   parentId?: Prisma.IntNullableFilter<"Category"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
@@ -318,6 +332,7 @@ export type CategoryOrderByWithAggregationInput = {
   descriptionRo?: Prisma.SortOrderInput | Prisma.SortOrder
   descriptionRu?: Prisma.SortOrderInput | Prisma.SortOrder
   state?: Prisma.SortOrder
+  priority?: Prisma.SortOrderInput | Prisma.SortOrder
   slug?: Prisma.SortOrder
   path?: Prisma.SortOrder
   parentId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -340,6 +355,7 @@ export type CategoryScalarWhereWithAggregatesInput = {
   descriptionRo?: Prisma.StringNullableWithAggregatesFilter<"Category"> | string | null
   descriptionRu?: Prisma.StringNullableWithAggregatesFilter<"Category"> | string | null
   state?: Prisma.EnumCategoryStateWithAggregatesFilter<"Category"> | $Enums.CategoryState
+  priority?: Prisma.IntNullableWithAggregatesFilter<"Category"> | number | null
   slug?: Prisma.StringWithAggregatesFilter<"Category"> | string
   path?: Prisma.StringWithAggregatesFilter<"Category"> | string
   parentId?: Prisma.IntNullableWithAggregatesFilter<"Category"> | number | null
@@ -353,6 +369,7 @@ export type CategoryCreateInput = {
   descriptionRo?: string | null
   descriptionRu?: string | null
   state?: $Enums.CategoryState
+  priority?: number | null
   slug: string
   path: string
   createdAt?: Date | string
@@ -369,6 +386,7 @@ export type CategoryUncheckedCreateInput = {
   descriptionRo?: string | null
   descriptionRu?: string | null
   state?: $Enums.CategoryState
+  priority?: number | null
   slug: string
   path: string
   parentId?: number | null
@@ -384,6 +402,7 @@ export type CategoryUpdateInput = {
   descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumCategoryStateFieldUpdateOperationsInput | $Enums.CategoryState
+  priority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -400,6 +419,7 @@ export type CategoryUncheckedUpdateInput = {
   descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumCategoryStateFieldUpdateOperationsInput | $Enums.CategoryState
+  priority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   parentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -416,6 +436,7 @@ export type CategoryCreateManyInput = {
   descriptionRo?: string | null
   descriptionRu?: string | null
   state?: $Enums.CategoryState
+  priority?: number | null
   slug: string
   path: string
   parentId?: number | null
@@ -429,6 +450,7 @@ export type CategoryUpdateManyMutationInput = {
   descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumCategoryStateFieldUpdateOperationsInput | $Enums.CategoryState
+  priority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -442,6 +464,7 @@ export type CategoryUncheckedUpdateManyInput = {
   descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumCategoryStateFieldUpdateOperationsInput | $Enums.CategoryState
+  priority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   parentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -476,6 +499,7 @@ export type CategoryCountOrderByAggregateInput = {
   descriptionRo?: Prisma.SortOrder
   descriptionRu?: Prisma.SortOrder
   state?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   path?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
@@ -485,6 +509,7 @@ export type CategoryCountOrderByAggregateInput = {
 
 export type CategoryAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
 }
 
@@ -495,6 +520,7 @@ export type CategoryMaxOrderByAggregateInput = {
   descriptionRo?: Prisma.SortOrder
   descriptionRu?: Prisma.SortOrder
   state?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   path?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
@@ -509,6 +535,7 @@ export type CategoryMinOrderByAggregateInput = {
   descriptionRo?: Prisma.SortOrder
   descriptionRu?: Prisma.SortOrder
   state?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   path?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
@@ -518,6 +545,7 @@ export type CategoryMinOrderByAggregateInput = {
 
 export type CategorySumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
 }
 
@@ -545,6 +573,14 @@ export type EnumCategoryStateFieldUpdateOperationsInput = {
   set?: $Enums.CategoryState
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type CategoryUpdateOneWithoutChildrenNestedInput = {
   create?: Prisma.XOR<Prisma.CategoryCreateWithoutChildrenInput, Prisma.CategoryUncheckedCreateWithoutChildrenInput>
   connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutChildrenInput
@@ -567,14 +603,6 @@ export type CategoryUpdateManyWithoutParentNestedInput = {
   update?: Prisma.CategoryUpdateWithWhereUniqueWithoutParentInput | Prisma.CategoryUpdateWithWhereUniqueWithoutParentInput[]
   updateMany?: Prisma.CategoryUpdateManyWithWhereWithoutParentInput | Prisma.CategoryUpdateManyWithWhereWithoutParentInput[]
   deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
-}
-
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
 }
 
 export type CategoryUncheckedUpdateManyWithoutParentNestedInput = {
@@ -613,6 +641,7 @@ export type CategoryCreateWithoutChildrenInput = {
   descriptionRo?: string | null
   descriptionRu?: string | null
   state?: $Enums.CategoryState
+  priority?: number | null
   slug: string
   path: string
   createdAt?: Date | string
@@ -628,6 +657,7 @@ export type CategoryUncheckedCreateWithoutChildrenInput = {
   descriptionRo?: string | null
   descriptionRu?: string | null
   state?: $Enums.CategoryState
+  priority?: number | null
   slug: string
   path: string
   parentId?: number | null
@@ -647,6 +677,7 @@ export type CategoryCreateWithoutParentInput = {
   descriptionRo?: string | null
   descriptionRu?: string | null
   state?: $Enums.CategoryState
+  priority?: number | null
   slug: string
   path: string
   createdAt?: Date | string
@@ -662,6 +693,7 @@ export type CategoryUncheckedCreateWithoutParentInput = {
   descriptionRo?: string | null
   descriptionRu?: string | null
   state?: $Enums.CategoryState
+  priority?: number | null
   slug: string
   path: string
   createdAt?: Date | string
@@ -697,6 +729,7 @@ export type CategoryUpdateWithoutChildrenInput = {
   descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumCategoryStateFieldUpdateOperationsInput | $Enums.CategoryState
+  priority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -712,6 +745,7 @@ export type CategoryUncheckedUpdateWithoutChildrenInput = {
   descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumCategoryStateFieldUpdateOperationsInput | $Enums.CategoryState
+  priority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   parentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -746,6 +780,7 @@ export type CategoryScalarWhereInput = {
   descriptionRo?: Prisma.StringNullableFilter<"Category"> | string | null
   descriptionRu?: Prisma.StringNullableFilter<"Category"> | string | null
   state?: Prisma.EnumCategoryStateFilter<"Category"> | $Enums.CategoryState
+  priority?: Prisma.IntNullableFilter<"Category"> | number | null
   slug?: Prisma.StringFilter<"Category"> | string
   path?: Prisma.StringFilter<"Category"> | string
   parentId?: Prisma.IntNullableFilter<"Category"> | number | null
@@ -759,6 +794,7 @@ export type CategoryCreateWithoutProductsInput = {
   descriptionRo?: string | null
   descriptionRu?: string | null
   state?: $Enums.CategoryState
+  priority?: number | null
   slug: string
   path: string
   createdAt?: Date | string
@@ -774,6 +810,7 @@ export type CategoryUncheckedCreateWithoutProductsInput = {
   descriptionRo?: string | null
   descriptionRu?: string | null
   state?: $Enums.CategoryState
+  priority?: number | null
   slug: string
   path: string
   parentId?: number | null
@@ -804,6 +841,7 @@ export type CategoryUpdateWithoutProductsInput = {
   descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumCategoryStateFieldUpdateOperationsInput | $Enums.CategoryState
+  priority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -819,6 +857,7 @@ export type CategoryUncheckedUpdateWithoutProductsInput = {
   descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumCategoryStateFieldUpdateOperationsInput | $Enums.CategoryState
+  priority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   parentId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -834,6 +873,7 @@ export type CategoryCreateManyParentInput = {
   descriptionRo?: string | null
   descriptionRu?: string | null
   state?: $Enums.CategoryState
+  priority?: number | null
   slug: string
   path: string
   createdAt?: Date | string
@@ -846,6 +886,7 @@ export type CategoryUpdateWithoutParentInput = {
   descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumCategoryStateFieldUpdateOperationsInput | $Enums.CategoryState
+  priority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -861,6 +902,7 @@ export type CategoryUncheckedUpdateWithoutParentInput = {
   descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumCategoryStateFieldUpdateOperationsInput | $Enums.CategoryState
+  priority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -876,6 +918,7 @@ export type CategoryUncheckedUpdateManyWithoutParentInput = {
   descriptionRo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descriptionRu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.EnumCategoryStateFieldUpdateOperationsInput | $Enums.CategoryState
+  priority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -929,6 +972,7 @@ export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   descriptionRo?: boolean
   descriptionRu?: boolean
   state?: boolean
+  priority?: boolean
   slug?: boolean
   path?: boolean
   parentId?: boolean
@@ -947,6 +991,7 @@ export type CategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   descriptionRo?: boolean
   descriptionRu?: boolean
   state?: boolean
+  priority?: boolean
   slug?: boolean
   path?: boolean
   parentId?: boolean
@@ -962,6 +1007,7 @@ export type CategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   descriptionRo?: boolean
   descriptionRu?: boolean
   state?: boolean
+  priority?: boolean
   slug?: boolean
   path?: boolean
   parentId?: boolean
@@ -977,6 +1023,7 @@ export type CategorySelectScalar = {
   descriptionRo?: boolean
   descriptionRu?: boolean
   state?: boolean
+  priority?: boolean
   slug?: boolean
   path?: boolean
   parentId?: boolean
@@ -984,7 +1031,7 @@ export type CategorySelectScalar = {
   updatedAt?: boolean
 }
 
-export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nameRo" | "nameRu" | "descriptionRo" | "descriptionRu" | "state" | "slug" | "path" | "parentId" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
+export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nameRo" | "nameRu" | "descriptionRo" | "descriptionRu" | "state" | "priority" | "slug" | "path" | "parentId" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
 export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   parent?: boolean | Prisma.Category$parentArgs<ExtArgs>
   children?: boolean | Prisma.Category$childrenArgs<ExtArgs>
@@ -1012,6 +1059,7 @@ export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     descriptionRo: string | null
     descriptionRu: string | null
     state: $Enums.CategoryState
+    priority: number | null
     slug: string
     path: string
     parentId: number | null
@@ -1449,6 +1497,7 @@ export interface CategoryFieldRefs {
   readonly descriptionRo: Prisma.FieldRef<"Category", 'String'>
   readonly descriptionRu: Prisma.FieldRef<"Category", 'String'>
   readonly state: Prisma.FieldRef<"Category", 'CategoryState'>
+  readonly priority: Prisma.FieldRef<"Category", 'Int'>
   readonly slug: Prisma.FieldRef<"Category", 'String'>
   readonly path: Prisma.FieldRef<"Category", 'String'>
   readonly parentId: Prisma.FieldRef<"Category", 'Int'>

@@ -122,6 +122,7 @@ export const CategoryScalarFieldEnum = {
   descriptionRo: 'descriptionRo',
   descriptionRu: 'descriptionRu',
   state: 'state',
+  priority: 'priority',
   slug: 'slug',
   path: 'path',
   parentId: 'parentId',

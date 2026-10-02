@@ -189,6 +189,7 @@ function getFormValues(category?: TCategoryBaseDto, defaultParentId?: number): T
     descriptionRo: category?.descriptionRo ?? undefined,
     descriptionRu: category?.descriptionRu ?? undefined,
     state: category?.state ?? CategoryState.ACTIVE,
+    priority: category?.priority ?? null,
     slug: category?.slug ?? '',
     // Use null as the "no parent" sentinel so react-hook-form can detect
     // clearing (onChange(null)) as an explicit value change, unlike undefined.

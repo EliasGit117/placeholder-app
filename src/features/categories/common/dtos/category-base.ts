@@ -15,6 +15,7 @@ export const categoryBaseDtoSchema = z.object({
   descriptionRo: z.string().nullable(),
   descriptionRu: z.string().nullable(),
   state: z.enum(CategoryState),
+  priority: z.number().int().nullable(),
   slug: z.string(),
   path: z.string(),
   parentId: z.number().nullable(),

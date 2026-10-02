@@ -1,7 +1,8 @@
 import { type ComponentProps, type FC } from 'react';
 import { Controller, type UseFormReturn } from 'react-hook-form';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field.tsx';
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field.tsx';
 import { Input } from '@/components/ui/input.tsx';
+import { NumberInput } from '@/components/ui/number-input.tsx';
 import { Skeleton } from '@/components/ui/skeleton.tsx';
 import { m } from '@/paraglide/messages';
 import { cn } from '@/lib/utils';
@@ -60,9 +61,30 @@ export const CategoryForm: FC<IProps> = ({
             name="slug"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid} className="col-span-full">
+              <Field data-invalid={fieldState.invalid} className="col-span-full sm:col-span-1">
                 <FieldLabel>{m['pages.categories.index.sheet.slug']()}</FieldLabel>
                 <Input {...field} value={field.value ?? ''} placeholder="electronica" className="font-mono"/>
+                <FieldDescription className="text-xs">{m['pages.categories.index.sheet.slug_hint']()}</FieldDescription>
+                {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
+              </Field>
+            )}
+          />
+
+          <Controller
+            name="priority"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid} className="col-span-full sm:col-span-1">
+                <FieldLabel>{m['pages.categories.index.sheet.priority']()}</FieldLabel>
+                <NumberInput
+                  ref={field.ref}
+                  onBlur={field.onBlur}
+                  value={field.value ?? undefined}
+                  onValueChange={(v) => field.onChange(v ?? null)}
+                  min={0}
+                  max={9999}
+                />
+                <FieldDescription className="text-xs">{m['pages.categories.index.sheet.priority_hint']()}</FieldDescription>
                 {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
               </Field>
             )}

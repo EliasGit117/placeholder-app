@@ -9,6 +9,7 @@ export const createCategoryFormSchema = z.object({
   descriptionRo: z.string().trim().max(512).optional(),
   descriptionRu: z.string().trim().max(512).optional(),
   state: z.enum(CategoryState).default(CategoryState.ACTIVE),
+  priority: z.number().int().min(0).max(9999).nullable().optional(),
   slug: slugSchema,
   parentId: z.number().nullable().optional(),
 });

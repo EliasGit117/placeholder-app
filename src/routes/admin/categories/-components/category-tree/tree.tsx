@@ -119,6 +119,9 @@ export const CategoryTree: FC<{ className?: string }> = ({ className }) => {
                   <TreeItemLabel className="before:-inset-y-0.5 before:-z-10 relative before:absolute before:inset-x-0 before:bg-background">
                     <div className="flex items-center gap-2 w-full">
                       <span>{item.getItemName()}</span>
+                      {data.priority != null && (
+                        <span className="text-xs text-muted-foreground font-mono">#{data.priority}</span>
+                      )}
                       {item.isFolder() && (
                         <span className="-ms-1 text-xs text-muted-foreground">
                           ({item.getChildren().length})

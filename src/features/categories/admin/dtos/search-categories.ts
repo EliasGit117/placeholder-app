@@ -10,6 +10,7 @@ const sortableFields = [
   'nameRo',
   'nameRu',
   'state',
+  'priority',
   'slug',
   'createdAt',
   'updatedAt',

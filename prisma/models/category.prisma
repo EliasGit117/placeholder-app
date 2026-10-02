@@ -10,7 +10,8 @@ model Category {
   descriptionRo String?       @map("description_ro")
   descriptionRu String?       @map("description_ru")
   state         CategoryState @default(ACTIVE)
-  slug          String
+  priority      Int?          @map("priority")
+  slug         String
   path          String        @unique @map("path")
   parentId      Int?          @map("parent_id")
   parent        Category?     @relation("CategoryHierarchy", fields: [parentId], references: [id])
