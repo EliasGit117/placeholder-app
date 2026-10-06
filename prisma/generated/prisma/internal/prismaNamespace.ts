@@ -1563,6 +1563,11 @@ export const OnlinePaymentScalarFieldEnum = {
   referenceNumber: 'referenceNumber',
   executedAt: 'executedAt',
   attemptCount: 'attemptCount',
+  refundId: 'refundId',
+  refundStatus: 'refundStatus',
+  refundAmount: 'refundAmount',
+  refundReason: 'refundReason',
+  refundedAt: 'refundedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1864,6 +1869,20 @@ export type EnumOnlinePaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputTy
  * Reference to a field of type 'OnlinePaymentStatus[]'
  */
 export type ListEnumOnlinePaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OnlinePaymentStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'OnlinePaymentRefundStatus'
+ */
+export type EnumOnlinePaymentRefundStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OnlinePaymentRefundStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'OnlinePaymentRefundStatus[]'
+ */
+export type ListEnumOnlinePaymentRefundStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OnlinePaymentRefundStatus[]'>
     
 
 

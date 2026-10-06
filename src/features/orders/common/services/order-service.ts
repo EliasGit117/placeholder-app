@@ -107,7 +107,7 @@ export class OrderService {
     if (!entity)
       return null;
 
-    const onlinePayment = await OnlinePaymentService.findByOrderId(entity.id);
+    const onlinePayment = await OnlinePaymentService.findByOrderIdWithRefundSync(entity.id);
     return OrderService.withImages(entity, onlinePayment);
   }
 

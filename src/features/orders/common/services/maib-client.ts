@@ -82,6 +82,28 @@ export interface IMaibCheckoutDetails {
   } | null;
 }
 
+export type TMaibRefundStatus = 'Created' | 'Requested' | 'Accepted' | 'Rejected' | 'Manual';
+
+export interface IMaibPaymentDetails {
+  id: string;
+  status: string;
+  isRefundable: boolean;
+  partialRefundAvailable: boolean;
+  refundableAmount: number;
+  refundedAmount: number;
+  requestedRefundAmount: number;
+}
+
+export interface IMaibRefundDetails {
+  id: string;
+  paymentId: string;
+  amount: number;
+  currency: string;
+  refundReason: string;
+  executedAt: string;
+  status: TMaibRefundStatus;
+}
+
 // Access token is short-lived (expiresIn: 300s per maib docs) and shared across all
 // requests from this process, so it's cached in module scope rather than re-fetched
 // per call. Refreshed a bit early to avoid racing the expiry.
@@ -112,21 +134,31 @@ async function getAccessToken(): Promise<{ accessToken: string; tokenType: strin
   return cachedToken;
 }
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
+async function request<T>(path: string, init?: RequestInit, retried = false): Promise<T> {
   const { accessToken, tokenType } = await getAccessToken();
 
   const response = await fetch(`${MAIB_BASE_URL}${path}`, {
     ...init,
     headers: {
-      'Content-Type': 'application/json',
+      // maib's WAF answers 403 to a GET that carries a JSON content type.
+      ...(init?.method === 'GET' ? {} : { 'Content-Type': 'application/json' }),
       Authorization: `${tokenType} ${accessToken}`,
       ...init?.headers,
     },
   });
 
-  const body = await response.json() as IMaibEnvelope<T>;
-  if (!response.ok || !body.ok)
-    throw new Error(`maib request to ${path} failed: ${body.errors?.map((e) => e.errorMessage).join(', ') ?? response.statusText}`);
+  // A cached token can be rejected before its nominal expiry (e.g. process kept
+  // running across a credentials change), so drop it and retry once with a fresh one.
+  if ((response.status === 401 || response.status === 403) && !retried) {
+    cachedToken = null;
+    return request<T>(path, init, true);
+  }
+
+  const body = await response.json().catch(() => null) as IMaibEnvelope<T> | null;
+  if (!response.ok || !body?.ok) {
+    const details = body?.errors?.map((e) => e.errorMessage).join(', ') ?? response.statusText;
+    throw new Error(`maib request to ${path} failed (${response.status}): ${details}`);
+  }
 
   return body.result;
 }
@@ -166,6 +198,18 @@ export const MaibClient = {
 
   getCheckoutDetails(checkoutId: string): Promise<IMaibCheckoutDetails> {
     return request(`/v2/checkouts/${checkoutId}`, { method: 'GET' });
+  },
+
+  getPayment(paymentId: string): Promise<IMaibPaymentDetails> {
+    return request(`/v2/payments/${paymentId}`, { method: 'GET' });
+  },
+
+  refundPayment(paymentId: string, input: { amount: number; reason: string }): Promise<{ refundId: string; status: TMaibRefundStatus }> {
+    return request(`/v2/payments/${paymentId}/refund`, { method: 'POST', body: JSON.stringify(input) });
+  },
+
+  getRefund(refundId: string): Promise<IMaibRefundDetails> {
+    return request(`/v2/payments/refunds/${refundId}`, { method: 'GET' });
   },
 
   cancelCheckout(checkoutId: string): Promise<{ checkoutId: string; status: string }> {

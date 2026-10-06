@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { OnlinePayment } from '~/prisma/generated/prisma/client.ts';
-import { OnlinePaymentProvider, OnlinePaymentStatus } from '~/prisma/generated/prisma/enums.ts';
+import { OnlinePaymentProvider, OnlinePaymentRefundStatus, OnlinePaymentStatus } from '~/prisma/generated/prisma/enums.ts';
 
 export const onlinePaymentDtoSchema = z.object({
   id: z.number(),
@@ -16,6 +16,11 @@ export const onlinePaymentDtoSchema = z.object({
   paymentMethod: z.string().nullable(),
   referenceNumber: z.string().nullable(),
   executedAt: z.string().nullable(),
+  refundId: z.string().nullable(),
+  refundStatus: z.enum(OnlinePaymentRefundStatus).nullable(),
+  refundAmount: z.number().int().nullable(),
+  refundReason: z.string().nullable(),
+  refundedAt: z.string().nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
@@ -39,6 +44,11 @@ export class OnlinePaymentDtoFactory {
       paymentMethod: entity.paymentMethod,
       referenceNumber: entity.referenceNumber,
       executedAt: entity.executedAt?.toISOString() ?? null,
+      refundId: entity.refundId,
+      refundStatus: entity.refundStatus,
+      refundAmount: entity.refundAmount,
+      refundReason: entity.refundReason,
+      refundedAt: entity.refundedAt?.toISOString() ?? null,
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
     };

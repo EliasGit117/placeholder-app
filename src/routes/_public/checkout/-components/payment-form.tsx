@@ -17,25 +17,14 @@ import { useCartContext } from '@/providers/cart.tsx';
 import { DeliveryMethod } from '~/prisma/generated/prisma/enums.ts';
 import { PaymentType } from '@/features/orders/common/constants.ts';
 
-const pickupAddresses = [
-  'Bulevardul Ștefan cel Mare 1, Chișinău',
-  'Strada Ismail 33, Chișinău',
-  'Bulevardul Dacia 55, Chișinău',
-];
-
 export const checkoutFormSchema = z.object({
   paymentType: z.enum(PaymentType),
   fullName: z.string().min(1),
   phone: z.string().min(1),
   email: z.string().min(1).email(),
   deliveryMethod: z.enum(DeliveryMethod),
-  pickupAddress: z.string().optional(),
   address: z.string().optional(),
 }).superRefine((data, ctx) => {
-  if (data.deliveryMethod === DeliveryMethod.PICKUP && !data.pickupAddress) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'REQUIRED', path: ['pickupAddress'] });
-  }
-
   if (data.deliveryMethod === DeliveryMethod.COURIER && !data.address) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'REQUIRED', path: ['address'] });
   }
@@ -50,7 +39,6 @@ export const checkoutFormDefaultValues: TCheckoutFormSchema = {
   phone: '',
   email: '',
   deliveryMethod: DeliveryMethod.COURIER,
-  pickupAddress: '',
   address: '',
 };
 
@@ -68,7 +56,7 @@ export const PaymentForm: FC = () => {
       phone: data.phone,
       email: data.email,
       deliveryMethod: data.deliveryMethod,
-      address: (data.deliveryMethod === DeliveryMethod.PICKUP ? data.pickupAddress : data.address)!,
+      address: (data.deliveryMethod === DeliveryMethod.PICKUP ? m['pages.contacts.office.address']() : data.address)!,
     }),
   });
 
@@ -187,7 +175,8 @@ export const PaymentForm: FC = () => {
                       value={field.value}
                       onChange={(value) => {
                         field.onChange(value);
-                        form.resetField(value === DeliveryMethod.PICKUP ? 'address' : 'pickupAddress');
+                        if (value === DeliveryMethod.PICKUP)
+                          form.resetField('address');
                       }}
                       options={[
                         { value: DeliveryMethod.COURIER, label: m['pages.checkout.payment.delivery_courier'](), icon: <IconTruckDelivery/> },
@@ -199,22 +188,13 @@ export const PaymentForm: FC = () => {
               />
 
               {deliveryMethod === DeliveryMethod.PICKUP ? (
-                <Controller
-                  name="pickupAddress"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="checkout-pickup-address">{m['pages.checkout.payment.pickup_address']()}</FieldLabel>
-                      <DropdownField
-                        id="checkout-pickup-address"
-                        value={field.value}
-                        onChange={field.onChange}
-                        placeholder={m['pages.checkout.payment.pickup_address_placeholder']()}
-                        options={pickupAddresses.map((address) => ({ value: address, label: address, icon: <IconMapPin/> }))}
-                      />
-                    </Field>
-                  )}
-                />
+                <Field>
+                  <FieldLabel>{m['pages.checkout.payment.pickup_address']()}</FieldLabel>
+                  <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <IconMapPin className="size-4 shrink-0 text-primary"/>
+                    {m['pages.contacts.office.address']()}
+                  </p>
+                </Field>
               ) : (
                 <Controller
                   name="address"
