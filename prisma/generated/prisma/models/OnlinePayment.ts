@@ -31,6 +31,7 @@ export type OnlinePaymentAvgAggregateOutputType = {
   orderId: number | null
   amount: number | null
   attemptCount: number | null
+  refundAmount: number | null
 }
 
 export type OnlinePaymentSumAggregateOutputType = {
@@ -38,6 +39,7 @@ export type OnlinePaymentSumAggregateOutputType = {
   orderId: number | null
   amount: number | null
   attemptCount: number | null
+  refundAmount: number | null
 }
 
 export type OnlinePaymentMinAggregateOutputType = {
@@ -56,6 +58,11 @@ export type OnlinePaymentMinAggregateOutputType = {
   referenceNumber: string | null
   executedAt: Date | null
   attemptCount: number | null
+  refundId: string | null
+  refundStatus: $Enums.OnlinePaymentRefundStatus | null
+  refundAmount: number | null
+  refundReason: string | null
+  refundedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -76,6 +83,11 @@ export type OnlinePaymentMaxAggregateOutputType = {
   referenceNumber: string | null
   executedAt: Date | null
   attemptCount: number | null
+  refundId: string | null
+  refundStatus: $Enums.OnlinePaymentRefundStatus | null
+  refundAmount: number | null
+  refundReason: string | null
+  refundedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -96,6 +108,11 @@ export type OnlinePaymentCountAggregateOutputType = {
   referenceNumber: number
   executedAt: number
   attemptCount: number
+  refundId: number
+  refundStatus: number
+  refundAmount: number
+  refundReason: number
+  refundedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -107,6 +124,7 @@ export type OnlinePaymentAvgAggregateInputType = {
   orderId?: true
   amount?: true
   attemptCount?: true
+  refundAmount?: true
 }
 
 export type OnlinePaymentSumAggregateInputType = {
@@ -114,6 +132,7 @@ export type OnlinePaymentSumAggregateInputType = {
   orderId?: true
   amount?: true
   attemptCount?: true
+  refundAmount?: true
 }
 
 export type OnlinePaymentMinAggregateInputType = {
@@ -132,6 +151,11 @@ export type OnlinePaymentMinAggregateInputType = {
   referenceNumber?: true
   executedAt?: true
   attemptCount?: true
+  refundId?: true
+  refundStatus?: true
+  refundAmount?: true
+  refundReason?: true
+  refundedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -152,6 +176,11 @@ export type OnlinePaymentMaxAggregateInputType = {
   referenceNumber?: true
   executedAt?: true
   attemptCount?: true
+  refundId?: true
+  refundStatus?: true
+  refundAmount?: true
+  refundReason?: true
+  refundedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -172,6 +201,11 @@ export type OnlinePaymentCountAggregateInputType = {
   referenceNumber?: true
   executedAt?: true
   attemptCount?: true
+  refundId?: true
+  refundStatus?: true
+  refundAmount?: true
+  refundReason?: true
+  refundedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -279,6 +313,11 @@ export type OnlinePaymentGroupByOutputType = {
   referenceNumber: string | null
   executedAt: Date | null
   attemptCount: number
+  refundId: string | null
+  refundStatus: $Enums.OnlinePaymentRefundStatus | null
+  refundAmount: number | null
+  refundReason: string | null
+  refundedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: OnlinePaymentCountAggregateOutputType | null
@@ -322,6 +361,11 @@ export type OnlinePaymentWhereInput = {
   referenceNumber?: Prisma.StringNullableFilter<"OnlinePayment"> | string | null
   executedAt?: Prisma.DateTimeNullableFilter<"OnlinePayment"> | Date | string | null
   attemptCount?: Prisma.IntFilter<"OnlinePayment"> | number
+  refundId?: Prisma.StringNullableFilter<"OnlinePayment"> | string | null
+  refundStatus?: Prisma.EnumOnlinePaymentRefundStatusNullableFilter<"OnlinePayment"> | $Enums.OnlinePaymentRefundStatus | null
+  refundAmount?: Prisma.IntNullableFilter<"OnlinePayment"> | number | null
+  refundReason?: Prisma.StringNullableFilter<"OnlinePayment"> | string | null
+  refundedAt?: Prisma.DateTimeNullableFilter<"OnlinePayment"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"OnlinePayment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OnlinePayment"> | Date | string
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
@@ -343,6 +387,11 @@ export type OnlinePaymentOrderByWithRelationInput = {
   referenceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   executedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   attemptCount?: Prisma.SortOrder
+  refundId?: Prisma.SortOrderInput | Prisma.SortOrder
+  refundStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  refundAmount?: Prisma.SortOrderInput | Prisma.SortOrder
+  refundReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  refundedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   order?: Prisma.OrderOrderByWithRelationInput
@@ -353,6 +402,7 @@ export type OnlinePaymentWhereUniqueInput = Prisma.AtLeast<{
   orderId?: number
   checkoutId?: string
   paymentId?: string
+  refundId?: string
   AND?: Prisma.OnlinePaymentWhereInput | Prisma.OnlinePaymentWhereInput[]
   OR?: Prisma.OnlinePaymentWhereInput[]
   NOT?: Prisma.OnlinePaymentWhereInput | Prisma.OnlinePaymentWhereInput[]
@@ -367,10 +417,14 @@ export type OnlinePaymentWhereUniqueInput = Prisma.AtLeast<{
   referenceNumber?: Prisma.StringNullableFilter<"OnlinePayment"> | string | null
   executedAt?: Prisma.DateTimeNullableFilter<"OnlinePayment"> | Date | string | null
   attemptCount?: Prisma.IntFilter<"OnlinePayment"> | number
+  refundStatus?: Prisma.EnumOnlinePaymentRefundStatusNullableFilter<"OnlinePayment"> | $Enums.OnlinePaymentRefundStatus | null
+  refundAmount?: Prisma.IntNullableFilter<"OnlinePayment"> | number | null
+  refundReason?: Prisma.StringNullableFilter<"OnlinePayment"> | string | null
+  refundedAt?: Prisma.DateTimeNullableFilter<"OnlinePayment"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"OnlinePayment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OnlinePayment"> | Date | string
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
-}, "id" | "orderId" | "checkoutId" | "paymentId">
+}, "id" | "orderId" | "checkoutId" | "paymentId" | "refundId">
 
 export type OnlinePaymentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -388,6 +442,11 @@ export type OnlinePaymentOrderByWithAggregationInput = {
   referenceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   executedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   attemptCount?: Prisma.SortOrder
+  refundId?: Prisma.SortOrderInput | Prisma.SortOrder
+  refundStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  refundAmount?: Prisma.SortOrderInput | Prisma.SortOrder
+  refundReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  refundedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.OnlinePaymentCountOrderByAggregateInput
@@ -416,6 +475,11 @@ export type OnlinePaymentScalarWhereWithAggregatesInput = {
   referenceNumber?: Prisma.StringNullableWithAggregatesFilter<"OnlinePayment"> | string | null
   executedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OnlinePayment"> | Date | string | null
   attemptCount?: Prisma.IntWithAggregatesFilter<"OnlinePayment"> | number
+  refundId?: Prisma.StringNullableWithAggregatesFilter<"OnlinePayment"> | string | null
+  refundStatus?: Prisma.EnumOnlinePaymentRefundStatusNullableWithAggregatesFilter<"OnlinePayment"> | $Enums.OnlinePaymentRefundStatus | null
+  refundAmount?: Prisma.IntNullableWithAggregatesFilter<"OnlinePayment"> | number | null
+  refundReason?: Prisma.StringNullableWithAggregatesFilter<"OnlinePayment"> | string | null
+  refundedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"OnlinePayment"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"OnlinePayment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"OnlinePayment"> | Date | string
 }
@@ -434,6 +498,11 @@ export type OnlinePaymentCreateInput = {
   referenceNumber?: string | null
   executedAt?: Date | string | null
   attemptCount?: number
+  refundId?: string | null
+  refundStatus?: $Enums.OnlinePaymentRefundStatus | null
+  refundAmount?: number | null
+  refundReason?: string | null
+  refundedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   order: Prisma.OrderCreateNestedOneWithoutOnlinePaymentInput
@@ -455,6 +524,11 @@ export type OnlinePaymentUncheckedCreateInput = {
   referenceNumber?: string | null
   executedAt?: Date | string | null
   attemptCount?: number
+  refundId?: string | null
+  refundStatus?: $Enums.OnlinePaymentRefundStatus | null
+  refundAmount?: number | null
+  refundReason?: string | null
+  refundedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -473,6 +547,11 @@ export type OnlinePaymentUpdateInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refundStatus?: Prisma.NullableEnumOnlinePaymentRefundStatusFieldUpdateOperationsInput | $Enums.OnlinePaymentRefundStatus | null
+  refundAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  refundReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refundedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   order?: Prisma.OrderUpdateOneRequiredWithoutOnlinePaymentNestedInput
@@ -494,6 +573,11 @@ export type OnlinePaymentUncheckedUpdateInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refundStatus?: Prisma.NullableEnumOnlinePaymentRefundStatusFieldUpdateOperationsInput | $Enums.OnlinePaymentRefundStatus | null
+  refundAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  refundReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refundedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -514,6 +598,11 @@ export type OnlinePaymentCreateManyInput = {
   referenceNumber?: string | null
   executedAt?: Date | string | null
   attemptCount?: number
+  refundId?: string | null
+  refundStatus?: $Enums.OnlinePaymentRefundStatus | null
+  refundAmount?: number | null
+  refundReason?: string | null
+  refundedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -532,6 +621,11 @@ export type OnlinePaymentUpdateManyMutationInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refundStatus?: Prisma.NullableEnumOnlinePaymentRefundStatusFieldUpdateOperationsInput | $Enums.OnlinePaymentRefundStatus | null
+  refundAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  refundReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refundedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -552,6 +646,11 @@ export type OnlinePaymentUncheckedUpdateManyInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refundStatus?: Prisma.NullableEnumOnlinePaymentRefundStatusFieldUpdateOperationsInput | $Enums.OnlinePaymentRefundStatus | null
+  refundAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  refundReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refundedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -577,6 +676,11 @@ export type OnlinePaymentCountOrderByAggregateInput = {
   referenceNumber?: Prisma.SortOrder
   executedAt?: Prisma.SortOrder
   attemptCount?: Prisma.SortOrder
+  refundId?: Prisma.SortOrder
+  refundStatus?: Prisma.SortOrder
+  refundAmount?: Prisma.SortOrder
+  refundReason?: Prisma.SortOrder
+  refundedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -586,6 +690,7 @@ export type OnlinePaymentAvgOrderByAggregateInput = {
   orderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   attemptCount?: Prisma.SortOrder
+  refundAmount?: Prisma.SortOrder
 }
 
 export type OnlinePaymentMaxOrderByAggregateInput = {
@@ -604,6 +709,11 @@ export type OnlinePaymentMaxOrderByAggregateInput = {
   referenceNumber?: Prisma.SortOrder
   executedAt?: Prisma.SortOrder
   attemptCount?: Prisma.SortOrder
+  refundId?: Prisma.SortOrder
+  refundStatus?: Prisma.SortOrder
+  refundAmount?: Prisma.SortOrder
+  refundReason?: Prisma.SortOrder
+  refundedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -624,6 +734,11 @@ export type OnlinePaymentMinOrderByAggregateInput = {
   referenceNumber?: Prisma.SortOrder
   executedAt?: Prisma.SortOrder
   attemptCount?: Prisma.SortOrder
+  refundId?: Prisma.SortOrder
+  refundStatus?: Prisma.SortOrder
+  refundAmount?: Prisma.SortOrder
+  refundReason?: Prisma.SortOrder
+  refundedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -633,6 +748,7 @@ export type OnlinePaymentSumOrderByAggregateInput = {
   orderId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   attemptCount?: Prisma.SortOrder
+  refundAmount?: Prisma.SortOrder
 }
 
 export type OnlinePaymentCreateNestedOneWithoutOrderInput = {
@@ -675,6 +791,10 @@ export type EnumOnlinePaymentStatusFieldUpdateOperationsInput = {
   set?: $Enums.OnlinePaymentStatus
 }
 
+export type NullableEnumOnlinePaymentRefundStatusFieldUpdateOperationsInput = {
+  set?: $Enums.OnlinePaymentRefundStatus | null
+}
+
 export type OnlinePaymentCreateWithoutOrderInput = {
   provider?: $Enums.OnlinePaymentProvider
   status?: $Enums.OnlinePaymentStatus
@@ -689,6 +809,11 @@ export type OnlinePaymentCreateWithoutOrderInput = {
   referenceNumber?: string | null
   executedAt?: Date | string | null
   attemptCount?: number
+  refundId?: string | null
+  refundStatus?: $Enums.OnlinePaymentRefundStatus | null
+  refundAmount?: number | null
+  refundReason?: string | null
+  refundedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -708,6 +833,11 @@ export type OnlinePaymentUncheckedCreateWithoutOrderInput = {
   referenceNumber?: string | null
   executedAt?: Date | string | null
   attemptCount?: number
+  refundId?: string | null
+  refundStatus?: $Enums.OnlinePaymentRefundStatus | null
+  refundAmount?: number | null
+  refundReason?: string | null
+  refundedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -742,6 +872,11 @@ export type OnlinePaymentUpdateWithoutOrderInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refundStatus?: Prisma.NullableEnumOnlinePaymentRefundStatusFieldUpdateOperationsInput | $Enums.OnlinePaymentRefundStatus | null
+  refundAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  refundReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refundedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -761,6 +896,11 @@ export type OnlinePaymentUncheckedUpdateWithoutOrderInput = {
   referenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   executedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  refundId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refundStatus?: Prisma.NullableEnumOnlinePaymentRefundStatusFieldUpdateOperationsInput | $Enums.OnlinePaymentRefundStatus | null
+  refundAmount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  refundReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refundedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -783,6 +923,11 @@ export type OnlinePaymentSelect<ExtArgs extends runtime.Types.Extensions.Interna
   referenceNumber?: boolean
   executedAt?: boolean
   attemptCount?: boolean
+  refundId?: boolean
+  refundStatus?: boolean
+  refundAmount?: boolean
+  refundReason?: boolean
+  refundedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
@@ -804,6 +949,11 @@ export type OnlinePaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   referenceNumber?: boolean
   executedAt?: boolean
   attemptCount?: boolean
+  refundId?: boolean
+  refundStatus?: boolean
+  refundAmount?: boolean
+  refundReason?: boolean
+  refundedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
@@ -825,6 +975,11 @@ export type OnlinePaymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   referenceNumber?: boolean
   executedAt?: boolean
   attemptCount?: boolean
+  refundId?: boolean
+  refundStatus?: boolean
+  refundAmount?: boolean
+  refundReason?: boolean
+  refundedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
@@ -846,11 +1001,16 @@ export type OnlinePaymentSelectScalar = {
   referenceNumber?: boolean
   executedAt?: boolean
   attemptCount?: boolean
+  refundId?: boolean
+  refundStatus?: boolean
+  refundAmount?: boolean
+  refundReason?: boolean
+  refundedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type OnlinePaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "provider" | "status" | "checkoutId" | "checkoutUrl" | "callbackUrl" | "paymentId" | "expiresAt" | "amount" | "currency" | "paymentMethod" | "referenceNumber" | "executedAt" | "attemptCount" | "createdAt" | "updatedAt", ExtArgs["result"]["onlinePayment"]>
+export type OnlinePaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "provider" | "status" | "checkoutId" | "checkoutUrl" | "callbackUrl" | "paymentId" | "expiresAt" | "amount" | "currency" | "paymentMethod" | "referenceNumber" | "executedAt" | "attemptCount" | "refundId" | "refundStatus" | "refundAmount" | "refundReason" | "refundedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["onlinePayment"]>
 export type OnlinePaymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
 }
@@ -882,6 +1042,11 @@ export type $OnlinePaymentPayload<ExtArgs extends runtime.Types.Extensions.Inter
     referenceNumber: string | null
     executedAt: Date | null
     attemptCount: number
+    refundId: string | null
+    refundStatus: $Enums.OnlinePaymentRefundStatus | null
+    refundAmount: number | null
+    refundReason: string | null
+    refundedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["onlinePayment"]>
@@ -1323,6 +1488,11 @@ export interface OnlinePaymentFieldRefs {
   readonly referenceNumber: Prisma.FieldRef<"OnlinePayment", 'String'>
   readonly executedAt: Prisma.FieldRef<"OnlinePayment", 'DateTime'>
   readonly attemptCount: Prisma.FieldRef<"OnlinePayment", 'Int'>
+  readonly refundId: Prisma.FieldRef<"OnlinePayment", 'String'>
+  readonly refundStatus: Prisma.FieldRef<"OnlinePayment", 'OnlinePaymentRefundStatus'>
+  readonly refundAmount: Prisma.FieldRef<"OnlinePayment", 'Int'>
+  readonly refundReason: Prisma.FieldRef<"OnlinePayment", 'String'>
+  readonly refundedAt: Prisma.FieldRef<"OnlinePayment", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"OnlinePayment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"OnlinePayment", 'DateTime'>
 }

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { ordersBase, ordersPath } from './base.ts';
-import { orderDtoSchema } from '@/features/orders/common/dtos/order.ts';
+import { publicOrderDtoSchema } from '@/features/orders/common/dtos/order.ts';
 import { OrderService } from '@/features/orders/common/services/order-service.ts';
 
 export const getOrder = ordersBase
@@ -13,7 +13,7 @@ export const getOrder = ordersBase
   .meta({ anonymous: true })
   .errors({ NOT_FOUND: {} })
   .input(z.object({ uid: z.string() }))
-  .output(orderDtoSchema)
+  .output(publicOrderDtoSchema)
   .handler(async ({ input: { uid }, errors }) => {
     const result = await OrderService.findByUid(uid);
     if (result == null)

@@ -79,6 +79,13 @@
       "abandoned": "Не завершено",
       "cancelled": "Отменено",
       "failed": "Неудачно"
+    },
+    "online_payment_refund_status": {
+      "created": "Создан",
+      "requested": "Отправлен в обработку",
+      "accepted": "Возвращён",
+      "rejected": "Отклонён",
+      "manual": "Требуется вмешательство maib"
     }
   },
   "components": {
@@ -656,13 +663,14 @@
         "contact_title": "Контактные данные",
         "phone": "Телефон",
         "delivery_title": "Доставка",
-        "pickup_address": "Адрес самовывоза",
-        "pickup_address_placeholder": "Выберите адрес",
         "submit": "Заказать",
         "full_name_placeholder": "Думитру Вагин",
         "phone_placeholder": "+373 6X XXX XXX",
         "email_placeholder": "email@example.com",
-        "address_placeholder": "Улица, номер дома, квартира"
+        "address_placeholder": "Улица, номер дома, квартира",
+        "terms_agree": "Я принимаю",
+        "validation_required": "Обязательное поле",
+        "validation_invalid_email": "Некорректный email"
       }
     },
     "order_confirmation": {
@@ -705,7 +713,11 @@
           "title": "Заказ отменён",
           "description": "Этот заказ был отменён. Свяжитесь с нами, если есть вопросы."
         }
-      }
+      },
+      "refund_processing_badge": "Возврат в обработке",
+      "refund_done_badge": "Возвращено",
+      "refund_processing_description": "Возврат {amount} {currency} обрабатывается. Деньги поступят на карту в течение нескольких дней.",
+      "refund_done_description": "{amount} {currency} возвращены на вашу карту."
     },
     "orders": {
       "title": "Заказы",
@@ -726,7 +738,26 @@
         "section_general_description": "Информация о заказе и клиенте",
         "section_items": "Заказанные товары",
         "status_label": "Статус заказа",
-        "save_success": "Статус успешно обновлён."
+        "save_success": "Статус успешно обновлён.",
+        "payment_method": "Способ",
+        "payment_amount": "Сумма",
+        "payment_executed_at": "Оплачено",
+        "payment_id": "ID платежа",
+        "payment_reference": "Референс (RRN)",
+        "payment_checkout_id": "ID checkout",
+        "refund_button": "Вернуть платёж",
+        "refund_title": "Возврат платежа",
+        "refund_description": "Оплаченная сумма будет полностью возвращена на карту клиента. Действие нельзя отменить.",
+        "refund_reason_label": "Причина возврата",
+        "refund_reason_placeholder": "Например: клиент отказался от заказа",
+        "refund_confirm": "Вернуть",
+        "refund_success": "Возврат инициирован.",
+        "refund_id": "ID возврата",
+        "refund_amount": "Сумма возврата",
+        "refund_status": "Статус возврата",
+        "refund_reason": "Причина",
+        "refunded_at": "Возвращено",
+        "refund_in_progress": "Выполняется..."
       }
     },
     "contacts": {

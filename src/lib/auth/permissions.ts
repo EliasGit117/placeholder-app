@@ -7,7 +7,7 @@ export const statements = {
   categories: ["list", "get", "create", "update", "delete"],
   products: ["list", "get", "create", "update", "delete"],
   banners: ["list", "get", "create", "update", "delete"],
-  orders: ["list", "get", "update"],
+  orders: ["list", "get", "update", "refund"],
 } as const;
 
 export const accessControl = createAccessControl(statements);

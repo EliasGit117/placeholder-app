@@ -79,6 +79,13 @@
       "abandoned": "Neefectuată",
       "cancelled": "Anulată",
       "failed": "Eșuată"
+    },
+    "online_payment_refund_status": {
+      "created": "Creată",
+      "requested": "Trimisă spre procesare",
+      "accepted": "Returnată",
+      "rejected": "Respinsă",
+      "manual": "Necesită intervenție maib"
     }
   },
   "components": {
@@ -656,13 +663,14 @@
         "contact_title": "Date de contact",
         "phone": "Telefon",
         "delivery_title": "Livrare",
-        "pickup_address": "Adresă ridicare",
-        "pickup_address_placeholder": "Selectează adresa",
         "submit": "Comandă",
         "full_name_placeholder": "Ion Popescu",
         "phone_placeholder": "+373 6X XXX XXX",
         "email_placeholder": "nume@exemplu.com",
-        "address_placeholder": "Strada, numărul casei, apartament"
+        "address_placeholder": "Strada, numărul casei, apartament",
+        "terms_agree": "Am citit și accept",
+        "validation_required": "Câmp obligatoriu",
+        "validation_invalid_email": "Email invalid"
       }
     },
     "order_confirmation": {
@@ -705,7 +713,11 @@
           "title": "Comanda a fost anulată",
           "description": "Această comandă a fost anulată. Contactează-ne dacă ai întrebări."
         }
-      }
+      },
+      "refund_processing_badge": "Returnare în curs",
+      "refund_done_badge": "Returnat",
+      "refund_processing_description": "Returnarea sumei de {amount} {currency} este în curs de procesare. Banii vor ajunge pe card în câteva zile.",
+      "refund_done_description": "Suma de {amount} {currency} a fost returnată pe cardul dumneavoastră."
     },
     "orders": {
       "title": "Comenzi",
@@ -726,7 +738,26 @@
         "section_general_description": "Informații despre comandă și client",
         "section_items": "Produse comandate",
         "status_label": "Stare comandă",
-        "save_success": "Stare actualizată cu succes."
+        "save_success": "Stare actualizată cu succes.",
+        "payment_method": "Metodă",
+        "payment_amount": "Sumă",
+        "payment_executed_at": "Plătit la",
+        "payment_id": "ID plată",
+        "payment_reference": "Număr de referință (RRN)",
+        "payment_checkout_id": "ID checkout",
+        "refund_button": "Returnează plata",
+        "refund_title": "Returnare plată",
+        "refund_description": "Suma plătită va fi returnată integral cardului clientului. Acțiunea nu poate fi anulată.",
+        "refund_reason_label": "Motivul returnării",
+        "refund_reason_placeholder": "Ex.: client a refuzat comanda",
+        "refund_confirm": "Returnează",
+        "refund_success": "Returnarea a fost inițiată.",
+        "refund_id": "ID returnare",
+        "refund_amount": "Sumă returnată",
+        "refund_status": "Stare returnare",
+        "refund_reason": "Motiv",
+        "refunded_at": "Returnat la",
+        "refund_in_progress": "Se procesează..."
       }
     },
     "contacts": {

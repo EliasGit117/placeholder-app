@@ -17,25 +17,40 @@ enum OnlinePaymentStatus {
   @@map("online_payment_status")
 }
 
+enum OnlinePaymentRefundStatus {
+  CREATED
+  REQUESTED
+  ACCEPTED
+  REJECTED
+  MANUAL
+
+  @@map("online_payment_refund_status")
+}
+
 model OnlinePayment {
-  id              Int                   @id @default(autoincrement())
-  orderId         Int                   @unique @map("order_id")
-  order           Order                 @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  provider        OnlinePaymentProvider @default(MAIB)
-  status          OnlinePaymentStatus   @default(WAITING_FOR_INIT)
-  checkoutId      String?               @unique @map("checkout_id")
-  checkoutUrl     String?               @map("checkout_url")
-  callbackUrl     String?               @map("callback_url")
-  paymentId       String?               @unique @map("payment_id")
-  expiresAt       DateTime?             @map("expires_at")
+  id              Int                        @id @default(autoincrement())
+  orderId         Int                        @unique @map("order_id")
+  order           Order                      @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  provider        OnlinePaymentProvider      @default(MAIB)
+  status          OnlinePaymentStatus        @default(WAITING_FOR_INIT)
+  checkoutId      String?                    @unique @map("checkout_id")
+  checkoutUrl     String?                    @map("checkout_url")
+  callbackUrl     String?                    @map("callback_url")
+  paymentId       String?                    @unique @map("payment_id")
+  expiresAt       DateTime?                  @map("expires_at")
   amount          Int
-  currency        String                @default("MDL")
-  paymentMethod   String?               @map("payment_method")
-  referenceNumber String?               @map("reference_number")
-  executedAt      DateTime?             @map("executed_at")
-  attemptCount    Int                   @default(0) @map("attempt_count")
-  createdAt       DateTime              @default(now()) @map("created_at")
-  updatedAt       DateTime              @updatedAt @map("updated_at")
+  currency        String                     @default("MDL")
+  paymentMethod   String?                    @map("payment_method")
+  referenceNumber String?                    @map("reference_number")
+  executedAt      DateTime?                  @map("executed_at")
+  attemptCount    Int                        @default(0) @map("attempt_count")
+  refundId        String?                    @unique @map("refund_id")
+  refundStatus    OnlinePaymentRefundStatus? @map("refund_status")
+  refundAmount    Int?                       @map("refund_amount")
+  refundReason    String?                    @map("refund_reason")
+  refundedAt      DateTime?                  @map("refunded_at")
+  createdAt       DateTime                   @default(now()) @map("created_at")
+  updatedAt       DateTime                   @updatedAt @map("updated_at")
 
   @@index([status, attemptCount])
   @@map("online_payments")

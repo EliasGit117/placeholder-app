@@ -31,6 +31,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { DeliveryMethod } from '~/prisma/generated/prisma/enums.ts';
 import { getOrderStatusOption, orderStatusOptions } from '../-components/order-status.ts';
+import { OnlinePaymentCard } from '../-components/online-payment-card.tsx';
 
 
 export const Route = createFileRoute('/admin/orders/$orderId/')({
@@ -46,7 +47,8 @@ export const Route = createFileRoute('/admin/orders/$orderId/')({
       throw redirect({ to: '/admin/orders', replace: true });
 
     const canUpdate = await roleHasPermission(user?.role, { orders: ['update'] });
-    return { canUpdate };
+    const canRefund = await roleHasPermission(user?.role, { orders: ['refund'] });
+    return { canUpdate, canRefund };
   },
   loader: async ({ context: { queryClient }, params: { orderId } }) => {
     if (!Number.isInteger(orderId))
@@ -108,7 +110,7 @@ function effectivePrice(price: number, discountPercent: number | null): number {
 
 function RouteComponent() {
   const { orderId } = Route.useParams();
-  const { canUpdate } = Route.useRouteContext();
+  const { canUpdate, canRefund } = Route.useRouteContext();
   const { order: initialOrder } = Route.useLoaderData();
   const queryClient = useQueryClient();
   const ru = getLocale() === 'ru';
@@ -140,143 +142,163 @@ function RouteComponent() {
 
   return (
     <div className="@container space-y-4">
-      <div className="grid grid-cols-1 @5xl:grid-cols-3 gap-4">
-        <Card className="@5xl:col-span-2">
-          <CardHeader>
-            <CardTitle>{m['pages.orders.detail.section_general']()}</CardTitle>
-            <CardDescription>{m['pages.orders.detail.section_general_description']()}</CardDescription>
-          </CardHeader>
+      <div className="grid grid-cols-1 @5xl:grid-cols-3 gap-4 items-start">
+        <div className="flex flex-col gap-4 @5xl:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>{m['pages.orders.detail.section_general']()}</CardTitle>
+              <CardDescription>{m['pages.orders.detail.section_general_description']()}</CardDescription>
+            </CardHeader>
 
-          <CardContent className="flex flex-col gap-3 text-sm">
-            <div className="flex justify-between gap-3">
-              <span className="text-muted-foreground">{m['common.id']()}</span>
-              <span className="font-mono text-xs">{order.uid}</span>
-            </div>
-            <div className="flex justify-between gap-3">
-              <span className="text-muted-foreground">{m['common.full_name']()}</span>
-              <span className="font-medium">{order.fullName}</span>
-            </div>
-            <div className="flex justify-between gap-3">
-              <span className="text-muted-foreground">{m['pages.checkout.payment.phone']()}</span>
-              <span className="font-medium">{order.phone}</span>
-            </div>
-            <div className="flex justify-between gap-3">
-              <span className="text-muted-foreground">{m['pages.checkout.payment.email']()}</span>
-              <span className="font-medium">{order.email}</span>
-            </div>
+            <CardContent className="flex flex-col gap-3 text-sm">
+              <div className="flex justify-between gap-3">
+                <span className="text-muted-foreground">{m['common.id']()}</span>
+                <span className="font-mono text-xs">{order.uid}</span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-muted-foreground">{m['common.full_name']()}</span>
+                <span className="font-medium">{order.fullName}</span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-muted-foreground">{m['pages.checkout.payment.phone']()}</span>
+                <span className="font-medium">{order.phone}</span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-muted-foreground">{m['pages.checkout.payment.email']()}</span>
+                <span className="font-medium">{order.email}</span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-muted-foreground">{m['pages.checkout.payment.payment_type']()}</span>
+                <span className="font-medium">
+                  {order.onlinePayment ? m['pages.checkout.payment.payment_type_maib']() : m['pages.checkout.payment.payment_type_cash']()}
+                </span>
+              </div>
 
-            <div className="border-t border-dashed"/>
+              <div className="border-t border-dashed"/>
 
-            <div className="flex items-center gap-2 text-muted-foreground">
-              {order.deliveryMethod === DeliveryMethod.PICKUP ? <IconBuildingStore className="size-4"/> :
-                <IconTruckDelivery className="size-4"/>}
-              <span>
-                {order.deliveryMethod === DeliveryMethod.PICKUP ? m['pages.checkout.payment.delivery_pickup']() : m['pages.checkout.payment.delivery_courier']()}
-              </span>
-            </div>
-            <div className="flex items-start gap-2 text-muted-foreground">
-              <IconMapPin className="mt-0.5 size-4 shrink-0"/>
-              <span>{order.address}</span>
-            </div>
-          </CardContent>
-        </Card>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                {order.deliveryMethod === DeliveryMethod.PICKUP ? <IconBuildingStore className="size-4"/> :
+                  <IconTruckDelivery className="size-4"/>}
+                <span>
+                  {order.deliveryMethod === DeliveryMethod.PICKUP ? m['pages.checkout.payment.delivery_pickup']() : m['pages.checkout.payment.delivery_courier']()}
+                </span>
+              </div>
+              <div className="flex items-start gap-2 text-muted-foreground">
+                <IconMapPin className="mt-0.5 size-4 shrink-0"/>
+                <span>{order.address}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+
 
         <Card>
           <CardHeader>
-            <CardTitle>{m['pages.orders.detail.status_label']()}</CardTitle>
+            <CardTitle>{m['pages.orders.detail.section_items']()}</CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col gap-3">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full justify-start" disabled={!canUpdate || isPending}>
-                  <StatusIcon className="text-muted-foreground" size={16}/>
-                  <span>{statusOption.label()}</span>
-                  <IconChevronDown className="ml-auto opacity-50" size={16}/>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
-                <DropdownMenuRadioGroup value={order.status}
-                                        onValueChange={(v) => updateStatus(v as typeof order.status)}>
-                  {orderStatusOptions.map(({ value, label, icon: Icon }) => (
-                    <DropdownMenuRadioItem key={value} value={value}>
-                      <Icon className="text-muted-foreground" size={16}/>
-                      <span>{label()}</span>
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          <CardContent>
+            <ul className="flex flex-col gap-3">
+              {order.items.map((item) => {
+                const productName = ru ? item.productNameRu : item.productNameRo;
+                const variantName = ru ? item.variantNameRu : item.variantNameRo;
+                const unitPrice = effectivePrice(item.price, item.discountPercent);
 
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">{m['common.created']()}</span>
-              <span>{new Date(order.createdAt).toLocaleDateString(ru ? 'ru-RU' : 'ro-RO')}</span>
-            </div>
+                const imgStyles: CSSProperties = {};
+                const thumbhashDataUrl = thumbhashToDataUrl(item.image?.thumbhash ?? null);
+                if (thumbhashDataUrl) {
+                  imgStyles.backgroundImage = `url(${thumbhashDataUrl})`;
+                  imgStyles.backgroundSize = 'cover';
+                }
+                const imageUrl = item.image?.variants.thumb256?.url ?? item.image?.url;
+
+                return (
+                  <li key={item.id} className="flex items-center gap-3 text-sm">
+                    <div
+                      style={imgStyles}
+                      className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-muted bg-cover bg-center ring-1 ring-foreground/10"
+                    >
+                      {imageUrl ? (
+                        <img src={imageUrl} alt={`${productName} ${variantName}`} className="size-full object-cover"/>
+                      ) : (
+                        <IconPhotoOff className="absolute inset-0 m-auto size-4 text-muted-foreground opacity-25"/>
+                      )}
+                    </div>
+
+                    <span className="min-w-0 flex-1">
+                      <span className="text-sm font-medium leading-tight">
+                        {productName}
+                        <span className="block text-sm font-normal">{variantName}</span>
+                      </span>
+                      {item.category && (
+                        <span className="block text-xs text-muted-foreground">{item.category}</span>
+                      )}
+                    </span>
+
+                    <span className="flex shrink-0 flex-col items-end gap-0.5">
+                      <span className="text-xs text-muted-foreground">× {item.count}</span>
+                      <span className="font-medium">
+                        {unitPrice * item.count} {m['components.shop.currency']()}
+                      </span>
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
           </CardContent>
-
-          <CardFooter className="mt-auto justify-between">
-            <span className="text-base font-semibold">{m['pages.checkout.summary.total']()}</span>
-            <span className="font-heading text-xl font-semibold">
-              {order.totalPrice} <span
-              className="text-sm font-normal text-muted-foreground">{m['components.shop.currency']()}</span>
-            </span>
-          </CardFooter>
         </Card>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>{m['pages.orders.detail.status_label']()}</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-3">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start" disabled={!canUpdate || isPending}>
+                    <StatusIcon className="text-muted-foreground" size={16}/>
+                    <span>{statusOption.label()}</span>
+                    <IconChevronDown className="ml-auto opacity-50" size={16}/>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width)">
+                  <DropdownMenuRadioGroup value={order.status}
+                                          onValueChange={(v) => updateStatus(v as typeof order.status)}>
+                    {orderStatusOptions.map(({ value, label, icon: Icon }) => (
+                      <DropdownMenuRadioItem key={value} value={value}>
+                        <Icon className="text-muted-foreground" size={16}/>
+                        <span>{label()}</span>
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">{m['common.created']()}</span>
+                <span>{new Date(order.createdAt).toLocaleDateString(ru ? 'ru-RU' : 'ro-RO')}</span>
+              </div>
+            </CardContent>
+
+            <CardFooter className="mt-auto justify-between">
+              <span className="text-base font-semibold">{m['pages.checkout.summary.total']()}</span>
+              <span className="font-heading text-xl font-semibold">
+                {order.totalPrice} <span
+                className="text-sm font-normal text-muted-foreground">{m['components.shop.currency']()}</span>
+              </span>
+            </CardFooter>
+          </Card>
+          {order.onlinePayment && (
+            <OnlinePaymentCard
+              orderId={order.id}
+              onlinePayment={order.onlinePayment}
+              canRefund={canRefund}
+              locale={ru ? 'ru-RU' : 'ro-RO'}
+            />
+          )}
+        </div>
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{m['pages.orders.detail.section_items']()}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="flex flex-col gap-3">
-            {order.items.map((item) => {
-              const productName = ru ? item.productNameRu : item.productNameRo;
-              const variantName = ru ? item.variantNameRu : item.variantNameRo;
-              const unitPrice = effectivePrice(item.price, item.discountPercent);
-
-              const imgStyles: CSSProperties = {};
-              const thumbhashDataUrl = thumbhashToDataUrl(item.image?.thumbhash ?? null);
-              if (thumbhashDataUrl) {
-                imgStyles.backgroundImage = `url(${thumbhashDataUrl})`;
-                imgStyles.backgroundSize = 'cover';
-              }
-              const imageUrl = item.image?.variants.thumb256?.url ?? item.image?.url;
-
-              return (
-                <li key={item.id} className="flex items-center gap-3 text-sm">
-                  <div
-                    style={imgStyles}
-                    className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-muted bg-cover bg-center ring-1 ring-foreground/10"
-                  >
-                    {imageUrl ? (
-                      <img src={imageUrl} alt={`${productName} ${variantName}`} className="size-full object-cover"/>
-                    ) : (
-                      <IconPhotoOff className="absolute inset-0 m-auto size-4 text-muted-foreground opacity-25"/>
-                    )}
-                  </div>
-
-                  <span className="min-w-0 flex-1">
-                    <span className="text-sm font-medium leading-tight">
-                      {productName}
-                      <span className="block text-sm font-normal">{variantName}</span>
-                    </span>
-                    {item.category && (
-                      <span className="block text-xs text-muted-foreground">{item.category}</span>
-                    )}
-                  </span>
-
-                  <span className="flex shrink-0 flex-col items-end gap-0.5">
-                    <span className="text-xs text-muted-foreground">× {item.count}</span>
-                    <span className="font-medium">
-                      {unitPrice * item.count} {m['components.shop.currency']()}
-                    </span>
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        </CardContent>
-      </Card>
     </div>
   );
 }

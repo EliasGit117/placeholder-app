@@ -1,15 +1,16 @@
 import { type FC, type ReactNode } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { z } from 'zod';
-import { useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { IconBasketCheck, IconBuildingStore, IconCash, IconCreditCard, IconMapPin, IconSelector, IconTruckDelivery } from '@tabler/icons-react';
+import { IconBasketCheck, IconBuildingStore, IconCash, IconCreditCard, IconSelector, IconTruckDelivery } from '@tabler/icons-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LoadingButton } from '@/components/ui/loading-button';
 import { Input } from '@/components/ui/input';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { m } from '@/paraglide/messages';
 import { client } from '@/lib/orpc';
@@ -17,27 +18,21 @@ import { useCartContext } from '@/providers/cart.tsx';
 import { DeliveryMethod } from '~/prisma/generated/prisma/enums.ts';
 import { PaymentType } from '@/features/orders/common/constants.ts';
 
-const pickupAddresses = [
-  'Bulevardul Ștefan cel Mare 1, Chișinău',
-  'Strada Ismail 33, Chișinău',
-  'Bulevardul Dacia 55, Chișinău',
-];
+// Schema messages are codes, translated at render time so they follow the active locale.
+const REQUIRED = 'REQUIRED';
+const INVALID_EMAIL = 'INVALID_EMAIL';
 
 export const checkoutFormSchema = z.object({
   paymentType: z.enum(PaymentType),
-  fullName: z.string().min(1),
-  phone: z.string().min(1),
-  email: z.string().min(1).email(),
+  fullName: z.string().min(1, REQUIRED),
+  phone: z.string().min(1, REQUIRED),
+  email: z.string().min(1, REQUIRED).email(INVALID_EMAIL),
   deliveryMethod: z.enum(DeliveryMethod),
-  pickupAddress: z.string().optional(),
   address: z.string().optional(),
+  acceptTerms: z.boolean().refine((value) => value),
 }).superRefine((data, ctx) => {
-  if (data.deliveryMethod === DeliveryMethod.PICKUP && !data.pickupAddress) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'REQUIRED', path: ['pickupAddress'] });
-  }
-
   if (data.deliveryMethod === DeliveryMethod.COURIER && !data.address) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'REQUIRED', path: ['address'] });
+    ctx.addIssue({ code: z.ZodIssueCode.custom, message: REQUIRED, path: ['address'] });
   }
 });
 
@@ -50,8 +45,8 @@ export const checkoutFormDefaultValues: TCheckoutFormSchema = {
   phone: '',
   email: '',
   deliveryMethod: DeliveryMethod.COURIER,
-  pickupAddress: '',
   address: '',
+  acceptTerms: false,
 };
 
 export const PaymentForm: FC = () => {
@@ -59,7 +54,9 @@ export const PaymentForm: FC = () => {
   const { items, clear } = useCartContext();
   const form = useFormContext<TCheckoutFormSchema>();
 
-  const deliveryMethod = form.watch('deliveryMethod');
+  // useWatch subscribes this component itself; form.watch() only re-renders the useForm host.
+  const deliveryMethod = useWatch({ control: form.control, name: 'deliveryMethod' });
+  const acceptTerms = useWatch({ control: form.control, name: 'acceptTerms' });
 
   const createOrderMutation = useMutation({
     mutationFn: (data: TCheckoutFormSchema) => client.orders.create({
@@ -68,7 +65,7 @@ export const PaymentForm: FC = () => {
       phone: data.phone,
       email: data.email,
       deliveryMethod: data.deliveryMethod,
-      address: (data.deliveryMethod === DeliveryMethod.PICKUP ? data.pickupAddress : data.address)!,
+      address: (data.deliveryMethod === DeliveryMethod.PICKUP ? m['pages.contacts.office.address']() : data.address)!,
     }),
   });
 
@@ -132,6 +129,7 @@ export const PaymentForm: FC = () => {
                       placeholder={m['pages.checkout.payment.full_name_placeholder']()}
                       {...field}
                     />
+                    <ValidationError error={fieldState.error}/>
                   </Field>
                 )}
               />
@@ -149,6 +147,7 @@ export const PaymentForm: FC = () => {
                       placeholder={m['pages.checkout.payment.phone_placeholder']()}
                       {...field}
                     />
+                    <ValidationError error={fieldState.error}/>
                   </Field>
                 )}
               />
@@ -166,6 +165,7 @@ export const PaymentForm: FC = () => {
                       placeholder={m['pages.checkout.payment.email_placeholder']()}
                       {...field}
                     />
+                    <ValidationError error={fieldState.error}/>
                   </Field>
                 )}
               />
@@ -187,7 +187,8 @@ export const PaymentForm: FC = () => {
                       value={field.value}
                       onChange={(value) => {
                         field.onChange(value);
-                        form.resetField(value === DeliveryMethod.PICKUP ? 'address' : 'pickupAddress');
+                        if (value === DeliveryMethod.PICKUP)
+                          form.resetField('address');
                       }}
                       options={[
                         { value: DeliveryMethod.COURIER, label: m['pages.checkout.payment.delivery_courier'](), icon: <IconTruckDelivery/> },
@@ -198,24 +199,7 @@ export const PaymentForm: FC = () => {
                 )}
               />
 
-              {deliveryMethod === DeliveryMethod.PICKUP ? (
-                <Controller
-                  name="pickupAddress"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="checkout-pickup-address">{m['pages.checkout.payment.pickup_address']()}</FieldLabel>
-                      <DropdownField
-                        id="checkout-pickup-address"
-                        value={field.value}
-                        onChange={field.onChange}
-                        placeholder={m['pages.checkout.payment.pickup_address_placeholder']()}
-                        options={pickupAddresses.map((address) => ({ value: address, label: address, icon: <IconMapPin/> }))}
-                      />
-                    </Field>
-                  )}
-                />
-              ) : (
+              {deliveryMethod === DeliveryMethod.COURIER && (
                 <Controller
                   name="address"
                   control={form.control}
@@ -228,13 +212,40 @@ export const PaymentForm: FC = () => {
                         placeholder={m['pages.checkout.payment.address_placeholder']()}
                         {...field}
                       />
+                      <ValidationError error={fieldState.error}/>
                     </Field>
                   )}
                 />
               )}
             </FieldGroup>
 
-            <LoadingButton type="submit" size="lg" className="sm:ml-auto sm:w-fit" loading={form.formState.isSubmitting} disabled={disabled}>
+            <Controller
+              name="acceptTerms"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field orientation="horizontal" data-invalid={fieldState.invalid}>
+                  <Checkbox
+                    id="checkout-accept-terms"
+                    name={field.name}
+                    checked={field.value}
+                    onCheckedChange={(checked) => field.onChange(checked === true)}
+                    onBlur={field.onBlur}
+                    ref={field.ref}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  <FieldLabel htmlFor="checkout-accept-terms" className="font-normal">
+                    <span>
+                      {m['pages.checkout.payment.terms_agree']()}{' '}
+                      <Link to="/terms" target="_blank" className="underline underline-offset-2 hover:text-primary">
+                        {m['pages.terms.title']()}
+                      </Link>
+                    </span>
+                  </FieldLabel>
+                </Field>
+              )}
+            />
+
+            <LoadingButton type="submit" size="lg" className="sm:ml-auto sm:w-fit" loading={form.formState.isSubmitting} disabled={disabled || !acceptTerms}>
               <IconBasketCheck/>
               {m['pages.checkout.payment.submit']()}
             </LoadingButton>
@@ -252,6 +263,19 @@ interface IDropdownFieldProps {
   options: { value: string; label: string; icon?: ReactNode }[];
   placeholder?: string;
 }
+
+const ValidationError: FC<{ error: { message?: string } | undefined }> = ({ error }) => {
+  if (!error)
+    return null;
+
+  return (
+    <FieldError>
+      {error.message === INVALID_EMAIL
+        ? m['pages.checkout.payment.validation_invalid_email']()
+        : m['pages.checkout.payment.validation_required']()}
+    </FieldError>
+  );
+};
 
 const DropdownField: FC<IDropdownFieldProps> = ({ id, value, onChange, options, placeholder }) => {
   const selected = options.find((option) => option.value === value);

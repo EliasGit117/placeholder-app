@@ -97,6 +97,17 @@ export const OnlinePaymentStatus = {
 export type OnlinePaymentStatus = (typeof OnlinePaymentStatus)[keyof typeof OnlinePaymentStatus]
 
 
+export const OnlinePaymentRefundStatus = {
+  CREATED: 'CREATED',
+  REQUESTED: 'REQUESTED',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  MANUAL: 'MANUAL'
+} as const
+
+export type OnlinePaymentRefundStatus = (typeof OnlinePaymentRefundStatus)[keyof typeof OnlinePaymentRefundStatus]
+
+
 export const ProductState = {
   ACTIVE: 'ACTIVE',
   NOT_AVAILABLE: 'NOT_AVAILABLE',

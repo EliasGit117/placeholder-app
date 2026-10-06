@@ -2,9 +2,9 @@ import { ORPCError } from '@orpc/server';
 import { prisma } from '@/lib/db';
 import { logger } from '@/lib/logger.ts';
 import { serverEnvConfig } from '@/lib/config/server-env-config.ts';
-import { OnlinePaymentStatus } from '~/prisma/generated/prisma/enums.ts';
+import { OnlinePaymentRefundStatus, OnlinePaymentStatus } from '~/prisma/generated/prisma/enums.ts';
 import type { OnlinePayment } from '~/prisma/generated/prisma/client.ts';
-import { MaibClient, type TMaibCheckoutStatus } from '@/features/orders/common/services/maib-client.ts';
+import { MaibClient, type TMaibCheckoutStatus, type TMaibRefundStatus } from '@/features/orders/common/services/maib-client.ts';
 import { OnlinePaymentDtoFactory, type TOnlinePaymentDto } from '@/features/orders/common/dtos/online-payment.ts';
 
 const REVERIFY_BATCH_SIZE = 50;
@@ -29,6 +29,20 @@ const MAIB_STATUS_TO_ENUM: Record<TMaibCheckoutStatus, OnlinePaymentStatus> = {
   Failed: OnlinePaymentStatus.FAILED,
 };
 
+const MAIB_REFUND_STATUS_TO_ENUM: Record<TMaibRefundStatus, OnlinePaymentRefundStatus> = {
+  Created: OnlinePaymentRefundStatus.CREATED,
+  Requested: OnlinePaymentRefundStatus.REQUESTED,
+  Accepted: OnlinePaymentRefundStatus.ACCEPTED,
+  Rejected: OnlinePaymentRefundStatus.REJECTED,
+  Manual: OnlinePaymentRefundStatus.MANUAL,
+};
+
+// maib has no refund webhook, so these are polled until they settle.
+const IN_FLIGHT_REFUND_STATUSES: OnlinePaymentRefundStatus[] = [
+  OnlinePaymentRefundStatus.CREATED,
+  OnlinePaymentRefundStatus.REQUESTED,
+];
+
 export const NON_TERMINAL_STATUSES: OnlinePaymentStatus[] = [
   OnlinePaymentStatus.WAITING_FOR_INIT,
   OnlinePaymentStatus.INITIALIZED,
@@ -46,18 +60,93 @@ export class OnlinePaymentService {
     return entity ? OnlinePaymentDtoFactory.fromEntity(entity) : null;
   }
 
-  // Payer can land back on the order page before maib's callback arrives (or if it
-  // never arrives), so pull the current state directly when it's still in-flight.
-  static async findByOrderIdFresh(orderId: number): Promise<TOnlinePaymentDto | null> {
+  // Admin view: same as findByOrderId, but also pulls the current refund state from
+  // maib while a refund is still in flight (no webhook exists for refunds).
+  static async findByOrderIdWithRefundSync(orderId: number): Promise<TOnlinePaymentDto | null> {
     const entity = await prisma.onlinePayment.findUnique({ where: { orderId } });
     if (!entity)
       return null;
 
-    if (!NON_TERMINAL_STATUSES.includes(entity.status) || !entity.checkoutId)
-      return OnlinePaymentDtoFactory.fromEntity(entity);
+    return OnlinePaymentDtoFactory.fromEntity(await OnlinePaymentService.refreshRefund(entity));
+  }
 
-    const synced = await OnlinePaymentService.syncFromMaib(entity.checkoutId).catch(() => null);
-    return OnlinePaymentDtoFactory.fromEntity(synced ?? entity);
+  // Full refund of a completed online payment. Re-checks refundability with maib first
+  // so the admin can't start a second refund or refund something maib considers closed.
+  static async refund(orderId: number, reason: string): Promise<TOnlinePaymentDto> {
+    const entity = await prisma.onlinePayment.findUnique({ where: { orderId } });
+    if (!entity)
+      throw new ORPCError('NOT_FOUND', { message: `Online payment for order '${orderId}' not found` });
+
+    if (entity.status !== OnlinePaymentStatus.COMPLETED || !entity.paymentId)
+      throw new ORPCError('BAD_REQUEST', { message: 'Payment is not completed' });
+
+    if (entity.refundStatus && entity.refundStatus !== OnlinePaymentRefundStatus.REJECTED)
+      throw new ORPCError('BAD_REQUEST', { message: 'Payment already has a refund' });
+
+    const paymentId = entity.paymentId;
+    const toBadGateway = (err: unknown): never => {
+      logger.error({ orderId, paymentId, err }, 'maib refund request failed');
+      throw new ORPCError('BAD_GATEWAY', { message: err instanceof Error ? err.message : 'maib request failed' });
+    };
+
+    const payment = await MaibClient.getPayment(paymentId).catch(toBadGateway);
+    if (!payment.isRefundable || payment.refundableAmount <= 0)
+      throw new ORPCError('BAD_REQUEST', { message: 'Payment is not refundable' });
+
+    const result = await MaibClient.refundPayment(paymentId, { amount: payment.refundableAmount, reason }).catch(toBadGateway);
+
+    const updated = await prisma.onlinePayment.update({
+      where: { id: entity.id },
+      data: {
+        refundId: result.refundId,
+        refundStatus: MAIB_REFUND_STATUS_TO_ENUM[result.status],
+        refundAmount: payment.refundableAmount,
+        refundReason: reason,
+      },
+    });
+
+    // Refund may settle immediately; try once so the UI doesn't show a stale "Created".
+    const synced = await OnlinePaymentService.syncRefundFromMaib(updated.id, result.refundId).catch(() => null);
+    return OnlinePaymentDtoFactory.fromEntity(synced ?? updated);
+  }
+
+  // Best-effort: a failed maib lookup keeps the stored state instead of failing the read.
+  private static async refreshRefund(entity: OnlinePayment): Promise<OnlinePayment> {
+    if (!entity.refundId || !entity.refundStatus || !IN_FLIGHT_REFUND_STATUSES.includes(entity.refundStatus))
+      return entity;
+
+    const refundId = entity.refundId;
+    const synced = await OnlinePaymentService.syncRefundFromMaib(entity.id, refundId).catch((err) => {
+      logger.warn({ orderId: entity.orderId, refundId, err }, 'refund sync failed');
+      return null;
+    });
+    return synced ?? entity;
+  }
+
+  static async syncRefundFromMaib(id: number, refundId: string): Promise<OnlinePayment> {
+    const details = await MaibClient.getRefund(refundId);
+    return prisma.onlinePayment.update({
+      where: { id },
+      data: {
+        refundStatus: MAIB_REFUND_STATUS_TO_ENUM[details.status],
+        refundedAt: details.status === 'Accepted' ? new Date(details.executedAt) : null,
+      },
+    });
+  }
+
+  // Payer can land back on the order page before maib's callback arrives (or if it
+  // never arrives), so pull the current state directly when it's still in-flight.
+  static async findByOrderIdFresh(orderId: number): Promise<TOnlinePaymentDto | null> {
+    let entity = await prisma.onlinePayment.findUnique({ where: { orderId } });
+    if (!entity)
+      return null;
+
+    if (NON_TERMINAL_STATUSES.includes(entity.status) && entity.checkoutId) {
+      const synced = await OnlinePaymentService.syncFromMaib(entity.checkoutId).catch(() => null);
+      entity = synced ?? entity;
+    }
+
+    return OnlinePaymentDtoFactory.fromEntity(await OnlinePaymentService.refreshRefund(entity));
   }
 
   // Registers a hosted checkout session with maib for an order and persists the
