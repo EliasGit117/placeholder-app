@@ -67,14 +67,7 @@ export class OnlinePaymentService {
     if (!entity)
       return null;
 
-    if (!entity.refundId || !entity.refundStatus || !IN_FLIGHT_REFUND_STATUSES.includes(entity.refundStatus))
-      return OnlinePaymentDtoFactory.fromEntity(entity);
-
-    const synced = await OnlinePaymentService.syncRefundFromMaib(entity.id, entity.refundId).catch((err) => {
-      logger.warn({ orderId, refundId: entity.refundId, err }, 'refund sync failed');
-      return null;
-    });
-    return OnlinePaymentDtoFactory.fromEntity(synced ?? entity);
+    return OnlinePaymentDtoFactory.fromEntity(await OnlinePaymentService.refreshRefund(entity));
   }
 
   // Full refund of a completed online payment. Re-checks refundability with maib first
@@ -117,6 +110,19 @@ export class OnlinePaymentService {
     return OnlinePaymentDtoFactory.fromEntity(synced ?? updated);
   }
 
+  // Best-effort: a failed maib lookup keeps the stored state instead of failing the read.
+  private static async refreshRefund(entity: OnlinePayment): Promise<OnlinePayment> {
+    if (!entity.refundId || !entity.refundStatus || !IN_FLIGHT_REFUND_STATUSES.includes(entity.refundStatus))
+      return entity;
+
+    const refundId = entity.refundId;
+    const synced = await OnlinePaymentService.syncRefundFromMaib(entity.id, refundId).catch((err) => {
+      logger.warn({ orderId: entity.orderId, refundId, err }, 'refund sync failed');
+      return null;
+    });
+    return synced ?? entity;
+  }
+
   static async syncRefundFromMaib(id: number, refundId: string): Promise<OnlinePayment> {
     const details = await MaibClient.getRefund(refundId);
     return prisma.onlinePayment.update({
@@ -131,15 +137,16 @@ export class OnlinePaymentService {
   // Payer can land back on the order page before maib's callback arrives (or if it
   // never arrives), so pull the current state directly when it's still in-flight.
   static async findByOrderIdFresh(orderId: number): Promise<TOnlinePaymentDto | null> {
-    const entity = await prisma.onlinePayment.findUnique({ where: { orderId } });
+    let entity = await prisma.onlinePayment.findUnique({ where: { orderId } });
     if (!entity)
       return null;
 
-    if (!NON_TERMINAL_STATUSES.includes(entity.status) || !entity.checkoutId)
-      return OnlinePaymentDtoFactory.fromEntity(entity);
+    if (NON_TERMINAL_STATUSES.includes(entity.status) && entity.checkoutId) {
+      const synced = await OnlinePaymentService.syncFromMaib(entity.checkoutId).catch(() => null);
+      entity = synced ?? entity;
+    }
 
-    const synced = await OnlinePaymentService.syncFromMaib(entity.checkoutId).catch(() => null);
-    return OnlinePaymentDtoFactory.fromEntity(synced ?? entity);
+    return OnlinePaymentDtoFactory.fromEntity(await OnlinePaymentService.refreshRefund(entity));
   }
 
   // Registers a hosted checkout session with maib for an order and persists the

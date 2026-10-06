@@ -1,6 +1,6 @@
 import { ordersBase } from './base.ts';
 import { createOrderDtoSchema } from '@/features/orders/public/dtos/create-order.ts';
-import { orderDtoSchema } from '@/features/orders/common/dtos/order.ts';
+import { publicOrderDtoSchema } from '@/features/orders/common/dtos/order.ts';
 import { OrderService } from '@/features/orders/common/services/order-service.ts';
 import { readCart, writeCart } from '@/features/checkout/common/lib/cart-cookie.ts';
 
@@ -13,7 +13,7 @@ export const createOrder = ordersBase
   .meta({ anonymous: true })
   .errors({ BAD_REQUEST: {}, NOT_FOUND: {} })
   .input(createOrderDtoSchema)
-  .output(orderDtoSchema)
+  .output(publicOrderDtoSchema)
   .handler(async ({ input, context: { headers, resHeaders }, errors }) => {
     const cart = readCart(headers);
     if (cart.length === 0)

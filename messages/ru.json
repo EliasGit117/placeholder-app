@@ -663,12 +663,14 @@
         "contact_title": "Контактные данные",
         "phone": "Телефон",
         "delivery_title": "Доставка",
-        "pickup_address": "Адрес самовывоза",
         "submit": "Заказать",
         "full_name_placeholder": "Думитру Вагин",
         "phone_placeholder": "+373 6X XXX XXX",
         "email_placeholder": "email@example.com",
-        "address_placeholder": "Улица, номер дома, квартира"
+        "address_placeholder": "Улица, номер дома, квартира",
+        "terms_agree": "Я принимаю",
+        "validation_required": "Обязательное поле",
+        "validation_invalid_email": "Некорректный email"
       }
     },
     "order_confirmation": {
@@ -711,7 +713,11 @@
           "title": "Заказ отменён",
           "description": "Этот заказ был отменён. Свяжитесь с нами, если есть вопросы."
         }
-      }
+      },
+      "refund_processing_badge": "Возврат в обработке",
+      "refund_done_badge": "Возвращено",
+      "refund_processing_description": "Возврат {amount} {currency} обрабатывается. Деньги поступят на карту в течение нескольких дней.",
+      "refund_done_description": "{amount} {currency} возвращены на вашу карту."
     },
     "orders": {
       "title": "Заказы",

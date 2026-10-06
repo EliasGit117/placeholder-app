@@ -27,6 +27,25 @@ export const onlinePaymentDtoSchema = z.object({
 
 export type TOnlinePaymentDto = z.infer<typeof onlinePaymentDtoSchema>;
 
+// Guest-facing subset: no provider ids, RRN or the admin-written refund reason.
+export const publicOnlinePaymentDtoSchema = onlinePaymentDtoSchema.pick({
+  id: true,
+  orderId: true,
+  provider: true,
+  status: true,
+  checkoutUrl: true,
+  expiresAt: true,
+  amount: true,
+  currency: true,
+  paymentMethod: true,
+  executedAt: true,
+  refundStatus: true,
+  refundAmount: true,
+  refundedAt: true,
+});
+
+export type TPublicOnlinePaymentDto = z.infer<typeof publicOnlinePaymentDtoSchema>;
+
 export class OnlinePaymentDtoFactory {
 
   static fromEntity(entity: OnlinePayment): TOnlinePaymentDto {

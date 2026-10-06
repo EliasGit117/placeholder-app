@@ -1,4 +1,4 @@
-import type { ComponentProps, CSSProperties, FC } from 'react';
+import type { ComponentProps, FC } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Popover as PopoverPrimitive } from 'radix-ui';
 import { Link } from '@tanstack/react-router';
@@ -8,7 +8,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { IconHeart, IconPhotoOff, IconTrash, IconX } from '@tabler/icons-react';
 import { useFavoritesContext } from '@/providers/favorites.tsx';
-import { cn, thumbhashToDataUrl } from '@/lib/utils';
+import { cn } from '@/lib/utils';
+import { ThumbhashPlaceholder } from '@/components/product/thumbhash-placeholder.tsx';
 import { m } from '@/paraglide/messages';
 import { orpc } from '@/lib/orpc';
 import { useMediaBreakpoint } from '@/hooks/use-media-breakpoint.ts';
@@ -88,13 +89,6 @@ export const FavoritesPopover: FC<IProps> = ({ contentClassName, ...props }) => 
                     <FavoriteItemSkeleton key={id}/> :
                     <MissingFavoriteItem key={id} id={id} onRemove={remove}/>;
                 }
-
-                const imgStyles: CSSProperties = {};
-                const thumbhashDataUrl = thumbhashToDataUrl(product.image?.thumbhash ?? null);
-                if (thumbhashDataUrl) {
-                  imgStyles.backgroundImage = `url(${thumbhashDataUrl})`;
-                  imgStyles.backgroundSize = 'cover';
-                }
                 const imageUrl = product.image?.variants.thumb256?.url ?? product.image?.url;
 
                 return (
@@ -116,12 +110,12 @@ export const FavoritesPopover: FC<IProps> = ({ contentClassName, ...props }) => 
                         className="flex min-w-0 flex-1 items-stretch gap-2"
                       >
                         <div className="relative size-18 shrink-0 overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/10">
+                          <ThumbhashPlaceholder thumbhash={product.image?.thumbhash} className="blur-[2px]"/>
                           {imageUrl ? (
                             <img
                               src={imageUrl}
                               alt={`${product.name} ${product.variantName}`}
-                              style={imgStyles}
-                              className="size-full object-cover"
+                              className="relative size-full object-cover"
                             />
                           ) : (
                             <IconPhotoOff className="absolute inset-0 m-auto size-5 text-muted-foreground opacity-25"/>

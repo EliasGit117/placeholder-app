@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Order, OrderProduct } from '~/prisma/generated/prisma/client.ts';
 import { DeliveryMethod, OrderStatus } from '~/prisma/generated/prisma/enums.ts';
 import { briefImageDtoSchema, type TBriefImageDto } from '@/features/products/common/dtos/brief-image.ts';
-import { onlinePaymentDtoSchema, type TOnlinePaymentDto } from '@/features/orders/common/dtos/online-payment.ts';
+import { onlinePaymentDtoSchema, publicOnlinePaymentDtoSchema, type TOnlinePaymentDto } from '@/features/orders/common/dtos/online-payment.ts';
 
 export const orderProductDtoSchema = z.object({
   id: z.number(),
@@ -40,6 +40,10 @@ export const orderDtoSchema = z.object({
 });
 
 export type TOrderDto = z.infer<typeof orderDtoSchema>;
+
+export const publicOrderDtoSchema = orderDtoSchema.extend({
+  onlinePayment: publicOnlinePaymentDtoSchema.nullable(),
+});
 
 export class OrderProductDtoFactory {
 

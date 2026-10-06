@@ -1,4 +1,4 @@
-import { type CSSProperties, type FC } from 'react';
+import { type FC } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Link, useNavigate } from '@tanstack/react-router';
 import {
@@ -21,7 +21,8 @@ import {
 } from '@/components/ui/dropdown-menu.tsx';
 import { Skeleton } from '@/components/ui/skeleton';
 import { IconBasketCheck, IconMinus, IconPhotoOff, IconPlus, IconTrash, IconX } from '@tabler/icons-react';
-import { cn, thumbhashToDataUrl } from '@/lib/utils';
+import { cn } from '@/lib/utils';
+import { ThumbhashPlaceholder } from '@/components/product/thumbhash-placeholder.tsx';
 import { m } from '@/paraglide/messages';
 import { orpc } from '@/lib/orpc';
 import { useCartContext } from '@/providers/cart.tsx';
@@ -97,13 +98,6 @@ export const CartSheet: FC = () => {
                     <CartItemSkeleton key={item.id}/> :
                     <MissingCartItem key={item.id} id={item.id} onRemove={remove}/>;
                 }
-
-                const imgStyles: CSSProperties = {};
-                const thumbhashDataUrl = thumbhashToDataUrl(product.image?.thumbhash ?? null);
-                if (thumbhashDataUrl) {
-                  imgStyles.backgroundImage = `url(${thumbhashDataUrl})`;
-                  imgStyles.backgroundSize = 'cover';
-                }
                 const imageUrl = product.image?.variants.thumb256?.url ?? product.image?.url;
 
                 return (
@@ -117,12 +111,12 @@ export const CartSheet: FC = () => {
                       onClick={close}
                       className="relative size-24 shrink-0 overflow-hidden rounded-lg bg-muted ring-1 ring-foreground/10"
                     >
+                      <ThumbhashPlaceholder thumbhash={product.image?.thumbhash} className="blur-[2px]"/>
                       {imageUrl ? (
                         <img
                           src={imageUrl}
                           alt={`${product.name} ${product.variantName}`}
-                          style={imgStyles}
-                          className="size-full object-cover"
+                          className="relative size-full object-cover"
                         />
                       ) : (
                         <IconPhotoOff className="absolute inset-0 m-auto size-6 text-muted-foreground opacity-25"/>
