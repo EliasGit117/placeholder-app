@@ -23,6 +23,8 @@ export const briefProductPublicDtoSchema = z.object({
   slug: z.string(),
   categoryId: z.number().nullable(),
   category: z.string().nullable(),
+  brandId: z.number().nullable(),
+  brand: z.string().nullable(),
   image: briefImageDtoSchema.nullable(),
   isAvailable: z.boolean(),
 });
@@ -35,6 +37,7 @@ export const searchPublicProductsRequestDtoSchema = paginatedRequestDtoSchema.ex
   sort: z.enum(sortableFields).optional().catch(undefined),
   name: z.string().optional().catch(undefined),
   categoryId: z.number().int().optional().catch(undefined),
+  brandId: z.number().int().optional().catch(undefined),
   priceMin: z.number().int().min(0).optional().catch(undefined),
   priceMax: z.number().int().min(0).optional().catch(undefined),
 });
@@ -55,6 +58,8 @@ export const briefProductVariantInclude = {
       shortDescriptionRu: true,
       categoryId: true,
       category: { select: { nameRo: true, nameRu: true } },
+      brandId: true,
+      brand: { select: { nameRo: true, nameRu: true } },
     },
   },
 } satisfies Prisma.ProductVariantInclude;
@@ -69,6 +74,7 @@ export class BriefProductPublicDtoFactory {
     locale: Locale
   ): TBriefProductPublicDto {
     const category = variant.product.category?.[`name${capitalizeFirst(locale)}`];
+    const brand = variant.product.brand?.[`name${capitalizeFirst(locale)}`];
     const shortDescription = variant.product[`shortDescription${capitalizeFirst(locale)}`];
 
     return {
@@ -82,6 +88,8 @@ export class BriefProductPublicDtoFactory {
       slug: variant.fullSlug,
       categoryId: variant.product.categoryId,
       category: category ?? null,
+      brandId: variant.product.brandId,
+      brand: brand ?? null,
       image,
       isAvailable: variant.state === ProductState.ACTIVE,
     };

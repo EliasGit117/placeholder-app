@@ -19,6 +19,7 @@ export const MobileSearchSheet: FC = () => {
     select: (search) => [
       search.name,
       search.categoryId != null,
+      search.brandId != null,
       search.priceMin != null,
       search.priceMax != null,
     ].filter(Boolean).length,

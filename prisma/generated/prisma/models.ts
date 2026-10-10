@@ -10,6 +10,7 @@
  */
 export type * from './models/Account.ts'
 export type * from './models/Banner.ts'
+export type * from './models/Brand.ts'
 export type * from './models/Category.ts'
 export type * from './models/Image.ts'
 export type * from './models/ImageVariant.ts'

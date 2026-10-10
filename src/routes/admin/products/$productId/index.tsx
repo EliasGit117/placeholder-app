@@ -131,7 +131,8 @@ function RouteComponent() {
         descriptionRu: values.descriptionRu,
         slug: values.slug,
         state: values.state,
-        categoryId: values.categoryId
+        categoryId: values.categoryId,
+        brandId: values.brandId
       }),
     onSuccess: (data) => {
       toast.success(m['pages.products.form.save_success']());

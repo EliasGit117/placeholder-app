@@ -60,7 +60,7 @@ target_images AS (
   WHERE img.resource_type = 'PRODUCT_VARIANT'
 )
 
--- Step 4: assemble the product row, joined to its category, with the
+-- Step 4: assemble the product row, joined to its category and brand, with the
 -- sibling-variant and image arrays from above attached as plain columns.
 SELECT
   tv.id AS "variantId",
@@ -70,13 +70,16 @@ SELECT
   CASE WHEN $2 = 'ru' THEN p.short_description_ru ELSE p.short_description_ro END AS "shortDescription",
   CASE WHEN $2 = 'ru' THEN p.description_ru ELSE p.description_ro END AS "description",
   p.category_id AS "categoryId",
+  p.brand_id AS "brandId",
   p.option_schema::json AS "options",
   CASE WHEN $2 = 'ru' THEN c.name_ru ELSE c.name_ro END AS "categoryName",
+  CASE WHEN $2 = 'ru' THEN b.name_ru ELSE b.name_ro END AS "brandName",
   COALESCE(sv.variants, '[]'::json) AS "variants",
   COALESCE(ti.images, '[]'::json) AS "images"
 FROM target_variant tv
 JOIN products p ON p.id = tv.product_id AND p.state = 'ACTIVE'
 LEFT JOIN categories c ON c.id = p.category_id
+LEFT JOIN brands b ON b.id = p.brand_id
 CROSS JOIN sibling_variants sv
 CROSS JOIN target_images ti
 WHERE tv.state IN ('ACTIVE', 'NOT_AVAILABLE')

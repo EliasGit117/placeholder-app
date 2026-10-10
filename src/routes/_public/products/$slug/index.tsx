@@ -209,6 +209,20 @@ function ProductDetail({ product }: { product: TProductDetailsDto }) {
                 </div>
               )}
 
+              {product.brand && (
+                product.brandId != null ? (
+                  <Link
+                    to="/products"
+                    search={{ brandId: product.brandId }}
+                    className="mb-1 block w-fit text-xs font-medium uppercase tracking-wider text-muted-foreground hover:text-foreground hover:underline underline-offset-2"
+                  >
+                    {product.brand}
+                  </Link>
+                ) : (
+                  <div className="mb-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">{product.brand}</div>
+                )
+              )}
+
               <div className="flex items-baseline gap-4">
                 <h1 className="font-heading text-2xl font-semibold leading-tight lg:text-3xl">
                   {product.name}

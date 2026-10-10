@@ -1,0 +1,10 @@
+model Brand {
+  id        Int       @id @default(autoincrement())
+  nameRo    String    @unique @map("name_ro")
+  nameRu    String    @unique @map("name_ru")
+  products  Product[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("brands")
+}

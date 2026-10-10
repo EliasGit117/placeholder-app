@@ -11,6 +11,7 @@ import { SearchByNameInput } from '@/routes/_public/products/-components/header/
 import { SortSelect } from './sort-select.tsx';
 import { PriceRangeFilter } from './price-range-filter.tsx';
 import { CategoryFilter } from './category-filter.tsx';
+import { BrandFilter } from './brand-filter.tsx';
 
 interface IProps extends ComponentProps<typeof Card> {
   showTitle?: boolean;
@@ -21,7 +22,7 @@ export const ProductSearchPanel: FC<IProps> = ({ className, showTitle = true, sh
   const navigate = useNavigate({ from: '/products/' });
   const hasActiveFilters = useSearch({
     from: '/_public/products/',
-    select: (search) => Boolean(search.name || search.categoryId != null || search.priceMin != null || search.priceMax != null)
+    select: (search) => Boolean(search.name || search.categoryId != null || search.brandId != null || search.priceMin != null || search.priceMax != null)
   });
 
   const reset = () => {
@@ -30,6 +31,7 @@ export const ProductSearchPanel: FC<IProps> = ({ className, showTitle = true, sh
         ...prev,
         name: undefined,
         categoryId: undefined,
+        brandId: undefined,
         priceMin: undefined,
         priceMax: undefined,
         page: 1
@@ -72,6 +74,7 @@ export const ProductSearchPanel: FC<IProps> = ({ className, showTitle = true, sh
         </div>
 
         <CategoryFilter/>
+        <BrandFilter/>
         <PriceRangeFilter/>
       </CardContent>
     </Card>

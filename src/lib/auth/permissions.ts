@@ -7,6 +7,7 @@ export const statements = {
   categories: ["list", "get", "create", "update", "delete"],
   products: ["list", "get", "create", "update", "delete"],
   banners: ["list", "get", "create", "update", "delete"],
+  brands: ["list", "get", "create", "update", "delete"],
   orders: ["list", "get", "update", "refund"],
 } as const;
 
@@ -16,6 +17,7 @@ export const user = accessControl.newRole({
   categories: ["list", "get"],
   products: ["list", "get"],
   banners: ["list", "get"],
+  brands: ["list", "get"],
 });
 
 export const admin = accessControl.newRole({
@@ -23,6 +25,7 @@ export const admin = accessControl.newRole({
   categories: statements.categories,
   products: statements.products,
   banners: statements.banners,
+  brands: statements.brands,
   orders: statements.orders,
 });
 

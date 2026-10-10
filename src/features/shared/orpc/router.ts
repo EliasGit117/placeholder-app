@@ -12,12 +12,15 @@ import { bannersPublicRoutes } from '@/features/banners/public/routes';
 import { bannersAdminRoutes } from '@/features/banners/admin/routes';
 import { checkoutRoutes } from '@/features/checkout/public/routes';
 import { ordersAdminRoutes } from '@/features/orders/admin/routes';
+import { brandsRoutes } from '@/features/brands/public/routes';
+import { brandsAdminRoutes } from '@/features/brands/admin/routes';
 import { ordersRoutes } from '@/features/orders/public/routes';
 
 
 export const orpcRouter = base.router({
   sessions: sessionsPublicRoutes,
   categories: categoriesRoutes,
+  brands: brandsRoutes,
   profile: profileRoutes,
   products: productsRoutes,
   banners: bannersPublicRoutes,
@@ -29,6 +32,7 @@ export const orpcRouter = base.router({
     categories: categoriesAdminRoutes,
     products: productsAdminRoutes,
     banners: bannersAdminRoutes,
+    brands: brandsAdminRoutes,
     orders: ordersAdminRoutes
   }
 });
