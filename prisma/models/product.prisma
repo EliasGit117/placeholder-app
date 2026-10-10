@@ -20,11 +20,14 @@ model Product {
   options       Json             @default("{}") @map("option_schema")
   categoryId    Int?             @map("category_id")
   category      Category?        @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  brandId       Int?             @map("brand_id")
+  brand         Brand?           @relation(fields: [brandId], references: [id], onDelete: SetNull)
   variants      ProductVariant[]
   createdAt     DateTime         @default(now()) @map("created_at")
   updatedAt     DateTime         @updatedAt @map("updated_at")
 
   @@index([categoryId])
+  @@index([brandId])
   @@index([state])
   @@index([createdAt])
   @@map("products")

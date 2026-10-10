@@ -258,7 +258,9 @@
         "price_label": "Preț",
         "category_label": "Categorie",
         "category_all": "Toate categoriile",
-        "reset": "Resetează filtrele"
+        "reset": "Resetează filtrele",
+        "brand_label": "Brand",
+        "brand_all": "Toate brandurile"
       }
     }
   },
@@ -338,7 +340,9 @@
         },
         "state_archived": "Arhivat",
         "category": "Categorie",
-        "category_none": "Fără categorie"
+        "category_none": "Fără categorie",
+        "brand": "Brand",
+        "brand_none": "Fără brand"
       },
       "options": {
         "create_title": "Adăugare opțiune",
@@ -795,6 +799,30 @@
       "s7_physical_address_value": "Str. Albișoara 4, CC. Atrium, Chișinău",
       "s7_phone_label": "Telefon de contact",
       "s7_email_label": "Email de contact"
+    },
+    "brands": {
+      "title": "Branduri",
+      "index": {
+        "create": "Brand nou",
+        "table": {
+          "name_ro": "Denumire (RO)",
+          "name_ru": "Denumire (RU)",
+          "delete_title": "Ștergere brand",
+          "delete_description": "Sigur doriți să ștergeți acest brand? Produsele asociate vor rămâne, dar fără brand.",
+          "delete_success": "Brandul a fost șters",
+          "delete_error": "Eroare la ștergere"
+        }
+      },
+      "sheet": {
+        "create_title": "Creare brand",
+        "create_description": "Completați câmpurile pentru a crea un brand nou",
+        "edit_title": "Editare brand",
+        "edit_description": "Modificați câmpurile brandului selectat",
+        "name_ro": "Denumire (RO)",
+        "name_ru": "Denumire (RU)",
+        "create_success": "Brandul a fost creat",
+        "update_success": "Brandul a fost salvat"
+      }
     }
   }
 }

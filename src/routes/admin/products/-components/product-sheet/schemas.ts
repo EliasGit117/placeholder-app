@@ -15,6 +15,7 @@ export const createProductFormSchema = z.object({
   slug: slugSchema,
   state: z.enum(ProductState),
   categoryId: z.number().int().positive().nullable(),
+  brandId: z.number().int().positive().nullable(),
 });
 
 export type TCreateProductForm = z.infer<typeof createProductFormSchema>;

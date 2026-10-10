@@ -1,4 +1,4 @@
-import { type CSSProperties, type FC, type ReactNode, useState } from 'react';
+import { type FC, useState } from 'react';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useDebouncedCallback } from 'use-debounce';
@@ -8,9 +8,10 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Button } from '@/components/ui/button.tsx';
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from '@/components/ui/input-group.tsx';
 import { Skeleton } from '@/components/ui/skeleton.tsx';
-import { IconCheck, IconChevronDown, IconFilter } from '@tabler/icons-react';
+import { IconChevronDown, IconFilter } from '@tabler/icons-react';
 import { cn } from '@/lib/utils';
 import { m } from '@/paraglide/messages';
+import { FilterDropdownItem } from './filter-dropdown-item.tsx';
 import type { ICategoryNodeDto } from '@/features/categories/public/dtos/category-tree.ts';
 
 export const CategoryFilter: FC = () => {
@@ -95,9 +96,9 @@ export const CategoryFilter: FC = () => {
 
           <div className="max-h-64 overflow-y-auto p-1">
             {showAll && (
-              <DropdownItem style={{ paddingLeft: 8 }} selected={categoryId == null} onClick={() => select(null)}>
+              <FilterDropdownItem style={{ paddingLeft: 8 }} selected={categoryId == null} onClick={() => select(null)}>
                 {allLabel}
-              </DropdownItem>
+              </FilterDropdownItem>
             )}
 
             {!showAll && filtered.length === 0 ? (
@@ -106,7 +107,7 @@ export const CategoryFilter: FC = () => {
               </p>
             ) : (
               filtered.map(({ node, level, matched }) => (
-                <DropdownItem
+                <FilterDropdownItem
                   key={node.id}
                   selected={node.id === categoryId}
                   muted={!matched}
@@ -114,7 +115,7 @@ export const CategoryFilter: FC = () => {
                   style={{ paddingLeft: level * 16 + 8 }}
                 >
                   {node.name}
-                </DropdownItem>
+                </FilterDropdownItem>
               ))
             )}
           </div>
@@ -123,33 +124,6 @@ export const CategoryFilter: FC = () => {
     </div>
   );
 };
-
-interface IDropdownItemProps {
-  selected?: boolean;
-  muted?: boolean;
-  onClick: () => void;
-  style?: CSSProperties;
-  children: ReactNode;
-}
-
-const DropdownItem: FC<IDropdownItemProps> = ({ selected, muted, onClick, style, children }) => (
-  <button
-    type="button"
-    role="option"
-    aria-selected={selected}
-    onClick={onClick}
-    style={style}
-    className={cn(
-      'flex w-full items-center gap-2 rounded-md py-1.5 pr-2 text-sm text-left cursor-default',
-      'hover:bg-accent hover:text-accent-foreground focus:outline-none focus-visible:bg-accent',
-      selected && 'bg-accent/50',
-      muted && 'text-muted-foreground',
-    )}
-  >
-    <span className="truncate">{children}</span>
-    {selected && <IconCheck className="size-3.5 shrink-0 ml-auto"/>}
-  </button>
-);
 
 interface IFlatItem {
   node: ICategoryNodeDto;

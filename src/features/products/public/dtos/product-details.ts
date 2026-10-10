@@ -34,6 +34,8 @@ export const productDetailsDtoSchema = z.object({
   description: z.string().nullable(),
   categoryId: z.number().nullable(),
   category: z.string().nullable(),
+  brandId: z.number().nullable(),
+  brand: z.string().nullable(),
   options: optionsSchema,
   variants: z.array(productVariantDetailDtoSchema),
   selectedVariantId: z.number(),
@@ -44,7 +46,7 @@ export type TProductDetailsDto = z.infer<typeof productDetailsDtoSchema>;
 // Localization happens in the query itself (only the requested locale's
 // columns are selected), so these sources already carry a plain `name` /
 // `shortDescription` / `description` rather than the bilingual `nameRo`/`nameRu` pairs.
-type TProductDetailsSource = Pick<Product, 'id' | 'slug' | 'categoryId' | 'options'> & {
+type TProductDetailsSource = Pick<Product, 'id' | 'slug' | 'categoryId' | 'brandId' | 'options'> & {
   name: string;
   shortDescription: string | null;
   description: string | null;
@@ -60,6 +62,7 @@ export class ProductDetailsDtoFactory {
   static build(
     product: TProductDetailsSource,
     categoryName: string | null,
+    brandName: string | null,
     variants: TProductVariantDetailsSource[],
     imagesByVariant: Map<number, TProductVariantImageDto[]>,
     selectedVariantId: number
@@ -73,6 +76,8 @@ export class ProductDetailsDtoFactory {
       description: product.description,
       categoryId: product.categoryId,
       category: categoryName,
+      brandId: product.brandId,
+      brand: brandName,
       options: optionsSchema.safeParse(product.options).data ?? {},
       selectedVariantId: selectedVariantId,
       variants: variants.map((v) => ({

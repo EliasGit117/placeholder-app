@@ -13,5 +13,6 @@ export interface $DbEnums {
   delivery_method: "COURIER" | "PICKUP"
   online_payment_provider: "MAIB"
   online_payment_status: "WAITING_FOR_INIT" | "INITIALIZED" | "PAYMENT_METHOD_SELECTED" | "COMPLETED" | "EXPIRED" | "ABANDONED" | "CANCELLED" | "FAILED"
+  online_payment_refund_status: "CREATED" | "REQUESTED" | "ACCEPTED" | "REJECTED" | "MANUAL"
   product_state: "ACTIVE" | "NOT_AVAILABLE" | "HIDDEN" | "ARCHIVED"
 }

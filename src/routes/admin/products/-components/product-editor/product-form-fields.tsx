@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button';
 import { IconChevronDown, IconWand } from '@tabler/icons-react';
 import { m } from '@/paraglide/messages';
 import { orpc } from '@/lib/orpc';
+import { BrandSelect } from '@/routes/admin/brands/-components/brand-select.tsx';
 import { CategorySelectDropdown } from '@/routes/admin/categories/-components/category-sheet/category-select-dropdown.tsx';
 import { slugifyValue } from '@/features/products/common/lib/slug.ts';
 import { getProductStateOption, productStateOptions } from './product-state.ts';
@@ -34,6 +35,8 @@ export const ProductFormFields: FC<IProps> = ({ disabled }) => {
 
   const { data: forest, isPending: isForestPending } = useQuery(orpc.admin.categories.getForest.queryOptions());
 
+  const { data: brands, isPending: isBrandsPending } = useQuery(orpc.admin.brands.getAll.queryOptions());
+
   const onGenerateSlug = () =>
     setValue('slug', slugifyValue(getValues('nameRo')), { shouldValidate: true, shouldDirty: true });
 
@@ -43,7 +46,7 @@ export const ProductFormFields: FC<IProps> = ({ disabled }) => {
         name="categoryId"
         control={control}
         render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid} className="col-span-full">
+          <Field data-invalid={fieldState.invalid} className="col-span-full @sm:col-span-1">
             <FieldLabel>{m['pages.products.form.category']()}</FieldLabel>
             <CategorySelectDropdown
               forest={forest ?? []}
@@ -51,6 +54,23 @@ export const ProductFormFields: FC<IProps> = ({ disabled }) => {
               onValueChange={(value) => field.onChange(value)}
               placeholder={m['pages.products.form.category_none']()}
               loading={isForestPending}
+            />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
+          </Field>
+        )}
+      />
+
+      <Controller
+        name="brandId"
+        control={control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid} className="col-span-full @sm:col-span-1">
+            <FieldLabel>{m['pages.products.form.brand']()}</FieldLabel>
+            <BrandSelect
+              brands={brands ?? []}
+              value={field.value ?? null}
+              onValueChange={field.onChange}
+              loading={isBrandsPending}
             />
             {fieldState.invalid && <FieldError errors={[fieldState.error]}/>}
           </Field>

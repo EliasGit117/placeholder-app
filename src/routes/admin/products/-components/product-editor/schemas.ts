@@ -50,6 +50,7 @@ export const productFormSchema = z.object({
   slug: slugSchema,
   state: z.enum(ProductState),
   categoryId: z.number().int().positive().nullable(),
+  brandId: z.number().int().positive().nullable(),
   options: z.array(productOptionFormSchema),
   variants: z.array(variantFormSchema).min(1),
 });
@@ -71,6 +72,7 @@ export const productDetailsFormSchema = productFormSchema.pick({
   slug: true,
   state: true,
   categoryId: true,
+  brandId: true,
 });
 
 export type TProductDetailsForm = z.infer<typeof productDetailsFormSchema>;
@@ -107,5 +109,6 @@ export function detailsDefaultsFromProduct(product: TProductWithVariantsDto): TP
     slug: product.slug,
     state: product.state,
     categoryId: product.categoryId,
+    brandId: product.brandId,
   };
 }

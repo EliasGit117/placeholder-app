@@ -40,6 +40,7 @@ function getDefaults(): TCreateProductForm {
     slug: '',
     state: ProductState.ACTIVE,
     categoryId: null,
+    brandId: null,
   };
 }
 

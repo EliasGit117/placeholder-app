@@ -258,7 +258,9 @@
         "price_label": "Цена",
         "category_label": "Категория",
         "category_all": "Все категории",
-        "reset": "Сбросить фильтры"
+        "reset": "Сбросить фильтры",
+        "brand_label": "Бренд",
+        "brand_all": "Все бренды"
       }
     }
   },
@@ -338,7 +340,9 @@
         },
         "state_archived": "Архивирован",
         "category": "Категория",
-        "category_none": "Без категории"
+        "category_none": "Без категории",
+        "brand": "Бренд",
+        "brand_none": "Без бренда"
       },
       "options": {
         "create_title": "Добавление опции",
@@ -795,6 +799,30 @@
       "s7_physical_address_value": "Ул. Албишоара 4, ТЦ Atrium, Кишинёв",
       "s7_phone_label": "Контактный телефон",
       "s7_email_label": "Контактный email"
+    },
+    "brands": {
+      "title": "Бренды",
+      "index": {
+        "create": "Новый бренд",
+        "table": {
+          "name_ro": "Название (RO)",
+          "name_ru": "Название (RU)",
+          "delete_title": "Удаление бренда",
+          "delete_description": "Вы уверены, что хотите удалить этот бренд? Привязанные товары сохранятся, но останутся без бренда.",
+          "delete_success": "Бренд удалён",
+          "delete_error": "Ошибка при удалении"
+        }
+      },
+      "sheet": {
+        "create_title": "Создать бренд",
+        "create_description": "Заполните поля, чтобы создать новый бренд.",
+        "edit_title": "Редактировать бренд",
+        "edit_description": "Измените поля выбранного бренда.",
+        "name_ro": "Название (RO)",
+        "name_ru": "Название (RU)",
+        "create_success": "Бренд создан",
+        "update_success": "Бренд сохранён"
+      }
     }
   }
 }

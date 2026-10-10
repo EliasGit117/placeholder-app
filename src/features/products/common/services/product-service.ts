@@ -135,7 +135,7 @@ export class ProductService {
     if (row.name == null || row.slug == null)
       return null;
 
-    const product: Pick<Product, 'id' | 'slug' | 'categoryId' | 'options'> & {
+    const product: Pick<Product, 'id' | 'slug' | 'categoryId' | 'brandId' | 'options'> & {
       name: string;
       shortDescription: string | null;
       description: string | null;
@@ -146,6 +146,7 @@ export class ProductService {
       shortDescription: row.shortDescription,
       description: row.description,
       categoryId: row.categoryId,
+      brandId: row.brandId,
       options: row.options,
     };
 
@@ -175,6 +176,7 @@ export class ProductService {
     return ProductDetailsDtoFactory.build(
       product,
       row.categoryName,
+      row.brandName,
       variants,
       imagesByVariant,
       variant.id
@@ -206,6 +208,9 @@ export class ProductService {
         };
       }
     }
+
+    if (input.brandId != null)
+      productWhere.brandId = input.brandId;
 
     const where: Prisma.ProductVariantWhereInput = {
       state: { in: [ProductState.ACTIVE, ProductState.NOT_AVAILABLE] },
@@ -347,6 +352,7 @@ export class ProductService {
         slug: input.slug,
         options: (input.options ?? {}) as Prisma.InputJsonValue,
         categoryId: input.categoryId ?? null,
+        brandId: input.brandId ?? null,
       },
       include: { variants: true },
     });
@@ -487,6 +493,7 @@ export class ProductService {
           ...(input.slug !== undefined && { slug: input.slug }),
           ...(input.options !== undefined && { options: input.options as Prisma.InputJsonValue }),
           ...(input.categoryId !== undefined && { categoryId: input.categoryId }),
+          ...(input.brandId !== undefined && { brandId: input.brandId }),
         },
       });
 

@@ -37,6 +37,8 @@ export const ProductCard: FC<IProps> = ({ product }) => {
     shortDescription,
     category,
     categoryId,
+    brand,
+    brandId,
     discountPercent,
     finalPrice,
     isAvailable
@@ -137,6 +139,20 @@ export const ProductCard: FC<IProps> = ({ product }) => {
               <IconTag className="size-3.5"/>
               {category}
             </div>
+          )
+        )}
+
+        {brand && (
+          brandId != null ? (
+            <Link
+              to="/products"
+              search={{ brandId }}
+              className="relative z-10 w-fit text-xs font-medium uppercase tracking-wider text-muted-foreground hover:text-foreground hover:underline underline-offset-2"
+            >
+              {brand}
+            </Link>
+          ) : (
+            <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{brand}</div>
           )
         )}
 
