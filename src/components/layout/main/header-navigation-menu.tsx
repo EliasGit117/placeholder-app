@@ -96,6 +96,9 @@ interface IShopFlyoutProps {
   categories: TCategoryForestDto;
 }
 
+// panel is bg-muted, so the default hover:bg-muted would be invisible
+const childLinkClassName = 'w-full hover:bg-popover focus-visible:bg-popover';
+
 type TPointerType = 'mouse' | 'touch' | 'pen';
 
 const ShopFlyout: FC<IShopFlyoutProps> = ({ categories }) => {
@@ -174,31 +177,33 @@ const ShopFlyout: FC<IShopFlyoutProps> = ({ categories }) => {
       </ScrollArea>
 
       {!!active?.children.length && (
-        <ul className="flex w-60 flex-col gap-0.5 border-l bg-muted p-2">
-          <li className="px-2 py-1.5 text-sm font-bold">
-            {active.name}
-          </li>
-
-          {pointerType === 'touch' && (
-            <li>
-              <NavigationMenuLink asChild>
-                <CategoryLink category={active} className="w-full">
-                  {m['components.header.show_all']()}
-                </CategoryLink>
-              </NavigationMenuLink>
+        <ScrollArea className="border-l bg-muted" type="always">
+          <ul className="flex w-60 flex-col gap-0.5 p-2">
+            <li className="px-2 py-1.5 text-sm font-bold">
+              {active.name}
             </li>
-          )}
 
-          {active.children.map((child) => (
-            <li key={child.slug}>
-              <NavigationMenuLink asChild>
-                <CategoryLink className="w-full" category={child}>
-                  {child.name}
-                </CategoryLink>
-              </NavigationMenuLink>
-            </li>
-          ))}
-        </ul>
+            {pointerType === 'touch' && (
+              <li>
+                <NavigationMenuLink asChild>
+                  <CategoryLink category={active} className={childLinkClassName}>
+                    {m['components.header.show_all']()}
+                  </CategoryLink>
+                </NavigationMenuLink>
+              </li>
+            )}
+
+            {active.children.map((child) => (
+              <li key={child.slug}>
+                <NavigationMenuLink asChild>
+                  <CategoryLink className={childLinkClassName} category={child}>
+                    {child.name}
+                  </CategoryLink>
+                </NavigationMenuLink>
+              </li>
+            ))}
+          </ul>
+        </ScrollArea>
       )}
     </div>
   );

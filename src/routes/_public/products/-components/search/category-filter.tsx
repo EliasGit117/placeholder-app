@@ -26,9 +26,7 @@ export const CategoryFilter: FC = () => {
   const flatItems = flattenForest(forest);
 
   const query = search.trim().toLowerCase();
-  const filtered = query
-    ? flatItems.filter(({ node }) => node.name.toLowerCase().includes(query))
-    : flatItems;
+  const filtered = query ? flattenForest(forest, 0, query) : flatItems;
 
   const allLabel = m['components.shop.filters.category_all']();
   const showAll = !query || allLabel.toLowerCase().includes(query);
@@ -54,7 +52,8 @@ export const CategoryFilter: FC = () => {
     <div className="space-y-3">
       <Label>{m['components.shop.filters.category_label']()}</Label>
 
-      <Popover open={open} onOpenChange={(v) => { setOpen(v); if (!v) setSearch(''); }}>
+      {/* modal: popover is portaled out of the mobile filter Sheet, whose scroll lock would otherwise block touch scroll in the list */}
+      <Popover open={open} onOpenChange={(v) => { setOpen(v); if (!v) setSearch(''); }} modal>
         <PopoverTrigger asChild>
           <Button
             type="button"
@@ -106,10 +105,11 @@ export const CategoryFilter: FC = () => {
                 {m['common.no_results']()}
               </p>
             ) : (
-              filtered.map(({ node, level }) => (
+              filtered.map(({ node, level, matched }) => (
                 <DropdownItem
                   key={node.id}
                   selected={node.id === categoryId}
+                  muted={!matched}
                   onClick={() => select(node.id)}
                   style={{ paddingLeft: level * 16 + 8 }}
                 >
@@ -126,12 +126,13 @@ export const CategoryFilter: FC = () => {
 
 interface IDropdownItemProps {
   selected?: boolean;
+  muted?: boolean;
   onClick: () => void;
   style?: CSSProperties;
   children: ReactNode;
 }
 
-const DropdownItem: FC<IDropdownItemProps> = ({ selected, onClick, style, children }) => (
+const DropdownItem: FC<IDropdownItemProps> = ({ selected, muted, onClick, style, children }) => (
   <button
     type="button"
     role="option"
@@ -142,6 +143,7 @@ const DropdownItem: FC<IDropdownItemProps> = ({ selected, onClick, style, childr
       'flex w-full items-center gap-2 rounded-md py-1.5 pr-2 text-sm text-left cursor-default',
       'hover:bg-accent hover:text-accent-foreground focus:outline-none focus-visible:bg-accent',
       selected && 'bg-accent/50',
+      muted && 'text-muted-foreground',
     )}
   >
     <span className="truncate">{children}</span>
@@ -152,14 +154,18 @@ const DropdownItem: FC<IDropdownItemProps> = ({ selected, onClick, style, childr
 interface IFlatItem {
   node: ICategoryNodeDto;
   level: number;
+  /** false for ancestors kept only to preserve the tree path to a match */
+  matched: boolean;
 }
 
-function flattenForest(nodes: ICategoryNodeDto[], level = 0): IFlatItem[] {
+/** Flattens the forest depth-first. With `query`, keeps matching nodes plus their ancestors. */
+function flattenForest(nodes: ICategoryNodeDto[], level = 0, query?: string): IFlatItem[] {
   const result: IFlatItem[] = [];
   for (const node of nodes) {
-    result.push({ node, level });
-    if (node.children.length) {
-      result.push(...flattenForest(node.children, level + 1));
+    const children = flattenForest(node.children, level + 1, query);
+    const matched = !query || node.name.toLowerCase().includes(query);
+    if (matched || children.length) {
+      result.push({ node, level, matched }, ...children);
     }
   }
   return result;
