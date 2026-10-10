@@ -79,7 +79,7 @@ const CategoryCard: FC<{ category: ICategoryNodeDto }> = ({ category }) => {
       search={{ categoryId: category.id }}
       className="group flex flex-col items-start gap-3 text-left"
     >
-      <div className="relative grid aspect-square w-full place-items-center overflow-hidden rounded-xl bg-muted">
+      <div className="relative grid aspect-square w-full place-items-center overflow-hidden rounded-xl border border-foreground/10 bg-muted">
         {imageUrl ? (
           <img
             src={imageUrl}
