@@ -5,14 +5,12 @@ import {
   IconBrandInstagram,
   IconBrandTiktok,
   IconBrandYoutube,
-  IconCookie,
   type TablerIcon
 } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { orpc } from '@/lib/orpc';
 import { cn } from '@/lib/utils';
 import { LogoButton } from '@/components/layout/common/logo-button.tsx';
-import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCookieConsentSettings } from '@/components/blocks/cookie-consent';
 import { m } from '@/paraglide/messages';
@@ -85,6 +83,15 @@ export const SiteFooter: FC<ComponentProps<'footer'>> = ({ className, ...props }
                 </Link>
               </li>
             ))}
+            <li>
+              <button
+                type="button"
+                onClick={openCookieSettings}
+                className="cursor-pointer [text-align:inherit] text-[15px] text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {m['components.cookie_consent.settings']()}
+              </button>
+            </li>
           </ul>
         </nav>
 
@@ -110,17 +117,7 @@ export const SiteFooter: FC<ComponentProps<'footer'>> = ({ className, ...props }
           <p className="mt-6 max-w-xs text-sm leading-relaxed text-muted-foreground">
             {m['components.footer.description']()}
           </p>
-          <Button
-            type="button"
-            variant="link"
-            size="sm"
-            className="mt-4 h-auto p-0 text-muted-foreground hover:text-foreground"
-            onClick={openCookieSettings}
-          >
-            <IconCookie data-icon="inline-start" aria-hidden="true"/>
-            {m['components.cookie_consent.settings']()}
-          </Button>
-          <div className="mt-4 flex justify-center gap-3 @4xl:justify-start">
+          <div className="mt-7 flex justify-center gap-3 @4xl:justify-start">
             {socials.map(({ Icon, label }) => (
               <a
                 key={label}
