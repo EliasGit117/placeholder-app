@@ -193,6 +193,15 @@
         "cancelled": "Anulat"
       }
     },
+    "cookie_consent": {
+      "title": "Preferințe cookie",
+      "description": "Cookie-urile esențiale mențin funcționale sesiunea, coșul și finalizarea comenzii.",
+      "essential": "Alegerea ta este salvată în browser pentru vizitele viitoare. Cookie-urile necesare funcționării site-ului rămân active.",
+      "learn_more": "Află mai multe despre confidențialitate",
+      "accept": "Acceptă",
+      "decline": "Refuză",
+      "settings": "Setări cookie"
+    },
     "footer": {
       "copyright": "© {year} {app}. Toate drepturile rezervate.",
       "navigation": "Navigare",

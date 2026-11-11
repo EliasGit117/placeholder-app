@@ -6,6 +6,7 @@ import { AppSidebar, AppSidebarProvider } from '@/components/layout/main/sidebar
 import { CartSheet, CartSheetProvider } from '@/components/cart/cart-sheet';
 import { WhatsAppButton } from './whatsapp-button.tsx';
 import { Breadcrumbs } from '@/components/layout/common/breadcrumbs';
+import { CookieConsentProvider } from '@/components/blocks/cookie-consent';
 
 interface IProps extends PropsWithChildren {
 }
@@ -13,6 +14,7 @@ interface IProps extends PropsWithChildren {
 export const MainLayout: FC<IProps> = ({ children }) => {
 
   return (
+    <CookieConsentProvider>
       <AppSidebarProvider>
         <CartSheetProvider>
           <AppSidebar/>
@@ -29,5 +31,6 @@ export const MainLayout: FC<IProps> = ({ children }) => {
           <WhatsAppButton/>
         </CartSheetProvider>
       </AppSidebarProvider>
+    </CookieConsentProvider>
   );
 };
